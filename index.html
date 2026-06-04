@@ -122,6 +122,21 @@
         .buy-btn:hover { background: rgba(0, 242, 255, 0.3); }
         .sell-btn { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
         .sell-btn:hover { background: rgba(188, 19, 254, 0.3); }
+        .swap-btn { background: rgba(255, 215, 0, 0.15); border: 1px solid var(--neon-yellow); color: var(--neon-yellow); }
+        .swap-btn:hover { background: rgba(255, 215, 0, 0.3); }
+        .payment-options-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9000; justify-content: center; align-items: center; }
+        .payment-options-modal.active { display: flex; }
+        .payment-options-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 450px; width: 90%; text-align: center; }
+        .payment-methods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .payment-method-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; cursor: pointer; transition: all 0.3s; }
+        .payment-method-card:hover { border-color: var(--neon-green); transform: translateY(-3px); }
+        .payment-method-card i { font-size: 2rem; margin-bottom: 0.5rem; }
+        .payment-method-card i.fa-cc-mastercard { color: #eb001b; }
+        .payment-method-card i.fa-cc-visa { color: #1a1f71; }
+        .payment-method-card i.fa-cc-amex { color: #2e77bc; }
+        .payment-method-card i.fa-google-pay { color: #4285f4; }
+        .payment-method-card i.fa-apple-pay { color: #000; }
+        .payment-method-card i.fa-paypal { color: #003087; }
         .cards-section { background: rgba(26, 27, 58, 0.6); backdrop-filter: blur(12px); border-radius: 1.5rem; border: 1px solid var(--border-glow); padding: 1.5rem; margin-bottom: 1.5rem; }
         .cards-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 0.5rem; }
         .cards-header h4 { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--neon-blue); }
@@ -201,6 +216,8 @@
         .modal-content h3 { color: var(--neon-blue); margin-bottom: 1rem; }
         .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; margin: 0.5rem 0; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
         .modal-content button { margin: 0.5rem; padding: 0.5rem 1rem; }
+        .button-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .button-group .buy-btn, .button-group .sell-btn, .button-group .swap-btn { flex: 0 0 auto; padding: 0.4rem 0.8rem; font-size: 0.65rem; }
     </style>
 </head>
 <body>
@@ -212,6 +229,40 @@
 <!-- MODAL OVERLAY -->
 <div id="modalOverlay" class="modal-overlay">
     <div id="modalContent" class="modal-content"></div>
+</div>
+
+<!-- PAYMENT OPTIONS MODAL (NOVO) -->
+<div id="paymentModal" class="payment-options-modal">
+    <div class="payment-options-content">
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;"><i class="fas fa-credit-card"></i> Escolha a Forma de Pagamento</h3>
+        <div class="payment-methods-grid">
+            <div class="payment-method-card" data-payment="mastercard">
+                <i class="fab fa-cc-mastercard fa-2x"></i>
+                <p>Mastercard</p>
+            </div>
+            <div class="payment-method-card" data-payment="visa">
+                <i class="fab fa-cc-visa fa-2x"></i>
+                <p>Visa</p>
+            </div>
+            <div class="payment-method-card" data-payment="amex">
+                <i class="fab fa-cc-amex fa-2x"></i>
+                <p>American Express</p>
+            </div>
+            <div class="payment-method-card" data-payment="googlepay">
+                <i class="fab fa-google-pay fa-2x"></i>
+                <p>Google Pay</p>
+            </div>
+            <div class="payment-method-card" data-payment="applepay">
+                <i class="fab fa-apple-pay fa-2x"></i>
+                <p>Apple Pay</p>
+            </div>
+            <div class="payment-method-card" data-payment="paypal">
+                <i class="fab fa-paypal fa-2x"></i>
+                <p>PayPal</p>
+            </div>
+        </div>
+        <button id="closePaymentModal" class="sell-btn" style="margin-top: 1rem; width: 100%;">Cancelar</button>
+    </div>
 </div>
 
 <!-- LANGUAGE SELECTOR -->
@@ -335,7 +386,16 @@
                 <div class="chart-card"><div class="chart-header"><h4>Staking Performance</h4></div><canvas id="stakingChart" height="160"></canvas></div>
                 
                 <div id="cryptoSection" class="investment-section"><div class="asset-grid">
-                    <div class="asset-card"><div class="asset-price">BRADICOIN - $10.42 <span style="color:var(--neon-green);">+2.3%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="bradicoin">STAKE</button><button class="sell-btn unstake-btn" data-asset="bradicoin">UNSTAKE</button></div></div>
+                    <!-- BRADICOIN CARD ATUALIZADO COM BOTÕES SWAP E BUY -->
+                    <div class="asset-card" id="bradicoinCard">
+                        <div class="asset-price">BRADICOIN - $10.42 <span style="color:var(--neon-green);">+2.3%</span></div>
+                        <div class="button-group">
+                            <button class="buy-btn stake-btn" data-asset="bradicoin">STAKE</button>
+                            <button class="sell-btn unstake-btn" data-asset="bradicoin">UNSTAKE</button>
+                            <button class="swap-btn" id="swapBradicoinBtn"><i class="fas fa-exchange-alt"></i> SWAP</button>
+                            <button class="buy-btn" id="buyBradicoinBtn"><i class="fas fa-shopping-cart"></i> BUY</button>
+                        </div>
+                    </div>
                     <div class="asset-card"><div class="asset-price">Bitcoin - $67,234</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="btc">STAKE BTC</button><button class="sell-btn unstake-btn" data-asset="btc">UNSTAKE</button></div></div>
                     <div class="asset-card"><div class="asset-price">Ethereum - $3,441</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="eth">STAKE ETH</button><button class="sell-btn unstake-btn" data-asset="eth">UNSTAKE</button></div></div>
                     <div class="asset-card"><div class="asset-price">Solana - $98.07</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="sol">STAKE SOL</button><button class="sell-btn unstake-btn" data-asset="sol">UNSTAKE</button></div></div>
@@ -480,6 +540,193 @@
         { date: "12/01/2025", description: "Card Payment", amount: 89.90, currency: "USD", type: "payment" }
     ];
 
+    // Preço do BRADICOIN
+    const BRADICOIN_PRICE = 10.42;
+
+    // Funções SWAP e BUY para BRADICOIN
+    function swapBradicoin() {
+        showModal(`
+            <h3><i class="fas fa-exchange-alt"></i> SWAP BRADICOIN</h3>
+            <p style="margin-bottom: 1rem;">Preço atual: <strong>$${BRADICOIN_PRICE}</strong> por BRC</p>
+            <select id="swapDirection" style="margin: 10px 0;">
+                <option value="brc_to_usd">BRADICOIN → USD</option>
+                <option value="usd_to_brc">USD → BRADICOIN</option>
+                <option value="brc_to_eur">BRADICOIN → EUR</option>
+                <option value="eur_to_brc">EUR → BRADICOIN</option>
+            </select>
+            <input type="number" id="swapAmount" placeholder="Quantidade" style="margin: 10px 0;">
+            <div id="swapResult" style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
+            <button id="confirmSwapBtn" class="buy-btn" style="width: 100%; margin-top: 10px;">CONFIRMAR SWAP</button>
+            <button class="sell-btn close-modal-btn" style="width: 100%; margin-top: 5px;">CANCELAR</button>
+        `);
+        
+        const amountInput = document.getElementById('swapAmount');
+        const directionSelect = document.getElementById('swapDirection');
+        const resultDiv = document.getElementById('swapResult');
+        
+        function updateSwapPreview() {
+            const amount = parseFloat(amountInput.value);
+            const direction = directionSelect.value;
+            if(isNaN(amount) || amount <= 0) {
+                resultDiv.innerHTML = 'Digite um valor válido';
+                return;
+            }
+            
+            if(direction === 'brc_to_usd') {
+                if(amount > userBalances.BRADICOIN) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances.BRADICOIN.toLocaleString()} BRC`;
+                } else {
+                    const usdAmount = amount * BRADICOIN_PRICE;
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>$${usdAmount.toFixed(2)} USD</strong><br>Taxa: 0%`;
+                }
+            } else if(direction === 'usd_to_brc') {
+                const neededUSD = amount * BRADICOIN_PRICE;
+                if(neededUSD > userBalances.USD) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você precisa de $${neededUSD.toFixed(2)} USD (Saldo: $${userBalances.USD.toLocaleString()})`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} BRC</strong><br>Custo: $${neededUSD.toFixed(2)} USD`;
+                }
+            } else if(direction === 'brc_to_eur') {
+                const eurAmount = amount * BRADICOIN_PRICE * 0.92;
+                if(amount > userBalances.BRADICOIN) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances.BRADICOIN.toLocaleString()} BRC`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>€${eurAmount.toFixed(2)} EUR</strong><br>Taxa: 0%`;
+                }
+            } else if(direction === 'eur_to_brc') {
+                const neededEUR = amount * BRADICOIN_PRICE * 0.92;
+                if(neededEUR > userBalances.EUR) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você precisa de €${neededEUR.toFixed(2)} EUR (Saldo: €${userBalances.EUR.toLocaleString()})`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} BRC</strong><br>Custo: €${neededEUR.toFixed(2)} EUR`;
+                }
+            }
+        }
+        
+        amountInput.addEventListener('input', updateSwapPreview);
+        directionSelect.addEventListener('change', updateSwapPreview);
+        
+        document.getElementById('confirmSwapBtn')?.addEventListener('click', () => {
+            const amount = parseFloat(amountInput.value);
+            const direction = directionSelect.value;
+            
+            if(isNaN(amount) || amount <= 0) {
+                alert('Digite um valor válido');
+                return;
+            }
+            
+            if(direction === 'brc_to_usd') {
+                if(amount <= userBalances.BRADICOIN) {
+                    const usdAmount = amount * BRADICOIN_PRICE;
+                    userBalances.BRADICOIN -= amount;
+                    userBalances.USD += usdAmount;
+                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} BRC → $${usdAmount.toFixed(2)} USD`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert('Saldo insuficiente de BRADICOIN');
+                }
+            } else if(direction === 'usd_to_brc') {
+                const neededUSD = amount * BRADICOIN_PRICE;
+                if(neededUSD <= userBalances.USD) {
+                    userBalances.USD -= neededUSD;
+                    userBalances.BRADICOIN += amount;
+                    showToast(`✅ Swap realizado! $${neededUSD.toFixed(2)} USD → ${amount.toLocaleString()} BRC`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert('Saldo insuficiente de USD');
+                }
+            } else if(direction === 'brc_to_eur') {
+                if(amount <= userBalances.BRADICOIN) {
+                    const eurAmount = amount * BRADICOIN_PRICE * 0.92;
+                    userBalances.BRADICOIN -= amount;
+                    userBalances.EUR += eurAmount;
+                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} BRC → €${eurAmount.toFixed(2)} EUR`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert('Saldo insuficiente de BRADICOIN');
+                }
+            } else if(direction === 'eur_to_brc') {
+                const neededEUR = amount * BRADICOIN_PRICE * 0.92;
+                if(neededEUR <= userBalances.EUR) {
+                    userBalances.EUR -= neededEUR;
+                    userBalances.BRADICOIN += amount;
+                    showToast(`✅ Swap realizado! €${neededEUR.toFixed(2)} EUR → ${amount.toLocaleString()} BRC`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert('Saldo insuficiente de EUR');
+                }
+            }
+        });
+    }
+    
+    let pendingBuyAmount = 0;
+    
+    function showPaymentModal(amount) {
+        pendingBuyAmount = amount;
+        const paymentModal = document.getElementById('paymentModal');
+        paymentModal.classList.add('active');
+    }
+    
+    function buyBradicoin() {
+        showModal(`
+            <h3><i class="fas fa-shopping-cart"></i> COMPRAR BRADICOIN</h3>
+            <p style="margin-bottom: 1rem;">Preço atual: <strong>$${BRADICOIN_PRICE}</strong> por BRC</p>
+            <input type="number" id="buyAmount" placeholder="Quantidade de BRC" style="margin: 10px 0;">
+            <div id="buyPreview" style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
+            <button id="proceedPaymentBtn" class="buy-btn" style="width: 100%; margin-top: 10px;">CONTINUAR PARA PAGAMENTO</button>
+            <button class="sell-btn close-modal-btn" style="width: 100%; margin-top: 5px;">CANCELAR</button>
+        `);
+        
+        const amountInput = document.getElementById('buyAmount');
+        const previewDiv = document.getElementById('buyPreview');
+        
+        function updateBuyPreview() {
+            const amount = parseFloat(amountInput.value);
+            if(isNaN(amount) || amount <= 0) {
+                previewDiv.innerHTML = 'Digite a quantidade desejada de BRC';
+                return;
+            }
+            const totalUSD = amount * BRADICOIN_PRICE;
+            previewDiv.innerHTML = `💰 Total: <strong>$${totalUSD.toFixed(2)} USD</strong><br>📊 Você receberá: ${amount.toLocaleString()} BRC`;
+        }
+        
+        amountInput.addEventListener('input', updateBuyPreview);
+        
+        document.getElementById('proceedPaymentBtn')?.addEventListener('click', () => {
+            const amount = parseFloat(amountInput.value);
+            if(isNaN(amount) || amount <= 0) {
+                alert('Digite uma quantidade válida');
+                return;
+            }
+            const totalUSD = amount * BRADICOIN_PRICE;
+            if(totalUSD > userBalances.USD) {
+                alert(`Saldo insuficiente! Você precisa de $${totalUSD.toFixed(2)} USD (Saldo: $${userBalances.USD.toLocaleString()})`);
+                return;
+            }
+            closeModal();
+            showPaymentModal(amount);
+        });
+    }
+    
+    function completePurchase(paymentMethod, amount) {
+        const totalUSD = amount * BRADICOIN_PRICE;
+        userBalances.USD -= totalUSD;
+        userBalances.BRADICOIN += amount;
+        showToast(`✅ Compra realizada com sucesso via ${paymentMethod}! ${amount.toLocaleString()} BRC adicionados à sua carteira.`);
+        updateTotalBalance();
+        renderCurrencies();
+        document.getElementById('paymentModal').classList.remove('active');
+        pendingBuyAmount = 0;
+    }
+    
     function applyLanguage(lang) {
         const t = translations[lang];
         if (!t) return;
@@ -555,7 +802,7 @@
 
     function showToast(msg){ let t=document.createElement('div'); t.className='toast-notification'; t.innerHTML=`<i class="fas fa-check-circle"></i> ${msg}`; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
     function formatBalance(code,val){ if(code==='USD') return `$${val.toLocaleString()}`; if(code==='EUR') return `€${val.toLocaleString()}`; if(code==='GBP') return `£${val.toLocaleString()}`; if(code==='BTC') return `${val.toFixed(4)} BTC`; if(code==='ETH') return `${val.toFixed(2)} ETH`; if(code==='BRADICOIN') return `${val.toLocaleString()} BRC`; if(code==='SOL') return `${val.toLocaleString()} SOL`; if(code==='MATIC') return `${val.toLocaleString()} MATIC`; if(code==='USDT') return `${val.toLocaleString()} USDT`; if(code==='LTC') return `${val.toLocaleString()} LTC`; if(code==='BNB') return `${val.toLocaleString()} BNB`; return `${val} ${code}`; }
-    function updateTotalBalance(){ let total = userBalances.USD + userBalances.EUR*1.09 + userBalances.GBP*1.27 + userBalances.BTC*67200 + userBalances.ETH*3443 + userBalances.BRADICOIN*10.42 + userBalances.SOL*98.07 + userBalances.MATIC*0.85 + userBalances.USDT*1.00 + userBalances.LTC*82.50 + userBalances.BNB*312.50; document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString()}`; document.getElementById('stealthUsd') && (document.getElementById('stealthUsd').innerHTML = `$${userBalances.USD.toLocaleString()}`); }
+    function updateTotalBalance(){ let total = userBalances.USD + userBalances.EUR*1.09 + userBalances.GBP*1.27 + userBalances.BTC*67200 + userBalances.ETH*3443 + userBalances.BRADICOIN*BRADICOIN_PRICE + userBalances.SOL*98.07 + userBalances.MATIC*0.85 + userBalances.USDT*1.00 + userBalances.LTC*82.50 + userBalances.BNB*312.50; document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString()}`; document.getElementById('stealthUsd') && (document.getElementById('stealthUsd').innerHTML = `$${userBalances.USD.toLocaleString()}`); }
     function renderCurrencies(){ let grid=document.getElementById('currencyGrid'); if(!grid) return; grid.innerHTML=''; [...currencies,...cryptoAssets].forEach(a=>{ let b=userBalances[a.code]||0; grid.innerHTML+=`<div class="currency-item"><span>${a.code}</span><span class="currency-balance">${formatBalance(a.code,b)}</span><div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;"><button class="currency-send-btn send-currency-btn" data-currency="${a.code}">SEND</button><button class="buy-btn receive-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;">RECEIVE</button><button class="sell-btn stake-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;">STAKE</button></div></div>`; }); 
         document.querySelectorAll('.send-currency-btn').forEach(btn=>btn.addEventListener('click',()=>{ let currency=btn.dataset.currency; let amt=parseFloat(prompt(`Amount to send (${currency}):`)); if(amt && userBalances[currency]>=amt){ userBalances[currency]-=amt; showToast(`Sent ${amt} ${currency}`); updateTotalBalance(); renderCurrencies(); } else if(amt) alert('Insufficient balance'); }));
         document.querySelectorAll('.receive-currency-btn').forEach(btn=>btn.addEventListener('click',()=>{ let currency=btn.dataset.currency; let amt=parseFloat(prompt(`Amount to receive (${currency}):`)); if(amt){ userBalances[currency]+=amt; showToast(`Received ${amt} ${currency}`); updateTotalBalance(); renderCurrencies(); } }));
@@ -572,7 +819,9 @@
         let modalContent = document.getElementById('modalContent');
         modalContent.innerHTML = contentHtml;
         modal.classList.add('active');
-        document.querySelector('.close-modal-btn')?.addEventListener('click', () => modal.classList.remove('active'));
+        document.querySelectorAll('.close-modal-btn').forEach(btn => {
+            btn.addEventListener('click', () => modal.classList.remove('active'));
+        });
     }
     function closeModal(){ document.getElementById('modalOverlay').classList.remove('active'); }
 
@@ -729,8 +978,35 @@
     document.getElementById('closeSettingsBtn')?.addEventListener('click',()=>{ document.getElementById('securitySettingsPanel').classList.remove('active'); });
     document.querySelectorAll('.security-setting-item').forEach(item=>{ item.addEventListener('click',()=>{ showToast(`Configuring ${item.dataset.security}...`); }); });
     
+    // Botões STAKE/UNSTAKE originais
     document.querySelectorAll('.stake-btn').forEach(btn=>btn.addEventListener('click',()=>{ let amt=prompt('Amount to stake:'); if(amt) showToast(`Staked ${amt}!`); }));
     document.querySelectorAll('.unstake-btn').forEach(btn=>btn.addEventListener('click',()=>{ let amt=prompt('Amount to unstake:'); if(amt) showToast(`Unstaked ${amt}!`); }));
+    
+    // NOVOS BOTÕES SWAP e BUY para BRADICOIN
+    document.getElementById('swapBradicoinBtn')?.addEventListener('click', swapBradicoin);
+    document.getElementById('buyBradicoinBtn')?.addEventListener('click', buyBradicoin);
+    
+    // Modal de pagamento
+    document.querySelectorAll('.payment-method-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const method = card.dataset.payment;
+            const methodNames = {
+                mastercard: 'Mastercard',
+                visa: 'Visa',
+                amex: 'American Express',
+                googlepay: 'Google Pay',
+                applepay: 'Apple Pay',
+                paypal: 'PayPal'
+            };
+            completePurchase(methodNames[method], pendingBuyAmount);
+        });
+    });
+    
+    document.getElementById('closePaymentModal')?.addEventListener('click', () => {
+        document.getElementById('paymentModal').classList.remove('active');
+        pendingBuyAmount = 0;
+    });
+    
     document.querySelectorAll('.send-crypto-btn').forEach(btn=>btn.addEventListener('click',()=>{ let amt=prompt('Amount to send:'); if(amt) showToast(`Sent ${amt}!`); }));
     document.querySelector('.trade-buy-btn')?.addEventListener('click',()=>{ let amt=prompt('Buy amount:'); if(amt) showToast(`Bought $${amt} BTC`); });
     document.querySelector('.trade-sell-btn')?.addEventListener('click',()=>{ let amt=prompt('Sell amount:'); if(amt) showToast(`Sold $${amt} BTC`); });
