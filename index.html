@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* SEU CSS ORIGINAL AQUI (TODO O ESTILO QUE VOCÊ JÁ TINHA) */
         :root { --bg-deep: #0a0b1e; --bg-surface: #0d1117; --card-bg: rgba(26, 27, 58, 0.75); --neon-blue: #00f2ff; --neon-purple: #bc13fe; --neon-green: #00ff88; --neon-red: #ff4466; --neon-yellow: #ffd700; --neon-orange: #ff6b35; --text-primary: #e0e0e0; --text-secondary: #a0a0b0; --border-glow: rgba(188, 19, 254, 0.3); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0a0b1e 0%, #0d1117 50%, #0a0b1e 100%); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
@@ -567,7 +568,372 @@
 <div id="securityModal" class="order-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:7000; justify-content:center; align-items:center;"><div style="background:#1a1b3a; padding:2rem; border-radius:2rem; text-align:center"><i class="fas fa-shield-alt" style="font-size:2rem;"></i><h3>Security Certificate</h3><p id="modalSealDesc"></p><button class="close-security" id="verifiedBtn" style="background:var(--neon-blue); border:none; padding:0.5rem 1.5rem; border-radius:2rem; margin-top:1rem; cursor:pointer;">VERIFIED</button></div></div>
 
 <script>
-    // PARTICLES
+    // ==================== INTEGRAÇÃO COM A API DO RENDER ====================
+    const API_BASE_URL = 'https://api-zentronix.onrender.com';
+    let apiToken = localStorage.getItem('zentronix_api_token');
+    let apiAccount = null;
+
+    // Funções de API
+    async function apiLogin(email, password) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+            if (data.success) {
+                apiToken = data.token;
+                apiAccount = data.account;
+                localStorage.setItem('zentronix_api_token', apiToken);
+                localStorage.setItem('zentronix_api_account', JSON.stringify(apiAccount));
+                return { success: true, data };
+            }
+            return { success: false, error: data.error };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    async function apiGetBalance() {
+        if (!apiToken) return null;
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/accounts/me/balance`, {
+                headers: { 'Authorization': `Bearer ${apiToken}` }
+            });
+            return await response.json();
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function apiCreatePixCharge(value, description) {
+        if (!apiToken) return null;
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/pix/create-charge`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiToken}`
+                },
+                body: JSON.stringify({ value, description })
+            });
+            return await response.json();
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function apiGetCards() {
+        if (!apiToken) return [];
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/cards`, {
+                headers: { 'Authorization': `Bearer ${apiToken}` }
+            });
+            const data = await response.json();
+            return data.cards || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    async function apiCreateCard(cardType, network) {
+        if (!apiToken) return null;
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/cards`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiToken}`
+                },
+                body: JSON.stringify({ cardType, network: network || 'VISA' })
+            });
+            return await response.json();
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function apiRequestLoan(amount, termMonths) {
+        if (!apiToken) return null;
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/loans/request`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiToken}`
+                },
+                body: JSON.stringify({ amount, termMonths: termMonths || 12 })
+            });
+            return await response.json();
+        } catch (error) {
+            return null;
+        }
+    }
+
+    // Sincronizar saldos da API com o frontend
+    async function syncBalancesFromAPI() {
+        const balance = await apiGetBalance();
+        if (balance) {
+            userBalances.USD = balance.availableBalance || userBalances.USD;
+            userBalances.BRL = (balance.availableBalance || 0) * 5.12;
+            updateTotalBalance();
+            renderCurrencies();
+            showToast(`💰 Saldo sincronizado: $${balance.availableBalance?.toLocaleString()} USD`);
+        }
+    }
+
+    // Função de login modificada para usar a API
+    async function performLoginAPI() {
+        let email = document.getElementById('loginId').value;
+        let password = document.getElementById('loginPassword').value;
+        
+        // Suporte para demo
+        if (email === 'admin' && password === 'zentronix') {
+            email = 'demo@zentronix.com';
+            password = 'demo123';
+        }
+        
+        const result = await apiLogin(email, password);
+        
+        if (result.success) {
+            isLoggedIn = true;
+            localStorage.setItem('zentronix_logged', 'true');
+            closeLoginModal();
+            
+            // Atualizar nome do usuário
+            document.getElementById('welcomeUser').innerText = apiAccount?.name || 'Alexander Vance';
+            
+            // Sincronizar saldos
+            await syncBalancesFromAPI();
+            
+            // Buscar cartões
+            const cards = await apiGetCards();
+            if (cards.length > 0) {
+                userCards = cards.map(card => ({
+                    id: card.id,
+                    last4: card.lastFour,
+                    limit: 10000
+                }));
+                renderCards();
+            }
+            
+            document.getElementById('dashboardContainer').style.display = 'block';
+            document.getElementById('institutionalContent').style.display = 'none';
+            document.getElementById('openLoginBtn').style.display = 'none';
+            document.getElementById('logoutMainBtn').style.display = 'flex';
+            document.getElementById('kycStatusBadge').style.display = 'flex';
+            document.getElementById('notificationBell').classList.add('visible');
+            
+            renderCurrencies();
+            updateTotalBalance();
+            initStakingChart();
+            renderSessionsList();
+            initCharts();
+            renderPixTransfers();
+            
+            showToast(`✅ Login realizado com sucesso! Bem-vindo, ${apiAccount?.name || 'Usuário'}!`);
+        } else {
+            showToast(`❌ Erro no login: ${result.error || 'Credenciais inválidas'}`);
+            alert('Credenciais inválidas. Use:\nEmail: demo@zentronix.com\nSenha: demo123');
+        }
+    }
+
+    // Enviar PIX via API
+    async function sendPixAPI() {
+        const destinationKey = document.getElementById('pixDestinationKey').value.trim();
+        const amount = parseFloat(document.getElementById('pixAmount').value);
+        const description = document.getElementById('pixDescription').value.trim();
+        
+        if (!destinationKey) {
+            showToast('❌ Digite a chave PIX do destinatário');
+            return;
+        }
+        if (isNaN(amount) || amount <= 0) {
+            showToast('❌ Digite um valor válido');
+            return;
+        }
+        
+        const result = await apiCreatePixCharge(amount, description);
+        if (result && result.success) {
+            showToast(`✅ PIX de R$ ${amount.toFixed(2)} gerado com sucesso!`);
+            
+            // Mostrar QR Code
+            const qrDisplay = document.getElementById('pixQrCodeDisplay');
+            if (qrDisplay && result.qrCodeImage) {
+                qrDisplay.innerHTML = `<img src="${result.qrCodeImage}" style="width: 100%; height: auto; border-radius: 8px;">`;
+            } else if (qrDisplay && result.qrCode) {
+                qrDisplay.innerHTML = `<div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+                    <i class="fas fa-qrcode" style="font-size: 3rem; color: #000;"></i>
+                    <p style="font-size: 0.6rem; color: #000;">Código: ${result.chargeId}</p>
+                </div>`;
+            }
+            
+            // Registrar no histórico
+            pixTransfers.unshift({
+                type: 'sent',
+                to: destinationKey,
+                amount: amount,
+                date: new Date().toLocaleDateString('pt-BR').slice(0,5),
+                time: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
+                status: 'completed'
+            });
+            renderPixTransfers();
+            
+            // Limpar campos
+            document.getElementById('pixDestinationKey').value = '';
+            document.getElementById('pixAmount').value = '';
+            document.getElementById('pixDescription').value = '';
+        } else {
+            showToast(`❌ Erro ao gerar PIX: ${result?.error || 'Tente novamente'}`);
+        }
+    }
+
+    // Criar cartão virtual via API
+    async function createVirtualCardAPI() {
+        const result = await apiCreateCard('VIRTUAL', 'VISA');
+        if (result && result.success) {
+            userCards.push({
+                id: result.card.id,
+                last4: result.card.lastFour,
+                limit: 5000
+            });
+            renderCards();
+            showToast('✅ Cartão virtual criado com sucesso!');
+        } else {
+            showToast('❌ Erro ao criar cartão virtual.');
+        }
+    }
+
+    // Solicitar empréstimo via API
+    async function requestLoanAPI() {
+        const amount = parseFloat(prompt('Valor do empréstimo (USD):', '1000'));
+        if (amount && amount > 0) {
+            showToast('🔄 Processando solicitação de empréstimo...');
+            const result = await apiRequestLoan(amount, 12);
+            if (result && result.success) {
+                showToast(`✅ Empréstimo aprovado! Valor: $${result.amount} USD\nParcela mensal: $${result.monthlyPayment} USD`);
+                await syncBalancesFromAPI();
+            } else {
+                showToast(`❌ Erro ao solicitar empréstimo: ${result?.error || 'Tente novamente'}`);
+            }
+        }
+    }
+
+    // Verificar status da API
+    async function checkAPIStatus() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/health`);
+            const data = await response.json();
+            if (data.status === 'ok') {
+                showToast('🌐 API Zentronix conectada!');
+                return true;
+            }
+        } catch (error) {
+            console.log('API offline, modo demo ativo');
+            return false;
+        }
+    }
+
+    // Substituir os event listeners pelos com API
+    // Login
+    const oldLoginBtn = document.getElementById('loginSubmitBtn');
+    if (oldLoginBtn) {
+        const newLoginBtn = oldLoginBtn.cloneNode(true);
+        oldLoginBtn.parentNode.replaceChild(newLoginBtn, oldLoginBtn);
+        newLoginBtn.addEventListener('click', performLoginAPI);
+    }
+    
+    // Empréstimo pessoal
+    document.querySelectorAll('.service-btn').forEach(btn => {
+        if (btn.dataset && btn.dataset.service === 'personal-loan') {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.addEventListener('click', requestLoanAPI);
+        }
+    });
+    
+    // Criar cartão virtual
+    const oldCardBtn = document.getElementById('createVirtualCardBtn');
+    if (oldCardBtn) {
+        const newCardBtn = oldCardBtn.cloneNode(true);
+        oldCardBtn.parentNode.replaceChild(newCardBtn, oldCardBtn);
+        newCardBtn.addEventListener('click', createVirtualCardAPI);
+    }
+    
+    // Enviar PIX
+    const oldSendPixBtn = document.getElementById('sendPixBtn');
+    if (oldSendPixBtn) {
+        const newSendPixBtn = oldSendPixBtn.cloneNode(true);
+        oldSendPixBtn.parentNode.replaceChild(newSendPixBtn, oldSendPixBtn);
+        newSendPixBtn.addEventListener('click', sendPixAPI);
+    }
+    
+    // Carregar token salvo
+    if (localStorage.getItem('zentronix_api_token')) {
+        apiToken = localStorage.getItem('zentronix_api_token');
+        const savedAccount = localStorage.getItem('zentronix_api_account');
+        if (savedAccount) {
+            apiAccount = JSON.parse(savedAccount);
+        }
+        // Verificar se o token ainda é válido
+        apiGetBalance().then(balance => {
+            if (balance) {
+                isLoggedIn = true;
+                document.getElementById('dashboardContainer').style.display = 'block';
+                document.getElementById('institutionalContent').style.display = 'none';
+                document.getElementById('openLoginBtn').style.display = 'none';
+                document.getElementById('logoutMainBtn').style.display = 'flex';
+                document.getElementById('kycStatusBadge').style.display = 'flex';
+                document.getElementById('notificationBell').classList.add('visible');
+                syncBalancesFromAPI();
+                renderCurrencies();
+                updateTotalBalance();
+                initStakingChart();
+                renderCards();
+                renderSessionsList();
+                initCharts();
+                renderPixTransfers();
+                showToast('✅ Sessão restaurada com sucesso!');
+            } else {
+                // Token inválido, limpar
+                localStorage.removeItem('zentronix_api_token');
+                localStorage.removeItem('zentronix_api_account');
+                apiToken = null;
+            }
+        });
+    }
+    
+    // Atualizar status da API no rodapé
+    const apiStatusFooter = document.createElement('div');
+    apiStatusFooter.style.cssText = 'text-align: center; font-size: 0.6rem; opacity: 0.6; margin-top: 0.5rem;';
+    apiStatusFooter.innerHTML = `🔗 API: <a href="${API_BASE_URL}" target="_blank" style="color: var(--neon-blue);">${API_BASE_URL}</a> | <span id="apiStatusText">Verificando...</span>`;
+    document.querySelector('.copyright').before(apiStatusFooter);
+    
+    async function updateAPIStatusDisplay() {
+        const statusSpan = document.getElementById('apiStatusText');
+        if (!statusSpan) return;
+        try {
+            const response = await fetch(`${API_BASE_URL}/health`);
+            if (response.ok) {
+                const data = await response.json();
+                statusSpan.innerHTML = '🟢 API Online';
+                statusSpan.style.color = 'var(--neon-green)';
+            } else {
+                statusSpan.innerHTML = '🟡 API Degradada';
+                statusSpan.style.color = 'var(--neon-yellow)';
+            }
+        } catch (error) {
+            statusSpan.innerHTML = '🔴 Modo Demo (API Offline)';
+            statusSpan.style.color = 'var(--neon-red)';
+        }
+    }
+    
+    updateAPIStatusDisplay();
+    setInterval(updateAPIStatusDisplay, 30000);
+    checkAPIStatus();
+
+    // PARTICLES (mantido original)
     function createParticles(){ for(let i=0;i<40;i++){ let p=document.createElement('div'); p.className='particle'; p.style.width=Math.random()*3+1+'px'; p.style.height=p.style.width; p.style.left=Math.random()*100+'%'; p.style.top=Math.random()*100+'%'; p.style.animationDelay=Math.random()*15+'s'; document.getElementById('particles').appendChild(p); } }
     createParticles();
 
@@ -620,7 +986,7 @@
     let ghostActive = false;
     let stealthActive = false;
     let stakingChart, realtimeChart, monthlyChart;
-    let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85 };
+    let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85, BRL: 5280.50 };
     let currencies = [{ code: 'USD', symbol: '$' }, { code: 'EUR', symbol: '€' }, { code: 'GBP', symbol: '£' }];
     let cryptoAssets = [{ code: 'BTC', symbol: '₿' }, { code: 'ETH', symbol: 'Ξ' }, { code: 'BRADICOIN', symbol: '🪙' }, { code: 'SOL', symbol: '◎' }, { code: 'MATIC', symbol: '🔷' }, { code: 'USDT', symbol: '₮' }, { code: 'LTC', symbol: 'Ł' }, { code: 'BNB', symbol: 'BNB' }];
     let userCards = [{ id: 'card1', last4: '4213', limit: 5000 }];
@@ -839,48 +1205,6 @@
         }).join('');
     }
     
-    function sendPix() {
-        const keyType = document.getElementById('pixKeyType').value;
-        const destinationKey = document.getElementById('pixDestinationKey').value.trim();
-        const amount = parseFloat(document.getElementById('pixAmount').value);
-        const description = document.getElementById('pixDescription').value.trim();
-        
-        if(!destinationKey) {
-            showToast('❌ Digite a chave PIX do destinatário');
-            return;
-        }
-        if(isNaN(amount) || amount <= 0) {
-            showToast('❌ Digite um valor válido');
-            return;
-        }
-        if(amount > userBalances.BRL) {
-            showToast(`❌ Saldo insuficiente em BRL. Saldo atual: R$ ${userBalances.BRL.toFixed(2)}`);
-            return;
-        }
-        
-        // Registrar transferência PIX
-        userBalances.BRL -= amount;
-        pixTransfers.unshift({
-            type: 'sent',
-            to: destinationKey,
-            amount: amount,
-            date: new Date().toLocaleDateString('pt-BR').slice(0,5),
-            time: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
-            status: 'completed'
-        });
-        
-        renderPixTransfers();
-        updateTotalBalance();
-        renderCurrencies();
-        
-        showToast(`✅ PIX de R$ ${amount.toFixed(2)} enviado com sucesso para ${destinationKey}!`);
-        
-        // Limpar campos
-        document.getElementById('pixDestinationKey').value = '';
-        document.getElementById('pixAmount').value = '';
-        document.getElementById('pixDescription').value = '';
-    }
-    
     function generatePixQr() {
         const amount = parseFloat(document.getElementById('qrPixAmount').value);
         const qrDisplay = document.getElementById('pixQrCodeDisplay');
@@ -1028,30 +1352,6 @@
         btn.addEventListener('click', (e) => {
             let service = btn.dataset.service;
             switch(service){
-                case 'personal-loan':
-                    showModal(`
-                        <h3>💰 Personal Loan Simulator</h3>
-                        <input type="number" id="loanAmount" placeholder="Loan Amount" style="margin:10px 0;">
-                        <select id="loanCurrency" style="margin:10px 0;">
-                            <option value="USD">USD ($)</option>
-                            <option value="EUR">EUR (€)</option>
-                            <option value="GBP">GBP (£)</option>
-                            <option value="BRL">BRL (R$)</option>
-                        </select>
-                        <p>Interest Rate: 4.9% p.a.</p>
-                        <button class="buy-btn" id="confirmLoanBtn">Confirm Loan</button>
-                        <button class="sell-btn close-modal-btn">Cancel</button>
-                    `);
-                    document.getElementById('confirmLoanBtn')?.addEventListener('click', () => {
-                        let amount = document.getElementById('loanAmount').value;
-                        let currency = document.getElementById('loanCurrency').value;
-                        if(amount && amount > 0){
-                            let symbol = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : 'R$';
-                            showToast(`Loan approved! ${symbol}${amount} will be deposited to your account within 24h.`);
-                            closeModal();
-                        } else alert('Please enter a valid amount');
-                    });
-                    break;
                 case 'corporate-loan':
                     showModal(`
                         <h3>🏢 Corporate Loan Request</h3>
@@ -1093,9 +1393,7 @@
                     showToast('Physical card requested! Delivery in 5-7 days.');
                     break;
                 case 'virtual-card':
-                    userCards.push({id:'c'+Date.now(), last4:Math.floor(1000+Math.random()*9000), limit:5000});
-                    renderCards();
-                    showToast('Virtual card created!');
+                    createVirtualCardAPI();
                     break;
                 case 'close-account':
                     if(confirm('Close account? This action is irreversible.')) showToast('Closure request received.');
@@ -1142,6 +1440,11 @@
                     link.click();
                     showToast('History exported!');
                     break;
+                default:
+                    if(service === 'personal-loan') {
+                        requestLoanAPI();
+                    }
+                    break;
             }
         });
     });
@@ -1165,7 +1468,6 @@
     document.getElementById('enable2faBtn')?.addEventListener('click',()=>showToast('2FA Enabled'));
     document.getElementById('setupBiometricBtn')?.addEventListener('click',()=>showToast('Biometric configured'));
     document.getElementById('terminateAllBtn')?.addEventListener('click',()=>{ activeSessions=activeSessions.filter(s=>s.current); renderSessionsList(); showToast('Other sessions terminated'); });
-    document.getElementById('createVirtualCardBtn')?.addEventListener('click',()=>{ userCards.push({id:'c'+Date.now(),last4:Math.floor(1000+Math.random()*9000),limit:5000}); renderCards(); showToast('Virtual card created!'); });
     document.getElementById('qrPaymentBtn')?.addEventListener('click',()=>{ let amt=prompt('Amount:'); if(amt) showToast(`QR Code: $${amt}`); });
     document.getElementById('recurringPaymentBtn')?.addEventListener('click',()=>showToast('Recurring payment setup'));
     document.getElementById('addBlacklistBtn')?.addEventListener('click',()=>{ let addr=prompt('Address:'); if(addr) showToast('Blacklisted'); });
@@ -1206,7 +1508,6 @@
     });
     
     // PIX EVENT LISTENERS
-    document.getElementById('sendPixBtn')?.addEventListener('click', sendPix);
     document.getElementById('generatePixQrBtn')?.addEventListener('click', generatePixQr);
     document.querySelectorAll('.copy-pix-key').forEach(btn => {
         btn.addEventListener('click', () => copyPixKey(btn.dataset.key));
@@ -1227,18 +1528,38 @@
     const loginModal=document.getElementById('loginModal');
     function openLoginModal(){ loginModal.classList.add('active'); }
     function closeLoginModal(){ loginModal.classList.remove('active'); }
-    function performLogin(){ let id=document.getElementById('loginId').value; let pass=document.getElementById('loginPassword').value; if(id==='admin' && pass==='zentronix'){ isLoggedIn=true; localStorage.setItem('zentronix_logged','true'); closeLoginModal(); document.getElementById('dashboardContainer').style.display='block'; document.getElementById('institutionalContent').style.display='none'; document.getElementById('openLoginBtn').style.display='none'; document.getElementById('logoutMainBtn').style.display='flex'; document.getElementById('kycStatusBadge').style.display='flex'; document.getElementById('notificationBell').classList.add('visible'); 
-        // Adicionar BRL ao usuário logado
-        userBalances.BRL = 5280.50;
-        renderCurrencies(); updateTotalBalance(); initStakingChart(); renderCards(); renderSessionsList(); initCharts(); renderPixTransfers(); 
-        setInterval(()=>{ let btc=67200+(Math.random()-0.5)*30; let eth=3443+(Math.random()-0.5)*5; document.getElementById('btcPrice')&&(document.getElementById('btcPrice').innerHTML=`$${btc.toFixed(0)}`); document.getElementById('ethPrice')&&(document.getElementById('ethPrice').innerHTML=`$${eth.toFixed(0)}`); updateTotalBalance(); },10000); showToast('Login successful!'); } else alert('Invalid credentials'); }
-    function logout(){ document.getElementById('confirmModal').style.display='flex'; document.getElementById('confirmYesBtn').onclick=()=>{ isLoggedIn=false; localStorage.removeItem('zentronix_logged'); document.getElementById('dashboardContainer').style.display='none'; document.getElementById('institutionalContent').style.display='block'; document.getElementById('openLoginBtn').style.display='flex'; document.getElementById('logoutMainBtn').style.display='none'; document.getElementById('kycStatusBadge').style.display='none'; document.getElementById('notificationBell').classList.remove('visible'); document.getElementById('confirmModal').style.display='none'; showToast('Logged out'); }; document.getElementById('confirmNoBtn').onclick=()=>document.getElementById('confirmModal').style.display='none'; }
-    if(localStorage.getItem('zentronix_logged')==='true'){ isLoggedIn=true; userBalances.BRL = 5280.50; document.getElementById('dashboardContainer').style.display='block'; document.getElementById('institutionalContent').style.display='none'; document.getElementById('openLoginBtn').style.display='none'; document.getElementById('logoutMainBtn').style.display='flex'; document.getElementById('kycStatusBadge').style.display='flex'; document.getElementById('notificationBell').classList.add('visible'); renderCurrencies(); updateTotalBalance(); initStakingChart(); renderCards(); renderSessionsList(); initCharts(); renderPixTransfers(); setInterval(()=>{ let btc=67200+(Math.random()-0.5)*30; let eth=3443+(Math.random()-0.5)*5; document.getElementById('btcPrice')&&(document.getElementById('btcPrice').innerHTML=`$${btc.toFixed(0)}`); document.getElementById('ethPrice')&&(document.getElementById('ethPrice').innerHTML=`$${eth.toFixed(0)}`); updateTotalBalance(); },10000); }
-    document.getElementById('openLoginBtn')?.addEventListener('click',openLoginModal); document.getElementById('logoutMainBtn')?.addEventListener('click',logout); document.getElementById('loginSubmitBtn')?.addEventListener('click',performLogin); document.getElementById('closeModalBtn')?.addEventListener('click',closeLoginModal);
+    function logout(){ document.getElementById('confirmModal').style.display='flex'; document.getElementById('confirmYesBtn').onclick=()=>{ 
+        isLoggedIn=false; 
+        localStorage.removeItem('zentronix_logged');
+        localStorage.removeItem('zentronix_api_token');
+        localStorage.removeItem('zentronix_api_account');
+        apiToken = null;
+        document.getElementById('dashboardContainer').style.display='none'; 
+        document.getElementById('institutionalContent').style.display='block'; 
+        document.getElementById('openLoginBtn').style.display='flex'; 
+        document.getElementById('logoutMainBtn').style.display='none'; 
+        document.getElementById('kycStatusBadge').style.display='none'; 
+        document.getElementById('notificationBell').classList.remove('visible'); 
+        document.getElementById('confirmModal').style.display='none'; 
+        showToast('Logged out'); 
+    }; document.getElementById('confirmNoBtn').onclick=()=>document.getElementById('confirmModal').style.display='none'; }
+    
+    document.getElementById('openLoginBtn')?.addEventListener('click',openLoginModal); 
+    document.getElementById('logoutMainBtn')?.addEventListener('click',logout); 
+    document.getElementById('closeModalBtn')?.addEventListener('click',closeLoginModal);
     
     const sealInfo={ev:'EV SSL Certificate',pci:'PCI DSS Certified',soc2:'SOC 2 Audited',mcafee:'McAfee Secure',iso:'ISO 27001',aes:'AES-256',certik:'CertiK Audit',kyc:'KYC/AML',license:'License ZNTX-2024'};
     document.querySelectorAll('.seal-item, .seal-cert').forEach(seal=>{ seal.addEventListener('click',()=>{ let type=seal.dataset.seal; if(sealInfo[type]){ document.getElementById('modalSealDesc').innerText=sealInfo[type]; document.getElementById('securityModal').style.display='flex'; } }); });
     document.getElementById('verifiedBtn')?.addEventListener('click',()=>document.getElementById('securityModal').style.display='none');
+    
+    // Inicialização
+    renderCurrencies();
+    updateTotalBalance();
+    initStakingChart();
+    renderCards();
+    renderSessionsList();
+    initCharts();
+    renderPixTransfers();
 </script>
 </body>
 </html>
