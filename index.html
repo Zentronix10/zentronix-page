@@ -117,7 +117,7 @@
         .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
         .asset-card { background: rgba(26, 27, 58, 0.7); border: 1px solid var(--border-glow); border-radius: 1.2rem; padding: 1.2rem; transition: all 0.3s; position: relative; overflow: hidden; }
         .asset-card:hover { transform: translateY(-4px); border-color: var(--neon-purple); }
-        .asset-price { font-family: 'Space Mono', monospace; font-size: 1.3rem; font-weight: bold; color: var(--neon-blue); margin: 0.5rem 0; }
+        .asset-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: bold; color: var(--neon-blue); margin: 0.5rem 0; }
         .buy-btn, .sell-btn { flex: 1; padding: 0.5rem; border-radius: 0.6rem; font-family: 'Orbitron', monospace; font-size: 0.7rem; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.3s; }
         .buy-btn { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
         .buy-btn:hover { background: rgba(0, 242, 255, 0.3); }
@@ -219,17 +219,8 @@
         .modal-content button { margin: 0.5rem; padding: 0.5rem 1rem; }
         .button-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
         .button-group .buy-btn, .button-group .sell-btn, .button-group .swap-btn { flex: 0 0 auto; padding: 0.4rem 0.8rem; font-size: 0.65rem; }
-        
-        /* PIX STYLES */
-        .pix-keys-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .pix-key-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; transition: all 0.3s; }
-        .pix-key-card:hover { border-color: var(--neon-green); transform: translateY(-2px); }
-        .pix-key-label { font-size: 0.7rem; opacity: 0.7; margin-bottom: 0.3rem; }
-        .pix-key-value { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--neon-green); word-break: break-all; margin-bottom: 0.5rem; }
-        .pix-qr-area { text-align: center; margin: 1rem 0; }
-        .pix-qr-code { width: 150px; height: 150px; background: #fff; margin: 0 auto; border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: #000; font-size: 0.7rem; text-align: center; padding: 0.5rem; }
-        .pix-transfers-list { max-height: 250px; overflow-y: auto; margin-top: 1rem; }
-        .pix-transfer-item { background: rgba(0,0,0,0.3); border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
+        .swap-modal-content { max-width: 550px; }
+        .fiat-swap-item { background: rgba(0, 242, 255, 0.05); border-radius: 0.8rem; padding: 0.5rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -243,7 +234,7 @@
     <div id="modalContent" class="modal-content"></div>
 </div>
 
-<!-- PAYMENT OPTIONS MODAL (NOVO) -->
+<!-- PAYMENT OPTIONS MODAL (COM GOOGLE PAY E APPLE PAY) -->
 <div id="paymentModal" class="payment-options-modal">
     <div class="payment-options-content">
         <h3 style="color: var(--neon-blue); margin-bottom: 1rem;"><i class="fas fa-credit-card"></i> Escolha a Forma de Pagamento</h3>
@@ -388,8 +379,8 @@
                 <div class="menu-category"><h4>📊 TRADING</h4><div class="menu-item" data-section="trading"><i class="fas fa-chart-line"></i> Trading Hub</div><div class="menu-item" data-section="conversion"><i class="fas fa-exchange-alt"></i> Conversion</div></div>
                 <div class="menu-category"><h4>🏛️ FIXED INCOME</h4><div class="menu-item" data-section="treasuries"><i class="fas fa-landmark"></i> Treasuries & Bonds</div><div class="menu-item" data-section="cds"><i class="fas fa-clock"></i> CDs / Time Deposits</div></div>
                 <div class="menu-category"><h4>💳 CARDS & PAYMENTS</h4><div class="menu-item" data-section="cards"><i class="fas fa-credit-card"></i> My Cards</div><div class="menu-item" data-section="payments"><i class="fas fa-money-bill-wave"></i> Payments</div></div>
-                <!-- NOVA SEÇÃO PIX -->
-                <div class="menu-category"><h4>💚 PIX</h4><div class="menu-item" data-section="pix"><i class="fas fa-bolt"></i> Área PIX</div></div>
+                <!-- PIX REMOVIDO - ADICIONADO SWAP SECTION -->
+                <div class="menu-category"><h4>🔄 SWAP</h4><div class="menu-item" data-section="swap"><i class="fas fa-exchange-alt"></i> Swap Center</div></div>
                 <div class="menu-category"><h4>📊 ANALYTICS</h4><div class="menu-item" data-section="analytics"><i class="fas fa-chart-pie"></i> Analytics</div><div class="menu-item" data-section="reports"><i class="fas fa-file-alt"></i> Reports</div></div>
                 <div class="menu-category"><h4>🔒 SECURITY & KYC</h4><div class="menu-item" data-section="security"><i class="fas fa-shield-alt"></i> Security Settings</div><div class="menu-item" data-section="sessions"><i class="fas fa-desktop"></i> Active Sessions</div><div class="menu-item" data-section="compliance"><i class="fas fa-gavel"></i> KYC & Compliance</div><div class="menu-item" data-section="antihack"><i class="fas fa-shield-virus"></i> Anti-Hack</div></div>
                 <div class="menu-category"><h4>⚙️ SYSTEM CONTROLS</h4><div class="menu-item" id="ghostModeBtn"><i class="fas fa-user-secret"></i> Ghost Mode</div><div class="menu-item" id="simulatorBtn"><i class="fas fa-chart-simple"></i> Scenario Simulator</div><div class="menu-item" id="themesBtn"><i class="fas fa-palette"></i> Theme Weaver</div><div class="menu-item" id="auditBtn"><i class="fas fa-history"></i> Audit Logs</div></div>
@@ -405,18 +396,19 @@
                         <div class="button-group">
                             <button class="buy-btn stake-btn" data-asset="bradicoin">STAKE</button>
                             <button class="sell-btn unstake-btn" data-asset="bradicoin">UNSTAKE</button>
-                            <button class="swap-btn" id="swapBradicoinBtn"><i class="fas fa-exchange-alt"></i> SWAP</button>
+                            <button class="swap-btn swap-crypto-btn" data-crypto="bradicoin" data-price="10.42"><i class="fas fa-exchange-alt"></i> SWAP</button>
                             <button class="buy-btn" id="buyBradicoinBtn"><i class="fas fa-shopping-cart"></i> BUY</button>
                         </div>
                     </div>
-                    <div class="asset-card"><div class="asset-price">Bitcoin - $67,234</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="btc">STAKE BTC</button><button class="sell-btn unstake-btn" data-asset="btc">UNSTAKE</button></div></div>
-                    <div class="asset-card"><div class="asset-price">Ethereum - $3,441</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="eth">STAKE ETH</button><button class="sell-btn unstake-btn" data-asset="eth">UNSTAKE</button></div></div>
-                    <div class="asset-card"><div class="asset-price">Solana - $98.07</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="sol">STAKE SOL</button><button class="sell-btn unstake-btn" data-asset="sol">UNSTAKE</button></div></div>
-                    <div class="asset-card"><div class="asset-price">Polygon - $0.85</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="matic">STAKE MATIC</button><button class="sell-btn unstake-btn" data-asset="matic">UNSTAKE</button></div></div>
-                    <div class="asset-card"><div class="asset-price">Tether - $1.00</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="usdt">STAKE USDT</button><button class="sell-btn unstake-btn" data-asset="usdt">UNSTAKE</button></div></div>
-                    <div class="asset-card"><div class="asset-price">Litecoin - $82.50 <span style="color:var(--neon-green);">+1.8%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="ltc">STAKE LTC</button><button class="sell-btn unstake-btn" data-asset="ltc">UNSTAKE</button></div></div>
-                    <div class="asset-card"><div class="asset-price">BNB - $312.50 <span style="color:var(--neon-green);">+3.2%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="bnb">STAKE BNB</button><button class="sell-btn unstake-btn" data-asset="bnb">UNSTAKE</button></div></div>
+                    <div class="asset-card"><div class="asset-price">Bitcoin - $67,234</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="btc">STAKE BTC</button><button class="sell-btn unstake-btn" data-asset="btc">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="btc" data-price="67234"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
+                    <div class="asset-card"><div class="asset-price">Ethereum - $3,441</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="eth">STAKE ETH</button><button class="sell-btn unstake-btn" data-asset="eth">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="eth" data-price="3441"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
+                    <div class="asset-card"><div class="asset-price">Solana - $98.07</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="sol">STAKE SOL</button><button class="sell-btn unstake-btn" data-asset="sol">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="sol" data-price="98.07"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
+                    <div class="asset-card"><div class="asset-price">Polygon - $0.85</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="matic">STAKE MATIC</button><button class="sell-btn unstake-btn" data-asset="matic">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="matic" data-price="0.85"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
+                    <div class="asset-card"><div class="asset-price">Tether - $1.00</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="usdt">STAKE USDT</button><button class="sell-btn unstake-btn" data-asset="usdt">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="usdt" data-price="1.00"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
+                    <div class="asset-card"><div class="asset-price">Litecoin - $82.50 <span style="color:var(--neon-green);">+1.8%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="ltc">STAKE LTC</button><button class="sell-btn unstake-btn" data-asset="ltc">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="ltc" data-price="82.50"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
+                    <div class="asset-card"><div class="asset-price">BNB - $312.50 <span style="color:var(--neon-green);">+3.2%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="bnb">STAKE BNB</button><button class="sell-btn unstake-btn" data-asset="bnb">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="bnb" data-price="312.50"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>
                 </div></div>
+                
                 <div id="cryptoTxSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="cards-header"><h4>Crypto Transactions</h4></div>
                     <div class="currency-item"><span>Send Crypto</span>
                         <button class="currency-send-btn send-crypto-btn" data-crypto="btc">Send BTC</button>
@@ -429,6 +421,7 @@
                         <button class="currency-send-btn send-crypto-btn" data-crypto="bnb">Send BNB</button>
                     </div>
                 </div></div>
+                
                 <div id="tradingSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="cards-header"><h4>Trading Hub</h4></div><div class="asset-grid"><div class="asset-card"><div class="asset-price">BTC/USD - $67,234</div><button class="buy-btn trade-buy-btn">BUY</button><button class="sell-btn trade-sell-btn">SELL</button></div></div></div></div>
                 <div id="conversionSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="cards-header"><h4>Currency Conversion</h4></div><div class="currency-item"><span>USD to EUR</span><button class="currency-send-btn convert-usd-eur">Convert</button></div></div></div>
                 <div id="treasuriesSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="cards-header"><h4>Treasuries & Bonds</h4></div><div class="asset-card"><div class="asset-price">10Y Treasury - 4.2%</div><button class="buy-btn buy-bond-btn">BUY BOND</button></div></div></div>
@@ -436,81 +429,64 @@
                 <div id="cardsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="cards-header"><h4>My Cards</h4><button class="create-card-btn" id="createVirtualCardBtn">+ New Virtual Card</button></div><div class="cards-grid" id="cardsGrid"></div></div></div>
                 <div id="paymentsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="cards-header"><h4>Payments</h4></div><div class="payment-methods"><button class="payment-btn" id="qrPaymentBtn"><i class="fas fa-qrcode"></i> QR Code</button><button class="payment-btn" id="recurringPaymentBtn"><i class="fas fa-clock"></i> Recurring</button></div><div id="recurringPaymentsList" class="recurring-list"></div></div></div>
                 
-                <!-- SEÇÃO PIX COMPLETA -->
-                <div id="pixSection" class="investment-section" style="display:none;">
+                <!-- NOVA SEÇÃO SWAP (substituindo PIX) -->
+                <div id="swapSection" class="investment-section" style="display:none;">
                     <div class="cards-section">
                         <div class="cards-header">
-                            <h4><i class="fas fa-bolt" style="color: var(--neon-green);"></i> Área PIX - Transferências Instantâneas</h4>
+                            <h4><i class="fas fa-exchange-alt" style="color: var(--neon-yellow);"></i> Swap Center - Troque suas moedas</h4>
                         </div>
                         
-                        <!-- MINHAS CHAVES PIX -->
+                        <!-- SWAP DE CRIPTOMOEDAS -->
                         <div style="margin-bottom: 1.5rem;">
-                            <h5 style="color: var(--neon-blue); margin-bottom: 0.5rem;"><i class="fas fa-key"></i> Minhas Chaves PIX</h5>
-                            <div class="pix-keys-grid" id="pixKeysGrid">
-                                <div class="pix-key-card">
-                                    <div class="pix-key-label"><i class="fas fa-envelope"></i> E-mail</div>
-                                    <div class="pix-key-value">alexander@zentronix.com</div>
-                                    <button class="currency-send-btn copy-pix-key" data-key="alexander@zentronix.com">Copiar</button>
-                                </div>
-                                <div class="pix-key-card">
-                                    <div class="pix-key-label"><i class="fas fa-phone-alt"></i> Telefone</div>
-                                    <div class="pix-key-value">+55 11 91234-5678</div>
-                                    <button class="currency-send-btn copy-pix-key" data-key="+55 11 91234-5678">Copiar</button>
-                                </div>
-                                <div class="pix-key-card">
-                                    <div class="pix-key-label"><i class="fas fa-id-card"></i> CPF</div>
-                                    <div class="pix-key-value">123.456.789-00</div>
-                                    <button class="currency-send-btn copy-pix-key" data-key="123.456.789-00">Copiar</button>
-                                </div>
-                                <div class="pix-key-card">
-                                    <div class="pix-key-label"><i class="fas fa-random"></i> Chave Aleatória</div>
-                                    <div class="pix-key-value">7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d</div>
-                                    <button class="currency-send-btn copy-pix-key" data-key="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d">Copiar</button>
-                                </div>
+                            <h5 style="color: var(--neon-blue); margin-bottom: 0.8rem;"><i class="fab fa-bitcoin"></i> Swap Criptomoedas</h5>
+                            <div class="asset-grid" id="cryptoSwapGrid">
+                                <!-- Os botões de swap de cripto serão gerados dinamicamente -->
                             </div>
                         </div>
                         
-                        <!-- ENVIAR PIX -->
-                        <div style="margin-bottom: 1.5rem; background: rgba(0, 255, 136, 0.05); border-radius: 1rem; padding: 1rem;">
-                            <h5 style="color: var(--neon-green); margin-bottom: 0.8rem;"><i class="fas fa-paper-plane"></i> Enviar PIX</h5>
-                            <div style="display: grid; gap: 0.8rem;">
-                                <select id="pixKeyType" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary);">
-                                    <option value="email">E-mail</option>
-                                    <option value="phone">Telefone</option>
-                                    <option value="cpf">CPF</option>
-                                    <option value="random">Chave Aleatória</option>
-                                </select>
-                                <input type="text" id="pixDestinationKey" placeholder="Digite a chave PIX do destinatário" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary);">
-                                <input type="number" id="pixAmount" placeholder="Valor (R$)" step="0.01" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary);">
-                                <input type="text" id="pixDescription" placeholder="Descrição (opcional)" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary);">
-                                <button id="sendPixBtn" class="buy-btn" style="background: rgba(0, 255, 136, 0.2); border-color: var(--neon-green); color: var(--neon-green);">
-                                    <i class="fas fa-bolt"></i> Enviar PIX
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- GERAR QR CODE PIX (RECEBER) -->
+                        <!-- SWAP DE MOEDAS FIAT (Euro, Dólar, Real, Libra) -->
                         <div style="margin-bottom: 1.5rem; background: rgba(0, 242, 255, 0.05); border-radius: 1rem; padding: 1rem;">
-                            <h5 style="color: var(--neon-blue); margin-bottom: 0.8rem;"><i class="fas fa-qrcode"></i> Receber via PIX (QR Code)</h5>
-                            <div class="pix-qr-area">
-                                <div class="pix-qr-code" id="pixQrCodeDisplay">
-                                    <i class="fas fa-qrcode" style="font-size: 3rem; color: #000;"></i><br>
-                                    Clique para gerar
-                                </div>
-                                <input type="number" id="qrPixAmount" placeholder="Valor para receber (R$)" step="0.01" style="margin-top: 0.8rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary); width: 100%;">
-                                <button id="generatePixQrBtn" class="currency-send-btn" style="margin-top: 0.8rem; width: 100%;">
-                                    <i class="fas fa-qrcode"></i> Gerar QR Code PIX
+                            <h5 style="color: var(--neon-green); margin-bottom: 0.8rem;"><i class="fas fa-money-bill-wave"></i> Swap Moedas Fiat</h5>
+                            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.8rem; align-items: center;">
+                                <select id="fiatFromCurrency" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary);">
+                                    <option value="USD">💵 Dólar Americano (USD)</option>
+                                    <option value="EUR">💶 Euro (EUR)</option>
+                                    <option value="GBP">💷 Libra Esterlina (GBP)</option>
+                                    <option value="BRL">💰 Real Brasileiro (BRL)</option>
+                                </select>
+                                <i class="fas fa-arrow-right" style="color: var(--neon-yellow); font-size: 1.5rem;"></i>
+                                <select id="fiatToCurrency" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary);">
+                                    <option value="USD">💵 Dólar Americano (USD)</option>
+                                    <option value="EUR">💶 Euro (EUR)</option>
+                                    <option value="GBP">💷 Libra Esterlina (GBP)</option>
+                                    <option value="BRL">💰 Real Brasileiro (BRL)</option>
+                                </select>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <input type="number" id="fiatSwapAmount" placeholder="Quantidade para trocar" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem; color: var(--text-primary); width: 100%; margin-bottom: 0.5rem;">
+                                <div id="fiatSwapPreview" style="margin: 0.5rem 0; padding: 0.8rem; background: rgba(0,0,0,0.3); border-radius: 0.8rem; font-size: 0.8rem; text-align: center;"></div>
+                                <button id="confirmFiatSwapBtn" class="buy-btn" style="width: 100%; background: rgba(255, 215, 0, 0.2); border-color: var(--neon-yellow); color: var(--neon-yellow);">
+                                    <i class="fas fa-exchange-alt"></i> CONFIRMAR SWAP
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- HISTÓRICO DE TRANSFERÊNCIAS PIX -->
-                        <div>
-                            <h5 style="color: var(--neon-purple); margin-bottom: 0.5rem;"><i class="fas fa-history"></i> Histórico de Transferências PIX</h5>
-                            <div id="pixTransfersList" class="pix-transfers-list">
-                                <div class="pix-transfer-item"><span><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Para: joao@email.com</span><span>R$ 150,00</span><span>15/01 - 14:32</span></div>
-                                <div class="pix-transfer-item"><span><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Para: 11987654321</span><span>R$ 45,90</span><span>14/01 - 09:15</span></div>
-                                <div class="pix-transfer-item"><span><i class="fas fa-receipt" style="color: var(--neon-blue);"></i> Recebido de: maria@empresa.com</span><span>R$ 2.500,00</span><span>13/01 - 18:45</span></div>
+                        <!-- TAXAS DE CÂMBIO ATUAIS -->
+                        <div style="background: rgba(188, 19, 254, 0.1); border-radius: 1rem; padding: 1rem;">
+                            <h5 style="color: var(--neon-purple); margin-bottom: 0.8rem;"><i class="fas fa-chart-line"></i> Taxas de Câmbio Atuais</h5>
+                            <div id="exchangeRatesDisplay" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.7rem;">
+                                <div>USD → EUR: 0.92</div>
+                                <div>EUR → USD: 1.09</div>
+                                <div>USD → GBP: 0.79</div>
+                                <div>GBP → USD: 1.27</div>
+                                <div>USD → BRL: 5.12</div>
+                                <div>BRL → USD: 0.195</div>
+                                <div>EUR → GBP: 0.86</div>
+                                <div>GBP → EUR: 1.16</div>
+                                <div>EUR → BRL: 5.57</div>
+                                <div>BRL → EUR: 0.18</div>
+                                <div>GBP → BRL: 6.48</div>
+                                <div>BRL → GBP: 0.154</div>
                             </div>
                         </div>
                     </div>
@@ -558,7 +534,7 @@
     </div>
 
     <div class="footer">
-        <div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-bitcoin"></i><i class="fab fa-ethereum"></i><i class="fab fa-solana"></i><span class="custom-icon">🪙 BRC</span><span class="custom-icon">Ł LTC</span><span class="custom-icon">BNB</span></div>
+        <div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-google-pay"></i><i class="fab fa-apple-pay"></i><i class="fab fa-bitcoin"></i><i class="fab fa-ethereum"></i><i class="fab fa-solana"></i><span class="custom-icon">🪙 BRC</span><span class="custom-icon">Ł LTC</span><span class="custom-icon">BNB</span></div>
         <div class="security-icons"><div class="seal-cert" data-seal="ev"><i class="fas fa-lock"></i><span>EV SSL</span></div><div class="seal-cert" data-seal="pci"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div><div class="seal-cert" data-seal="soc2"><i class="fas fa-file-alt"></i><span>SOC 2</span></div><div class="seal-cert" data-seal="mcafee"><i class="fas fa-shield"></i><span>McAfee</span></div><div class="seal-cert" data-seal="iso"><i class="fas fa-certificate"></i><span>ISO 27001</span></div><div class="seal-cert" data-seal="aes"><i class="fas fa-microchip"></i><span>AES-256</span></div><div class="seal-cert" data-seal="certik"><i class="fas fa-code-branch"></i><span>CertiK</span></div><div class="seal-cert" data-seal="kyc"><i class="fas fa-id-card"></i><span>KYC/AML</span></div><div class="seal-cert" data-seal="license"><i class="fas fa-gavel"></i><span>License</span></div></div>
         <div class="regulatory-text" id="regulatoryText">Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider. All digital asset services are provided in compliance with international AML/KYC standards.</div>
         <div class="copyright" id="copyrightText">© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024 | Quantum Secure</div>
@@ -604,36 +580,6 @@
             return await response.json();
         } catch (error) {
             return null;
-        }
-    }
-
-    async function apiCreatePixCharge(value, description) {
-        if (!apiToken) return null;
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/pix/create-charge`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiToken}`
-                },
-                body: JSON.stringify({ value, description })
-            });
-            return await response.json();
-        } catch (error) {
-            return null;
-        }
-    }
-
-    async function apiGetCards() {
-        if (!apiToken) return [];
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/cards`, {
-                headers: { 'Authorization': `Bearer ${apiToken}` }
-            });
-            const data = await response.json();
-            return data.cards || [];
-        } catch (error) {
-            return [];
         }
     }
 
@@ -709,7 +655,7 @@
             
             // Buscar cartões
             const cards = await apiGetCards();
-            if (cards.length > 0) {
+            if (cards && cards.length > 0) {
                 userCards = cards.map(card => ({
                     id: card.id,
                     last4: card.lastFour,
@@ -730,7 +676,6 @@
             initStakingChart();
             renderSessionsList();
             initCharts();
-            renderPixTransfers();
             
             showToast(`✅ Login realizado com sucesso! Bem-vindo, ${apiAccount?.name || 'Usuário'}!`);
         } else {
@@ -739,53 +684,16 @@
         }
     }
 
-    // Enviar PIX via API
-    async function sendPixAPI() {
-        const destinationKey = document.getElementById('pixDestinationKey').value.trim();
-        const amount = parseFloat(document.getElementById('pixAmount').value);
-        const description = document.getElementById('pixDescription').value.trim();
-        
-        if (!destinationKey) {
-            showToast('❌ Digite a chave PIX do destinatário');
-            return;
-        }
-        if (isNaN(amount) || amount <= 0) {
-            showToast('❌ Digite um valor válido');
-            return;
-        }
-        
-        const result = await apiCreatePixCharge(amount, description);
-        if (result && result.success) {
-            showToast(`✅ PIX de R$ ${amount.toFixed(2)} gerado com sucesso!`);
-            
-            // Mostrar QR Code
-            const qrDisplay = document.getElementById('pixQrCodeDisplay');
-            if (qrDisplay && result.qrCodeImage) {
-                qrDisplay.innerHTML = `<img src="${result.qrCodeImage}" style="width: 100%; height: auto; border-radius: 8px;">`;
-            } else if (qrDisplay && result.qrCode) {
-                qrDisplay.innerHTML = `<div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
-                    <i class="fas fa-qrcode" style="font-size: 3rem; color: #000;"></i>
-                    <p style="font-size: 0.6rem; color: #000;">Código: ${result.chargeId}</p>
-                </div>`;
-            }
-            
-            // Registrar no histórico
-            pixTransfers.unshift({
-                type: 'sent',
-                to: destinationKey,
-                amount: amount,
-                date: new Date().toLocaleDateString('pt-BR').slice(0,5),
-                time: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
-                status: 'completed'
+    async function apiGetCards() {
+        if (!apiToken) return [];
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/cards`, {
+                headers: { 'Authorization': `Bearer ${apiToken}` }
             });
-            renderPixTransfers();
-            
-            // Limpar campos
-            document.getElementById('pixDestinationKey').value = '';
-            document.getElementById('pixAmount').value = '';
-            document.getElementById('pixDescription').value = '';
-        } else {
-            showToast(`❌ Erro ao gerar PIX: ${result?.error || 'Tente novamente'}`);
+            const data = await response.json();
+            return data.cards || [];
+        } catch (error) {
+            return [];
         }
     }
 
@@ -861,14 +769,6 @@
         newCardBtn.addEventListener('click', createVirtualCardAPI);
     }
     
-    // Enviar PIX
-    const oldSendPixBtn = document.getElementById('sendPixBtn');
-    if (oldSendPixBtn) {
-        const newSendPixBtn = oldSendPixBtn.cloneNode(true);
-        oldSendPixBtn.parentNode.replaceChild(newSendPixBtn, oldSendPixBtn);
-        newSendPixBtn.addEventListener('click', sendPixAPI);
-    }
-    
     // Carregar token salvo
     if (localStorage.getItem('zentronix_api_token')) {
         apiToken = localStorage.getItem('zentronix_api_token');
@@ -893,7 +793,6 @@
                 renderCards();
                 renderSessionsList();
                 initCharts();
-                renderPixTransfers();
                 showToast('✅ Sessão restaurada com sucesso!');
             } else {
                 // Token inválido, limpar
@@ -986,9 +885,9 @@
     let ghostActive = false;
     let stealthActive = false;
     let stakingChart, realtimeChart, monthlyChart;
-    let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85, BRL: 5280.50 };
-    let currencies = [{ code: 'USD', symbol: '$' }, { code: 'EUR', symbol: '€' }, { code: 'GBP', symbol: '£' }];
-    let cryptoAssets = [{ code: 'BTC', symbol: '₿' }, { code: 'ETH', symbol: 'Ξ' }, { code: 'BRADICOIN', symbol: '🪙' }, { code: 'SOL', symbol: '◎' }, { code: 'MATIC', symbol: '🔷' }, { code: 'USDT', symbol: '₮' }, { code: 'LTC', symbol: 'Ł' }, { code: 'BNB', symbol: 'BNB' }];
+    let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BRL: 5280.50, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85 };
+    let currencies = [{ code: 'USD', symbol: '$' }, { code: 'EUR', symbol: '€' }, { code: 'GBP', symbol: '£' }, { code: 'BRL', symbol: 'R$' }];
+    let cryptoAssets = [{ code: 'BTC', symbol: '₿', price: 67234 }, { code: 'ETH', symbol: 'Ξ', price: 3441 }, { code: 'BRADICOIN', symbol: '🪙', price: 10.42 }, { code: 'SOL', symbol: '◎', price: 98.07 }, { code: 'MATIC', symbol: '🔷', price: 0.85 }, { code: 'USDT', symbol: '₮', price: 1.00 }, { code: 'LTC', symbol: 'Ł', price: 82.50 }, { code: 'BNB', symbol: 'BNB', price: 312.50 }];
     let userCards = [{ id: 'card1', last4: '4213', limit: 5000 }];
     let recurringPayments = [{ id: 'rec1', name: 'Netflix', amount: 15.99 }];
     let activeSessions = [{ device: 'Chrome on Windows', current: true }];
@@ -998,38 +897,43 @@
         { date: "13/01/2025", description: "BRADICOIN Staking", amount: 500, currency: "BRC", type: "staking" },
         { date: "12/01/2025", description: "Card Payment", amount: 89.90, currency: "USD", type: "payment" }
     ];
-    
-    // Histórico PIX
-    let pixTransfers = [
-        { type: "sent", to: "joao@email.com", amount: 150.00, date: "15/01", time: "14:32", status: "completed" },
-        { type: "sent", to: "11987654321", amount: 45.90, date: "14/01", time: "09:15", status: "completed" },
-        { type: "received", from: "maria@empresa.com", amount: 2500.00, date: "13/01", time: "18:45", status: "completed" }
-    ];
 
     const BRADICOIN_PRICE = 10.42;
 
-    // Funções SWAP e BUY para BRADICOIN (mantidas)
-    function swapBradicoin() {
+    // Taxas de câmbio entre moedas fiat
+    const exchangeRates = {
+        USD: { USD: 1, EUR: 0.92, GBP: 0.79, BRL: 5.12 },
+        EUR: { USD: 1.09, EUR: 1, GBP: 0.86, BRL: 5.57 },
+        GBP: { USD: 1.27, EUR: 1.16, GBP: 1, BRL: 6.48 },
+        BRL: { USD: 0.195, EUR: 0.18, GBP: 0.154, BRL: 1 }
+    };
+
+    // Função para SWAP de criptomoeda
+    function swapCrypto(cryptoCode, cryptoPrice, cryptoName) {
         showModal(`
-            <h3><i class="fas fa-exchange-alt"></i> SWAP BRADICOIN</h3>
-            <p style="margin-bottom: 1rem;">Preço atual: <strong>$${BRADICOIN_PRICE}</strong> por BRC</p>
-            <select id="swapDirection" style="margin: 10px 0;">
-                <option value="brc_to_usd">BRADICOIN → USD</option>
-                <option value="usd_to_brc">USD → BRADICOIN</option>
-                <option value="brc_to_eur">BRADICOIN → EUR</option>
-                <option value="eur_to_brc">EUR → BRADICOIN</option>
+            <h3><i class="fas fa-exchange-alt"></i> SWAP ${cryptoName} (${cryptoCode.toUpperCase()})</h3>
+            <p style="margin-bottom: 1rem;">Preço atual: <strong>$${cryptoPrice.toLocaleString()}</strong> por ${cryptoCode.toUpperCase()}</p>
+            <select id="cryptoSwapDirection" style="margin: 10px 0; width: 100%; padding: 0.8rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary);">
+                <option value="${cryptoCode.toLowerCase()}_to_usd">${cryptoCode.toUpperCase()} → Dólar (USD)</option>
+                <option value="usd_to_${cryptoCode.toLowerCase()}">Dólar (USD) → ${cryptoCode.toUpperCase()}</option>
+                <option value="${cryptoCode.toLowerCase()}_to_eur">${cryptoCode.toUpperCase()} → Euro (EUR)</option>
+                <option value="eur_to_${cryptoCode.toLowerCase()}">Euro (EUR) → ${cryptoCode.toUpperCase()}</option>
+                <option value="${cryptoCode.toLowerCase()}_to_gbp">${cryptoCode.toUpperCase()} → Libra (GBP)</option>
+                <option value="gbp_to_${cryptoCode.toLowerCase()}">Libra (GBP) → ${cryptoCode.toUpperCase()}</option>
+                <option value="${cryptoCode.toLowerCase()}_to_brl">${cryptoCode.toUpperCase()} → Real (BRL)</option>
+                <option value="brl_to_${cryptoCode.toLowerCase()}">Real (BRL) → ${cryptoCode.toUpperCase()}</option>
             </select>
-            <input type="number" id="swapAmount" placeholder="Quantidade" style="margin: 10px 0;">
-            <div id="swapResult" style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
-            <button id="confirmSwapBtn" class="buy-btn" style="width: 100%; margin-top: 10px;">CONFIRMAR SWAP</button>
+            <input type="number" id="cryptoSwapAmount" placeholder="Quantidade" style="margin: 10px 0; width: 100%; padding: 0.8rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary);">
+            <div id="cryptoSwapResult" style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
+            <button id="confirmCryptoSwapBtn" class="buy-btn" style="width: 100%; margin-top: 10px;">CONFIRMAR SWAP</button>
             <button class="sell-btn close-modal-btn" style="width: 100%; margin-top: 5px;">CANCELAR</button>
         `);
         
-        const amountInput = document.getElementById('swapAmount');
-        const directionSelect = document.getElementById('swapDirection');
-        const resultDiv = document.getElementById('swapResult');
+        const amountInput = document.getElementById('cryptoSwapAmount');
+        const directionSelect = document.getElementById('cryptoSwapDirection');
+        const resultDiv = document.getElementById('cryptoSwapResult');
         
-        function updateSwapPreview() {
+        function updateCryptoSwapPreview() {
             const amount = parseFloat(amountInput.value);
             const direction = directionSelect.value;
             if(isNaN(amount) || amount <= 0) {
@@ -1037,41 +941,69 @@
                 return;
             }
             
-            if(direction === 'brc_to_usd') {
-                if(amount > userBalances.BRADICOIN) {
-                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances.BRADICOIN.toLocaleString()} BRC`;
+            if(direction === `${cryptoCode.toLowerCase()}_to_usd`) {
+                if(amount > userBalances[cryptoCode.toUpperCase()]) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances[cryptoCode.toUpperCase()].toLocaleString()} ${cryptoCode.toUpperCase()}`;
                 } else {
-                    const usdAmount = amount * BRADICOIN_PRICE;
+                    const usdAmount = amount * cryptoPrice;
                     resultDiv.innerHTML = `✅ Você receberá: <strong>$${usdAmount.toFixed(2)} USD</strong><br>Taxa: 0%`;
                 }
-            } else if(direction === 'usd_to_brc') {
-                const neededUSD = amount * BRADICOIN_PRICE;
+            } else if(direction === `usd_to_${cryptoCode.toLowerCase()}`) {
+                const neededUSD = amount * cryptoPrice;
                 if(neededUSD > userBalances.USD) {
                     resultDiv.innerHTML = `❌ Saldo insuficiente! Você precisa de $${neededUSD.toFixed(2)} USD (Saldo: $${userBalances.USD.toLocaleString()})`;
                 } else {
-                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} BRC</strong><br>Custo: $${neededUSD.toFixed(2)} USD`;
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} ${cryptoCode.toUpperCase()}</strong><br>Custo: $${neededUSD.toFixed(2)} USD`;
                 }
-            } else if(direction === 'brc_to_eur') {
-                const eurAmount = amount * BRADICOIN_PRICE * 0.92;
-                if(amount > userBalances.BRADICOIN) {
-                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances.BRADICOIN.toLocaleString()} BRC`;
+            } else if(direction === `${cryptoCode.toLowerCase()}_to_eur`) {
+                const eurAmount = amount * cryptoPrice * exchangeRates.USD.EUR;
+                if(amount > userBalances[cryptoCode.toUpperCase()]) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances[cryptoCode.toUpperCase()].toLocaleString()} ${cryptoCode.toUpperCase()}`;
                 } else {
                     resultDiv.innerHTML = `✅ Você receberá: <strong>€${eurAmount.toFixed(2)} EUR</strong><br>Taxa: 0%`;
                 }
-            } else if(direction === 'eur_to_brc') {
-                const neededEUR = amount * BRADICOIN_PRICE * 0.92;
+            } else if(direction === `eur_to_${cryptoCode.toLowerCase()}`) {
+                const neededEUR = amount * cryptoPrice * exchangeRates.USD.EUR;
                 if(neededEUR > userBalances.EUR) {
                     resultDiv.innerHTML = `❌ Saldo insuficiente! Você precisa de €${neededEUR.toFixed(2)} EUR (Saldo: €${userBalances.EUR.toLocaleString()})`;
                 } else {
-                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} BRC</strong><br>Custo: €${neededEUR.toFixed(2)} EUR`;
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} ${cryptoCode.toUpperCase()}</strong><br>Custo: €${neededEUR.toFixed(2)} EUR`;
+                }
+            } else if(direction === `${cryptoCode.toLowerCase()}_to_gbp`) {
+                const gbpAmount = amount * cryptoPrice * exchangeRates.USD.GBP;
+                if(amount > userBalances[cryptoCode.toUpperCase()]) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances[cryptoCode.toUpperCase()].toLocaleString()} ${cryptoCode.toUpperCase()}`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>£${gbpAmount.toFixed(2)} GBP</strong><br>Taxa: 0%`;
+                }
+            } else if(direction === `gbp_to_${cryptoCode.toLowerCase()}`) {
+                const neededGBP = amount * cryptoPrice * exchangeRates.USD.GBP;
+                if(neededGBP > userBalances.GBP) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você precisa de £${neededGBP.toFixed(2)} GBP (Saldo: £${userBalances.GBP.toLocaleString()})`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} ${cryptoCode.toUpperCase()}</strong><br>Custo: £${neededGBP.toFixed(2)} GBP`;
+                }
+            } else if(direction === `${cryptoCode.toLowerCase()}_to_brl`) {
+                const brlAmount = amount * cryptoPrice * exchangeRates.USD.BRL;
+                if(amount > userBalances[cryptoCode.toUpperCase()]) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${userBalances[cryptoCode.toUpperCase()].toLocaleString()} ${cryptoCode.toUpperCase()}`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>R$ ${brlAmount.toFixed(2)} BRL</strong><br>Taxa: 0%`;
+                }
+            } else if(direction === `brl_to_${cryptoCode.toLowerCase()}`) {
+                const neededBRL = amount * cryptoPrice * exchangeRates.USD.BRL;
+                if(neededBRL > userBalances.BRL) {
+                    resultDiv.innerHTML = `❌ Saldo insuficiente! Você precisa de R$ ${neededBRL.toFixed(2)} BRL (Saldo: R$ ${userBalances.BRL.toLocaleString()})`;
+                } else {
+                    resultDiv.innerHTML = `✅ Você receberá: <strong>${amount.toLocaleString()} ${cryptoCode.toUpperCase()}</strong><br>Custo: R$ ${neededBRL.toFixed(2)} BRL`;
                 }
             }
         }
         
-        amountInput.addEventListener('input', updateSwapPreview);
-        directionSelect.addEventListener('change', updateSwapPreview);
+        amountInput.addEventListener('input', updateCryptoSwapPreview);
+        directionSelect.addEventListener('change', updateCryptoSwapPreview);
         
-        document.getElementById('confirmSwapBtn')?.addEventListener('click', () => {
+        document.getElementById('confirmCryptoSwapBtn')?.addEventListener('click', () => {
             const amount = parseFloat(amountInput.value);
             const direction = directionSelect.value;
             
@@ -1080,56 +1012,161 @@
                 return;
             }
             
-            if(direction === 'brc_to_usd') {
-                if(amount <= userBalances.BRADICOIN) {
-                    const usdAmount = amount * BRADICOIN_PRICE;
-                    userBalances.BRADICOIN -= amount;
+            if(direction === `${cryptoCode.toLowerCase()}_to_usd`) {
+                if(amount <= userBalances[cryptoCode.toUpperCase()]) {
+                    const usdAmount = amount * cryptoPrice;
+                    userBalances[cryptoCode.toUpperCase()] -= amount;
                     userBalances.USD += usdAmount;
-                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} BRC → $${usdAmount.toFixed(2)} USD`);
+                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} ${cryptoCode.toUpperCase()} → $${usdAmount.toFixed(2)} USD`);
                     updateTotalBalance();
                     renderCurrencies();
                     closeModal();
                 } else {
-                    alert('Saldo insuficiente de BRADICOIN');
+                    alert(`Saldo insuficiente de ${cryptoCode.toUpperCase()}`);
                 }
-            } else if(direction === 'usd_to_brc') {
-                const neededUSD = amount * BRADICOIN_PRICE;
+            } else if(direction === `usd_to_${cryptoCode.toLowerCase()}`) {
+                const neededUSD = amount * cryptoPrice;
                 if(neededUSD <= userBalances.USD) {
                     userBalances.USD -= neededUSD;
-                    userBalances.BRADICOIN += amount;
-                    showToast(`✅ Swap realizado! $${neededUSD.toFixed(2)} USD → ${amount.toLocaleString()} BRC`);
+                    userBalances[cryptoCode.toUpperCase()] += amount;
+                    showToast(`✅ Swap realizado! $${neededUSD.toFixed(2)} USD → ${amount.toLocaleString()} ${cryptoCode.toUpperCase()}`);
                     updateTotalBalance();
                     renderCurrencies();
                     closeModal();
                 } else {
                     alert('Saldo insuficiente de USD');
                 }
-            } else if(direction === 'brc_to_eur') {
-                if(amount <= userBalances.BRADICOIN) {
-                    const eurAmount = amount * BRADICOIN_PRICE * 0.92;
-                    userBalances.BRADICOIN -= amount;
+            } else if(direction === `${cryptoCode.toLowerCase()}_to_eur`) {
+                if(amount <= userBalances[cryptoCode.toUpperCase()]) {
+                    const eurAmount = amount * cryptoPrice * exchangeRates.USD.EUR;
+                    userBalances[cryptoCode.toUpperCase()] -= amount;
                     userBalances.EUR += eurAmount;
-                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} BRC → €${eurAmount.toFixed(2)} EUR`);
+                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} ${cryptoCode.toUpperCase()} → €${eurAmount.toFixed(2)} EUR`);
                     updateTotalBalance();
                     renderCurrencies();
                     closeModal();
                 } else {
-                    alert('Saldo insuficiente de BRADICOIN');
+                    alert(`Saldo insuficiente de ${cryptoCode.toUpperCase()}`);
                 }
-            } else if(direction === 'eur_to_brc') {
-                const neededEUR = amount * BRADICOIN_PRICE * 0.92;
+            } else if(direction === `eur_to_${cryptoCode.toLowerCase()}`) {
+                const neededEUR = amount * cryptoPrice * exchangeRates.USD.EUR;
                 if(neededEUR <= userBalances.EUR) {
                     userBalances.EUR -= neededEUR;
-                    userBalances.BRADICOIN += amount;
-                    showToast(`✅ Swap realizado! €${neededEUR.toFixed(2)} EUR → ${amount.toLocaleString()} BRC`);
+                    userBalances[cryptoCode.toUpperCase()] += amount;
+                    showToast(`✅ Swap realizado! €${neededEUR.toFixed(2)} EUR → ${amount.toLocaleString()} ${cryptoCode.toUpperCase()}`);
                     updateTotalBalance();
                     renderCurrencies();
                     closeModal();
                 } else {
                     alert('Saldo insuficiente de EUR');
                 }
+            } else if(direction === `${cryptoCode.toLowerCase()}_to_gbp`) {
+                if(amount <= userBalances[cryptoCode.toUpperCase()]) {
+                    const gbpAmount = amount * cryptoPrice * exchangeRates.USD.GBP;
+                    userBalances[cryptoCode.toUpperCase()] -= amount;
+                    userBalances.GBP += gbpAmount;
+                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} ${cryptoCode.toUpperCase()} → £${gbpAmount.toFixed(2)} GBP`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert(`Saldo insuficiente de ${cryptoCode.toUpperCase()}`);
+                }
+            } else if(direction === `gbp_to_${cryptoCode.toLowerCase()}`) {
+                const neededGBP = amount * cryptoPrice * exchangeRates.USD.GBP;
+                if(neededGBP <= userBalances.GBP) {
+                    userBalances.GBP -= neededGBP;
+                    userBalances[cryptoCode.toUpperCase()] += amount;
+                    showToast(`✅ Swap realizado! £${neededGBP.toFixed(2)} GBP → ${amount.toLocaleString()} ${cryptoCode.toUpperCase()}`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert('Saldo insuficiente de GBP');
+                }
+            } else if(direction === `${cryptoCode.toLowerCase()}_to_brl`) {
+                if(amount <= userBalances[cryptoCode.toUpperCase()]) {
+                    const brlAmount = amount * cryptoPrice * exchangeRates.USD.BRL;
+                    userBalances[cryptoCode.toUpperCase()] -= amount;
+                    userBalances.BRL += brlAmount;
+                    showToast(`✅ Swap realizado! ${amount.toLocaleString()} ${cryptoCode.toUpperCase()} → R$ ${brlAmount.toFixed(2)} BRL`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert(`Saldo insuficiente de ${cryptoCode.toUpperCase()}`);
+                }
+            } else if(direction === `brl_to_${cryptoCode.toLowerCase()}`) {
+                const neededBRL = amount * cryptoPrice * exchangeRates.USD.BRL;
+                if(neededBRL <= userBalances.BRL) {
+                    userBalances.BRL -= neededBRL;
+                    userBalances[cryptoCode.toUpperCase()] += amount;
+                    showToast(`✅ Swap realizado! R$ ${neededBRL.toFixed(2)} BRL → ${amount.toLocaleString()} ${cryptoCode.toUpperCase()}`);
+                    updateTotalBalance();
+                    renderCurrencies();
+                    closeModal();
+                } else {
+                    alert('Saldo insuficiente de BRL');
+                }
             }
         });
+    }
+    
+    // Função para SWAP de moedas fiat (Euro, Dólar, Real, Libra)
+    function updateFiatSwapPreview() {
+        const amount = parseFloat(document.getElementById('fiatSwapAmount').value);
+        const fromCurrency = document.getElementById('fiatFromCurrency').value;
+        const toCurrency = document.getElementById('fiatToCurrency').value;
+        const previewDiv = document.getElementById('fiatSwapPreview');
+        
+        if(isNaN(amount) || amount <= 0) {
+            previewDiv.innerHTML = 'Digite um valor válido';
+            return;
+        }
+        
+        const rate = exchangeRates[fromCurrency][toCurrency];
+        const convertedAmount = amount * rate;
+        const fromSymbol = fromCurrency === 'USD' ? '$' : fromCurrency === 'EUR' ? '€' : fromCurrency === 'GBP' ? '£' : 'R$';
+        const toSymbol = toCurrency === 'USD' ? '$' : toCurrency === 'EUR' ? '€' : toCurrency === 'GBP' ? '£' : 'R$';
+        
+        if(amount > userBalances[fromCurrency]) {
+            previewDiv.innerHTML = `❌ Saldo insuficiente! Você tem ${fromSymbol}${userBalances[fromCurrency].toLocaleString()} ${fromCurrency}`;
+        } else {
+            previewDiv.innerHTML = `✅ Você receberá: <strong>${toSymbol}${convertedAmount.toLocaleString()} ${toCurrency}</strong><br>Taxa de câmbio: 1 ${fromCurrency} = ${rate} ${toCurrency}`;
+        }
+    }
+    
+    function confirmFiatSwap() {
+        const amount = parseFloat(document.getElementById('fiatSwapAmount').value);
+        const fromCurrency = document.getElementById('fiatFromCurrency').value;
+        const toCurrency = document.getElementById('fiatToCurrency').value;
+        
+        if(isNaN(amount) || amount <= 0) {
+            alert('Digite um valor válido');
+            return;
+        }
+        
+        if(amount > userBalances[fromCurrency]) {
+            alert(`Saldo insuficiente de ${fromCurrency}`);
+            return;
+        }
+        
+        const rate = exchangeRates[fromCurrency][toCurrency];
+        const convertedAmount = amount * rate;
+        
+        const fromSymbol = fromCurrency === 'USD' ? '$' : fromCurrency === 'EUR' ? '€' : fromCurrency === 'GBP' ? '£' : 'R$';
+        const toSymbol = toCurrency === 'USD' ? '$' : toCurrency === 'EUR' ? '€' : toCurrency === 'GBP' ? '£' : 'R$';
+        
+        userBalances[fromCurrency] -= amount;
+        userBalances[toCurrency] += convertedAmount;
+        
+        showToast(`✅ Swap realizado! ${fromSymbol}${amount.toLocaleString()} ${fromCurrency} → ${toSymbol}${convertedAmount.toLocaleString()} ${toCurrency}`);
+        updateTotalBalance();
+        renderCurrencies();
+        
+        // Limpar campo
+        document.getElementById('fiatSwapAmount').value = '';
+        document.getElementById('fiatSwapPreview').innerHTML = 'Digite um valor válido';
     }
     
     let pendingBuyAmount = 0;
@@ -1190,63 +1227,6 @@
         renderCurrencies();
         document.getElementById('paymentModal').classList.remove('active');
         pendingBuyAmount = 0;
-    }
-    
-    // FUNÇÕES PIX
-    function renderPixTransfers() {
-        const container = document.getElementById('pixTransfersList');
-        if(!container) return;
-        container.innerHTML = pixTransfers.map(t => {
-            if(t.type === 'sent') {
-                return `<div class="pix-transfer-item"><span><i class="fas fa-paper-plane" style="color: var(--neon-green);"></i> Para: ${t.to}</span><span>R$ ${t.amount.toFixed(2)}</span><span>${t.date} - ${t.time}</span></div>`;
-            } else {
-                return `<div class="pix-transfer-item"><span><i class="fas fa-download" style="color: var(--neon-blue);"></i> Recebido de: ${t.from}</span><span>R$ ${t.amount.toFixed(2)}</span><span>${t.date} - ${t.time}</span></div>`;
-            }
-        }).join('');
-    }
-    
-    function generatePixQr() {
-        const amount = parseFloat(document.getElementById('qrPixAmount').value);
-        const qrDisplay = document.getElementById('pixQrCodeDisplay');
-        
-        if(isNaN(amount) || amount <= 0) {
-            qrDisplay.innerHTML = '<i class="fas fa-qrcode" style="font-size: 3rem; color: #000;"></i><br>Digite um valor válido';
-            return;
-        }
-        
-        // Simular QR Code com texto
-        const pixPayload = `00020126580014BR.GOV.BCB.PIX0136alexander@zentronix.com5204000053039865404${Math.round(amount*100)}5802BR5915Alexander Vance6009SAO PAULO62070503***6304E6A3`;
-        qrDisplay.innerHTML = `<div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
-            <i class="fas fa-qrcode" style="font-size: 3rem; color: #000;"></i>
-            <p style="font-size: 0.6rem; color: #000; margin-top: 5px;">Valor: R$ ${amount.toFixed(2)}</p>
-            <p style="font-size: 0.5rem; color: #666;">Código PIX gerado</p>
-        </div>`;
-        
-        showToast(`✅ QR Code PIX gerado! Valor: R$ ${amount.toFixed(2)}`);
-        
-        // Simular recebimento após alguns segundos (apenas para demonstração)
-        setTimeout(() => {
-            if(Math.random() > 0.7) {
-                userBalances.BRL += amount;
-                pixTransfers.unshift({
-                    type: 'received',
-                    from: 'Pagamento via QR Code',
-                    amount: amount,
-                    date: new Date().toLocaleDateString('pt-BR').slice(0,5),
-                    time: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
-                    status: 'completed'
-                });
-                renderPixTransfers();
-                updateTotalBalance();
-                renderCurrencies();
-                showToast(`💰 R$ ${amount.toFixed(2)} recebido via PIX!`);
-            }
-        }, 3000);
-    }
-    
-    function copyPixKey(key) {
-        navigator.clipboard.writeText(key);
-        showToast(`✅ Chave PIX copiada: ${key}`);
     }
     
     function applyLanguage(lang) {
@@ -1323,18 +1303,56 @@
     });
 
     function showToast(msg){ let t=document.createElement('div'); t.className='toast-notification'; t.innerHTML=`<i class="fas fa-check-circle"></i> ${msg}`; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
-    function formatBalance(code,val){ if(code==='USD') return `$${val.toLocaleString()}`; if(code==='EUR') return `€${val.toLocaleString()}`; if(code==='GBP') return `£${val.toLocaleString()}`; if(code==='BTC') return `${val.toFixed(4)} BTC`; if(code==='ETH') return `${val.toFixed(2)} ETH`; if(code==='BRADICOIN') return `${val.toLocaleString()} BRC`; if(code==='SOL') return `${val.toLocaleString()} SOL`; if(code==='MATIC') return `${val.toLocaleString()} MATIC`; if(code==='USDT') return `${val.toLocaleString()} USDT`; if(code==='LTC') return `${val.toLocaleString()} LTC`; if(code==='BNB') return `${val.toLocaleString()} BNB`; if(code==='BRL') return `R$ ${val.toFixed(2)}`; return `${val} ${code}`; }
-    function updateTotalBalance(){ let total = userBalances.USD + (userBalances.EUR||0)*1.09 + (userBalances.GBP||0)*1.27 + (userBalances.BTC||0)*67200 + (userBalances.ETH||0)*3443 + (userBalances.BRADICOIN||0)*BRADICOIN_PRICE + (userBalances.SOL||0)*98.07 + (userBalances.MATIC||0)*0.85 + (userBalances.USDT||0)*1.00 + (userBalances.LTC||0)*82.50 + (userBalances.BNB||0)*312.50 + ((userBalances.BRL||0)/5.12); document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString()}`; document.getElementById('stealthUsd') && (document.getElementById('stealthUsd').innerHTML = `$${userBalances.USD.toLocaleString()}`); }
-    function renderCurrencies(){ let grid=document.getElementById('currencyGrid'); if(!grid) return; grid.innerHTML=''; [...currencies,{code:'BRL',symbol:'R$'},...cryptoAssets].forEach(a=>{ let b=userBalances[a.code]||0; grid.innerHTML+=`<div class="currency-item"><span>${a.code}</span><span class="currency-balance">${formatBalance(a.code,b)}</span><div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;"><button class="currency-send-btn send-currency-btn" data-currency="${a.code}">SEND</button><button class="buy-btn receive-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;">RECEIVE</button><button class="sell-btn stake-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;">STAKE</button></div></div>`; }); 
+    function formatBalance(code,val){ if(code==='USD') return `$${val.toLocaleString()}`; if(code==='EUR') return `€${val.toLocaleString()}`; if(code==='GBP') return `£${val.toLocaleString()}`; if(code==='BRL') return `R$ ${val.toFixed(2)}`; if(code==='BTC') return `${val.toFixed(4)} BTC`; if(code==='ETH') return `${val.toFixed(2)} ETH`; if(code==='BRADICOIN') return `${val.toLocaleString()} BRC`; if(code==='SOL') return `${val.toLocaleString()} SOL`; if(code==='MATIC') return `${val.toLocaleString()} MATIC`; if(code==='USDT') return `${val.toLocaleString()} USDT`; if(code==='LTC') return `${val.toLocaleString()} LTC`; if(code==='BNB') return `${val.toLocaleString()} BNB`; return `${val} ${code}`; }
+    function updateTotalBalance(){ 
+        let total = userBalances.USD + (userBalances.EUR||0)*exchangeRates.USD.EUR + (userBalances.GBP||0)*exchangeRates.USD.GBP + (userBalances.BRL||0)*exchangeRates.BRL.USD;
+        total += (userBalances.BTC||0)*67234 + (userBalances.ETH||0)*3441 + (userBalances.BRADICOIN||0)*BRADICOIN_PRICE + (userBalances.SOL||0)*98.07 + (userBalances.MATIC||0)*0.85 + (userBalances.USDT||0)*1.00 + (userBalances.LTC||0)*82.50 + (userBalances.BNB||0)*312.50;
+        document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString()}`; 
+        document.getElementById('stealthUsd') && (document.getElementById('stealthUsd').innerHTML = `$${userBalances.USD.toLocaleString()}`); 
+    }
+    function renderCurrencies(){ 
+        let grid=document.getElementById('currencyGrid'); 
+        if(!grid) return; 
+        grid.innerHTML=''; 
+        [...currencies,...cryptoAssets].forEach(a=>{ 
+            let b=userBalances[a.code]||0; 
+            grid.innerHTML+=`<div class="currency-item"><span>${a.code}</span><span class="currency-balance">${formatBalance(a.code,b)}</span><div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;"><button class="currency-send-btn send-currency-btn" data-currency="${a.code}">SEND</button><button class="buy-btn receive-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;">RECEIVE</button><button class="sell-btn stake-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;">STAKE</button><button class="swap-btn swap-currency-btn" data-currency="${a.code}" style="padding:0.3rem 0.6rem; font-size:0.6rem;"><i class="fas fa-exchange-alt"></i> SWAP</button></div></div>`; 
+        }); 
         document.querySelectorAll('.send-currency-btn').forEach(btn=>btn.addEventListener('click',()=>{ let currency=btn.dataset.currency; let amt=parseFloat(prompt(`Amount to send (${currency}):`)); if(amt && userBalances[currency]>=amt){ userBalances[currency]-=amt; showToast(`Sent ${amt} ${currency}`); updateTotalBalance(); renderCurrencies(); } else if(amt) alert('Insufficient balance'); }));
         document.querySelectorAll('.receive-currency-btn').forEach(btn=>btn.addEventListener('click',()=>{ let currency=btn.dataset.currency; let amt=parseFloat(prompt(`Amount to receive (${currency}):`)); if(amt){ userBalances[currency]+=amt; showToast(`Received ${amt} ${currency}`); updateTotalBalance(); renderCurrencies(); } }));
         document.querySelectorAll('.stake-currency-btn').forEach(btn=>btn.addEventListener('click',()=>{ let currency=btn.dataset.currency; let amt=parseFloat(prompt(`Amount to stake (${currency}):`)); if(amt && userBalances[currency]>=amt){ userBalances[currency]-=amt; showToast(`Staked ${amt} ${currency} successfully! Rewards: 5% APY`); updateTotalBalance(); renderCurrencies(); } else if(amt) alert('Insufficient balance'); }));
+        document.querySelectorAll('.swap-currency-btn').forEach(btn=>{
+            btn.addEventListener('click',()=>{
+                let currency = btn.dataset.currency;
+                let cryptoFound = cryptoAssets.find(c => c.code === currency);
+                if(cryptoFound) {
+                    swapCrypto(currency, cryptoFound.price, currency);
+                } else if(currencies.find(c => c.code === currency)) {
+                    // Para moedas fiat, redirecionar para a seção de swap fiat
+                    showToast(`Use a seção Swap Center para trocar ${currency}`);
+                    showSection('swap');
+                    // Preencher os selects automaticamente
+                    document.getElementById('fiatFromCurrency').value = currency;
+                    document.getElementById('fiatSwapPreview').innerHTML = 'Digite um valor válido';
+                } else {
+                    showToast(`Swap disponível na seção Swap Center`);
+                }
+            });
+        });
     }
     function renderCards(){ let cont=document.getElementById('cardsGrid'); if(cont) cont.innerHTML=userCards.map(c=>`<div class="card-item"><div>**** ${c.last4}</div><div>Limit: $${c.limit}</div><div class="card-actions-buttons" style="margin-top:0.5rem;"><button class="card-action-btn block-card" data-card="${c.id}" style="background:rgba(255,68,102,0.2); border:1px solid #ff4466; border-radius:0.5rem; padding:0.3rem 0.6rem; margin-right:0.5rem; cursor:pointer;">🔒 Block</button><button class="card-action-btn adjust-limit" data-card="${c.id}" style="background:rgba(0,242,255,0.2); border:1px solid #00f2ff; border-radius:0.5rem; padding:0.3rem 0.6rem; cursor:pointer;">💰 Adjust Limit</button></div></div>`).join(''); document.querySelectorAll('.block-card').forEach(btn=>btn.addEventListener('click',()=>showToast('Card blocked'))); document.querySelectorAll('.adjust-limit').forEach(btn=>btn.addEventListener('click',()=>showToast('Limit adjustment requested'))); }
     function renderSessionsList(){ let cont=document.getElementById('sessionsList'); if(cont) cont.innerHTML=activeSessions.map(s=>`<div class="recurring-item"><div>${s.device}</div><div>${s.current?'● Current':''}</div></div>`).join(''); }
     function initStakingChart(){ let ctx=document.getElementById('stakingChart').getContext('2d'); stakingChart=new Chart(ctx,{type:'line',data:{labels:['W1','W2','W3','W4','W5','W6'],datasets:[{label:'Portfolio',data:[100,105,108,112,118,125],borderColor:'#00f2ff',tension:0.4}]}}); }
     function initCharts(){ let ctx=document.getElementById('realtimeChart')?.getContext('2d'); if(ctx) realtimeChart=new Chart(ctx,{type:'line',data:{labels:['1','2','3','4','5'],datasets:[{label:'Performance',data:[25,27,26,28,30],borderColor:'#00f2ff'}]}}); let ctx2=document.getElementById('monthlyChart')?.getContext('2d'); if(ctx2) monthlyChart=new Chart(ctx2,{type:'bar',data:{labels:['Jan','Feb','Mar'],datasets:[{label:'Income',data:[12,14,13],backgroundColor:'#00f2ff'}]}}); }
-    function showSection(id){ document.querySelectorAll('.investment-section').forEach(s=>s.style.display='none'); let el=document.getElementById(`${id}Section`); if(el) el.style.display='block'; document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active')); document.querySelector(`.menu-item[data-section="${id}"]`)?.classList.add('active'); if(id==='cards') renderCards(); if(id==='sessions') renderSessionsList(); if(id==='pix') renderPixTransfers(); }
+    function showSection(id){ 
+        document.querySelectorAll('.investment-section').forEach(s=>s.style.display='none'); 
+        let el=document.getElementById(`${id}Section`); 
+        if(el) el.style.display='block'; 
+        document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active')); 
+        document.querySelector(`.menu-item[data-section="${id}"]`)?.classList.add('active'); 
+        if(id==='cards') renderCards(); 
+        if(id==='sessions') renderSessionsList(); 
+    }
     
     function showModal(contentHtml){
         let modal = document.getElementById('modalOverlay');
@@ -1409,8 +1427,8 @@
                     showModal(`
                         <h3>💱 Currency Exchange</h3>
                         <input type="number" id="exchangeAmount" placeholder="Amount">
-                        <select id="fromCurrency"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select> → 
-                        <select id="toCurrency"><option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option></select>
+                        <select id="fromCurrency"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="BRL">BRL</option></select> → 
+                        <select id="toCurrency"><option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option><option value="BRL">BRL</option></select>
                         <button class="buy-btn" id="calcExchangeBtn">Calculate</button>
                         <button class="sell-btn close-modal-btn">Close</button>
                     `);
@@ -1418,7 +1436,7 @@
                         let amt = document.getElementById('exchangeAmount').value;
                         let from = document.getElementById('fromCurrency').value;
                         let to = document.getElementById('toCurrency').value;
-                        let rate = from === 'USD' && to === 'EUR' ? 0.92 : from === 'EUR' && to === 'USD' ? 1.09 : 1;
+                        let rate = exchangeRates[from][to];
                         showToast(`${amt} ${from} = ${(amt * rate).toFixed(2)} ${to}`);
                         closeModal();
                     });
@@ -1482,9 +1500,32 @@
     document.querySelectorAll('.stake-btn').forEach(btn=>btn.addEventListener('click',()=>{ let amt=prompt('Amount to stake:'); if(amt) showToast(`Staked ${amt}!`); }));
     document.querySelectorAll('.unstake-btn').forEach(btn=>btn.addEventListener('click',()=>{ let amt=prompt('Amount to unstake:'); if(amt) showToast(`Unstaked ${amt}!`); }));
     
-    // NOVOS BOTÕES SWAP e BUY para BRADICOIN
-    document.getElementById('swapBradicoinBtn')?.addEventListener('click', swapBradicoin);
+    // Botões SWAP para criptomoedas
+    document.querySelectorAll('.swap-crypto-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const crypto = btn.dataset.crypto;
+            const price = parseFloat(btn.dataset.price);
+            let cryptoName = '';
+            if(crypto === 'bradicoin') cryptoName = 'BRADICOIN';
+            else if(crypto === 'btc') cryptoName = 'Bitcoin';
+            else if(crypto === 'eth') cryptoName = 'Ethereum';
+            else if(crypto === 'sol') cryptoName = 'Solana';
+            else if(crypto === 'matic') cryptoName = 'Polygon';
+            else if(crypto === 'usdt') cryptoName = 'Tether';
+            else if(crypto === 'ltc') cryptoName = 'Litecoin';
+            else if(crypto === 'bnb') cryptoName = 'BNB';
+            swapCrypto(crypto, price, cryptoName);
+        });
+    });
+    
+    // Botão COMPRAR para BRADICOIN
     document.getElementById('buyBradicoinBtn')?.addEventListener('click', buyBradicoin);
+    
+    // SWAP de moedas fiat
+    document.getElementById('fiatSwapAmount')?.addEventListener('input', updateFiatSwapPreview);
+    document.getElementById('fiatFromCurrency')?.addEventListener('change', updateFiatSwapPreview);
+    document.getElementById('fiatToCurrency')?.addEventListener('change', updateFiatSwapPreview);
+    document.getElementById('confirmFiatSwapBtn')?.addEventListener('click', confirmFiatSwap);
     
     // Modal de pagamento
     document.querySelectorAll('.payment-method-card').forEach(card => {
@@ -1505,12 +1546,6 @@
     document.getElementById('closePaymentModal')?.addEventListener('click', () => {
         document.getElementById('paymentModal').classList.remove('active');
         pendingBuyAmount = 0;
-    });
-    
-    // PIX EVENT LISTENERS
-    document.getElementById('generatePixQrBtn')?.addEventListener('click', generatePixQr);
-    document.querySelectorAll('.copy-pix-key').forEach(btn => {
-        btn.addEventListener('click', () => copyPixKey(btn.dataset.key));
     });
     
     document.querySelectorAll('.send-crypto-btn').forEach(btn=>btn.addEventListener('click',()=>{ let amt=prompt('Amount to send:'); if(amt) showToast(`Sent ${amt}!`); }));
@@ -1559,7 +1594,6 @@
     renderCards();
     renderSessionsList();
     initCharts();
-    renderPixTransfers();
 </script>
 </body>
 </html>
