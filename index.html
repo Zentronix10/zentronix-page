@@ -719,6 +719,274 @@ function copyWalletAddress(address) {
     navigator.clipboard.writeText(address);
     showToast("✅ Wallet address copied to clipboard!");
 }
+// ==================== BANKING DETAILS FOR RECEIVE (Zentronix Accounts) ====================
+const bankReceiveDetails = {
+    USD: {
+        bankName: "JPMorgan Chase Bank N.A.",
+        swiftCode: "CHASUS33XXX",
+        routingNumber: "021000021",
+        accountNumber: "ZNTX-4821-7390-1256",
+        bankAddress: "270 Park Avenue, New York, NY 10017, USA",
+        beneficiaryName: "Zentronix Bank International",
+        beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001"
+    },
+    EUR: {
+        bankName: "Deutsche Bank AG",
+        swiftCode: "DEUTDEFFXXX",
+        iban: "DE89370400440532013000",
+        accountNumber: "ZNTX-EU-7390-1256",
+        bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany",
+        beneficiaryName: "Zentronix Bank Europe",
+        beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany"
+    },
+    GBP: {
+        bankName: "Barclays Bank PLC",
+        swiftCode: "BARCLGB22XXX",
+        sortCode: "20-00-00",
+        accountNumber: "ZNTX-UK-7390-1256",
+        bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom",
+        beneficiaryName: "Zentronix Bank UK Ltd",
+        beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY"
+    },
+    BRL: {
+        bankName: "Banco Itaú Unibanco S.A.",
+        swiftCode: "ITAUBRSPXXX",
+        cnpj: "60.701.190/0001-04",
+        accountNumber: "ZNTX-BR-7390-1256",
+        agency: "1234",
+        bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil",
+        beneficiaryName: "Zentronix Bank Brasil",
+        beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP"
+    }
+};
+
+// ==================== FUNCTIONS FOR FIAT CURRENCIES (USD, EUR, GBP, BRL) ====================
+
+// Function to open SEND modal for fiat currencies
+function openFiatSendModal(currency, symbol) {
+    const balance = userBalances[symbol] || 0;
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
+        
+        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(2)} ${symbol}</div>
+        </div>
+        
+        <!-- BENEFICIARY DATA -->
+        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="beneficiaryName" class="form-input" placeholder="Full name of the recipient">
+            </div>
+            <div class="form-group">
+                <label>Beneficiary Address</label>
+                <input type="text" id="beneficiaryAddress" class="form-input" placeholder="Street, City, Country">
+            </div>
+        </div>
+        
+        <!-- BENEFICIARY BANK DETAILS -->
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BENEFICIARY BANK DETAILS</div>
+            <div class="form-group">
+                <label>Bank Name *</label>
+                <input type="text" id="bankName" class="form-input" placeholder="Name of the beneficiary's bank">
+            </div>
+            <div class="form-group">
+                <label>Bank Address</label>
+                <input type="text" id="bankAddress" class="form-input" placeholder="Bank address (optional)">
+            </div>
+            <div class="form-group">
+                <label>SWIFT/BIC Code *</label>
+                <input type="text" id="swiftCode" class="form-input" placeholder="Example: BARCLGB22XXX">
+                <div style="font-size: 0.6rem; opacity: 0.6; margin-top: 0.2rem;">8-11 characters: Bank code + Country code + Location code</div>
+            </div>
+        </div>
+        
+        <!-- BENEFICIARY ACCOUNT DETAILS -->
+        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">💳 BENEFICIARY ACCOUNT DETAILS</div>
+            <div class="form-group">
+                <label>Account Number / IBAN *</label>
+                <input type="text" id="accountNumber" class="form-input" placeholder="Account number or IBAN">
+            </div>
+            ${symbol === 'EUR' ? `<div class="form-group"><label>IBAN (for SEPA transfers)</label><input type="text" id="ibanNumber" class="form-input" placeholder="International Bank Account Number"></div>` : ''}
+            ${symbol === 'GBP' ? `<div class="form-group"><label>Sort Code</label><input type="text" id="sortCode" class="form-input" placeholder="6-digit sort code (e.g., 20-00-00)"></div>` : ''}
+            ${symbol === 'USD' ? `<div class="form-group"><label>Routing Number (ABA)</label><input type="text" id="routingNumber" class="form-input" placeholder="9-digit routing number"></div>` : ''}
+            ${symbol === 'BRL' ? `<div class="form-group"><label>CPF/CNPJ</label><input type="text" id="cpfCnpj" class="form-input" placeholder="Document number for Brazilian transfers"></div><div class="form-group"><label>Agency / Bank Branch</label><input type="text" id="agencyNumber" class="form-input" placeholder="Bank agency number"></div>` : ''}
+        </div>
+        
+        <!-- TRANSFER DETAILS -->
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">📊 TRANSFER DETAILS</div>
+            <div class="form-group">
+                <label>Amount to Send *</label>
+                <input type="number" id="sendAmountFiat" class="form-input" placeholder="0.00" step="any">
+            </div>
+            <div class="form-group">
+                <label>Transfer Type</label>
+                <select id="transferType" class="form-input">
+                    <option value="SWIFT">🌍 SWIFT (International Wire)</option>
+                    ${symbol === 'EUR' ? '<option value="SEPA">🇪🇺 SEPA (Single Euro Payments Area)</option>' : ''}
+                    ${symbol === 'USD' ? '<option value="FEDWIRE">🇺🇸 Fedwire (Domestic Wire)</option><option value="ACH">🇺🇸 ACH (Batch Transfer)</option>' : ''}
+                    ${symbol === 'GBP' ? '<option value="FPS">🇬🇧 Faster Payments (FPS)</option><option value="CHAPS">🇬🇧 CHAPS (Large Amount)</option>' : ''}
+                    ${symbol === 'BRL' ? '<option value="TED">🇧🇷 TED (Same Day)</option>' : ''}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Purpose of Payment</label>
+                <select id="paymentPurpose" class="form-input">
+                    <option value="Personal Transfer">👤 Personal Transfer</option>
+                    <option value="Business Payment">💼 Business Payment</option>
+                    <option value="Investment">📈 Investment</option>
+                    <option value="Real Estate">🏠 Real Estate</option>
+                    <option value="Education">🎓 Education</option>
+                    <option value="Family Support">👨‍👩‍👧 Family Support</option>
+                    <option value="Trade">📦 Trade / Commercial</option>
+                    <option value="Salary">💰 Salary / Payroll</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Reference / Invoice Number</label>
+                <input type="text" id="referenceNumber" class="form-input" placeholder="Optional reference">
+            </div>
+            <div class="form-group">
+                <label>Transaction Note</label>
+                <input type="text" id="txNoteFiat" class="form-input" placeholder="Add a note to the beneficiary">
+            </div>
+        </div>
+        
+        <!-- FEES AND OPTIONS -->
+        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">💰 FEES & OPTIONS</div>
+            <div class="form-group">
+                <label>Fee Option</label>
+                <select id="feeOption" class="form-input">
+                    <option value="OUR">🏦 OUR (Sender pays all fees)</option>
+                    <option value="SHA">🤝 SHA (Fees shared - recommended)</option>
+                    <option value="BEN">📥 BEN (Beneficiary pays fees)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Estimated Fee</label>
+                <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                    ${getFiatFeeEstimate(symbol)}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Estimated Delivery Time</label>
+                <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                    ${getFiatDeliveryTime(symbol)}
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
+            <div style="font-size: 0.65rem;">
+                • Verify all details before confirming<br>
+                • International transfers may be subject to intermediary bank fees<br>
+                • Funds will be credited within the estimated timeframe
+            </div>
+        </div>
+        
+        <button class="send-crypto-btn" onclick="confirmFiatSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem;">
+            <i class="fas fa-paper-plane"></i> CONFIRM TRANSFER
+        </button>
+    `;
+    showModal(modalContent);
+}
+
+function getFiatFeeEstimate(symbol) {
+    const fees = { USD: "~$25 - $45 (International SWIFT)", EUR: "~€15 - €35 (SEPA: free - €5 / SWIFT: €15-€35)", GBP: "~£10 - £30 (FPS: free / CHAPS: £20-£30)", BRL: "~R$10 - R$50 (TED: R$10-20)" };
+    return fees[symbol] || "~$30";
+}
+
+function getFiatDeliveryTime(symbol) {
+    const times = { USD: "1-3 business days (SWIFT)", EUR: "1-2 business days (SEPA: 1 day / SWIFT: 1-2 days)", GBP: "Same day - 2 business days", BRL: "Instant - 1 business day" };
+    return times[symbol] || "1-3 business days";
+}
+
+function confirmFiatSend(currency, symbol) {
+    const amount = parseFloat(document.getElementById('sendAmountFiat')?.value);
+    const beneficiaryName = document.getElementById('beneficiaryName')?.value;
+    const bankName = document.getElementById('bankName')?.value;
+    const swiftCode = document.getElementById('swiftCode')?.value;
+    const accountNumber = document.getElementById('accountNumber')?.value;
+    const transferType = document.getElementById('transferType')?.value;
+    const paymentPurpose = document.getElementById('paymentPurpose')?.value;
+    const reference = document.getElementById('referenceNumber')?.value || "";
+    const feeOption = document.getElementById('feeOption')?.value;
+    const txNote = document.getElementById('txNoteFiat')?.value || "";
+    
+    const balance = userBalances[symbol] || 0;
+    
+    if (!beneficiaryName || beneficiaryName.trim() === "") { showToast("❌ Please enter beneficiary name"); return; }
+    if (!bankName || bankName.trim() === "") { showToast("❌ Please enter bank name"); return; }
+    if (!swiftCode || swiftCode.trim() === "") { showToast("❌ Please enter SWIFT/BIC code"); return; }
+    if (!accountNumber || accountNumber.trim() === "") { showToast("❌ Please enter account number/IBAN"); return; }
+    if (isNaN(amount) || amount <= 0) { showToast("❌ Please enter a valid amount"); return; }
+    if (amount > balance) { showToast(`❌ Insufficient balance. You have ${balance.toFixed(2)} ${symbol}`); return; }
+    
+    userBalances[symbol] -= amount;
+    updateBalances();
+    
+    const feeOptionText = feeOption === 'OUR' ? 'Sender pays all fees' : (feeOption === 'SHA' ? 'Fees shared' : 'Beneficiary pays fees');
+    addMessage("BANK TRANSFER", `Sent ${symbol}`, `💰 Sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}\n🏦 Bank: ${bankName} (${swiftCode})\n💳 Account: ${accountNumber}\n📊 Type: ${transferType}\n🎯 Purpose: ${paymentPurpose}\n💸 Fee: ${feeOptionText}${reference ? '\n📋 Ref: ' + reference : ''}${txNote ? '\n📝 Note: ' + txNote : ''}`);
+    
+    showToast(`✅ Successfully sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}!`);
+    closeModal();
+}
+
+// Open RECEIVE modal for fiat currencies
+function openFiatReceiveModal(currency, symbol) {
+    const bankInfo = bankReceiveDetails[symbol];
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
+        <div style="text-align: center; margin-bottom: 1rem;"><i class="fas fa-university" style="font-size: 3rem; color: var(--neon-yellow);"></i></div>
+        
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7; text-align: center;">YOUR ZENTRONIX ACCOUNT</div>
+            <div style="font-size: 1rem; font-weight: bold; text-align: center; font-family: monospace;">ZNTX-4821-7390-1256</div>
+            <button class="copy-address-btn" onclick="copyWalletAddress('ZNTX-4821-7390-1256')" style="margin-top: 0.3rem; width: 100%;">COPY ACCOUNT NUMBER</button>
+        </div>
+        
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BANK INFORMATION FOR WIRE TRANSFER</div>
+            <div class="form-group"><label>Bank Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.bankName}</div></div>
+            <div class="form-group"><label>Bank Address</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.bankAddress}</div></div>
+            <div class="form-group"><label>SWIFT/BIC Code</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.swiftCode}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.swiftCode}')" style="margin-left: 0.5rem;">COPY</button></div></div>
+            ${symbol === 'USD' ? `<div class="form-group"><label>Routing Number (ABA)</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.routingNumber}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.routingNumber}')" style="margin-left: 0.5rem;">COPY</button></div></div>` : ''}
+            ${symbol === 'EUR' ? `<div class="form-group"><label>IBAN</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.iban}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.iban}')" style="margin-left: 0.5rem;">COPY</button></div></div>` : ''}
+            ${symbol === 'GBP' ? `<div class="form-group"><label>Sort Code</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.sortCode}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.sortCode}')" style="margin-left: 0.5rem;">COPY</button></div></div>` : ''}
+            ${symbol === 'BRL' ? `<div class="form-group"><label>CNPJ</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.cnpj}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.cnpj}')" style="margin-left: 0.5rem;">COPY</button></div></div><div class="form-group"><label>Agency</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.agency}</div></div>` : ''}
+        </div>
+        
+        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
+            <div class="form-group"><label>Beneficiary Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.beneficiaryName}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.beneficiaryName}')" style="margin-left: 0.5rem;">COPY</button></div></div>
+            <div class="form-group"><label>Beneficiary Address</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.beneficiaryAddress}</div></div>
+        </div>
+        
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
+            <div style="font-size: 0.65rem;">
+                • Include your account number (ZNTX-4821-7390-1256) in the transfer reference<br>
+                • Funds typically arrive within 1-3 business days<br>
+                • Minimum deposit: $1,000 equivalent
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <button class="buy-btn" onclick="showToast('Wire instructions sent to your email')" style="flex: 1;"><i class="fas fa-file-pdf"></i> Wire Instructions</button>
+            <button class="wallet-btn" onclick="copyWalletAddress('ZNTX-4821-7390-1256')" style="flex: 1;"><i class="fas fa-share-alt"></i> Share Details</button>
+        </div>
+    `;
+    showModal(modalContent);
+}
 
 function generateQRCode(address) {
     showToast("🔲 QR Code would be generated here in production");
@@ -885,6 +1153,251 @@ function openWalletModal(asset, symbol) {
 function openSwapModalFull() { 
     showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap Center</h3><select id="swapFromSelect"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><i class="fas fa-arrow-down" style="display:block; text-align:center; margin:0.5rem 0;"></i><select id="swapToSelect"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><input type="number" id="swapAmountInput" placeholder="Amount"><button class="buy-btn" onclick="executeSwap()" style="width:100%; margin-top:1rem;">Confirm Swap</button>`); 
 }
+    // ==================== LOAN APPLICATION FUNCTION ====================
+
+// Function to open loan application modal
+function openLoanApplicationModal(serviceName) {
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📋 ${serviceName} APPLICATION</h3>
+        
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Zentronix Bank - Credit Analysis</div>
+            <div style="font-size: 0.8rem; margin-top: 0.3rem;">Competitive rates from 3.99% APR</div>
+        </div>
+        
+        <!-- LOAN AMOUNT -->
+        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">💰 LOAN AMOUNT</div>
+            <div class="form-group">
+                <label>Amount *</label>
+                <input type="number" id="loanAmount" class="form-input" placeholder="0.00" step="any">
+            </div>
+            <div class="form-group">
+                <label>Currency *</label>
+                <select id="loanCurrency" class="form-input">
+                    <option value="USD">🇺🇸 US Dollar (USD)</option>
+                    <option value="EUR">🇪🇺 Euro (EUR)</option>
+                    <option value="GBP">🇬🇧 British Pound (GBP)</option>
+                    <option value="BRL">🇧🇷 Brazilian Real (BRL)</option>
+                    <option value="BRADICOIN">🪙 BradiCoin (BRC)</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- LOAN PURPOSE -->
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">📝 LOAN PURPOSE</div>
+            <div class="form-group">
+                <label>Purpose of Loan *</label>
+                <select id="loanPurpose" class="form-input">
+                    <option value="Personal">👤 Personal Expenses</option>
+                    <option value="Business">💼 Business Investment</option>
+                    <option value="Education">🎓 Education / Tuition</option>
+                    <option value="Real Estate">🏠 Real Estate / Property</option>
+                    <option value="Debt Consolidation">📊 Debt Consolidation</option>
+                    <option value="Medical">🏥 Medical Expenses</option>
+                    <option value="Vehicle">🚗 Vehicle Purchase</option>
+                    <option value="Travel">✈️ Travel / Vacation</option>
+                    <option value="Crypto Investment">📈 Crypto Investment</option>
+                    <option value="Other">🔧 Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Additional Details</label>
+                <textarea id="loanDetails" class="form-input" rows="2" placeholder="Please provide more information about your loan request..."></textarea>
+            </div>
+        </div>
+        
+        <!-- LOAN TERM -->
+        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">⏱️ LOAN TERM</div>
+            <div class="form-group">
+                <label>Loan Term</label>
+                <select id="loanTerm" class="form-input">
+                    <option value="6">6 months</option>
+                    <option value="12" selected>12 months (1 year)</option>
+                    <option value="24">24 months (2 years)</option>
+                    <option value="36">36 months (3 years)</option>
+                    <option value="48">48 months (4 years)</option>
+                    <option value="60">60 months (5 years)</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- PERSONAL INFORMATION -->
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">👤 PERSONAL INFORMATION</div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="loanFullName" class="form-input" value="Alexander Vance" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loanEmail" class="form-input" value="alexander.vance@zentronix.com" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="loanPhone" class="form-input" value="+41 78 123 4567" placeholder="Your phone number">
+            </div>
+            <div class="form-group">
+                <label>Monthly Income (approx.)</label>
+                <input type="number" id="loanIncome" class="form-input" placeholder="Monthly income amount">
+            </div>
+        </div>
+        
+        <!-- SUMMARY & RATES -->
+        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">📊 SUMMARY & RATES</div>
+            <div id="loanSummary" style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.7rem;">
+                Select amount and currency to see estimated rates
+            </div>
+        </div>
+        
+        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
+            <div style="font-size: 0.65rem;">
+                • Credit analysis subject to approval<br>
+                • Terms and conditions apply<br>
+                • Loan amount may vary based on credit history<br>
+                • Zentronix Bank reserves the right to adjust rates
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+            <button class="send-crypto-btn" onclick="submitLoanApplication()" style="flex: 1; padding: 0.8rem;">
+                <i class="fas fa-paper-plane"></i> SUBMIT APPLICATION
+            </button>
+            <button class="sell-btn" onclick="closeModal()" style="flex: 1; padding: 0.8rem;">
+                <i class="fas fa-times"></i> CANCEL
+            </button>
+        </div>
+    `;
+    showModal(modalContent);
+    
+    // Add event listeners to update summary
+    setTimeout(() => {
+        const amountInput = document.getElementById('loanAmount');
+        const currencySelect = document.getElementById('loanCurrency');
+        const termSelect = document.getElementById('loanTerm');
+        if (amountInput) amountInput.addEventListener('input', updateLoanSummary);
+        if (currencySelect) currencySelect.addEventListener('change', updateLoanSummary);
+        if (termSelect) termSelect.addEventListener('change', updateLoanSummary);
+    }, 100);
+}
+
+// Function to update loan summary
+function updateLoanSummary() {
+    const amount = parseFloat(document.getElementById('loanAmount')?.value);
+    const currency = document.getElementById('loanCurrency')?.value;
+    const termMonths = parseInt(document.getElementById('loanTerm')?.value) || 12;
+    
+    if (!amount || amount <= 0 || !currency) {
+        document.getElementById('loanSummary').innerHTML = 'Select amount and currency to see estimated rates';
+        return;
+    }
+    
+    // Interest rates by currency
+    const interestRates = {
+        USD: 4.99,
+        EUR: 5.49,
+        GBP: 5.29,
+        BRL: 12.99,
+        BRADICOIN: 8.50
+    };
+    
+    const rate = interestRates[currency] || 6.99;
+    const monthlyRate = rate / 100 / 12;
+    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
+    const totalPayment = monthlyPayment * termMonths;
+    const totalInterest = totalPayment - amount;
+    
+    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
+    const symbol = currencySymbols[currency] || '$';
+    
+    document.getElementById('loanSummary').innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Loan Amount:</span>
+            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Interest Rate (APR):</span>
+            <span style="color: var(--neon-yellow);">${rate}%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Term:</span>
+            <span>${termMonths} months</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Monthly Payment:</span>
+            <span style="color: var(--neon-blue);">${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Total Interest:</span>
+            <span style="color: var(--neon-red);">${symbol}${totalInterest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>Total Payment:</span>
+            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${totalPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+    `;
+}
+
+// Function to submit loan application
+function submitLoanApplication() {
+    const amount = parseFloat(document.getElementById('loanAmount')?.value);
+    const currency = document.getElementById('loanCurrency')?.value;
+    const purpose = document.getElementById('loanPurpose')?.value;
+    const details = document.getElementById('loanDetails')?.value || "";
+    const term = document.getElementById('loanTerm')?.value;
+    const fullName = document.getElementById('loanFullName')?.value;
+    const email = document.getElementById('loanEmail')?.value;
+    const phone = document.getElementById('loanPhone')?.value;
+    const income = document.getElementById('loanIncome')?.value;
+    
+    // Validations
+    if (!amount || amount <= 0) {
+        showToast("❌ Please enter a valid loan amount");
+        return;
+    }
+    
+    if (!fullName || fullName.trim() === "") {
+        showToast("❌ Please enter your full name");
+        return;
+    }
+    
+    if (!email || email.trim() === "") {
+        showToast("❌ Please enter your email");
+        return;
+    }
+    
+    // Interest rates by currency
+    const interestRates = { USD: 4.99, EUR: 5.49, GBP: 5.29, BRL: 12.99, BRADICOIN: 8.50 };
+    const rate = interestRates[currency] || 6.99;
+    const termMonths = parseInt(term);
+    const monthlyRate = rate / 100 / 12;
+    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
+    
+    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
+    const symbol = currencySymbols[currency] || '$';
+    
+    // Add to history
+    addMessage("LOAN APPLICATION", `Loan Request - ${currency} ${amount.toFixed(2)}`, 
+        `📋 Loan Application Submitted
+        👤 Name: ${fullName}
+        💰 Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
+        📊 Currency: ${currency}
+        🎯 Purpose: ${purpose}
+        ⏱️ Term: ${termMonths} months
+        📅 Monthly Payment: ${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2})}
+        📧 Contact: ${email}
+        ${details ? '📝 Details: ' + details : ''}
+        ${income ? '💰 Income: ' + income : ''}`
+    );
+    
+    showToast(`✅ Loan application submitted successfully! Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}. You will receive a response within 24 hours.`);
+    closeModal();
+}
 
 function executeSwap() { 
     const from = document.getElementById('swapFromSelect')?.value; 
@@ -934,7 +1447,7 @@ function updateBalances() {
         grid.innerHTML = [...fiatCurrencies, ...cryptos].map(curr => {
             const balance = userBalances[curr] || 0;
             if (fiatCurrencies.includes(curr)) {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(2)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(2)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openFiatSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openFiatReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
             } else {
                 return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
             }
@@ -943,7 +1456,7 @@ function updateBalances() {
     const militaryDiv = document.getElementById('militaryBalances'); 
     if (militaryDiv) militaryDiv.innerHTML = Object.entries(userBalances).slice(0, 8).map(([k, v]) => `<div class="balance-item"><span>${k}</span><span>${v.toFixed(8)}</span></div>`).join('');
 }
-
+    
 function renderSecurityCenter() {
     const securityItems = [
         { name: "Two-Factor Authentication (2FA)", status: "Disabled", action: "Enable" },
@@ -970,7 +1483,7 @@ function renderBankingServices() {
         { name: "Education Loan", desc: "Student financing", icon: "fas fa-graduation-cap" }
     ];
     const container = document.getElementById('bankingServicesList');
-    if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="showToast('${service.name} application started')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); showToast('Apply for ${service.name}')">Apply Now</button></div>`).join('');
+    if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="if('${service.name}' === 'Personal Loan') { openLoanApplicationModal('${service.name}'); } else { showToast('${service.name} application started'); }"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); if('${service.name}' === 'Personal Loan') { openLoanApplicationModal('${service.name}'); } else { showToast('Apply for ${service.name}'); }">Apply Now</button></div>`).join('');
 }
 
 function initStakingChart() { 
@@ -1188,6 +1701,9 @@ document.getElementById('togglePasswordBtn')?.addEventListener('click', () => {
 window.closeModal = closeModal;
 window.openSendModal = openSendModal;
 window.openReceiveModal = openReceiveModal;
+window.openLoanApplicationModal = openLoanApplicationModal;
+window.submitLoanApplication = submitLoanApplication;
+window.updateLoanSummary = updateLoanSummary;    
 window.confirmSend = confirmSend;
 window.copyWalletAddress = copyWalletAddress;
 window.generateQRCode = generateQRCode;
@@ -1208,6 +1724,11 @@ window.deleteMessage = deleteMessage;
 window.addMessage = addMessage;
 window.showCurrencyHistory = showCurrencyHistory;
 window.copyAccountNumber = copyAccountNumber;
+window.openFiatSendModal = openFiatSendModal;
+window.openFiatReceiveModal = openFiatReceiveModal;
+window.confirmFiatSend = confirmFiatSend;
+window.getFiatFeeEstimate = getFiatFeeEstimate;
+window.getFiatDeliveryTime = getFiatDeliveryTime;
 
 // Inicialização
 renderCryptoAssets();
