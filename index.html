@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Zentronix Bank | Offshore Premium Banking - Blue & Purple Edition</title>
+    <title>Zentronix Bank | Offshore Premium Banking</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,9 +15,6 @@
         .cyber-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(ellipse at 20% 30%, #0a0b1e 0%, #050617 100%); }
         .cyber-bg::before { content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background: repeating-linear-gradient(transparent 0px, transparent 2px, rgba(188, 19, 254, 0.04) 2px, rgba(188, 19, 254, 0.04) 4px); animation: scan 20s linear infinite; }
         .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; }
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .particle { position: absolute; background: rgba(188, 19, 254, 0.3); border-radius: 50%; animation: floatParticle 15s infinite; }
-        @keyframes floatParticle { 0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; } 50% { transform: translateY(-60px) translateX(30px); opacity: 0.5; } }
         .lang-container { position: fixed; top: 20px; right: 20px; z-index: 1000; }
         .lang-trigger { background: rgba(26, 27, 58, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--neon-purple); border-radius: 2rem; padding: 0.5rem 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', monospace; font-size: 0.75rem; color: var(--neon-blue); transition: all 0.3s; }
         .lang-trigger:hover { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
@@ -50,17 +47,8 @@
         .icon-neon i { font-size: 1.8rem; color: var(--neon-blue); }
         .info-card h3 { font-family: 'Orbitron', monospace; font-size: 1.1rem; color: var(--neon-purple); margin-bottom: 0.8rem; }
         .info-card p { font-size: 0.8rem; line-height: 1.5; opacity: 0.8; }
-        .features-list { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
-        .feature-tag { background: rgba(0, 242, 255, 0.1); border-radius: 2rem; padding: 0.3rem 0.8rem; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
-        .feature-tag i { font-size: 0.7rem; color: var(--neon-green); }
-        .sub-items-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .sub-item { background: rgba(26, 27, 58, 0.4); border-radius: 1rem; padding: 0.8rem; text-align: center; transition: all 0.3s; }
-        .sub-item:hover { background: rgba(0, 242, 255, 0.1); transform: translateY(-3px); }
-        .sub-item i { font-size: 1.3rem; color: var(--neon-blue); margin-bottom: 0.3rem; }
-        .sub-item span { font-size: 0.65rem; display: block; }
         .impact-footer { text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(0, 242, 255, 0.08), rgba(188, 19, 254, 0.05)); border-radius: 1.5rem; margin-top: 1rem; border: 1px solid var(--border-glow); }
         .impact-footer p { font-family: 'Orbitron', monospace; font-size: 1rem; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .impact-footer small { font-size: 0.7rem; opacity: 0.6; }
         .about-section { background: rgba(26, 27, 58, 0.5); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-glow); }
         .section-title { color: var(--neon-blue); font-size: 1.2rem; margin-bottom: 1rem; text-align: center; letter-spacing: 2px; font-family: 'Orbitron', monospace; }
         .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
@@ -80,29 +68,30 @@
         .submit-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 3500; justify-content: center; align-items: center; }
         .submit-modal.active { display: flex; }
         .submit-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 650px; width: 90%; max-height: 85vh; overflow-y: auto; }
-        .submit-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 1rem; }
-        .close-submit-modal { background: rgba(255, 68, 102, 0.2); border: 1px solid #ff4466; border-radius: 2rem; padding: 0.5rem 1rem; color: #ff4466; cursor: pointer; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-family: 'Orbitron', monospace; font-size: 0.75rem; color: var(--neon-purple); margin-bottom: 0.5rem; }
-        .form-input, .form-select { width: 100%; padding: 0.8rem; background: rgba(26, 27, 58, 0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
-        .document-upload-area { border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer; margin-top: 0.5rem; }
-        .submit-docs-btn { width: 100%; padding: 1rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-family: 'Orbitron', monospace; font-weight: bold; cursor: pointer; margin-top: 1rem; }
-        .camera-preview { width: 100%; height: 150px; background: #000; border-radius: 1rem; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; color: #888; border: 1px dashed var(--neon-blue); overflow: hidden; }
+        .kyc-steps { display: flex; justify-content: space-between; margin-bottom: 2rem; position: relative; }
+        .kyc-step { text-align: center; flex: 1; position: relative; z-index: 2; }
+        .step-circle { width: 40px; height: 40px; background: rgba(26,27,58,0.9); border: 2px solid var(--border-glow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-weight: bold; color: var(--text-secondary); transition: all 0.3s; }
+        .kyc-step.active .step-circle { border-color: var(--neon-blue); background: rgba(0,242,255,0.2); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,255,0.3); }
+        .kyc-step.completed .step-circle { border-color: var(--neon-green); background: rgba(0,255,136,0.2); color: var(--neon-green); }
+        .step-label { font-size: 0.65rem; color: var(--text-secondary); }
+        .kyc-step.active .step-label { color: var(--neon-blue); }
+        .step-progress-line { position: absolute; top: 20px; left: 0; right: 0; height: 2px; background: rgba(188,19,254,0.3); z-index: 1; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.3rem; }
+        .form-input, .form-select { width: 100%; padding: 0.7rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
         .dashboard-container { display: none; margin-top: 2rem; }
         .dashboard-three-columns { display: grid; grid-template-columns: 280px 1fr 380px; gap: 1.8rem; }
         .profile-card { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-glow); }
-        .profile-avatar { width: 70px; height: 70px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; cursor: pointer; transition: all 0.3s; }
-        .profile-avatar:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,242,255,0.3); }
+        .profile-avatar { width: 70px; height: 70px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .profile-avatar i { font-size: 2.5rem; color: #0a0b1e; }
         .profile-name { font-family: 'Orbitron', monospace; font-size: 1rem; color: var(--neon-blue); cursor: pointer; }
         .profile-role { font-size: 0.7rem; opacity: 0.6; }
-        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 4000; justify-content: center; align-items: center; }
-        .profile-modal.active { display: flex; }
-        .profile-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; width: 450px; max-width: 90%; }
-        .profile-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 1rem; }
-        .profile-field { margin-bottom: 1.2rem; }
-        .profile-field input { width: 100%; padding: 0.8rem; background: rgba(26, 27, 58, 0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
-        .save-profile-btn { width: 100%; padding: 0.9rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-family: 'Orbitron', monospace; font-weight: bold; cursor: pointer; margin-top: 1rem; }
+        .account-number-display { background: linear-gradient(135deg, rgba(0, 242, 255, 0.15), rgba(188, 19, 254, 0.15)); border-radius: 1rem; padding: 0.8rem; text-align: center; margin-top: 0.5rem; border: 1px solid var(--neon-blue); }
+        .account-number-display .label { font-size: 0.6rem; opacity: 0.7; letter-spacing: 1px; }
+        .account-number-display .number { font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: bold; color: var(--neon-blue); margin-top: 0.2rem; letter-spacing: 2px; }
+        .copy-account-btn { background: rgba(0, 242, 255, 0.2); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.6rem; cursor: pointer; margin-top: 0.3rem; transition: all 0.3s; }
+        .copy-account-btn:hover { background: rgba(0, 242, 255, 0.4); }
         .tactical-menu { background: rgba(26, 27, 58, 0.7); backdrop-filter: blur(12px); border-radius: 1.5rem; border: 1px solid var(--border-glow); padding: 1.5rem; height: fit-content; position: sticky; top: 20px; }
         .menu-category { margin-bottom: 1.5rem; }
         .menu-category h4 { font-family: 'Orbitron', monospace; font-size: 0.7rem; color: var(--neon-purple); letter-spacing: 2px; margin-bottom: 0.6rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 0.3rem; }
@@ -116,10 +105,10 @@
         .close-section-btn:hover { background: rgba(255, 68, 102, 0.4); transform: scale(1.1); }
         canvas { max-height: 200px; width: 100%; }
         .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
-        .asset-card { background: rgba(26, 27, 58, 0.7); border: 1px solid var(--border-glow); border-radius: 1.2rem; padding: 1.2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .asset-card { background: rgba(26, 27, 58, 0.7); border: 1px solid var(--border-glow); border-radius: 1.2rem; padding: 1.2rem; transition: all 0.3s; }
         .asset-card:hover { transform: translateY(-4px); border-color: var(--neon-purple); }
         .asset-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: bold; color: var(--neon-blue); margin: 0.5rem 0; }
-        .buy-btn, .sell-btn { flex: 1; padding: 0.5rem; border-radius: 0.6rem; font-family: 'Orbitron', monospace; font-size: 0.7rem; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.3s; }
+        .buy-btn, .sell-btn, .swap-btn, .wallet-btn, .history-btn, .currency-send-btn, .receive-btn { padding: 0.4rem 0.6rem; border-radius: 0.6rem; font-family: 'Orbitron', monospace; font-size: 0.65rem; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.3s; }
         .buy-btn { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
         .buy-btn:hover { background: rgba(0, 242, 255, 0.3); }
         .sell-btn { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
@@ -128,37 +117,21 @@
         .swap-btn:hover { background: rgba(255, 215, 0, 0.3); }
         .wallet-btn { background: rgba(0, 255, 136, 0.15); border: 1px solid var(--neon-green); color: var(--neon-green); }
         .wallet-btn:hover { background: rgba(0, 255, 136, 0.3); }
-        .payment-options-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9000; justify-content: center; align-items: center; }
-        .payment-options-modal.active { display: flex; }
-        .payment-options-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 450px; width: 90%; text-align: center; }
-        .payment-methods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
-        .payment-method-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; cursor: pointer; transition: all 0.3s; }
-        .payment-method-card:hover { border-color: var(--neon-green); transform: translateY(-3px); }
-        .payment-method-card i { font-size: 2rem; margin-bottom: 0.5rem; }
-        .payment-method-card i.fa-cc-mastercard { color: #eb001b; }
-        .payment-method-card i.fa-cc-visa { color: #1a1f71; }
-        .payment-method-card i.fa-cc-amex { color: #2e77bc; }
-        .payment-method-card i.fa-google-pay { color: #4285f4; }
-        .payment-method-card i.fa-apple-pay { color: #000; }
-        .payment-method-card i.fa-paypal { color: #003087; }
-        .cards-section { background: rgba(26, 27, 58, 0.6); backdrop-filter: blur(12px); border-radius: 1.5rem; border: 1px solid var(--border-glow); padding: 1.5rem; margin-bottom: 1.5rem; position: relative; }
-        .cards-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 0.5rem; }
-        .cards-header h4 { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--neon-blue); }
-        .create-card-btn { background: rgba(0, 242, 255, 0.15); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.3rem 0.8rem; font-size: 0.65rem; cursor: pointer; color: var(--neon-blue); transition: all 0.3s; }
-        .create-card-btn:hover { background: rgba(0, 242, 255, 0.3); }
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-        .card-item { background: linear-gradient(135deg, #1a1b3a, #0f1025); border-radius: 1rem; padding: 1rem; border: 1px solid var(--border-glow); }
-        .payment-methods { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .payment-btn { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.5rem 1rem; font-size: 0.7rem; cursor: pointer; color: var(--neon-blue); display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; }
-        .payment-btn:hover { background: rgba(0, 242, 255, 0.3); }
-        .recurring-list, .split-list, .suspicious-list, .transaction-list { margin-top: 0.5rem; max-height: 300px; overflow-y: auto; }
-        .recurring-item, .split-item, .suspicious-item, .transaction-item { background: rgba(0, 0, 0, 0.3); border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
-        .currency-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
-        .currency-item { background: rgba(0, 0, 0, 0.3); border-radius: 1rem; padding: 0.8rem; border: 1px solid var(--border-glow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .currency-balance { font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: bold; color: var(--neon-blue); }
-        .currency-send-btn { background: rgba(0, 255, 136, 0.15); border: 1px solid var(--neon-green); border-radius: 0.5rem; padding: 0.3rem 0.8rem; font-family: 'Orbitron', monospace; font-size: 0.65rem; cursor: pointer; color: var(--neon-green); transition: all 0.3s; }
-        .currency-send-btn:hover { background: rgba(0, 255, 136, 0.3); }
+        .history-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--text-secondary); color: var(--text-secondary); }
+        .history-btn:hover { background: rgba(255, 255, 255, 0.2); color: var(--neon-yellow); border-color: var(--neon-yellow); }
+        .currency-send-btn { background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; color: #0a0b1e; font-weight: bold; }
+        .currency-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 10px rgba(0,242,255,0.3); }
+        .receive-btn { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+        .receive-btn:hover { background: rgba(0, 242, 255, 0.3); }
+        .button-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .button-group button { flex: 1; padding: 0.35rem 0.5rem; font-size: 0.6rem; }
         .right-column { display: flex; flex-direction: column; gap: 1.5rem; }
+        .balance-section { background: rgba(26, 27, 58, 0.6); backdrop-filter: blur(12px); border-radius: 1.5rem; border: 1px solid var(--border-glow); padding: 1.2rem; }
+        .balance-header { display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 0.5rem; }
+        .balance-total { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: var(--neon-green); }
+        .currency-grid { display: flex; flex-direction: column; gap: 0.5rem; max-height: 350px; overflow-y: auto; }
+        .currency-item { background: rgba(0, 0, 0, 0.3); border-radius: 0.8rem; padding: 0.6rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .currency-balance { font-family: 'Space Mono', monospace; font-size: 0.8rem; font-weight: bold; color: var(--neon-blue); }
         .military-hub { background: linear-gradient(135deg, #1a1b3a, #2a1b4a); border-radius: 1.5rem; border: 1px solid var(--neon-green); padding: 1.5rem; }
         .military-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .stealth-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -168,13 +141,6 @@
         .stealth-switch.active::before { transform: translateX(20px); }
         .balance-card { background: rgba(0, 0, 0, 0.2); border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
         .balance-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .balance-amount.stealth { filter: blur(5px); cursor: pointer; }
-        .security-seals-right { background: rgba(26, 27, 58, 0.7); backdrop-filter: blur(12px); border-radius: 1.5rem; border: 1px solid var(--border-glow); padding: 1.2rem; }
-        .seals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
-        .seal-item { text-align: center; cursor: pointer; filter: grayscale(100%); opacity: 0.6; transition: all 0.3s; }
-        .seal-item:hover { filter: grayscale(0%); opacity: 1; transform: translateY(-3px); }
-        .simulator-panel { background: rgba(26, 27, 58, 0.6); border-radius: 1rem; padding: 1rem; margin-top: 1rem; display: none; }
-        .ghost-mode.active .balance-amount, .ghost-mode.active .asset-price, .ghost-mode.active .currency-balance { filter: blur(5px); cursor: pointer; }
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 3000; justify-content: center; align-items: center; }
         .login-modal.active { display: flex; }
         .login-container { background: linear-gradient(145deg, #1a1b3a, #0f1025); border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 2rem; padding: 2.5rem; width: 420px; max-width: 90%; text-align: center; }
@@ -183,129 +149,70 @@
         .login-container h2 { font-family: 'Orbitron', monospace; font-size: 1.6rem; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .input-group { position: relative; margin: 1rem 0; }
         .login-input { width: 100%; padding: 0.9rem 1rem; background: rgba(10, 11, 30, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; color: var(--text-primary); padding-right: 45px; }
-        .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--neon-blue); cursor: pointer; font-size: 1.1rem; opacity: 0.7; transition: all 0.3s; }
-        .password-toggle:hover { opacity: 1; }
+        .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--neon-blue); cursor: pointer; }
         .login-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
         .login-btn { flex: 1; padding: 0.9rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; }
         .close-login-btn { flex: 1; padding: 0.9rem; background: rgba(255, 68, 102, 0.15); border: 1px solid #ff4466; border-radius: 1rem; color: #ff4466; cursor: pointer; }
         .demo-credentials { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-glow); font-size: 0.65rem; }
-        .footer { margin-top: 2rem; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(135deg, rgba(26, 27, 58, 0.95), rgba(42, 27, 74, 0.95)); border-radius: 1.5rem; border-top: 1px solid var(--border-glow); }
-        .payment-icons { display: flex; justify-content: center; align-items: center; gap: 1.8rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .payment-icons i, .security-icons i, .payment-icons .custom-icon { font-size: 2rem; color: var(--neon-blue); opacity: 0.7; transition: all 0.3s; filter: drop-shadow(0 0 5px rgba(0, 242, 255, 0.3)); }
-        .payment-icons i:hover, .security-icons i:hover, .payment-icons .custom-icon:hover { opacity: 1; transform: translateY(-3px); filter: drop-shadow(0 0 10px var(--neon-blue)); }
-        .security-icons { display: flex; justify-content: center; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; flex-wrap: wrap; padding: 0.8rem 0; border-top: 1px solid rgba(188, 19, 254, 0.2); border-bottom: 1px solid rgba(188, 19, 254, 0.2); }
-        .security-icons .seal-cert { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.3s; filter: grayscale(100%); opacity: 0.6; }
-        .security-icons .seal-cert:hover { filter: grayscale(0%); opacity: 1; transform: translateY(-3px); }
-        .security-icons .seal-cert i { font-size: 1.5rem; margin-bottom: 0.2rem; }
-        .security-icons .seal-cert span { font-size: 0.55rem; font-family: 'Space Mono', monospace; color: var(--text-secondary); }
-        .regulatory-text { font-size: 0.65rem; opacity: 0.7; font-family: 'Space Mono', monospace; margin: 1rem 0; padding: 0.8rem; text-align: center; background: rgba(0, 0, 0, 0.2); border-radius: 0.8rem; line-height: 1.5; }
-        .copyright { font-size: 0.65rem; opacity: 0.5; font-family: 'Space Mono', monospace; text-align: center; margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(0, 242, 255, 0.1); }
-        .investment-section { display: block; position: relative; }
+        .footer-dashboard { margin-top: 2rem; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(135deg, rgba(26, 27, 58, 0.95), rgba(42, 27, 74, 0.95)); border-radius: 1.5rem; border-top: 1px solid var(--border-glow); }
+        .payment-icons, .security-icons-footer { display: flex; justify-content: center; align-items: center; gap: 1.2rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .payment-icons i, .security-icons-footer i { font-size: 1.5rem; color: var(--neon-blue); opacity: 0.7; transition: all 0.3s; }
+        .payment-icons i:hover, .security-icons-footer i:hover { opacity: 1; transform: translateY(-3px); }
+        .security-icons-footer span { font-size: 0.65rem; color: var(--text-secondary); margin-left: 0.3rem; }
         .toast-notification { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); color: #0a0b1e; padding: 0.8rem 1.5rem; border-radius: 2rem; font-family: 'Orbitron', monospace; font-size: 0.8rem; font-weight: bold; z-index: 10000; animation: fadeInUp 0.3s ease, fadeOut 0.3s ease 2.5s forwards; pointer-events: none; }
         @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .feature-card { background: rgba(26, 27, 58, 0.7); border: 1px solid var(--border-glow); border-radius: 1.2rem; padding: 1rem; transition: all 0.3s; }
-        .feature-card:hover { transform: translateY(-3px); border-color: var(--neon-blue); }
-        .notification-badge { position: fixed; top: 80px; right: 20px; background: rgba(188, 19, 254, 0.9); border-radius: 2rem; padding: 0.5rem 1rem; font-size: 0.7rem; z-index: 1000; cursor: pointer; animation: pulse 2s infinite; display: none; }
+        .notification-badge { position: fixed; top: 80px; right: 20px; background: rgba(188, 19, 254, 0.9); border-radius: 2rem; padding: 0.5rem 1rem; font-size: 0.7rem; z-index: 1000; cursor: pointer; animation: pulse 2s infinite; display: none; gap: 5px; align-items: center; }
         .notification-badge.visible { display: flex; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; box-shadow: 0 0 10px var(--neon-purple); } }
-        @media (max-width: 1100px) { .dashboard-three-columns { grid-template-columns: 1fr; } .tactical-menu { position: relative; } }
-        .security-settings-panel { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border-left: 2px solid var(--neon-purple); z-index: 5000; transition: right 0.3s ease; padding: 2rem; overflow-y: auto; }
-        .security-settings-panel.active { right: 0; }
-        .security-settings-panel h3 { color: var(--neon-blue); margin-bottom: 1.5rem; }
-        .security-setting-item { padding: 0.8rem; border-bottom: 1px solid var(--border-glow); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .security-setting-item:hover { background: rgba(188, 19, 254, 0.1); }
-        .close-settings { position: absolute; top: 20px; right: 20px; background: rgba(255,68,102,0.2); border: none; color: var(--neon-red); font-size: 1.2rem; cursor: pointer; padding: 0.5rem; border-radius: 50%; width: 40px; height: 40px; }
-        .close-settings:hover { background: rgba(255,68,102,0.4); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 8000; display: none; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 500px; width: 90%; text-align: center; }
-        .modal-content h3 { color: var(--neon-blue); margin-bottom: 1rem; }
+        .modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 550px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; }
         .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; margin: 0.5rem 0; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
-        .modal-content button { margin: 0.5rem; padding: 0.5rem 1rem; }
-        .button-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-        .button-group .buy-btn, .button-group .sell-btn, .button-group .swap-btn, .button-group .wallet-btn { flex: 0 0 auto; padding: 0.4rem 0.8rem; font-size: 0.65rem; }
-        .account-number-display { background: linear-gradient(135deg, rgba(0, 242, 255, 0.15), rgba(188, 19, 254, 0.15)); border-radius: 1rem; padding: 0.8rem; text-align: center; margin-top: 0.5rem; border: 1px solid var(--neon-blue); }
-        .account-number-display .label { font-size: 0.6rem; opacity: 0.7; letter-spacing: 1px; }
-        .account-number-display .number { font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: bold; color: var(--neon-blue); margin-top: 0.2rem; letter-spacing: 2px; }
-        .copy-account-btn { background: rgba(0, 242, 255, 0.2); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.6rem; cursor: pointer; margin-top: 0.3rem; transition: all 0.3s; }
-        .copy-account-btn:hover { background: rgba(0, 242, 255, 0.4); }
-        .wallet-modal-content { max-width: 550px; position: relative; }
-        .wallet-address { background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 0.8rem; font-family: monospace; word-break: break-all; font-size: 0.8rem; margin: 1rem 0; }
-        .close-wallet-modal-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: var(--neon-red); font-size: 0.9rem; }
-        .close-wallet-modal-btn:hover { background: rgba(255,68,102,0.4); transform: scale(1.1); }
-        
-        .investment-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .investment-product-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; transition: all 0.3s; }
-        .investment-product-card:hover { transform: translateY(-3px); border-color: var(--neon-blue); }
-        .product-yield { font-size: 1.3rem; font-weight: bold; color: var(--neon-green); font-family: 'Orbitron', monospace; }
-        .product-risk { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 1rem; display: inline-block; margin-top: 0.3rem; }
-        .risk-low { background: rgba(0,255,136,0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
-        .risk-medium { background: rgba(255,215,0,0.2); color: var(--neon-yellow); border: 1px solid var(--neon-yellow); }
-        .risk-high { background: rgba(255,68,102,0.2); color: var(--neon-red); border: 1px solid var(--neon-red); }
-        
-        /* Estilos para o modal de notificações */
-        .notification-modal { max-width: 450px; }
-        .notification-item { background: rgba(26,27,58,0.9); border-radius: 0.8rem; padding: 1rem; margin-bottom: 0.8rem; border-left: 3px solid var(--neon-blue); transition: all 0.3s; }
-        .notification-item:hover { transform: translateX(-5px); background: rgba(0,242,255,0.1); }
-        .notification-item.unread { border-left-color: var(--neon-purple); background: rgba(188,19,254,0.1); }
-        .notification-title { font-size: 0.8rem; font-weight: bold; color: var(--neon-blue); margin-bottom: 0.3rem; }
-        .notification-desc { font-size: 0.7rem; opacity: 0.8; }
-        .notification-time { font-size: 0.6rem; opacity: 0.5; margin-top: 0.3rem; }
-        .mark-read-btn { background: rgba(0,242,255,0.15); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.6rem; cursor: pointer; margin-top: 0.3rem; }
-        
-        /* Estilos para os passos do KYC */
-        .kyc-steps { display: flex; justify-content: space-between; margin-bottom: 2rem; position: relative; }
-        .kyc-step { text-align: center; flex: 1; position: relative; z-index: 2; }
-        .step-circle { width: 40px; height: 40px; background: rgba(26,27,58,0.9); border: 2px solid var(--border-glow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-weight: bold; color: var(--text-secondary); transition: all 0.3s; }
-        .kyc-step.active .step-circle { border-color: var(--neon-blue); background: rgba(0,242,255,0.2); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,255,0.3); }
-        .kyc-step.completed .step-circle { border-color: var(--neon-green); background: rgba(0,255,136,0.2); color: var(--neon-green); }
-        .step-label { font-size: 0.65rem; color: var(--text-secondary); }
-        .kyc-step.active .step-label { color: var(--neon-blue); }
-        .step-progress-line { position: absolute; top: 20px; left: 0; right: 0; height: 2px; background: rgba(188,19,254,0.3); z-index: 1; }
-        
-        .photo-capture-area { border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .photo-capture-area:hover { border-color: var(--neon-blue); background: rgba(0,242,255,0.05); }
-        .photo-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 0.5rem; margin-top: 0.5rem; }
-        .camera-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-        
-        /* Estilos para o modal de Stake */
-        .stake-modal { max-width: 480px; }
-        .stake-header { background: linear-gradient(135deg, rgba(0,242,255,0.15), rgba(188,19,254,0.15)); border-radius: 1rem; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
-        .stake-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .stake-apy { font-size: 2rem; font-weight: bold; color: var(--neon-green); font-family: 'Orbitron', monospace; }
-        .stake-input-area { background: rgba(0,0,0,0.3); border-radius: 1rem; padding: 1rem; margin: 1rem 0; }
-        .stake-amount-input { width: 100%; padding: 0.8rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); font-size: 1rem; text-align: center; }
-        .stake-balance-info { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.7rem; opacity: 0.7; }
-        .stake-rewards-preview { background: rgba(0,255,136,0.05); border-radius: 0.8rem; padding: 0.8rem; margin: 1rem 0; text-align: center; }
-        .stake-reward-value { font-size: 1.2rem; font-weight: bold; color: var(--neon-green); }
-        .stake-duration-select { width: 100%; padding: 0.8rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); margin: 0.5rem 0; }
+        .close-wallet-modal-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: var(--neon-red); }
+        .payment-methods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .payment-method-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; cursor: pointer; transition: all 0.3s; }
+        .payment-method-card:hover { border-color: var(--neon-green); transform: translateY(-3px); }
+        .payment-method-card i { font-size: 2rem; margin-bottom: 0.5rem; }
+        .investment-section { display: none; }
+        .investment-section.active { display: block; }
+        .history-list { max-height: 400px; overflow-y: auto; }
+        .history-item { background: rgba(26,27,58,0.6); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 0.5rem; border-left: 3px solid var(--neon-blue); display: flex; justify-content: space-between; align-items: flex-start; }
+        .history-content { flex: 1; }
+        .history-type { font-size: 0.7rem; font-weight: bold; color: var(--neon-yellow); }
+        .history-detail { font-size: 0.7rem; margin-top: 0.3rem; }
+        .history-time { font-size: 0.6rem; opacity: 0.5; margin-top: 0.3rem; }
+        .delete-notification-btn { background: rgba(255,68,102,0.2); border: none; border-radius: 0.3rem; padding: 0.2rem 0.5rem; font-size: 0.6rem; color: var(--neon-red); cursor: pointer; transition: all 0.3s; margin-left: 0.5rem; }
+        .delete-notification-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.05); }
+        .security-item { background: rgba(26,27,58,0.6); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        .service-card { background: rgba(26,27,58,0.6); border-radius: 1rem; padding: 1rem; margin-bottom: 0.8rem; transition: all 0.3s; cursor: pointer; }
+        .service-card:hover { transform: translateX(5px); border-left: 3px solid var(--neon-blue); }
+        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 4000; justify-content: center; align-items: center; }
+        .profile-modal.active { display: flex; }
+        .profile-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; width: 450px; max-width: 90%; text-align: center; }
+        .profile-avatar-large { width: 100px; height: 100px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; cursor: pointer; position: relative; overflow: hidden; }
+        .profile-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-avatar-large i { font-size: 3rem; color: #0a0b1e; }
+        .upload-photo-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); border-radius: 2rem; padding: 0.3rem 0.8rem; font-size: 0.6rem; cursor: pointer; margin-top: 0.5rem; display: inline-block; }
+        .profile-field { margin-bottom: 1rem; text-align: left; }
+        .profile-field label { display: block; font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.3rem; }
+        .profile-field input { width: 100%; padding: 0.7rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
+        .save-profile-btn { width: 100%; padding: 0.8rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; margin-top: 1rem; }
+        .confirm-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 9000; display: none; justify-content: center; align-items: center; }
+        .confirm-modal.active { display: flex; }
+        .confirm-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; text-align: center; max-width: 400px; width: 90%; }
+        .confirm-modal-content h3 { color: var(--neon-yellow); margin-bottom: 1rem; }
+        .confirm-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .confirm-yes-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); color: var(--neon-red); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
+        .confirm-yes-btn:hover { background: rgba(255,68,102,0.4); }
+        .confirm-no-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
+        .confirm-no-btn:hover { background: rgba(0,242,255,0.4); }
+        @media (max-width: 1100px) { .dashboard-three-columns { grid-template-columns: 1fr; } .tactical-menu { position: relative; } }
     </style>
 </head>
 <body>
 
 <div class="cyber-bg"></div>
 <div class="grid-overlay"></div>
-<div class="particles" id="particles"></div>
-
-<div id="modalOverlay" class="modal-overlay">
-    <div id="modalContent" class="modal-content"></div>
-</div>
-
-<div id="paymentModal" class="payment-options-modal">
-    <div class="payment-options-content">
-        <h3 id="paymentModalTitle" style="color: var(--neon-blue); margin-bottom: 1rem;"><i class="fas fa-credit-card"></i> Escolha a Forma de Pagamento</h3>
-        <div class="payment-methods-grid">
-            <div class="payment-method-card" data-payment="mastercard"><i class="fab fa-cc-mastercard fa-2x"></i><p>Mastercard</p></div>
-            <div class="payment-method-card" data-payment="visa"><i class="fab fa-cc-visa fa-2x"></i><p>Visa</p></div>
-            <div class="payment-method-card" data-payment="amex"><i class="fab fa-cc-amex fa-2x"></i><p>American Express</p></div>
-            <div class="payment-method-card" data-payment="googlepay"><i class="fab fa-google-pay fa-2x"></i><p>Google Pay</p></div>
-            <div class="payment-method-card" data-payment="applepay"><i class="fab fa-apple-pay fa-2x"></i><p>Apple Pay</p></div>
-            <div class="payment-method-card" data-payment="paypal"><i class="fab fa-paypal fa-2x"></i><p>PayPal</p></div>
-        </div>
-        <button id="closePaymentModal" class="sell-btn" style="margin-top: 1rem; width: 100%;">Cancelar</button>
-    </div>
-</div>
 
 <div class="lang-container" id="langContainer">
     <div class="lang-trigger" id="langTrigger"><i class="fas fa-globe"></i><span id="currentLangText">EN</span><i class="fas fa-chevron-down"></i></div>
@@ -317,54 +224,58 @@
     </div>
 </div>
 
-<div id="securitySettingsPanel" class="security-settings-panel">
-    <button class="close-settings" id="closeSettingsBtn"><i class="fas fa-times"></i></button>
-    <h3><i class="fas fa-shield-alt"></i> <span id="securityCenterTitle">Security Center</span></h3>
-    <div class="security-setting-item" data-security="2fa"><span><i class="fas fa-mobile-alt"></i> Two-Factor Authentication</span><span>Disabled</span></div>
-    <div class="security-setting-item" data-security="biometric"><span><i class="fas fa-fingerprint"></i> Biometric Login</span><span>Disabled</span></div>
-    <div class="security-setting-item" data-security="whitelist"><span><i class="fas fa-list"></i> Address Whitelist</span><span>0 Addresses</span></div>
-    <div class="security-setting-item" data-security="limit"><span><i class="fas fa-chart-line"></i> Withdrawal Limit</span><span>$50,000/day</span></div>
-    <div class="security-setting-item" data-security="session"><span><i class="fas fa-clock"></i> Session Timeout</span><span>30 minutes</span></div>
-    <div class="security-setting-item" data-security="notify"><span><i class="fas fa-bell"></i> Login Notifications</span><span>Enabled</span></div>
-    <div class="security-setting-item" data-security="device"><span><i class="fas fa-laptop"></i> Trusted Devices</span><span>3 Devices</span></div>
-    <div class="security-setting-item" data-security="pin"><span><i class="fas fa-key"></i> Transaction PIN</span><span>Not Set</span></div>
-    <div class="security-setting-item" data-security="backup"><span><i class="fas fa-database"></i> Backup Codes</span><span>Not Generated</span></div>
-    <div class="security-setting-item" data-security="email"><span><i class="fas fa-envelope"></i> Email Alerts</span><span>Enabled</span></div>
-    <div class="security-setting-item" data-security="sms"><span><i class="fas fa-sms"></i> SMS Alerts</span><span>Disabled</span></div>
-    <div class="security-setting-item" data-security="antiphish"><span><i class="fas fa-shield-virus"></i> Anti-Phishing Code</span><span>Not Set</span></div>
-    <div class="security-setting-item" data-security="vpn"><span><i class="fas fa-globe"></i> VPN Required</span><span>Optional</span></div>
-    <div class="security-setting-item" data-security="cold"><span><i class="fas fa-thermometer-half"></i> Cold Storage</span><span>Inactive</span></div>
-    <div class="security-setting-item" data-security="audit"><span><i class="fas fa-history"></i> Audit Logs</span><span>Available</span></div>
-    <div class="security-setting-item" data-security="timeout"><span><i class="fas fa-hourglass-half"></i> Auto-Logout</span><span>10 min idle</span></div>
-    <div class="security-setting-item" data-security="ip"><span><i class="fas fa-network-wired"></i> IP Whitelist</span><span>Not Set</span></div>
-    <div class="security-setting-item" data-security="recovery"><span><i class="fas fa-user-shield"></i> Recovery Options</span><span>Configured</span></div>
-    <div class="security-setting-item" data-security="encrypt"><span><i class="fas fa-lock"></i> Data Encryption</span><span>AES-256</span></div>
-</div>
-
-<div class="notification-badge" id="notificationBell"><i class="fas fa-bell"></i> <span id="notificationCount">3</span></div>
-
 <div id="loginModal" class="login-modal">
     <div class="login-container">
         <div class="login-icon"><i class="fas fa-microchip"></i></div>
         <h2 id="modalTitle">ACCESS INVESTMENT HUB</h2>
-        <div class="login-subtitle" id="modalSubtitle">SECURE • PRIVATE • QUANTUM</div>
-        <div class="input-group" style="margin:1rem 0"><input type="text" id="loginId" class="login-input" placeholder="User ID"></div>
-        <div class="input-group" style="margin:1rem 0">
-            <input type="password" id="loginPassword" class="login-input" placeholder="Password">
-            <button type="button" class="password-toggle" id="togglePasswordBtn"><i class="fas fa-eye"></i></button>
-        </div>
-        <div class="login-actions"><button id="loginSubmitBtn" class="login-btn"><span id="loginBtnText">LOGIN</span></button><button id="closeModalBtn" class="close-login-btn"><span id="closeBtnText">CLOSE</span></button></div>
-        <div class="demo-credentials"><span id="demoCredText">ID: admin | Password: zentronix</span></div>
+        <div class="input-group"><input type="text" id="loginId" class="login-input" placeholder="User ID" value="admin"></div>
+        <div class="input-group"><input type="password" id="loginPassword" class="login-input" placeholder="Password" value="zentronix"><button type="button" class="password-toggle" id="togglePasswordBtn"><i class="fas fa-eye"></i></button></div>
+        <div class="login-actions"><button id="loginSubmitBtn" class="login-btn">LOGIN</button><button id="closeModalBtn" class="close-login-btn">CLOSE</button></div>
+        <div class="demo-credentials">ID: admin | Password: zentronix</div>
     </div>
 </div>
 
-<div id="confirmModal" class="confirm-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:6000; justify-content:center; align-items:center;"><div style="background:#1a1b3a; padding:2rem; border-radius:2rem; text-align:center"><h3 id="confirmLogoutText">Confirm Logout</h3><button id="confirmYesBtn" style="background:#ff4466; padding:0.5rem 1rem; margin:1rem; border:none; border-radius:0.5rem; cursor:pointer;"><span id="confirmYesText">YES</span></button><button id="confirmNoBtn" style="background:#00f2ff; padding:0.5rem 1rem; border:none; border-radius:0.5rem; cursor:pointer;"><span id="confirmNoText">NO</span></button></div></div>
+<div id="modalOverlay" class="modal-overlay"><div id="modalContent" class="modal-content"></div></div>
 
-<div id="profileModal" class="profile-modal"><div class="profile-modal-content"><div class="profile-modal-header"><h2 id="editProfileTitle">EDIT PROFILE</h2><button class="close-profile-modal" id="closeProfileModalBtn" style="background:transparent; border:none; color:#ff4466; font-size:1.5rem; cursor:pointer;">✕</button></div><div class="profile-field"><label id="fullNameLabel">Full Name</label><input type="text" id="profileFullName" value="Alexander Vance"></div><div class="profile-field"><label id="emailLabel">Email</label><input type="email" id="profileEmail" value="alexander@zentronix.com"></div><div class="profile-field"><label id="addressLabel">Address</label><input type="text" id="profileAddress" value="Zurich, Switzerland"></div><button id="saveProfileBtn" class="save-profile-btn"><span id="saveProfileText">SAVE</span></button></div></div>
+<!-- Confirm Logout Modal -->
+<div id="confirmLogoutModal" class="confirm-modal">
+    <div class="confirm-modal-content">
+        <h3 id="confirmLogoutTitle">Confirm Logout</h3>
+        <p id="confirmLogoutMessage">Are you sure you want to logout from your account?</p>
+        <div class="confirm-buttons">
+            <button id="confirmLogoutYes" class="confirm-yes-btn" id="confirmYesText">YES</button>
+            <button id="confirmLogoutNo" class="confirm-no-btn" id="confirmNoText">NO</button>
+        </div>
+    </div>
+</div>
 
+<!-- Profile Modal -->
+<div id="profileModal" class="profile-modal">
+    <div class="profile-modal-content">
+        <div class="profile-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="color: var(--neon-blue);">Edit Profile</h2>
+            <button class="close-profile-modal" id="closeProfileModalBtn" style="background: transparent; border: none; color: var(--neon-red); font-size: 1.5rem; cursor: pointer;">✕</button>
+        </div>
+        <div class="profile-avatar-large" id="profileAvatarLarge">
+            <i class="fas fa-user-astronaut"></i>
+        </div>
+        <button class="upload-photo-btn" id="uploadPhotoBtn"><i class="fas fa-camera"></i> Upload Photo</button>
+        <input type="file" id="profilePhotoInput" accept="image/*" style="display:none">
+        <div class="profile-field"><label>First Name</label><input type="text" id="profileFirstName" value="Alexander"></div>
+        <div class="profile-field"><label>Last Name</label><input type="text" id="profileLastName" value="Vance"></div>
+        <div class="profile-field"><label>Email</label><input type="email" id="profileEmail" value="alexander.vance@zentronix.com"></div>
+        <div class="profile-field"><label>Phone</label><input type="tel" id="profilePhone" value="+41 78 123 4567"></div>
+        <button id="saveProfileBtn" class="save-profile-btn">SAVE CHANGES</button>
+    </div>
+</div>
+
+<!-- KYC MODAL COMPLETO -->
 <div id="submitModal" class="submit-modal">
     <div class="submit-modal-content">
-        <div class="submit-modal-header"><h2 id="kycModalTitle">KYC VERIFICATION</h2><button class="close-submit-modal" id="closeSubmitModalBtn" style="background:transparent; border:none; color:#ff4466; font-size:1.5rem; cursor:pointer;">✕</button></div>
+        <div class="submit-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="color: var(--neon-blue);">KYC VERIFICATION</h2>
+            <button class="close-submit-modal" id="closeSubmitModalBtn" style="background: transparent; border: none; color: var(--neon-red); font-size: 1.5rem; cursor: pointer;">✕</button>
+        </div>
         <div class="kyc-steps">
             <div class="step-progress-line"></div>
             <div class="kyc-step" id="step1"><div class="step-circle">1</div><div class="step-label">Personal Info</div></div>
@@ -372,278 +283,526 @@
             <div class="kyc-step" id="step3"><div class="step-circle">3</div><div class="step-label">Review</div></div>
         </div>
         <div id="kycStep1" class="kyc-step-content">
-            <div class="form-group"><label id="fullNameKycLabel">Full Name</label><input type="text" id="fullNameDoc" class="form-input" placeholder="Enter your full name"></div>
-            <div class="form-group"><label id="emailKycLabel">Email</label><input type="email" id="emailDocInput" class="form-input" placeholder="your@email.com"></div>
-            <div class="form-group"><label id="phoneKycLabel">Phone</label><input type="tel" id="phoneDoc" class="form-input" placeholder="+1 234 567 8900"></div>
-            <div class="form-group"><label id="addressKycLabel">Address</label><input type="text" id="addressDoc" class="form-input" placeholder="Street, City, State, Zip"></div>
-            <div class="form-group"><label id="nationalityKycLabel">Nationality</label><select id="nationalityDoc" class="form-select"><option>United States</option><option>Brazil</option><option>United Kingdom</option><option>Portugal</option><option>Germany</option><option>France</option><option>Switzerland</option><option>Canada</option><option>Australia</option><option>Japan</option><option>Spain</option><option>Italy</option><option>Netherlands</option><option>Sweden</option><option>Norway</option><option>Denmark</option><option>Ireland</option><option>New Zealand</option><option>Singapore</option><option>South Africa</option><option>Mexico</option><option>Argentina</option><option>Chile</option><option>Colombia</option><option>India</option><option>China</option></select></div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="fullNameDoc" class="form-input" placeholder="Enter your full name"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="emailDocInput" class="form-input" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="phoneDoc" class="form-input" placeholder="+1 234 567 8900"></div>
+            <div class="form-group"><label>Address</label><input type="text" id="addressDoc" class="form-input" placeholder="Street, City, State, Zip"></div>
+            <div class="form-group"><label>Nationality</label><select id="nationalityDoc" class="form-select">
+                <option value="">Select Nationality</option>
+                <option>United States</option><option>Brazil</option><option>United Kingdom</option><option>Portugal</option><option>Germany</option>
+                <option>France</option><option>Switzerland</option><option>Canada</option><option>Australia</option><option>Japan</option>
+                <option>Spain</option><option>Italy</option><option>Netherlands</option><option>Sweden</option><option>Norway</option>
+                <option>Denmark</option><option>Ireland</option><option>New Zealand</option><option>Singapore</option><option>South Africa</option>
+                <option>Mexico</option><option>Argentina</option><option>Chile</option><option>Colombia</option><option>India</option>
+                <option>China</option><option>South Korea</option><option>Russia</option><option>Turkey</option><option>Israel</option>
+            </select></div>
         </div>
         <div id="kycStep2" class="kyc-step-content" style="display:none;">
-            <div class="form-group"><label id="facialRecogLabel">Facial Recognition</label>
-                <div id="facialPreview" class="camera-preview"><i class="fas fa-camera"></i> <span id="clickToCapture">Click to capture</span></div>
-                <input type="file" id="facialPhotoInput" accept="image/*" style="display:none">
-                <div class="camera-actions">
-                    <button type="button" id="captureFacialBtn" class="buy-btn" style="flex:1"><i class="fas fa-camera"></i> <span id="capturePhotoText">Take Photo</span></button>
-                    <button type="button" id="uploadPhotoBtn" class="sell-btn" style="flex:1"><i class="fas fa-upload"></i> <span id="uploadPhotoText">Upload</span></button>
-                </div>
-            </div>
-            <div class="form-group"><label id="idDocLabel">ID Document</label>
-                <div class="document-upload-area" id="uploadArea"><i class="fas fa-cloud-upload-alt"></i><p id="clickToUploadText">Click to upload document</p></div>
+            <div class="form-group"><label>ID Document</label>
+                <div class="document-upload-area" id="uploadArea" style="border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1rem; text-align: center; cursor: pointer;"><i class="fas fa-cloud-upload-alt"></i><p>Click to upload document</p></div>
                 <input type="file" id="fileInput" style="display:none" accept="image/*,application/pdf">
             </div>
             <div class="form-group"><label>Proof of Address</label>
-                <div class="document-upload-area" id="addressUploadArea"><i class="fas fa-cloud-upload-alt"></i><p>Click to upload proof of address</p></div>
+                <div class="document-upload-area" id="addressUploadArea" style="border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1rem; text-align: center; cursor: pointer;"><i class="fas fa-cloud-upload-alt"></i><p>Click to upload proof of address</p></div>
                 <input type="file" id="addressFileInput" style="display:none" accept="image/*,application/pdf">
             </div>
         </div>
         <div id="kycStep3" class="kyc-step-content" style="display:none;">
-            <div style="background: rgba(0,242,255,0.1); border-radius: 1rem; padding: 1rem; margin-bottom: 1rem;"><p><i class="fas fa-info-circle"></i> <strong>Please review your information before submitting:</strong></p><div id="kycReviewInfo" style="margin-top: 0.8rem; font-size: 0.7rem;"></div></div>
-            <div style="background: rgba(255,215,0,0.1); border-radius: 1rem; padding: 1rem;"><p><i class="fas fa-shield-alt"></i> <strong>Declaration:</strong> I confirm that the information provided is accurate and complete.</p></div>
+            <div style="background: rgba(0,242,255,0.1); border-radius: 1rem; padding: 1rem; margin-bottom: 1rem;">
+                <p><i class="fas fa-info-circle"></i> <strong>Please review your information before submitting:</strong></p>
+                <div id="kycReviewInfo" style="margin-top: 0.8rem; font-size: 0.7rem;"></div>
+            </div>
         </div>
         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-            <button type="button" id="kycPrevBtn" class="sell-btn" style="flex:1; display:none;"><i class="fas fa-arrow-left"></i> Previous</button>
-            <button type="button" id="kycNextBtn" class="buy-btn" style="flex:2;">Next <i class="fas fa-arrow-right"></i></button>
-            <button type="button" id="submitKycBtn" class="submit-docs-btn" style="flex:2; display:none;">SUBMIT KYC</button>
+            <button type="button" id="kycPrevBtn" class="sell-btn" style="flex:1; display:none;">Previous</button>
+            <button type="button" id="kycNextBtn" class="buy-btn" style="flex:2;">Next</button>
+            <button type="button" id="submitKycBtn" class="submit-docs-btn" style="flex:2; display:none; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer;">SUBMIT KYC</button>
         </div>
     </div>
 </div>
 
-<div class="main-container">
-    <div class="top-logo-area"><div class="bank-logo"><i class="fas fa-microchip"></i></div><h1 class="bank-title">ZENTRONIX BANK</h1><div class="bank-subtitle" id="bankSubtitle">Offshore Private Banking</div></div>
-    <div class="dashboard-nav"><button id="openLoginBtn" class="dashboard-trigger"><i class="fas fa-sign-in-alt"></i> <span id="accessHubBtn">ACCESS HUB</span></button><button id="openSubmitModalBtn" class="submit-docs-trigger"><i class="fas fa-id-card"></i> <span id="kycBtn">KYC</span></button><button id="logoutMainBtn" class="logout-trigger" style="display:none;"><i class="fas fa-sign-out-alt"></i> <span id="logoutBtnText">LOGOUT</span></button></div>
-    <div id="kycStatusBadge" class="kyc-status pending" style="display:none;"><i class="fas fa-shield-alt"></i> <span id="kycPendingText">KYC PENDING</span></div>
+<div class="notification-badge" id="notificationBell"><i class="fas fa-bell"></i> <span id="notificationCount">0</span></div>
 
+<div class="main-container">
+    <div class="top-logo-area">
+        <div class="bank-logo"><i class="fas fa-microchip"></i></div>
+        <h1 class="bank-title">ZENTRONIX BANK</h1>
+        <div class="bank-subtitle" id="bankSubtitle">Offshore Private Banking</div>
+    </div>
+    <div class="dashboard-nav">
+        <button id="openLoginBtn" class="dashboard-trigger"><i class="fas fa-sign-in-alt"></i> <span id="accessHubBtn">ACCESS HUB</span></button>
+        <button id="kycBtn" class="submit-docs-trigger"><i class="fas fa-id-card"></i> <span id="kycBtnText">KYC</span></button>
+        <button id="logoutMainBtn" class="logout-trigger" style="display:none;"><i class="fas fa-sign-out-alt"></i> <span id="logoutBtnText">LOGOUT</span></button>
+    </div>
+    <div id="kycStatusBadge" class="kyc-status" style="display:none;"><i class="fas fa-shield-alt"></i> <span id="kycPendingText">KYC PENDING</span></div>
+
+    <!-- PÁGINA PRINCIPAL INSTITUCIONAL -->
     <div id="institutionalContent">
         <div class="institutional-section">
-            <div class="hero-institutional"><div class="icon-neon" style="margin: 0 auto 1rem auto; width: 60px; height: 60px;"><i class="fas fa-shield-alt" style="font-size: 2rem;"></i></div><h1 id="heroTitle">Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite</h1><div class="hero-badge" id="heroBadge">🏆 Leading the Offshore Revolution since 2017</div><p class="hero-description-institutional" id="heroDesc">Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.</p></div>
-            <div class="institutional-grid"><div class="info-card"><div class="icon-neon"><i class="fas fa-globe"></i></div><h3 id="card1Title">🌍 Total Convergence: Fiat and Crypto</h3><p id="card1Desc">Unlike traditional banks, Zentronix was designed for the digital age.</p><div class="sub-items-grid"><div class="sub-item"><i class="fas fa-dollar-sign"></i><span id="card1Currencies">USD • EUR • CHF • GBP • JPY</span></div><div class="sub-item"><i class="fab fa-bitcoin"></i><span id="card1Crypto">BTC • BRADICOIN • ETH • BNB • SOL • LTC</span></div><div class="sub-item"><i class="fas fa-bolt"></i><span id="card1Liquidity">Instant Liquidity</span></div></div></div>
-            <div class="info-card"><div class="icon-neon"><i class="fas fa-chart-line"></i></div><h3 id="card2Title">📈 Next-Generation Investment Portfolio</h3><p id="card2Desc">Our financial product shelf is the most complete in the offshore sector.</p><div class="features-list"><span class="feature-tag"><i class="fas fa-chart-pie"></i> <span id="tagFixedIncome">Global Fixed Income</span></span><span class="feature-tag"><i class="fas fa-brain"></i> <span id="tagWealth">Wealth Management & AI</span></span><span class="feature-tag"><i class="fas fa-rocket"></i> <span id="tagPrivateEquity">Private Equity</span></span><span class="feature-tag"><i class="fas fa-shield-virus"></i> <span id="tagMilitary">Military Sector</span></span><span class="feature-tag"><i class="fas fa-gem"></i> <span id="tagCommodities">Commodities</span></span></div></div>
-            <div class="info-card"><div class="icon-neon"><i class="fas fa-microchip"></i></div><h3 id="card3Title">🔐 Technology, Privacy and Succession</h3><p id="card3Desc">Zentronix Bank goes beyond simple transactions; we take care of your legacy.</p><div class="sub-items-grid"><div class="sub-item"><i class="fas fa-file-signature"></i><span id="card3Succession">Succession Planning</span></div><div class="sub-item"><i class="fas fa-quantum"></i><span id="card3Quantum">Quantum Security</span></div><div class="sub-item"><i class="fas fa-tachometer-alt"></i><span id="card3Interface">Futuristic Interface</span></div></div></div></div>
-            <div class="impact-footer"><p id="impactPhrase">✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨</p><small id="impactSmall">Founded in 2017. Connected to the Future.</small></div>
+            <div class="hero-institutional">
+                <div class="icon-neon" style="margin: 0 auto 1rem auto; width: 60px; height: 60px;"><i class="fas fa-shield-alt" style="font-size: 2rem;"></i></div>
+                <h1 id="heroTitle">Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite</h1>
+                <div class="hero-badge" id="heroBadge">🏆 Leading the Offshore Revolution since 2017</div>
+                <p class="hero-description-institutional" id="heroDesc">Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.</p>
+            </div>
+            <div class="institutional-grid">
+                <div class="info-card">
+                    <div class="icon-neon"><i class="fas fa-globe"></i></div>
+                    <h3 id="card1Title">🌍 Total Convergence: Fiat and Crypto</h3>
+                    <p id="card1Desc">Unlike traditional banks, Zentronix was designed for the digital age.</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon-neon"><i class="fas fa-chart-line"></i></div>
+                    <h3 id="card2Title">📈 Next-Generation Investment Portfolio</h3>
+                    <p id="card2Desc">Our financial product shelf is the most complete in the offshore sector.</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon-neon"><i class="fas fa-microchip"></i></div>
+                    <h3 id="card3Title">🔐 Technology, Privacy and Succession</h3>
+                    <p id="card3Desc">Zentronix Bank goes beyond simple transactions; we take care of your legacy.</p>
+                </div>
+            </div>
+            <div class="impact-footer">
+                <p id="impactPhrase">✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨</p>
+                <small id="impactSmall">Founded in 2017. Connected to the Future.</small>
+            </div>
         </div>
-        <div class="about-section"><h2 class="section-title" id="aboutTitle">🌟 ABOUT ZENTRONIX BANK</h2><div class="about-grid"><div class="about-card"><i class="fas fa-history"></i><h4 id="aboutHistoryTitle">Our History</h4><p id="aboutHistoryDesc">Founded in 2018, serving 156+ countries</p></div><div class="about-card"><i class="fas fa-shield-alt"></i><h4 id="aboutSecurityTitle">Security First</h4><p id="aboutSecurityDesc">Quantum-resistant protocols</p></div><div class="about-card"><i class="fas fa-globe-americas"></i><h4 id="aboutReachTitle">Global Reach</h4><p id="aboutReachDesc">Offices in Switzerland, Singapore, Dubai</p></div><div class="about-card"><i class="fas fa-chart-line"></i><h4 id="aboutReturnsTitle">Premium Returns</h4><p id="aboutReturnsDesc">Up to 12% annual yield</p></div></div></div>
-        <div class="currencies-section"><h2 class="section-title" id="currenciesTitle">💱 CURRENCIES WE ACCEPT</h2><div class="currencies-grid"><div class="currency-accepted"><i class="fas fa-dollar-sign"></i><div>USD</div></div><div class="currency-accepted"><i class="fas fa-euro-sign"></i><div>EUR</div></div><div class="currency-accepted"><i class="fas fa-pound-sign"></i><div>GBP</div></div><div class="currency-accepted"><i class="fas fa-dollar-sign"></i><div>CAD</div></div><div class="currency-accepted"><i class="fas fa-real"></i><div>BRL</div></div><div class="currency-accepted"><i class="fas fa-dirham"></i><div>AED</div></div><div class="currency-accepted"><i class="fas fa-franc-sign"></i><div>CHF</div></div><div class="currency-accepted"><i class="fas fa-yen-sign"></i><div>JPY</div></div></div></div>
-        <div class="crypto-section"><h2 class="section-title" id="cryptoTitles">💎 SUPPORTED CRYPTOCURRENCIES</h2><div class="crypto-grid"><div class="crypto-item"><div>₿</div><div>Bitcoin</div><div id="btcPrice">$67,200</div></div><div class="crypto-item"><div>Ξ</div><div>Ethereum</div><div id="ethPrice">$3,443</div></div><div class="crypto-item"><div>🪙</div><div>BradiCoin</div><div id="brdPrice">$9.87</div></div><div class="crypto-item"><div>◎</div><div>Solana</div><div id="solPrice">$98.07</div></div><div class="crypto-item"><div>Ł</div><div>Litecoin</div><div id="ltcPrice">$82.50</div></div><div class="crypto-item"><div>BNB</div><div>Binance Coin</div><div id="bnbPrice">$312.50</div></div></div></div>
-        <div class="stats-grid"><div class="stat-card"><div class="stat-value">$2.8B</div><div id="statAum">AUM</div></div><div class="stat-card"><div class="stat-value">12,847</div><div id="statClients">Clients</div></div><div class="stat-card"><div class="stat-value">156+</div><div id="statCountries">Countries</div></div><div class="stat-card"><div class="stat-value">Quantum</div><div id="statEncryption">Encryption</div></div></div>
+
+        <div class="about-section">
+            <h2 class="section-title" id="aboutTitle">🌟 ABOUT ZENTRONIX BANK</h2>
+            <div class="about-grid">
+                <div class="about-card"><i class="fas fa-history"></i><h4 id="aboutHistoryTitle">Our History</h4><p id="aboutHistoryDesc">Founded in 2018, serving 156+ countries</p></div>
+                <div class="about-card"><i class="fas fa-shield-alt"></i><h4 id="aboutSecurityTitle">Security First</h4><p id="aboutSecurityDesc">Quantum-resistant protocols</p></div>
+                <div class="about-card"><i class="fas fa-globe-americas"></i><h4 id="aboutReachTitle">Global Reach</h4><p id="aboutReachDesc">Offices in Switzerland, Singapore, Dubai</p></div>
+                <div class="about-card"><i class="fas fa-chart-line"></i><h4 id="aboutReturnsTitle">Premium Returns</h4><p id="aboutReturnsDesc">Up to 12% annual yield</p></div>
+            </div>
+        </div>
+
+        <div class="currencies-section">
+            <h2 class="section-title" id="currenciesTitle">💱 CURRENCIES WE ACCEPT</h2>
+            <div class="currencies-grid">
+                <div class="currency-accepted"><i class="fas fa-dollar-sign"></i><div>USD</div></div>
+                <div class="currency-accepted"><i class="fas fa-euro-sign"></i><div>EUR</div></div>
+                <div class="currency-accepted"><i class="fas fa-pound-sign"></i><div>GBP</div></div>
+                <div class="currency-accepted"><i class="fas fa-dollar-sign"></i><div>CAD</div></div>
+                <div class="currency-accepted"><i class="fas fa-real"></i><div>BRL</div></div>
+                <div class="currency-accepted"><i class="fas fa-dirham"></i><div>AED</div></div>
+                <div class="currency-accepted"><i class="fas fa-franc-sign"></i><div>CHF</div></div>
+                <div class="currency-accepted"><i class="fas fa-yen-sign"></i><div>JPY</div></div>
+            </div>
+        </div>
+
+        <div class="crypto-section">
+            <h2 class="section-title" id="cryptoTitles">💎 SUPPORTED CRYPTOCURRENCIES</h2>
+            <div class="crypto-grid">
+                <div class="crypto-item"><div>₿</div><div>Bitcoin</div><div id="btcPrice">$67,200</div></div>
+                <div class="crypto-item"><div>Ξ</div><div>Ethereum</div><div id="ethPrice">$3,443</div></div>
+                <div class="crypto-item"><div>🪙</div><div>BradiCoin</div><div id="brdPrice">$9.87</div></div>
+                <div class="crypto-item"><div>◎</div><div>Solana</div><div id="solPrice">$98.07</div></div>
+                <div class="crypto-item"><div>Ł</div><div>Litecoin</div><div id="ltcPrice">$82.50</div></div>
+                <div class="crypto-item"><div>BNB</div><div>Binance Coin</div><div id="bnbPrice">$312.50</div></div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-value">$2.8B</div><div id="statAum">AUM</div></div>
+            <div class="stat-card"><div class="stat-value">12,847</div><div id="statClients">Clients</div></div>
+            <div class="stat-card"><div class="stat-value">156+</div><div id="statCountries">Countries</div></div>
+            <div class="stat-card"><div class="stat-value">Quantum</div><div id="statEncryption">Encryption</div></div>
+        </div>
     </div>
 
+    <!-- DASHBOARD -->
     <div id="dashboardContainer" class="dashboard-container">
         <div class="dashboard-three-columns">
             <div class="tactical-menu">
-                <div class="profile-card" id="openProfileBtn"><div class="profile-avatar"><i class="fas fa-user-astronaut"></i></div><div class="profile-name" id="welcomeUser">Alexander Vance</div><div class="profile-role" id="profileRole">Private Banking Elite</div><div class="account-number-display" id="accountNumberDisplay"><div class="label"><i class="fas fa-credit-card"></i> <span id="accountNumberLabel">ACCOUNT NUMBER</span></div><div class="number" id="accountNumberValue">ZNTX-4821-7390-1256</div><button class="copy-account-btn" id="copyAccountBtn" onclick="copyAccountNumber()"><i class="fas fa-copy"></i> <span id="copyAccountText">COPY</span></button></div></div>
-                <div class="menu-category"><h4>⚙️ <span id="menuSecuritySettings">SECURITY SETTINGS</span></h4><div class="menu-item" id="openSecuritySettings"><i class="fas fa-shield-alt"></i> <span id="menuSecurityCenter">Security Center</span></div></div>
-                <div class="menu-category"><h4>⛓️ <span id="menuCryptoDefi">CRYPTO & DEFI</span></h4><div class="menu-item active" data-section="crypto"><i class="fas fa-coins"></i> <span id="menuStakingCenter">Staking Center</span></div><div class="menu-item" data-section="crypto-tx"><i class="fab fa-bitcoin"></i> <span id="menuCryptoTransactions">Crypto Transactions</span></div></div>
-                <div class="menu-category"><h4>📊 <span id="menuTrading">TRADING</span></h4><div class="menu-item" data-section="trading"><i class="fas fa-chart-line"></i> <span id="menuTradingHub">Trading Hub</span></div><div class="menu-item" data-section="conversion"><i class="fas fa-exchange-alt"></i> <span id="menuConversion">Conversion</span></div></div>
-                <div class="menu-category"><h4>🏛️ <span id="menuFixedIncome">FIXED INCOME</span></h4><div class="menu-item" data-section="treasuries"><i class="fas fa-landmark"></i> <span id="menuTreasuries">Treasuries & Bonds</span></div><div class="menu-item" data-section="cds"><i class="fas fa-clock"></i> <span id="menuCds">CDs / Time Deposits</span></div><div class="menu-item" data-section="debentures"><i class="fas fa-file-invoice"></i> <span id="menuDebentures">Debentures</span></div><div class="menu-item" data-section="reits"><i class="fas fa-building"></i> <span id="menuReits">REITs</span></div><div class="menu-item" data-section="privateCredit"><i class="fas fa-handshake"></i> <span id="menuPrivateCredit">Private Credit</span></div><div class="menu-item" data-section="structuredNotes"><i class="fas fa-chart-line"></i> <span id="menuStructuredNotes">Structured Notes</span></div><div class="menu-item" data-section="muniBonds"><i class="fas fa-landmark"></i> <span id="menuMuniBonds">Municipal Bonds</span></div></div>
-                <div class="menu-category"><h4>💳 <span id="menuCardsPayments">CARDS & PAYMENTS</span></h4><div class="menu-item" data-section="cards"><i class="fas fa-credit-card"></i> <span id="menuMyCards">My Cards</span></div><div class="menu-item" data-section="payments"><i class="fas fa-money-bill-wave"></i> <span id="menuPayments">Payments</span></div></div>
-                <div class="menu-category"><h4>🔄 <span id="menuSwap">SWAP</span></h4><div class="menu-item" data-section="swap"><i class="fas fa-exchange-alt"></i> <span id="menuSwapCenter">Swap Center</span></div></div>
-                <div class="menu-category"><h4>📊 <span id="menuAnalytics">ANALYTICS</span></h4><div class="menu-item" data-section="analytics"><i class="fas fa-chart-pie"></i> <span id="menuAnalyticsTitle">Analytics</span></div><div class="menu-item" data-section="reports"><i class="fas fa-file-alt"></i> <span id="menuReports">Reports</span></div></div>
-                <div class="menu-category"><h4>🔒 <span id="menuSecurityKyc">SECURITY & KYC</span></h4><div class="menu-item" data-section="security"><i class="fas fa-shield-alt"></i> <span id="menuSecuritySettingsTitle">Security Settings</span></div><div class="menu-item" data-section="sessions"><i class="fas fa-desktop"></i> <span id="menuActiveSessions">Active Sessions</span></div><div class="menu-item" data-section="compliance"><i class="fas fa-gavel"></i> <span id="menuKycCompliance">KYC & Compliance</span></div><div class="menu-item" data-section="antihack"><i class="fas fa-shield-virus"></i> <span id="menuAntiHack">Anti-Hack</span></div></div>
-                <div class="menu-category"><h4>⚙️ <span id="menuSystemControls">SYSTEM CONTROLS</span></h4><div class="menu-item" id="ghostModeBtn"><i class="fas fa-user-secret"></i> <span id="menuGhostMode">Ghost Mode</span></div><div class="menu-item" id="simulatorBtn"><i class="fas fa-chart-simple"></i> <span id="menuSimulator">Scenario Simulator</span></div><div class="menu-item" id="themesBtn"><i class="fas fa-palette"></i> <span id="menuThemeWeaver">Theme Weaver</span></div><div class="menu-item" id="auditBtn"><i class="fas fa-history"></i> <span id="menuAuditLogs">Audit Logs</span></div></div>
-                <div class="menu-category"><h4>✨ <span id="menuBankingServices">BANKING SERVICES</span></h4><div class="menu-item" data-section="novas"><i class="fas fa-star"></i> <span id="menuCompleteServices">Complete Services</span></div><div class="menu-item" id="digitalPaymentSection"><i class="fas fa-mobile-alt"></i> <span id="menuDigitalPayment">💳 Payment Digital</span></div></div>
+                <div class="profile-card">
+                    <div class="profile-avatar" id="profileAvatarBtn"><i class="fas fa-user-astronaut"></i></div>
+                    <div class="profile-name" id="welcomeUser">Alexander Vance</div>
+                    <div class="profile-role">Private Banking Elite</div>
+                    <div class="account-number-display">
+                        <div class="label"><i class="fas fa-credit-card"></i> ACCOUNT NUMBER</div>
+                        <div class="number" id="accountNumberValue">ZNTX-4821-7390-1256</div>
+                        <button class="copy-account-btn" id="copyAccountBtn" onclick="copyAccountNumber()"><i class="fas fa-copy"></i> COPY</button>
+                    </div>
+                </div>
+                <div class="menu-category"><h4>⚙️ SECURITY SETTINGS</h4><div class="menu-item" data-section="securityCenter"><i class="fas fa-shield-alt"></i> Security Center</div></div>
+                <div class="menu-category"><h4>⛓️ CRYPTO & DEFI</h4><div class="menu-item active" data-section="crypto"><i class="fas fa-coins"></i> Staking Center</div><div class="menu-item" data-section="cryptoTransactions"><i class="fab fa-bitcoin"></i> Crypto Transactions</div><div class="menu-item" data-section="history"><i class="fas fa-history"></i> History / Extrato</div></div>
+                <div class="menu-category"><h4>📊 TRADING</h4><div class="menu-item" data-section="trading"><i class="fas fa-chart-line"></i> Trading Hub</div><div class="menu-item" data-section="conversion"><i class="fas fa-exchange-alt"></i> Conversion</div></div>
+                <div class="menu-category"><h4>🏛️ FIXED INCOME</h4><div class="menu-item" data-section="treasuries"><i class="fas fa-landmark"></i> Treasuries & Bonds</div><div class="menu-item" data-section="cds"><i class="fas fa-clock"></i> CDs / Time Deposits</div><div class="menu-item" data-section="debentures"><i class="fas fa-file-invoice"></i> Debentures</div><div class="menu-item" data-section="reits"><i class="fas fa-building"></i> REITs</div><div class="menu-item" data-section="privateCredit"><i class="fas fa-handshake"></i> Private Credit</div><div class="menu-item" data-section="structuredNotes"><i class="fas fa-chart-line"></i> Structured Notes</div><div class="menu-item" data-section="municipalBonds"><i class="fas fa-landmark"></i> Municipal Bonds</div></div>
+                <div class="menu-category"><h4>💳 CARDS & PAYMENTS</h4><div class="menu-item" data-section="cards"><i class="fas fa-credit-card"></i> My Cards</div><div class="menu-item" data-section="payments"><i class="fas fa-money-bill-wave"></i> Payments</div></div>
+                <div class="menu-category"><h4>🔄 SWAP</h4><div class="menu-item" data-section="swap"><i class="fas fa-exchange-alt"></i> Swap Center</div></div>
+                <div class="menu-category"><h4>📊 ANALYTICS</h4><div class="menu-item" data-section="analytics"><i class="fas fa-chart-pie"></i> Analytics</div><div class="menu-item" data-section="reports"><i class="fas fa-file-alt"></i> Reports</div></div>
+                <div class="menu-category"><h4>🔒 SECURITY & KYC</h4><div class="menu-item" data-section="security"><i class="fas fa-shield-alt"></i> Security Settings</div><div class="menu-item" data-section="sessions"><i class="fas fa-desktop"></i> Active Sessions</div><div class="menu-item" data-section="compliance"><i class="fas fa-gavel"></i> KYC & Compliance</div><div class="menu-item" data-section="antihack"><i class="fas fa-shield-virus"></i> Anti-Hack</div></div>
+                <div class="menu-category"><h4>⚙️ SYSTEM CONTROLS</h4><div class="menu-item" id="ghostModeBtn"><i class="fas fa-user-secret"></i> Ghost Mode</div><div class="menu-item" id="simulatorBtn"><i class="fas fa-chart-simple"></i> Scenario Simulator</div><div class="menu-item" id="themesBtn"><i class="fas fa-palette"></i> Theme Weaver</div><div class="menu-item" id="auditBtn"><i class="fas fa-history"></i> Audit Logs</div></div>
+                <div class="menu-category"><h4>✨ BANKING SERVICES</h4><div class="menu-item" data-section="services"><i class="fas fa-star"></i> Complete Services</div><div class="menu-item" data-section="digitalPayment"><i class="fas fa-mobile-alt"></i> Payment Digital</div></div>
             </div>
 
             <div class="center-column">
-                <div class="chart-card"><div class="chart-header"><h4 id="stakingPerformanceTitle">Staking Performance</h4></div><canvas id="stakingChart" height="160"></canvas></div>
-                <div id="cryptoSection" class="investment-section">
-                    <div class="close-section-btn" onclick="showSection('crypto')" style="display:none;">✕</div>
-                    <div class="asset-grid">
-                        <div class="asset-card"><div class="asset-price">BRADICOIN - $10.42 <span style="color:var(--neon-green);">+2.3%</span></div><div class="button-group"><button class="buy-btn stake-btn" data-asset="bradicoin" data-symbol="BRC" data-price="10.42">STAKE</button><button class="sell-btn unstake-btn" data-asset="bradicoin">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="bradicoin" data-price="10.42" onclick="openSwapModal('bradicoin', 10.42)">SWAP</button><button class="buy-btn" id="buyBradicoinBtn">BUY</button><button class="wallet-btn generate-wallet-btn" data-asset="BRADICOIN" data-symbol="BRC">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">Bitcoin - $67,234</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="btc" data-symbol="BTC" data-price="67234">STAKE BTC</button><button class="sell-btn unstake-btn" data-asset="btc">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="btc" data-price="67234" onclick="openSwapModal('bitcoin', 67234)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="BITCOIN" data-symbol="BTC">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">Ethereum - $3,441</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="eth" data-symbol="ETH" data-price="3441">STAKE ETH</button><button class="sell-btn unstake-btn" data-asset="eth">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="eth" data-price="3441" onclick="openSwapModal('ethereum', 3441)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="ETHEREUM" data-symbol="ETH">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">Solana - $98.07</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="sol" data-symbol="SOL" data-price="98.07">STAKE SOL</button><button class="sell-btn unstake-btn" data-asset="sol">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="sol" data-price="98.07" onclick="openSwapModal('solana', 98.07)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="SOLANA" data-symbol="SOL">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">Polygon - $0.85</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="matic" data-symbol="MATIC" data-price="0.85">STAKE MATIC</button><button class="sell-btn unstake-btn" data-asset="matic">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="matic" data-price="0.85" onclick="openSwapModal('matic', 0.85)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="POLYGON" data-symbol="MATIC">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">Tether - $1.00</div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="usdt" data-symbol="USDT" data-price="1.00">STAKE USDT</button><button class="sell-btn unstake-btn" data-asset="usdt">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="usdt" data-price="1.00" onclick="openSwapModal('tether', 1.00)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="TETHER" data-symbol="USDT">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">Litecoin - $82.50 <span style="color:var(--neon-green);">+1.8%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="ltc" data-symbol="LTC" data-price="82.50">STAKE LTC</button><button class="sell-btn unstake-btn" data-asset="ltc">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="ltc" data-price="82.50" onclick="openSwapModal('litecoin', 82.50)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="LITECOIN" data-symbol="LTC">WALLET</button></div></div>
-                        <div class="asset-card"><div class="asset-price">BNB - $312.50 <span style="color:var(--neon-green);">+3.2%</span></div><div class="card-actions"><button class="buy-btn stake-btn" data-asset="bnb" data-symbol="BNB" data-price="312.50">STAKE BNB</button><button class="sell-btn unstake-btn" data-asset="bnb">UNSTAKE</button><button class="swap-btn swap-crypto-btn" data-crypto="bnb" data-price="312.50" onclick="openSwapModal('binance', 312.50)">SWAP</button><button class="wallet-btn generate-wallet-btn" data-asset="BINANCE" data-symbol="BNB">WALLET</button></div></div>
-                    </div>
+                <div class="chart-card"><div class="chart-header"><h4>Staking Performance</h4></div><canvas id="stakingChart" height="160"></canvas></div>
+                
+                <div id="cryptoSec" class="investment-section active">
+                    <div class="asset-grid" id="cryptoAssetsGrid"></div>
                 </div>
                 
-                <div id="debenturesSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Debentures</h4></div><div class="investment-products-grid"><div class="investment-product-card"><h3>Zentronix Energy 2030</h3><div class="product-yield">8.5% a.a.</div><button class="buy-btn invest-debenture-btn" data-product="Zentronix Energy 2030" data-yield="8.5">Investir</button></div></div></div></div>
-                
-                <div id="cryptoTxSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="cryptoTxTitle">Crypto Transactions</h4></div><div class="currency-item"><span id="sendCryptoLabel">Send Crypto</span><button class="currency-send-btn send-crypto-btn" data-crypto="btc">Send BTC</button><button class="currency-send-btn send-crypto-btn" data-crypto="eth">Send ETH</button><button class="currency-send-btn send-crypto-btn" data-crypto="sol">Send SOL</button><button class="currency-send-btn send-crypto-btn" data-crypto="matic">Send MATIC</button><button class="currency-send-btn send-crypto-btn" data-crypto="usdt">Send USDT</button><button class="currency-send-btn send-crypto-btn" data-crypto="bradicoin">Send BRADICOIN</button><button class="currency-send-btn send-crypto-btn" data-crypto="ltc">Send LTC</button><button class="currency-send-btn send-crypto-btn" data-crypto="bnb">Send BNB</button></div></div></div>
-                
-                <div id="tradingSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="tradingHubTitle">Trading Hub</h4></div><div class="asset-grid"><div class="asset-card"><div class="asset-price">BTC/USD - $67,234</div><button class="buy-btn trade-buy-btn">BUY</button><button class="sell-btn trade-sell-btn">SELL</button></div></div></div></div>
-                <div id="conversionSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="conversionTitle">Currency Conversion</h4></div><div class="currency-item"><span>USD to EUR</span><button class="currency-send-btn convert-usd-eur">Convert</button></div></div></div>
-                <div id="treasuriesSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="treasuriesTitle">Treasuries</h4></div><div class="asset-card"><div class="asset-price">10Y Treasury - 4.2%</div><button class="buy-btn buy-bond-btn">BUY BOND</button></div></div></div>
-                <div id="cdsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="cdsTitle">CDs</h4></div><div class="asset-card"><div class="asset-price">6 Month CD - 5.2% APY</div><button class="buy-btn subscribe-cd-btn">SUBSCRIBE</button></div></div></div>
-                <div id="cardsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="myCardsTitle">My Cards</h4><button class="create-card-btn" id="createVirtualCardBtn">+ New Virtual Card</button></div><div class="cards-grid" id="cardsGrid"></div></div></div>
-                <div id="paymentsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4 id="paymentsTitle">Payments</h4></div><div class="payment-methods"><button class="payment-btn" id="qrPaymentBtn"><i class="fas fa-qrcode"></i> QR Code</button><button class="payment-btn" id="recurringPaymentBtn"><i class="fas fa-clock"></i> Recurring</button></div></div></div>
-                
-                <div id="digitalPaymentSectionContent" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Digital Payment</h4></div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;"><div class="asset-card" style="text-align: center;"><i class="fab fa-google-pay" style="font-size: 4rem; color: #4285f4;"></i><h3>Google Pay</h3><button id="googlePayActionBtn" class="buy-btn">Pagar</button></div><div class="asset-card" style="text-align: center;"><i class="fab fa-apple-pay" style="font-size: 4rem; color: #000;"></i><h3>Apple Pay</h3><button id="applePayActionBtn" class="buy-btn">Pagar</button></div></div></div></div>
-                
-                <div id="swapSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Swap Center</h4></div><div style="margin-bottom: 1.5rem; background: rgba(0, 242, 255, 0.05); border-radius: 1rem; padding: 1rem;"><h5 style="color: var(--neon-blue);">Trocar Moeda Fiat por Criptomoeda</h5><div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.8rem; align-items: center; margin: 1rem 0;"><select id="fiatCurrencySelect" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem;"><option value="USD">USD - $15,000</option><option value="EUR">EUR - €18,000</option><option value="GBP">GBP - £15,000</option><option value="BRL">BRL - R$76,800</option></select><i class="fas fa-arrow-right" style="color: var(--neon-yellow);"></i><select id="cryptoSwapSelect" style="background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; padding: 0.8rem;"><option value="bitcoin">Bitcoin - $67,234</option><option value="ethereum">Ethereum - $3,441</option><option value="solana">Solana - $98.07</option><option value="binance">BNB - $312.50</option><option value="tether">USDT - $1.00</option><option value="bradicoin">BradiCoin - $10.42</option><option value="litecoin">Litecoin - $82.50</option></select></div><div><input type="number" id="fiatToCryptoAmount" placeholder="Quantidade" style="width:100%; padding:0.8rem; background: rgba(26,27,58,0.9); border-radius:0.8rem;"><div id="fiatToCryptoPreview" style="margin:0.5rem 0; padding:0.8rem; background:rgba(0,0,0,0.3); border-radius:0.8rem;"></div><button id="confirmFiatToCryptoSwapBtn" class="buy-btn" style="width:100%; background:rgba(255,215,0,0.2); border-color:var(--neon-yellow); color:var(--neon-yellow);">CONFIRMAR SWAP</button></div></div></div></div>
-                
-                <div id="securitySection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Security Settings</h4></div><div class="currency-item"><span>2FA</span><button id="enable2faBtn" class="currency-send-btn">Enable</button></div></div></div>
-                <div id="sessionsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Active Sessions</h4><button id="terminateAllBtn" class="create-card-btn">Terminate All</button></div><div id="sessionsList" class="recurring-list"></div></div></div>
-                <div id="complianceSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>KYC & Compliance</h4></div><div class="currency-item"><span>Status</span><span id="kycDetailedStatus">PENDING</span></div></div></div>
-                <div id="antihackSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Anti-Hack</h4></div><div class="currency-item"><span>Blacklist</span><button id="addBlacklistBtn" class="currency-send-btn">Add</button></div></div></div>
-                <div id="analyticsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><canvas id="realtimeChart" height="120"></canvas></div></div>
-                <div id="reportsSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><canvas id="monthlyChart" height="150"></canvas><button id="exportMonthlyCSV" class="create-card-btn">Export CSV</button></div></div>
-                
-                <div id="novasSection" class="investment-section" style="display:none;"><div class="cards-section"><div class="close-section-btn" onclick="closeCurrentSection()">✕</div><div class="cards-header"><h4>Complete Banking Services</h4></div><div class="features-grid"><div class="feature-card" data-service="personal-loan"><i class="fas fa-hand-holding-usd"></i><h3>Personal Loan</h3><button class="buy-btn service-btn" data-service="personal-loan">Simulate</button></div></div></div></div>
-                
-                <div id="simulatorPanel" class="simulator-panel"><h4>Scenario Simulator</h4><input type="range" id="timeSlider" min="1" max="20" value="10"><div id="simResult">👉 Projection for 10 years: +48%</div></div>
+                <div id="cryptoTransactionsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Crypto Transactions</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="cryptoTxList"></div></div></div>
+                <div id="historySec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Transaction History / Extrato</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="historyList" class="history-list"></div></div></div>
+                <div id="tradingSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Trading Hub</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">BTC/USD - $67,234</div><button class="buy-btn">BUY</button><button class="sell-btn">SELL</button></div></div></div>
+                <div id="conversionSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Currency Conversion</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><select id="convFrom" style="width:100%; padding:0.5rem; margin:0.5rem 0;"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><select id="convTo" style="width:100%; padding:0.5rem; margin:0.5rem 0;"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option></select><input type="number" id="convAmount" placeholder="Amount"><button class="buy-btn" id="doConvertBtn">Convert</button></div></div>
+                <div id="treasuriesSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Treasuries & Bonds</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">10Y Treasury - 4.2%</div><button class="buy-btn">Invest</button></div></div></div>
+                <div id="cdsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>CDs / Time Deposits</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">6 Month CD - 5.2% APY</div><button class="buy-btn">Subscribe</button></div></div></div>
+                <div id="debenturesSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Debentures</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Zentronix Energy - 8.5%</div><button class="buy-btn">Invest</button></div></div></div>
+                <div id="reitsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>REITs</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Global REIT - 6.8%</div><button class="buy-btn">Invest</button></div></div></div>
+                <div id="privateCreditSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Private Credit</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Senior Loans - 9.2%</div><button class="buy-btn">Invest</button></div></div></div>
+                <div id="structuredNotesSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Structured Notes</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Market Linked Notes - 7.5%</div><button class="buy-btn">Invest</button></div></div></div>
+                <div id="municipalBondsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Municipal Bonds</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Tax-Free Muni Bonds - 4.8%</div><button class="buy-btn">Invest</button></div></div></div>
+                <div id="cardsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>My Cards</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="cardsList"></div><button class="buy-btn" id="createCardBtn">+ Create Virtual Card</button></div></div>
+                <div id="paymentsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Payments</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><button class="buy-btn">Make Payment</button></div></div>
+                <div id="swapSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Swap Center</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><select id="swapFrom" style="width:100%; padding:0.5rem; margin:0.5rem 0;"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><select id="swapTo" style="width:100%; padding:0.5rem; margin:0.5rem 0;"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option></select><input type="number" id="swapAmount" placeholder="Amount"><button class="buy-btn" id="doSwapBtn">Swap</button></div></div>
+                <div id="analyticsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Analytics</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><canvas id="analyticsChart" height="150"></canvas></div></div>
+                <div id="reportsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Reports</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><button class="buy-btn">Download Monthly Report</button></div></div>
+                <div id="securitySec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Security Settings</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="securitySettingsList"></div></div></div>
+                <div id="securityCenterSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Security Center</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="securityCenterList"></div><div style="margin-top: 1rem;"><button class="sell-btn" id="deleteAccountBtn" style="background: rgba(255,68,102,0.2); border-color: var(--neon-red); color: var(--neon-red); width: 100%;"><i class="fas fa-trash-alt"></i> DELETE ACCOUNT</button></div></div></div>
+                <div id="sessionsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Active Sessions</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div>Chrome - Windows (Current)</div><div>iPhone - Safari</div><button class="sell-btn">Terminate All</button></div></div>
+                <div id="complianceSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>KYC & Compliance</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><p>Status: <span id="kycStatusText">Pending</span></p><button class="buy-btn" id="startKycBtn">Start KYC</button></div></div>
+                <div id="antihackSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Anti-Hack</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="currency-item"><span>Blacklist Addresses</span><button class="buy-btn">Add Address</button></div></div></div>
+                <div id="servicesSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Complete Banking Services</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="bankingServicesList"></div></div></div>
+                <div id="digitalPaymentSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4>Digital Payment</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div style="display:flex; gap:1rem;"><button class="buy-btn"><i class="fab fa-google-pay"></i> Google Pay</button><button class="buy-btn"><i class="fab fa-apple-pay"></i> Apple Pay</button></div></div></div>
             </div>
 
             <div class="right-column">
-                <div class="balance-section"><div class="balance-header"><h4 id="yourBalancesTitle">YOUR BALANCES</h4><div class="balance-total" id="totalBalance">$0.00</div></div><div class="currency-grid" id="currencyGrid"></div></div>
-                <div class="military-hub"><div class="military-header"><h4 id="militaryHubTitle">MILITARY HUB</h4><div class="stealth-toggle" id="stealthToggle"><span id="stealthModeText">STEALTH MODE</span><div class="stealth-switch" id="stealthSwitch"></div></div></div><div class="balance-card"><div class="balance-item"><span>USD</span><span id="stealthUsd">$25,000</span></div><div class="balance-item"><span>BTC</span><span>0.42 BTC</span></div><div class="balance-item"><span>ETH</span><span>4.2 ETH</span></div><div class="balance-item"><span>SOL</span><span>250 SOL</span></div><div class="balance-item"><span>MATIC</span><span>5,000 MATIC</span></div><div class="balance-item"><span>USDT</span><span>10,000 USDT</span></div><div class="balance-item"><span>LTC</span><span>125 LTC</span></div><div class="balance-item"><span>BNB</span><span>85 BNB</span></div></div></div>
-                <div class="security-seals-right"><h4 id="securityCertificationsTitle">SECURITY CERTIFICATIONS</h4><div class="seals-grid"><div class="seal-item" data-seal="ev"><i class="fas fa-lock"></i><span>EV SSL</span></div><div class="seal-item" data-seal="pci"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div><div class="seal-item" data-seal="soc2"><i class="fas fa-file-alt"></i><span>SOC 2</span></div><div class="seal-item" data-seal="mcafee"><i class="fas fa-shield"></i><span>McAfee</span></div><div class="seal-item" data-seal="iso"><i class="fas fa-certificate"></i><span>ISO 27001</span></div><div class="seal-item" data-seal="aes"><i class="fas fa-microchip"></i><span>AES-256</span></div><div class="seal-item" data-seal="certik"><i class="fas fa-code-branch"></i><span>CertiK</span></div><div class="seal-item" data-seal="kyc"><i class="fas fa-id-card"></i><span>KYC/AML</span></div><div class="seal-item" data-seal="license"><i class="fas fa-gavel"></i><span>License</span></div></div></div>
+                <div class="balance-section"><div class="balance-header"><h4>YOUR BALANCES</h4><div class="balance-total" id="totalBalance">$0.00</div></div><div class="currency-grid" id="currencyGrid"></div></div>
+                <div class="military-hub"><div class="military-header"><h4>MILITARY HUB</h4><div class="stealth-toggle" id="stealthToggle"><span>STEALTH MODE</span><div class="stealth-switch" id="stealthSwitch"></div></div></div><div class="balance-card" id="militaryBalances"></div></div>
             </div>
         </div>
-    </div>
 
-    <div class="footer">
-        <div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-google-pay"></i><i class="fab fa-apple-pay"></i><i class="fab fa-bitcoin"></i><i class="fab fa-ethereum"></i><i class="fab fa-solana"></i><span class="custom-icon">🪙 BRC</span><span class="custom-icon">Ł LTC</span><span class="custom-icon">BNB</span></div>
-        <div class="security-icons"><div class="seal-cert" data-seal="ev"><i class="fas fa-lock"></i><span>EV SSL</span></div><div class="seal-cert" data-seal="pci"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div><div class="seal-cert" data-seal="soc2"><i class="fas fa-file-alt"></i><span>SOC 2</span></div><div class="seal-cert" data-seal="mcafee"><i class="fas fa-shield"></i><span>McAfee</span></div><div class="seal-cert" data-seal="iso"><i class="fas fa-certificate"></i><span>ISO 27001</span></div><div class="seal-cert" data-seal="aes"><i class="fas fa-microchip"></i><span>AES-256</span></div><div class="seal-cert" data-seal="certik"><i class="fas fa-code-branch"></i><span>CertiK</span></div><div class="seal-cert" data-seal="kyc"><i class="fas fa-id-card"></i><span>KYC/AML</span></div><div class="seal-cert" data-seal="license"><i class="fas fa-gavel"></i><span>License</span></div></div>
-        <div class="regulatory-text" id="regulatoryText">Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</div>
-        <div class="copyright" id="copyrightText">© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</div>
+        <!-- FOOTER DO DASHBOARD -->
+        <div class="footer-dashboard">
+            <div class="payment-icons">
+                <i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-google-pay"></i><i class="fab fa-apple-pay"></i><i class="fab fa-bitcoin"></i><i class="fab fa-ethereum"></i>
+                <span class="custom-icon" style="font-size:1.5rem;">🪙</span><span>BRC</span>
+                <span class="custom-icon" style="font-size:1.5rem;">Ł</span><span>LTC</span>
+                <span class="custom-icon" style="font-size:1.5rem;">BNB</span>
+            </div>
+            <div class="security-icons-footer">
+                <i class="fas fa-lock"></i><span>EV SSL</span>
+                <i class="fab fa-cc-visa"></i><span>PCI DSS</span>
+                <i class="fas fa-file-alt"></i><span>SOC 2</span>
+                <i class="fas fa-shield"></i><span>McAfee</span>
+                <i class="fas fa-certificate"></i><span>ISO 27001</span>
+                <i class="fas fa-microchip"></i><span>AES-256</span>
+                <i class="fas fa-code-branch"></i><span>CertiK</span>
+                <i class="fas fa-id-card"></i><span>KYC/AML</span>
+                <i class="fas fa-gavel"></i><span>License</span>
+            </div>
+            <div class="regulatory-text" id="regulatoryTextFooter">Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</div>
+            <div class="copyright" id="copyrightTextFooter">© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</div>
+        </div>
     </div>
 </div>
 
-<div id="securityModal" class="order-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:7000; justify-content:center; align-items:center;"><div style="background:#1a1b3a; padding:2rem; border-radius:2rem; text-align:center"><i class="fas fa-shield-alt" style="font-size:2rem;"></i><h3>Security Certificate</h3><p id="modalSealDesc"></p><button class="close-security" id="verifiedBtn" style="background:var(--neon-blue); border:none; padding:0.5rem 1.5rem; border-radius:2rem; margin-top:1rem; cursor:pointer;">VERIFIED</button></div></div>
-
 <script>
-    // ==================== FUNÇÃO DE STAKE PERSONALIZADA ====================
-    const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, MATIC: 6.5, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
-    const stakeDurations = [
-        { value: 30, label: "30 days - Flex", apyMultiplier: 1.0 },
-        { value: 90, label: "90 days - Premium", apyMultiplier: 1.15 },
-        { value: 180, label: "180 days - Elite", apyMultiplier: 1.35 },
-        { value: 365, label: "365 days - Maximum", apyMultiplier: 1.6 }
+// ==================== TRADUÇÕES ====================
+const translations = {
+    en: { 
+        bankSubtitle: "Offshore Private Banking", accessHub: "ACCESS HUB", kyc: "KYC", logout: "LOGOUT", 
+        heroTitle: "Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite", heroBadge: "🏆 Leading the Offshore Revolution since 2017", 
+        heroDesc: "Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.", 
+        card1Title: "🌍 Total Convergence: Fiat and Crypto", card1Desc: "Unlike traditional banks, Zentronix was designed for the digital age.", 
+        card2Title: "📈 Next-Generation Investment Portfolio", card2Desc: "Our financial product shelf is the most complete in the offshore sector.", 
+        card3Title: "🔐 Technology, Privacy and Succession", card3Desc: "Zentronix Bank goes beyond simple transactions; we take care of your legacy.", 
+        impactPhrase: "✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨", impactSmall: "Founded in 2017. Connected to the Future.", 
+        aboutTitle: "🌟 ABOUT ZENTRONIX BANK", aboutHistoryTitle: "Our History", aboutHistoryDesc: "Founded in 2018, serving 156+ countries", 
+        aboutSecurityTitle: "Security First", aboutSecurityDesc: "Quantum-resistant protocols", aboutReachTitle: "Global Reach", aboutReachDesc: "Offices in Switzerland, Singapore, Dubai", 
+        aboutReturnsTitle: "Premium Returns", aboutReturnsDesc: "Up to 12% annual yield", 
+        currenciesTitle: "💱 CURRENCIES WE ACCEPT", cryptoTitles: "💎 SUPPORTED CRYPTOCURRENCIES", 
+        statAum: "AUM", statClients: "Clients", statCountries: "Countries", statEncryption: "Encryption", 
+        regulatoryText: "Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.", 
+        copyrightText: "© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024",
+        confirmLogoutTitle: "Confirm Logout", confirmLogoutMessage: "Are you sure you want to logout from your account?", confirmYes: "YES", confirmNo: "NO"
+    },
+    pt: { 
+        bankSubtitle: "Banco Offshore Privado", accessHub: "ACESSAR HUB", kyc: "KYC", logout: "SAIR", 
+        heroTitle: "Zentronix Banco Offshore: Soberania, Tecnologia e Elite Financeira", heroBadge: "🏆 Liderando a Revolução Offshore desde 2017", 
+        heroDesc: "Fundado em 2017, o Zentronix Bank não é apenas uma instituição financeira; é uma fortaleza para capital global.", 
+        card1Title: "🌍 Convergência Total: Fiat e Cripto", card1Desc: "Ao contrário dos bancos tradicionais, a Zentronix foi projetada para a era digital.", 
+        card2Title: "📈 Portfólio de Investimentos de Próxima Geração", card2Desc: "Nossa prateleira de produtos financeiros é a mais completa do setor offshore.", 
+        card3Title: "🔐 Tecnologia, Privacidade e Sucessão", card3Desc: "O Zentronix Bank vai além de simples transações; cuidamos do seu legado.", 
+        impactPhrase: "✨ Zentronix Banco Offshore: A evolução do seu poder financeiro começa aqui. ✨", impactSmall: "Fundado em 2017. Conectado ao Futuro.", 
+        aboutTitle: "🌟 SOBRE O ZENTRONIX BANK", aboutHistoryTitle: "Nossa História", aboutHistoryDesc: "Fundado em 2018, atendendo 156+ países", 
+        aboutSecurityTitle: "Segurança em Primeiro Lugar", aboutSecurityDesc: "Protocolos resistentes a quantum", aboutReachTitle: "Alcance Global", aboutReachDesc: "Escritórios na Suíça, Singapura, Dubai", 
+        aboutReturnsTitle: "Retornos Premium", aboutReturnsDesc: "Até 12% de rendimento anual", 
+        currenciesTitle: "💱 MOEDAS QUE ACEITAMOS", cryptoTitles: "💎 CRIPTOMOEDAS SUPORTADAS", 
+        statAum: "PATRIMÔNIO", statClients: "Clientes", statCountries: "Países", statEncryption: "Criptografia", 
+        regulatoryText: "O Zentronix Bank está atualmente passando por licenciamento regulatório como Provedor de Serviços de Ativos Virtuais.", 
+        copyrightText: "© 2024 Zentronix Bank - Edição Azul e Roxa | Licença Bancária Offshore Nº ZNTX-2024",
+        confirmLogoutTitle: "Confirmar Saída", confirmLogoutMessage: "Tem certeza que deseja sair da sua conta?", confirmYes: "SIM", confirmNo: "NÃO"
+    },
+    es: { 
+        bankSubtitle: "Banca Offshore Privada", accessHub: "ACCESO HUB", kyc: "KYC", logout: "SALIR", 
+        heroTitle: "Zentronix Banco Offshore: Soberanía, Tecnología y Elite Financiera", heroBadge: "🏆 Liderando la Revolución Offshore desde 2017", 
+        heroDesc: "Fundado en 2017, Zentronix Bank no es solo una institución financiera; es una fortaleza para el capital global.", 
+        card1Title: "🌍 Convergencia Total: Fiat y Cripto", card1Desc: "A diferencia de los bancos tradicionales, Zentronix fue diseñado para la era digital.", 
+        card2Title: "📈 Cartera de Inversiones de Próxima Generación", card2Desc: "Nuestra gama de productos financieros es la más completa del sector offshore.", 
+        card3Title: "🔐 Tecnología, Privacidad y Sucesión", card3Desc: "Zentronix Bank va más allá de las simples transacciones; cuidamos su legado.", 
+        impactPhrase: "✨ Zentronix Banco Offshore: La evolución de su poder financiero comienza aquí. ✨", impactSmall: "Fundado en 2017. Conectado al Futuro.", 
+        aboutTitle: "🌟 SOBRE ZENTRONIX BANK", aboutHistoryTitle: "Nuestra Historia", aboutHistoryDesc: "Fundado en 2018, sirviendo a 156+ países", 
+        aboutSecurityTitle: "Seguridad Primero", aboutSecurityDesc: "Protocolos resistentes a cuánticos", aboutReachTitle: "Alcance Global", aboutReachDesc: "Oficinas en Suiza, Singapur, Dubái", 
+        aboutReturnsTitle: "Rendimientos Premium", aboutReturnsDesc: "Hasta 12% de rendimiento anual", 
+        currenciesTitle: "💱 MONEDAS QUE ACEPTAMOS", cryptoTitles: "💎 CRIPTOMONEDAS SOPORTADAS", 
+        statAum: "PATRIMONIO", statClients: "Clientes", statCountries: "Países", statEncryption: "Cifrado", 
+        regulatoryText: "Zentronix Bank se encuentra actualmente en proceso de licenciamiento regulatorio como Proveedor de Servicios de Activos Virtuales.", 
+        copyrightText: "© 2024 Zentronix Bank - Edición Azul y Púrpura | Licencia Bancaria Offshore Nº ZNTX-2024",
+        confirmLogoutTitle: "Confirmar Salida", confirmLogoutMessage: "¿Estás seguro de que quieres salir de tu cuenta?", confirmYes: "SÍ", confirmNo: "NO"
+    },
+    ar: { 
+        bankSubtitle: "الخدمات المصرفية الخارجية الخاصة", accessHub: "الوصول إلى المركز", kyc: "التحقق", logout: "تسجيل خروج", 
+        heroTitle: "بنك Zentronix الخارجي: السيادة والتكنولوجيا والنخبة المالية", heroBadge: "🏆 قيادة الثورة الخارجية منذ 2017", 
+        heroDesc: "تأسس بنك Zentronix في عام 2017، ليس مجرد مؤسسة مالية؛ إنه حصن لرأس المال العالمي.", 
+        card1Title: "🌍 التقارب الكلي: العملات التقليدية والرقمية", card1Desc: "على عكس البنوك التقليدية، تم تصميم Zentronix للعصر الرقمي.", 
+        card2Title: "📈 محفظة استثمارات الجيل القادم", card2Desc: "مجموعة منتجاتنا المالية هي الأكثر اكتمالاً في القطاع الخارجي.", 
+        card3Title: "🔐 التكنولوجيا والخصوصية والخلافة", card3Desc: "بنك Zentronix يتجاوز المعاملات البسيطة؛ نحن نعتني بإرثك.", 
+        impactPhrase: "✨ بنك Zentronix الخارجي: تطور قوتك المالية يبدأ هنا. ✨", impactSmall: "تأسس في 2017. متصل بالمستقبل.", 
+        aboutTitle: "🌟 حول بنك Zentronix", aboutHistoryTitle: "تاريخنا", aboutHistoryDesc: "تأسس في 2018، يخدم 156+ دولة", 
+        aboutSecurityTitle: "الأمن أولاً", aboutSecurityDesc: "بروتوكولات مقاومة الكم", aboutReachTitle: "الوصول العالمي", aboutReachDesc: "مكاتب في سويسرا وسنغافورة ودبي", 
+        aboutReturnsTitle: "عوائد ممتازة", aboutReturnsDesc: "حتى 12% عائد سنوي", 
+        currenciesTitle: "💱 العملات التي نقبلها", cryptoTitles: "💎 العملات الرقمية المدعومة", 
+        statAum: "الأصول المدارة", statClients: "العملاء", statCountries: "الدول", statEncryption: "التشفير", 
+        regulatoryText: "يخضع بنك Zentronix حالياً للترخيص التنظيمي كمزود خدمات الأصول الافتراضية.", 
+        copyrightText: "© 2024 بنك Zentronix - الإصدار الأزرق والأرجواني | رخصة مصرفية خارجية رقم ZNTX-2024",
+        confirmLogoutTitle: "تأكيد تسجيل الخروج", confirmLogoutMessage: "هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟", confirmYes: "نعم", confirmNo: "لا"
+    }
+};
+
+// ==================== DADOS GLOBAIS ====================
+let currentLang = 'en';
+let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BRL: 5280, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85 };
+let messages = [
+    { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false },
+    { id: 2, type: "SECURITY", title: "Security Alert", desc: "New login detected from Chrome browser.", time: new Date(Date.now() - 3600000).toLocaleString(), read: false },
+    { id: 3, type: "TRANSACTION", title: "BTC Transfer Received", desc: "You received 0.05 BTC", time: new Date(Date.now() - 7200000).toLocaleString(), read: false }
+];
+let kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null };
+let currentKycStep = 1;
+let profilePhoto = null;
+
+const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, MATIC: 0.85, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
+const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, MATIC: 6.5, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
+
+function copyAccountNumber() { navigator.clipboard.writeText('ZNTX-4821-7390-1256'); showToast("Account number copied!"); }
+function generateWallet(asset) { const wallets = { BTC: "bc1q" + Math.random().toString(36).substring(2, 15), ETH: "0x" + Math.random().toString(36).substring(2, 15), SOL: "Sol" + Math.random().toString(36).substring(2, 20), BRADICOIN: "BRC" + Math.random().toString(36).substring(2, 20).toUpperCase() }; return wallets[asset] || asset + "_" + Math.random().toString(36).substring(2, 10); }
+function addMessage(type, title, desc) { messages.unshift({ id: Date.now(), type, title, desc, time: new Date().toLocaleString(), read: false }); if (messages.length > 50) messages.pop(); updateMessagesDisplay(); updateNotificationCount(); }
+function deleteMessage(id) { messages = messages.filter(m => m.id !== id); updateMessagesDisplay(); updateNotificationCount(); showToast("Message deleted"); }
+function updateMessagesDisplay() { const container = document.getElementById('historyList'); if (!container) return; if (messages.length === 0) { container.innerHTML = '<p>No transactions yet</p>'; return; } container.innerHTML = messages.map(m => `<div class="history-item"><div class="history-content"><div class="history-type">${m.type} - ${m.title}</div><div class="history-detail">${m.desc}</div><div class="history-time">${m.time}</div></div><button class="delete-notification-btn" onclick="deleteMessage(${m.id})"><i class="fas fa-times"></i></button></div>`).join(''); }
+function updateNotificationCount() { document.getElementById('notificationCount').innerText = messages.filter(m => !m.read).length; }
+function showToast(msg) { let t = document.createElement('div'); t.className = 'toast-notification'; t.innerHTML = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
+function showModal(content) { const modal = document.getElementById('modalOverlay'); const modalContent = document.getElementById('modalContent'); modalContent.innerHTML = content; modal.classList.add('active'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+function showCurrencyHistory(currency) { const currencyMessages = messages.filter(m => m.desc.includes(currency) || m.title.includes(currency)); if (currencyMessages.length === 0) { showToast(`No history found for ${currency}`); return; } showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${currency} Transaction History</h3><div style="max-height:400px; overflow-y:auto;">${currencyMessages.map(m => `<div style="background:rgba(26,27,58,0.6); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem;"><div style="color:var(--neon-yellow);">${m.type}</div><div>${m.desc}</div><div style="font-size:0.6rem; opacity:0.5;">${m.time}</div></div>`).join('')}</div><button class="buy-btn" onclick="closeModal()" style="margin-top:1rem;">Close</button>`); }
+
+function openStakeModal(asset, symbol, price) { const apy = stakeAPYs[symbol] || 5.0; const balance = userBalances[symbol] || 0; showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>STAKE ${symbol}</h3><div>${apy}% APY</div><input type="number" id="stakeAmount" placeholder="Amount to stake"><div>Available: ${balance.toFixed(4)} ${symbol}</div><button class="buy-btn" onclick="confirmStake('${symbol}', ${apy})">Confirm Stake</button>`); }
+function confirmStake(symbol, apy) { let amount = parseFloat(document.getElementById('stakeAmount')?.value); if (isNaN(amount) || amount <= 0 || amount > userBalances[symbol]) { showToast("Invalid amount"); closeModal(); return; } userBalances[symbol] -= amount; addMessage("STAKE", `Staked ${symbol}`, `Staked ${amount.toFixed(4)} ${symbol} at ${apy}% APY`); showToast(`✅ Staked ${amount.toFixed(4)} ${symbol}!`); updateBalances(); closeModal(); }
+function openUnstakeModal(asset, symbol) { showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>UNSTAKE ${symbol}</h3><input type="number" id="unstakeAmount" placeholder="Amount to unstake"><button class="buy-btn" onclick="confirmUnstake('${symbol}')">Confirm Unstake</button>`); }
+function confirmUnstake(symbol) { let amount = parseFloat(document.getElementById('unstakeAmount')?.value); if (isNaN(amount) || amount <= 0) { showToast("Invalid amount"); closeModal(); return; } userBalances[symbol] += amount; addMessage("UNSTAKE", `Unstaked ${symbol}`, `Unstaked ${amount.toFixed(4)} ${symbol}`); showToast(`✅ Unstaked ${amount.toFixed(4)} ${symbol}!`); updateBalances(); closeModal(); }
+function openBuyModal(asset, symbol, price) { showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Buy ${symbol}</h3><p>Price: $${price}</p><input type="number" id="buyAmount" placeholder="Amount to buy"><div class="payment-methods-grid"><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'mastercard')"><i class="fab fa-cc-mastercard"></i><p>Mastercard</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'visa')"><i class="fab fa-cc-visa"></i><p>Visa</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'amex')"><i class="fab fa-cc-amex"></i><p>Amex</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'googlepay')"><i class="fab fa-google-pay"></i><p>Google Pay</p></div></div><div class="payment-method-card" onclick="processBuyWithLoan('${symbol}', ${price})"><i class="fas fa-hand-holding-usd"></i><p>💰 Zentronix Loan</p></div><button class="sell-btn" onclick="closeModal()">Cancel</button>`); }
+function processBuyWithCard(symbol, method) { let amount = parseFloat(document.getElementById('buyAmount')?.value); if (isNaN(amount) || amount <= 0) { showToast("Enter valid amount"); return; } const price = cryptoPrices[symbol] || 1; const cost = amount * price; userBalances[symbol] = (userBalances[symbol] || 0) + amount; addMessage("BUY", `Purchased ${symbol}`, `Purchased ${amount} ${symbol} via ${method.toUpperCase()} for $${cost.toFixed(2)}`); showToast(`✅ Purchased ${amount} ${symbol}!`); updateBalances(); closeModal(); }
+function processBuyWithLoan(symbol, price) { let amount = parseFloat(document.getElementById('buyAmount')?.value); if (isNaN(amount) || amount <= 0) { showToast("Enter valid amount"); return; } const cost = amount * price; userBalances[symbol] = (userBalances[symbol] || 0) + amount; addMessage("LOAN BUY", `Loan Purchase ${symbol}`, `Purchased ${amount} ${symbol} via Zentronix Loan - $${cost.toFixed(2)}`); showToast(`🏦 Loan approved! ${amount} ${symbol} added!`); updateBalances(); closeModal(); }
+function openWalletModal(asset, symbol) { const walletAddress = generateWallet(asset); const links = { BTC: "https://www.blockchain.com/explorer", ETH: "https://etherscan.io", SOL: "https://explorer.solana.com", BRADICOIN: "https://www.bradichain.com" }; showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${symbol} Wallet</h3><div style="background:rgba(0,0,0,0.4);padding:0.8rem;border-radius:0.8rem;word-break:break-all;">${walletAddress}</div><button class="buy-btn" onclick="navigator.clipboard.writeText('${walletAddress}');showToast('Copied!')">Copy</button><button class="sell-btn" onclick="window.open('${links[asset] || links.BRADICOIN}', '_blank')">🔗 Blockchain Explorer</button>`); }
+function openSwapModalFull() { showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap Center</h3><select id="swapFromSelect"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><i class="fas fa-arrow-down"></i><select id="swapToSelect"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><input type="number" id="swapAmountInput" placeholder="Amount"><button class="buy-btn" onclick="executeSwap()">Confirm Swap</button>`); }
+function executeSwap() { const from = document.getElementById('swapFromSelect')?.value; const to = document.getElementById('swapToSelect')?.value; let amount = parseFloat(document.getElementById('swapAmountInput')?.value); if (isNaN(amount) || amount <= 0) { showToast("Invalid amount"); closeModal(); return; } if (from === to) { showToast("Cannot swap same currency"); closeModal(); return; } const fromPrice = cryptoPrices[from] || 1; const toPrice = cryptoPrices[to] || 1; const received = (amount * fromPrice) / toPrice; addMessage("SWAP", `${from} → ${to}`, `Swapped ${amount} ${from} for ${received.toFixed(6)} ${to}`); showToast(`✅ Swapped ${amount} ${from} to ${received.toFixed(6)} ${to}`); closeModal(); }
+
+function renderCryptoAssets() {
+    const cryptos = [{ name: "Bitcoin", symbol: "BTC", price: 67234 }, { name: "Ethereum", symbol: "ETH", price: 3441 }, { name: "Solana", symbol: "SOL", price: 98.07 }, { name: "Polygon", symbol: "MATIC", price: 0.85 }, { name: "Tether", symbol: "USDT", price: 1.00 }, { name: "Litecoin", symbol: "LTC", price: 82.50, change: "+1.8%" }, { name: "BNB", symbol: "BNB", price: 312.50, change: "+3.2%" }, { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42, change: "+2.3%" }];
+    const container = document.getElementById('cryptoAssetsGrid');
+    if (container) container.innerHTML = cryptos.map(c => `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price} <span style="color:var(--neon-green);">${c.change || ''}</span></div><div class="button-group"><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="sell-btn" onclick="openUnstakeModal('${c.symbol.toLowerCase()}', '${c.symbol}')">UNSTAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openBuyModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">BUY</button><button class="wallet-btn" onclick="openWalletModal('${c.symbol}', '${c.symbol}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HISTORY</button></div></div>`).join('');
+}
+
+function updateBalances() {
+    const total = Object.entries(userBalances).reduce((sum, [key, val]) => sum + (val * (cryptoPrices[key] || 1)), 0);
+    document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+    const grid = document.getElementById('currencyGrid');
+    if (grid) {
+        const fiatCurrencies = ['USD', 'EUR', 'GBP', 'BRL'];
+        const cryptos = ['BTC', 'ETH', 'SOL', 'BRADICOIN', 'USDT', 'LTC', 'BNB'];
+        grid.innerHTML = [...fiatCurrencies, ...cryptos].map(curr => {
+            if (fiatCurrencies.includes(curr)) {
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${userBalances[curr]?.toFixed(2) || 0}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="showToast('Send ${curr}')">SEND</button><button class="receive-btn" onclick="showToast('Receive ${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+            } else {
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${userBalances[curr]?.toFixed(4) || 0}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="showToast('Send ${curr}')">SEND</button><button class="receive-btn" onclick="showToast('Receive ${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+            }
+        }).join('');
+    }
+    const militaryDiv = document.getElementById('militaryBalances'); if (militaryDiv) militaryDiv.innerHTML = Object.entries(userBalances).slice(0, 8).map(([k, v]) => `<div class="balance-item"><span>${k}</span><span>${v.toFixed(4)}</span></div>`).join('');
+}
+
+function renderSecurityCenter() {
+    const securityItems = [
+        { name: "Two-Factor Authentication (2FA)", status: "Disabled", action: "Enable" },
+        { name: "Biometric Login", status: "Disabled", action: "Setup" },
+        { name: "Address Whitelist", status: "0 Addresses", action: "Configure" },
+        { name: "Withdrawal Limit", status: "$50,000/day", action: "Change" },
+        { name: "Session Timeout", status: "30 minutes", action: "Change" },
+        { name: "Login Notifications", status: "Enabled", action: "Configure" },
+        { name: "Transaction PIN", status: "Not Set", action: "Set PIN" },
+        { name: "Anti-Phishing Code", status: "Not Set", action: "Set Code" },
+        { name: "IP Whitelist", status: "Not Set", action: "Configure" },
+        { name: "Cold Storage", status: "Inactive", action: "Activate" }
     ];
-    
-    function openStakeModal(asset, symbol, price) {
-        const apy = stakeAPYs[symbol] || 5.0;
-        let cryptoKey = '';
-        if (asset === 'btc') cryptoKey = 'BTC';
-        else if (asset === 'eth') cryptoKey = 'ETH';
-        else if (asset === 'sol') cryptoKey = 'SOL';
-        else if (asset === 'matic') cryptoKey = 'MATIC';
-        else if (asset === 'usdt') cryptoKey = 'USDT';
-        else if (asset === 'bradicoin') cryptoKey = 'BRADICOIN';
-        else if (asset === 'ltc') cryptoKey = 'LTC';
-        else if (asset === 'bnb') cryptoKey = 'BNB';
-        else cryptoKey = asset.toUpperCase();
-        
-        const currentBalance = userBalances[cryptoKey] || 0;
-        const icons = { BTC: '₿', ETH: 'Ξ', SOL: '◎', MATIC: '🔷', USDT: '₮', BRADICOIN: '🪙', LTC: 'Ł', BNB: 'BNB' };
-        const icon = icons[symbol] || '💎';
-        
-        let durationOptions = '';
-        stakeDurations.forEach(d => { const effectiveApy = (apy * d.apyMultiplier).toFixed(1); durationOptions += `<option value="${d.value}" data-multiplier="${d.apyMultiplier}">${d.label} - ${effectiveApy}% APY</option>`; });
-        
-        const modalContent = `<div class="stake-modal" style="max-width: 480px;"><button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><div class="stake-header"><div class="stake-icon">${icon}</div><h2 style="color: var(--neon-blue); margin-bottom: 0.3rem;">STAKE ${symbol}</h2><div class="stake-apy">${apy}% APY</div><p style="font-size: 0.7rem; opacity: 0.7;">Earn passive income on your ${symbol}</p></div><div class="stake-input-area"><label style="font-size: 0.7rem; opacity: 0.7;">Amount to Stake</label><input type="number" id="stakeAmount" class="stake-amount-input" placeholder="0.00" step="any"><div class="stake-balance-info"><span>Available: ${currentBalance.toFixed(4)} ${symbol}</span><button id="stakeMaxBtn" class="buy-btn" style="padding: 0.2rem 0.5rem; font-size: 0.6rem;">MAX</button></div></div><div><label style="font-size: 0.7rem; opacity: 0.7;">Duration</label><select id="stakeDuration" class="stake-duration-select">${durationOptions}</select></div><div id="stakeRewardsPreview" class="stake-rewards-preview"><p style="font-size: 0.7rem; margin-bottom: 0.3rem;">📈 Estimated Rewards</p><div class="stake-reward-value" id="rewardsAmount">0.0000 ${symbol}</div><p style="font-size: 0.6rem; opacity: 0.7;">+ <span id="rewardsUSD">$0.00</span> USD value</p></div><div style="background: rgba(0,242,255,0.05); border-radius: 0.8rem; padding: 0.8rem; margin: 1rem 0; text-align: center;"><p style="font-size: 0.65rem;"><i class="fas fa-clock"></i> Rewards distributed daily | No lock-in penalty after 7 days</p></div><div style="display: flex; gap: 0.8rem;"><button class="sell-btn close-modal-btn" style="flex: 1;">Cancel</button><button id="confirmStakeBtn" class="buy-btn" style="flex: 2; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue));"><i class="fas fa-lock"></i> Confirm Stake</button></div></div>`;
-        showModal(modalContent);
-        
-        const stakeAmountInput = document.getElementById('stakeAmount');
-        const stakeDurationSelect = document.getElementById('stakeDuration');
-        
-        function updateRewardsPreview() {
-            let amount = parseFloat(stakeAmountInput?.value);
-            if (isNaN(amount) || amount <= 0) { document.getElementById('rewardsAmount').innerHTML = `0.0000 ${symbol}`; document.getElementById('rewardsUSD').innerHTML = `$0.00`; return; }
-            amount = Math.min(amount, currentBalance);
-            const selectedOption = stakeDurationSelect.options[stakeDurationSelect.selectedIndex];
-            const multiplier = parseFloat(selectedOption.dataset.multiplier) || 1.0;
-            const days = parseInt(stakeDurationSelect.value);
-            const effectiveApy = apy * multiplier;
-            const yearlyReward = amount * (effectiveApy / 100);
-            const totalReward = (yearlyReward / 365) * days;
-            const priceInUSD = price || 1;
-            const rewardUSD = totalReward * priceInUSD;
-            document.getElementById('rewardsAmount').innerHTML = `${totalReward.toFixed(6)} ${symbol}`;
-            document.getElementById('rewardsUSD').innerHTML = `$${rewardUSD.toFixed(2)}`;
-        }
-        
-        stakeAmountInput?.addEventListener('input', updateRewardsPreview);
-        stakeDurationSelect?.addEventListener('change', updateRewardsPreview);
-        document.getElementById('stakeMaxBtn')?.addEventListener('click', () => { if (stakeAmountInput) stakeAmountInput.value = currentBalance.toFixed(6); updateRewardsPreview(); });
-        document.getElementById('confirmStakeBtn')?.addEventListener('click', () => {
-            let amount = parseFloat(stakeAmountInput?.value);
-            if (isNaN(amount) || amount <= 0) { alert('Please enter a valid amount'); return; }
-            if (amount > currentBalance) { alert(`Insufficient balance! You have ${currentBalance.toFixed(6)} ${symbol}`); return; }
-            userBalances[cryptoKey] -= amount;
-            const selectedOption = stakeDurationSelect.options[stakeDurationSelect.selectedIndex];
-            const days = parseInt(stakeDurationSelect.value);
-            const multiplier = parseFloat(selectedOption.dataset.multiplier) || 1.0;
-            const effectiveApy = apy * multiplier;
-            const yearlyReward = amount * (effectiveApy / 100);
-            const totalReward = (yearlyReward / 365) * days;
-            showToast(`✅ Success! You staked ${amount.toFixed(4)} ${symbol} for ${days} days. Estimated reward: ${totalReward.toFixed(6)} ${symbol}`);
-            updateTotalBalance();
-            renderCurrencies();
-            closeModal();
+    const container = document.getElementById('securityCenterList');
+    if (container) container.innerHTML = securityItems.map(item => `<div class="security-item"><span><i class="fas fa-shield-alt"></i> ${item.name}</span><span style="color:var(--neon-yellow);">${item.status}</span><button class="buy-btn" style="padding:0.2rem 0.5rem; font-size:0.6rem;" onclick="showToast('${item.action} ${item.name}')">${item.action}</button></div>`).join('');
+}
+
+function renderBankingServices() {
+    const services = [
+        { name: "Personal Loan", desc: "Up to $500,000 with competitive rates", icon: "fas fa-user" },
+        { name: "Corporate Loan", desc: "Business financing up to $5M", icon: "fas fa-building" },
+        { name: "Investor Profile", desc: "Personalized investment strategy", icon: "fas fa-chart-line" },
+        { name: "Mortgage", desc: "Property financing worldwide", icon: "fas fa-home" },
+        { name: "Education Loan", desc: "Student financing", icon: "fas fa-graduation-cap" }
+    ];
+    const container = document.getElementById('bankingServicesList');
+    if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="showToast('${service.name} application started')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); showToast('Apply for ${service.name}')">Apply Now</button></div>`).join('');
+}
+
+function initStakingChart() { const ctx = document.getElementById('stakingChart')?.getContext('2d'); if (ctx) new Chart(ctx, { type: 'line', data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Portfolio Value', data: [100, 105, 112, 120], borderColor: '#00f2ff', tension: 0.4 }] } }); }
+function initAnalyticsChart() { const ctx = document.getElementById('analyticsChart')?.getContext('2d'); if (ctx) new Chart(ctx, { type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr'], datasets: [{ label: 'Returns %', data: [5.2, 6.1, 5.8, 7.2], backgroundColor: '#00f2ff' }] } }); }
+function closeCurrentSection() { document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); document.getElementById('cryptoSec').classList.add('active'); }
+
+function setupMenu() {
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const section = item.dataset.section;
+            document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active'));
+            const sections = { crypto: 'cryptoSec', cryptoTransactions: 'cryptoTransactionsSec', history: 'historySec', trading: 'tradingSec', conversion: 'conversionSec', treasuries: 'treasuriesSec', cds: 'cdsSec', debentures: 'debenturesSec', reits: 'reitsSec', privateCredit: 'privateCreditSec', structuredNotes: 'structuredNotesSec', municipalBonds: 'municipalBondsSec', cards: 'cardsSec', payments: 'paymentsSec', swap: 'swapSec', analytics: 'analyticsSec', reports: 'reportsSec', security: 'securitySec', securityCenter: 'securityCenterSec', sessions: 'sessionsSec', compliance: 'complianceSec', antihack: 'antihackSec', services: 'servicesSec', digitalPayment: 'digitalPaymentSec' };
+            if (sections[section]) document.getElementById(sections[section]).classList.add('active');
         });
-    }
-    
-    // ==================== NOTIFICAÇÕES ====================
-    let notifications = [{ id: 1, title: "💰 BTC Transfer Received", desc: "You received 0.05 BTC", time: "2 hours ago", read: false, type: "transaction" }];
-    function showNotifications() { let html = `<div class="notification-modal"><button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Notifications</h3>`; notifications.forEach(n => { html += `<div class="notification-item"><div class="notification-title">${n.title}</div><div class="notification-desc">${n.desc}</div><div class="notification-time">${n.time}</div></div>`; }); html += `<button class="close-modal-btn">Close</button></div>`; showModal(html); }
-    function updateNotificationCount() { document.getElementById('notificationCount').innerText = notifications.filter(n => !n.read).length; }
-    
-    // ==================== VARIÁVEIS GLOBAIS ====================
-    let currentLang = 'en';
-    let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BRL: 5280.50, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85 };
-    let fiatBalances = { USD: 15000, EUR: 18000, GBP: 15000, BRL: 76800 };
-    let apiAccount = null;
-    
-    function updateTotalBalance() { let total = userBalances.USD + (userBalances.EUR||0)*1.09 + (userBalances.GBP||0)*1.27 + (userBalances.BRL||0)*0.195; total += (userBalances.BTC||0)*67234 + (userBalances.ETH||0)*3441 + (userBalances.BRADICOIN||0)*10.42 + (userBalances.SOL||0)*98.07 + (userBalances.MATIC||0)*0.85 + (userBalances.USDT||0)*1 + (userBalances.LTC||0)*82.50 + (userBalances.BNB||0)*312.50; document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString()}`; document.getElementById('stealthUsd') && (document.getElementById('stealthUsd').innerHTML = `$${userBalances.USD.toLocaleString()}`); }
-    
-    function renderCurrencies() { 
-        const grid = document.getElementById('currencyGrid'); if(!grid) return; grid.innerHTML = '';
-        const allCurrencies = [{ code: 'USD', balance: fiatBalances.USD },{ code: 'EUR', balance: fiatBalances.EUR },{ code: 'GBP', balance: fiatBalances.GBP },{ code: 'BRL', balance: fiatBalances.BRL },{ code: 'BTC', balance: userBalances.BTC },{ code: 'ETH', balance: userBalances.ETH },{ code: 'BRADICOIN', balance: userBalances.BRADICOIN },{ code: 'SOL', balance: userBalances.SOL },{ code: 'MATIC', balance: userBalances.MATIC },{ code: 'USDT', balance: userBalances.USDT },{ code: 'LTC', balance: userBalances.LTC },{ code: 'BNB', balance: userBalances.BNB }];
-        allCurrencies.forEach(a => { grid.innerHTML += `<div class="currency-item"><span>${a.code}</span><span class="currency-balance">${a.balance?.toFixed(4)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn send-currency-btn" data-currency="${a.code}">SEND</button><button class="buy-btn receive-currency-btn" data-currency="${a.code}">RECEIVE</button><button class="sell-btn stake-currency-btn" data-currency="${a.code}">STAKE</button><button class="swap-btn swap-currency-btn" data-currency="${a.code}">SWAP</button><button class="wallet-btn wallet-currency-btn" data-currency="${a.code}">WALLET</button></div></div>`; });
-        document.querySelectorAll('.stake-currency-btn').forEach(btn => { btn.addEventListener('click', () => { let currency = btn.dataset.currency; let assetName = currency === 'BTC' ? 'btc' : currency === 'ETH' ? 'eth' : currency === 'SOL' ? 'sol' : currency === 'MATIC' ? 'matic' : currency === 'USDT' ? 'usdt' : currency === 'BRADICOIN' ? 'bradicoin' : currency === 'LTC' ? 'ltc' : 'bnb'; openStakeModal(assetName, currency, 1); }); });
-    }
-    
-    function showToast(msg){ let t=document.createElement('div'); t.className='toast-notification'; t.innerHTML=`<i class="fas fa-check-circle"></i> ${msg}`; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
-    function showModal(contentHtml){ const modal = document.getElementById('modalOverlay'); const modalContent = document.getElementById('modalContent'); if(modalContent) modalContent.innerHTML = contentHtml; if(modal) modal.classList.add('active'); document.querySelectorAll('.close-modal-btn').forEach(btn => { btn.addEventListener('click', () => { if(modal) modal.classList.remove('active'); }); }); }
-    function closeModal(){ document.getElementById('modalOverlay').classList.remove('active'); }
-    function showSection(id){ document.querySelectorAll('.investment-section').forEach(s=>s.style.display='none'); const el = document.getElementById(`${id}Section`); if(el) el.style.display='block'; }
-    function closeCurrentSection(){ document.querySelectorAll('.investment-section').forEach(s=>s.style.display='none'); document.getElementById('cryptoSection').style.display='block'; showToast('Back to dashboard'); }
-    function openSwapModal(cryptoType, price){ showModal(`<div><button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap</h3><p>Price: $${price}</p><input type="number" id="swapAmount" placeholder="Amount"><button id="confirmSwapBtn" class="buy-btn">Confirm</button></div>`); document.getElementById('confirmSwapBtn')?.addEventListener('click',()=>{ let amt=parseFloat(document.getElementById('swapAmount')?.value); if(amt>0){ showToast(`Swapped ${amt} ${cryptoType}`); closeModal(); } }); }
-    function copyAccountNumber(){ navigator.clipboard.writeText('ZNTX-4821-7390-1256'); showToast('Account number copied!'); }
-    function initStakingChart(){ const ctx = document.getElementById('stakingChart')?.getContext('2d'); if(ctx) new Chart(ctx,{type:'line',data:{labels:['W1','W2','W3','W4','W5','W6'],datasets:[{label:'Portfolio',data:[100,105,108,112,118,125],borderColor:'#00f2ff',tension:0.4}]}}); }
-    function initCharts(){ const ctx = document.getElementById('realtimeChart')?.getContext('2d'); if(ctx) new Chart(ctx,{type:'line',data:{labels:['1','2','3','4','5'],datasets:[{label:'Performance',data:[25,27,26,28,30],borderColor:'#00f2ff'}]}}); const ctx2 = document.getElementById('monthlyChart')?.getContext('2d'); if(ctx2) new Chart(ctx2,{type:'bar',data:{labels:['Jan','Feb','Mar'],datasets:[{label:'Income',data:[12,14,13],backgroundColor:'#00f2ff'}]}}); }
-    
-    // Event Listeners
-    document.querySelectorAll('.stake-btn').forEach(btn => { btn.addEventListener('click', () => { const asset = btn.dataset.asset; const symbol = btn.dataset.symbol; const price = parseFloat(btn.dataset.price) || 0; openStakeModal(asset, symbol, price); }); });
-    document.querySelectorAll('.generate-wallet-btn').forEach(btn => { btn.addEventListener('click', () => { showToast(`Wallet generated for ${btn.dataset.asset}`); }); });
-    document.getElementById('notificationBell')?.addEventListener('click', showNotifications);
-    document.getElementById('openLoginBtn')?.addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
-    document.getElementById('closeModalBtn')?.addEventListener('click', () => document.getElementById('loginModal').classList.remove('active'));
-    document.getElementById('loginSubmitBtn')?.addEventListener('click', () => { document.getElementById('loginModal').classList.remove('active'); document.getElementById('dashboardContainer').style.display = 'block'; document.getElementById('institutionalContent').style.display = 'none'; document.getElementById('openLoginBtn').style.display = 'none'; document.getElementById('logoutMainBtn').style.display = 'flex'; document.getElementById('kycStatusBadge').style.display = 'flex'; document.getElementById('notificationBell').classList.add('visible'); renderCurrencies(); updateTotalBalance(); initStakingChart(); showToast('✅ Login successful!'); });
-    document.getElementById('logoutMainBtn')?.addEventListener('click', () => { document.getElementById('dashboardContainer').style.display = 'none'; document.getElementById('institutionalContent').style.display = 'block'; document.getElementById('openLoginBtn').style.display = 'flex'; document.getElementById('logoutMainBtn').style.display = 'none'; document.getElementById('kycStatusBadge').style.display = 'none'; document.getElementById('notificationBell').classList.remove('visible'); showToast('Logged out'); });
-    document.getElementById('openSubmitModalBtn')?.addEventListener('click', () => document.getElementById('submitModal').classList.add('active'));
-    document.getElementById('closeSubmitModalBtn')?.addEventListener('click', () => document.getElementById('submitModal').classList.remove('active'));
-    document.getElementById('kycNextBtn')?.addEventListener('click', () => { if(currentKycStep===1 && validateKycStep1()) updateKycStep(2); else if(currentKycStep===2 && validateKycStep2()) updateKycStep(3); });
-    document.getElementById('kycPrevBtn')?.addEventListener('click', () => { if(currentKycStep>1) updateKycStep(currentKycStep-1); });
-    document.getElementById('submitKycBtn')?.addEventListener('click', submitKycWithMessage);
-    document.getElementById('captureFacialBtn')?.addEventListener('click', startCamera);
-    document.getElementById('uploadPhotoBtn')?.addEventListener('click', () => document.getElementById('facialPhotoInput').click());
-    document.getElementById('uploadArea')?.addEventListener('click', () => document.getElementById('fileInput').click());
-    document.getElementById('addressUploadArea')?.addEventListener('click', () => document.getElementById('addressFileInput').click());
-    
-    function validateKycStep1() { return !!(document.getElementById('fullNameDoc').value && document.getElementById('emailDocInput').value && document.getElementById('phoneDoc').value); }
-    function validateKycStep2() { return !!(capturedPhoto && uploadedDocument && uploadedAddress); }
-    function submitKycWithMessage() { if(validateKycStep2()){ document.getElementById('submitModal').classList.remove('active'); showToast("✅ Congratulations! You have successfully submitted your documents. We will contact you shortly to activate your account."); document.getElementById('kycDetailedStatus').innerText = 'SUBMITTED'; currentKycStep=1; updateKycStep(1); capturedPhoto=null; uploadedDocument=null; uploadedAddress=null; document.getElementById('facialPreview').innerHTML = '<i class="fas fa-camera"></i> <span>Click to capture</span>'; } else { alert('Please complete all steps'); } }
-    
-    let currentKycStep = 1, capturedPhoto = null, uploadedDocument = null, uploadedAddress = null;
-    function updateKycStep(step){ currentKycStep=step; document.getElementById('kycStep1').style.display=step===1?'block':'none'; document.getElementById('kycStep2').style.display=step===2?'block':'none'; document.getElementById('kycStep3').style.display=step===3?'block':'none'; document.getElementById('kycPrevBtn').style.display=step>1?'flex':'none'; document.getElementById('kycNextBtn').style.display=step<3?'flex':'none'; document.getElementById('submitKycBtn').style.display=step===3?'flex':'none'; }
-    function startCamera() { alert('Camera access would start here'); capturedPhoto = 'captured'; document.getElementById('facialPreview').innerHTML = '<img src="https://via.placeholder.com/150" class="photo-preview">'; }
-    document.getElementById('facialPhotoInput')?.addEventListener('change',(e)=>{ if(e.target.files[0]){ const reader=new FileReader(); reader.onload=(ev)=>{ capturedPhoto=ev.target.result; document.getElementById('facialPreview').innerHTML=`<img src="${capturedPhoto}" class="photo-preview">`; }; reader.readAsDataURL(e.target.files[0]); } });
-    document.getElementById('fileInput')?.addEventListener('change',(e)=>{ if(e.target.files[0]){ uploadedDocument=e.target.files[0]; document.getElementById('uploadArea').innerHTML=`<i class="fas fa-check-circle" style="color: var(--neon-green);"></i><p>Uploaded: ${e.target.files[0].name}</p>`; } });
-    document.getElementById('addressFileInput')?.addEventListener('change',(e)=>{ if(e.target.files[0]){ uploadedAddress=e.target.files[0]; document.getElementById('addressUploadArea').innerHTML=`<i class="fas fa-check-circle" style="color: var(--neon-green);"></i><p>Uploaded: ${e.target.files[0].name}</p>`; } });
-    
-    // Inicialização
-    renderCurrencies();
-    updateTotalBalance();
-    initStakingChart();
-    initCharts();
-    updateNotificationCount();
-    updateKycStep(1);
-    window.copyAccountNumber = copyAccountNumber;
+    });
+}
+
+function applyLanguage() { 
+    const t = translations[currentLang]; 
+    document.getElementById('bankSubtitle').innerText = t.bankSubtitle; 
+    document.getElementById('accessHubBtn').innerText = t.accessHub; 
+    document.getElementById('kycBtnText').innerText = t.kyc; 
+    document.getElementById('logoutBtnText').innerText = t.logout; 
+    document.getElementById('heroTitle').innerText = t.heroTitle; 
+    document.getElementById('heroBadge').innerText = t.heroBadge; 
+    document.getElementById('heroDesc').innerText = t.heroDesc; 
+    document.getElementById('card1Title').innerHTML = t.card1Title; 
+    document.getElementById('card1Desc').innerText = t.card1Desc; 
+    document.getElementById('card2Title').innerHTML = t.card2Title; 
+    document.getElementById('card2Desc').innerText = t.card2Desc; 
+    document.getElementById('card3Title').innerHTML = t.card3Title; 
+    document.getElementById('card3Desc').innerText = t.card3Desc; 
+    document.getElementById('impactPhrase').innerHTML = t.impactPhrase; 
+    document.getElementById('impactSmall').innerText = t.impactSmall; 
+    document.getElementById('aboutTitle').innerHTML = t.aboutTitle; 
+    document.getElementById('aboutHistoryTitle').innerText = t.aboutHistoryTitle; 
+    document.getElementById('aboutHistoryDesc').innerText = t.aboutHistoryDesc; 
+    document.getElementById('aboutSecurityTitle').innerText = t.aboutSecurityTitle; 
+    document.getElementById('aboutSecurityDesc').innerText = t.aboutSecurityDesc; 
+    document.getElementById('aboutReachTitle').innerText = t.aboutReachTitle; 
+    document.getElementById('aboutReachDesc').innerText = t.aboutReachDesc; 
+    document.getElementById('aboutReturnsTitle').innerText = t.aboutReturnsTitle; 
+    document.getElementById('aboutReturnsDesc').innerText = t.aboutReturnsDesc; 
+    document.getElementById('currenciesTitle').innerHTML = t.currenciesTitle; 
+    document.getElementById('cryptoTitles').innerHTML = t.cryptoTitles; 
+    document.getElementById('statAum').innerText = t.statAum; 
+    document.getElementById('statClients').innerText = t.statClients; 
+    document.getElementById('statCountries').innerText = t.statCountries; 
+    document.getElementById('statEncryption').innerText = t.statEncryption; 
+    document.getElementById('regulatoryTextFooter').innerText = t.regulatoryText; 
+    document.getElementById('copyrightTextFooter').innerText = t.copyrightText;
+    document.getElementById('confirmLogoutTitle').innerText = t.confirmLogoutTitle;
+    document.getElementById('confirmLogoutMessage').innerText = t.confirmLogoutMessage;
+    document.getElementById('confirmLogoutYes').innerText = t.confirmYes;
+    document.getElementById('confirmLogoutNo').innerText = t.confirmNo;
+}
+
+function setupLang() {
+    document.getElementById('langTrigger').addEventListener('click', () => document.getElementById('langContainer').classList.toggle('active'));
+    document.querySelectorAll('.lang-option').forEach(btn => { btn.addEventListener('click', () => { currentLang = btn.dataset.lang; document.getElementById('currentLangText').innerText = currentLang.toUpperCase(); applyLanguage(); document.getElementById('langContainer').classList.remove('active'); if (currentLang === 'ar') document.body.classList.add('rtl'); else document.body.classList.remove('rtl'); }); });
+}
+
+// Profile Functions
+function openProfileModal() {
+    document.getElementById('profileModal').classList.add('active');
+    document.getElementById('profileFirstName').value = document.getElementById('welcomeUser').innerText.split(' ')[0] || 'Alexander';
+    document.getElementById('profileLastName').value = document.getElementById('welcomeUser').innerText.split(' ')[1] || 'Vance';
+}
+
+function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
+
+function saveProfile() {
+    const firstName = document.getElementById('profileFirstName').value;
+    const lastName = document.getElementById('profileLastName').value;
+    const fullName = `${firstName} ${lastName}`;
+    document.getElementById('welcomeUser').innerText = fullName;
+    showToast("Profile updated successfully!");
+    closeProfileModal();
+}
+
+// Logout with confirmation
+function showLogoutConfirmation() {
+    document.getElementById('confirmLogoutModal').classList.add('active');
+}
+
+function performLogout() {
+    document.getElementById('dashboardContainer').style.display = 'none';
+    document.getElementById('institutionalContent').style.display = 'block';
+    document.getElementById('openLoginBtn').style.display = 'flex';
+    document.getElementById('logoutMainBtn').style.display = 'none';
+    document.getElementById('kycStatusBadge').style.display = 'none';
+    document.getElementById('notificationBell').classList.remove('visible');
+    showToast("Logged out successfully");
+    document.getElementById('confirmLogoutModal').classList.remove('active');
+}
+
+// KYC Functions
+function updateKycStep(step) { currentKycStep = step; document.getElementById('kycStep1').style.display = step === 1 ? 'block' : 'none'; document.getElementById('kycStep2').style.display = step === 2 ? 'block' : 'none'; document.getElementById('kycStep3').style.display = step === 3 ? 'block' : 'none'; document.getElementById('kycPrevBtn').style.display = step > 1 ? 'flex' : 'none'; document.getElementById('kycNextBtn').style.display = step < 3 ? 'flex' : 'none'; document.getElementById('submitKycBtn').style.display = step === 3 ? 'flex' : 'none'; document.querySelectorAll('.kyc-step').forEach((el, idx) => { el.classList.remove('active', 'completed'); if (idx + 1 === step) el.classList.add('active'); else if (idx + 1 < step) el.classList.add('completed'); }); if (step === 3) { document.getElementById('kycReviewInfo').innerHTML = `<strong>Name:</strong> ${kycData.fullName}<br><strong>Email:</strong> ${kycData.email}<br><strong>Phone:</strong> ${kycData.phone}<br><strong>Address:</strong> ${kycData.address}<br><strong>Nationality:</strong> ${kycData.nationality}<br><strong>ID Document:</strong> ${kycData.idDoc ? 'Uploaded' : 'Not uploaded'}<br><strong>Proof of Address:</strong> ${kycData.addressDoc ? 'Uploaded' : 'Not uploaded'}`; } }
+function validateKycStep1() { kycData.fullName = document.getElementById('fullNameDoc').value; kycData.email = document.getElementById('emailDocInput').value; kycData.phone = document.getElementById('phoneDoc').value; kycData.address = document.getElementById('addressDoc').value; kycData.nationality = document.getElementById('nationalityDoc').value; if (!kycData.fullName || !kycData.email || !kycData.phone || !kycData.address || !kycData.nationality) { showToast("Please fill all fields"); return false; } return true; }
+function submitKyc() { addMessage("KYC", "KYC Documents Submitted", `Dear ${kycData.fullName}, your KYC documents have been received. We will review and send your account details via email shortly.`); showToast("✅ Congratulations! Your documents have been submitted. You will receive an email with your account details shortly."); document.getElementById('submitModal').classList.remove('active'); document.getElementById('kycStatusText').innerText = 'Submitted - Pending Review'; document.getElementById('kycStatusBadge').innerHTML = '<i class="fas fa-shield-alt"></i> KYC SUBMITTED'; kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null }; currentKycStep = 1; updateKycStep(1); document.getElementById('fullNameDoc').value = ''; document.getElementById('emailDocInput').value = ''; document.getElementById('phoneDoc').value = ''; document.getElementById('addressDoc').value = ''; document.getElementById('nationalityDoc').value = ''; document.getElementById('uploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Click to upload document</p>'; document.getElementById('addressUploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Click to upload proof of address</p>'; }
+
+// Event Listeners
+document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
+document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('loginModal').classList.remove('active'));
+document.getElementById('loginSubmitBtn').addEventListener('click', () => { document.getElementById('loginModal').classList.remove('active'); document.getElementById('dashboardContainer').style.display = 'block'; document.getElementById('institutionalContent').style.display = 'none'; document.getElementById('openLoginBtn').style.display = 'none'; document.getElementById('logoutMainBtn').style.display = 'flex'; document.getElementById('kycStatusBadge').style.display = 'flex'; document.getElementById('notificationBell').classList.add('visible'); updateBalances(); initStakingChart(); initAnalyticsChart(); renderSecurityCenter(); renderBankingServices(); showToast("✅ Welcome to Zentronix Bank!"); });
+document.getElementById('logoutMainBtn').addEventListener('click', showLogoutConfirmation);
+document.getElementById('confirmLogoutYes').addEventListener('click', performLogout);
+document.getElementById('confirmLogoutNo').addEventListener('click', () => { document.getElementById('confirmLogoutModal').classList.remove('active'); });
+document.getElementById('notificationBell').addEventListener('click', () => { messages.forEach(m => m.read = true); updateMessagesDisplay(); updateNotificationCount(); document.getElementById('historySec').classList.add('active'); document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); document.getElementById('historySec').classList.add('active'); });
+document.getElementById('kycBtn').addEventListener('click', () => document.getElementById('submitModal').classList.add('active'));
+document.getElementById('closeSubmitModalBtn').addEventListener('click', () => document.getElementById('submitModal').classList.remove('active'));
+document.getElementById('kycNextBtn').addEventListener('click', () => { if (validateKycStep1()) updateKycStep(2); });
+document.getElementById('kycPrevBtn').addEventListener('click', () => updateKycStep(currentKycStep - 1));
+document.getElementById('submitKycBtn').addEventListener('click', submitKyc);
+document.getElementById('uploadArea').addEventListener('click', () => document.getElementById('fileInput').click());
+document.getElementById('addressUploadArea').addEventListener('click', () => document.getElementById('addressFileInput').click());
+document.getElementById('fileInput').addEventListener('change', (e) => { if (e.target.files[0]) { kycData.idDoc = e.target.files[0]; document.getElementById('uploadArea').innerHTML = `<i class="fas fa-check-circle" style="color: var(--neon-green);"></i><p>Uploaded: ${e.target.files[0].name}</p>`; } });
+document.getElementById('addressFileInput').addEventListener('change', (e) => { if (e.target.files[0]) { kycData.addressDoc = e.target.files[0]; document.getElementById('addressUploadArea').innerHTML = `<i class="fas fa-check-circle" style="color: var(--neon-green);"></i><p>Uploaded: ${e.target.files[0].name}</p>`; } });
+document.getElementById('startKycBtn')?.addEventListener('click', () => document.getElementById('submitModal').classList.add('active'));
+document.getElementById('doSwapBtn')?.addEventListener('click', () => { const from = document.getElementById('swapFrom')?.value; const to = document.getElementById('swapTo')?.value; const amt = parseFloat(document.getElementById('swapAmount')?.value); if (amt > 0) { addMessage("SWAP", `${from} → ${to}`, `Swapped ${amt} ${from} to ${to}`); showToast(`Swapped ${amt} ${from} to ${to}`); } });
+document.getElementById('doConvertBtn')?.addEventListener('click', () => showToast("Conversion feature"));
+document.getElementById('stealthSwitch')?.addEventListener('click', function() { this.classList.toggle('active'); document.querySelectorAll('.currency-balance, .balance-item span:last-child').forEach(el => el.style.filter = this.classList.contains('active') ? 'blur(5px)' : 'none'); });
+document.getElementById('deleteAccountBtn')?.addEventListener('click', () => { if (confirm("WARNING: This action will permanently delete your account. Are you sure?")) { showToast("Account deletion request submitted. You will receive confirmation via email."); } });
+document.getElementById('copyAccountBtn')?.addEventListener('click', copyAccountNumber);
+document.getElementById('ghostModeBtn')?.addEventListener('click', () => showToast("Ghost Mode: Your balances are now hidden from view"));
+document.getElementById('simulatorBtn')?.addEventListener('click', () => showToast("Scenario Simulator: Project your investment growth"));
+document.getElementById('themesBtn')?.addEventListener('click', () => showToast("Theme Weaver: Choose your preferred color scheme"));
+document.getElementById('auditBtn')?.addEventListener('click', () => showToast("Audit Logs: Download your complete transaction history"));
+document.getElementById('createCardBtn')?.addEventListener('click', () => showToast("New virtual card created! Check your email for details."));
+document.getElementById('profileAvatarBtn')?.addEventListener('click', openProfileModal);
+document.getElementById('closeProfileModalBtn')?.addEventListener('click', closeProfileModal);
+document.getElementById('saveProfileBtn')?.addEventListener('click', saveProfile);
+document.getElementById('uploadPhotoBtn')?.addEventListener('click', () => document.getElementById('profilePhotoInput').click());
+document.getElementById('profilePhotoInput')?.addEventListener('change', (e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { profilePhoto = event.target.result; document.querySelector('.profile-avatar').innerHTML = `<img src="${profilePhoto}">`; document.querySelector('#profileAvatarLarge').innerHTML = `<img src="${profilePhoto}">`; }; reader.readAsDataURL(e.target.files[0]); } });
+
+// Expor funções globais
+window.closeModal = closeModal; window.openStakeModal = openStakeModal; window.openUnstakeModal = openUnstakeModal; window.openBuyModal = openBuyModal; window.openWalletModal = openWalletModal; window.openSwapModalFull = openSwapModalFull; window.processBuyWithCard = processBuyWithCard; window.processBuyWithLoan = processBuyWithLoan; window.confirmStake = confirmStake; window.confirmUnstake = confirmUnstake; window.executeSwap = executeSwap; window.closeCurrentSection = closeCurrentSection; window.showToast = showToast; window.deleteMessage = deleteMessage; window.addMessage = addMessage; window.showCurrencyHistory = showCurrencyHistory; window.copyAccountNumber = copyAccountNumber;
+
+// Inicialização
+renderCryptoAssets(); updateBalances(); setupMenu(); setupLang(); applyLanguage(); updateMessagesDisplay(); updateNotificationCount(); updateKycStep(1);
 </script>
 </body>
 </html>
