@@ -108,7 +108,7 @@
         .asset-card { background: rgba(26, 27, 58, 0.7); border: 1px solid var(--border-glow); border-radius: 1.2rem; padding: 1.2rem; transition: all 0.3s; }
         .asset-card:hover { transform: translateY(-4px); border-color: var(--neon-purple); }
         .asset-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: bold; color: var(--neon-blue); margin: 0.5rem 0; }
-        .buy-btn, .sell-btn, .swap-btn, .wallet-btn, .history-btn, .currency-send-btn, .receive-btn { padding: 0.4rem 0.6rem; border-radius: 0.6rem; font-family: 'Orbitron', monospace; font-size: 0.65rem; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.3s; }
+        .buy-btn, .sell-btn, .swap-btn, .wallet-btn, .history-btn, .currency-send-btn, .receive-btn, .send-crypto-btn { padding: 0.4rem 0.6rem; border-radius: 0.6rem; font-family: 'Orbitron', monospace; font-size: 0.65rem; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.3s; }
         .buy-btn { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
         .buy-btn:hover { background: rgba(0, 242, 255, 0.3); }
         .sell-btn { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
@@ -119,8 +119,8 @@
         .wallet-btn:hover { background: rgba(0, 255, 136, 0.3); }
         .history-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--text-secondary); color: var(--text-secondary); }
         .history-btn:hover { background: rgba(255, 255, 255, 0.2); color: var(--neon-yellow); border-color: var(--neon-yellow); }
-        .currency-send-btn { background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; color: #0a0b1e; font-weight: bold; }
-        .currency-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 10px rgba(0,242,255,0.3); }
+        .currency-send-btn, .send-crypto-btn { background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; color: #0a0b1e; font-weight: bold; }
+        .currency-send-btn:hover, .send-crypto-btn:hover { transform: scale(1.02); box-shadow: 0 0 10px rgba(0,242,255,0.3); }
         .receive-btn { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
         .receive-btn:hover { background: rgba(0, 242, 255, 0.3); }
         .button-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
@@ -166,9 +166,10 @@
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 8000; display: none; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 550px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; }
+        .modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 550px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; position: relative; }
         .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; margin: 0.5rem 0; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
         .close-wallet-modal-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: var(--neon-red); }
+        .close-wallet-modal-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.1); }
         .payment-methods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
         .payment-method-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; cursor: pointer; transition: all 0.3s; }
         .payment-method-card:hover { border-color: var(--neon-green); transform: translateY(-3px); }
@@ -188,7 +189,7 @@
         .service-card:hover { transform: translateX(5px); border-left: 3px solid var(--neon-blue); }
         .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 4000; justify-content: center; align-items: center; }
         .profile-modal.active { display: flex; }
-        .profile-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; width: 450px; max-width: 90%; text-align: center; }
+        .profile-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; width: 450px; max-width: 90%; text-align: center; position: relative; }
         .profile-avatar-large { width: 100px; height: 100px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; cursor: pointer; position: relative; overflow: hidden; }
         .profile-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
         .profile-avatar-large i { font-size: 3rem; color: #0a0b1e; }
@@ -206,6 +207,8 @@
         .confirm-yes-btn:hover { background: rgba(255,68,102,0.4); }
         .confirm-no-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
         .confirm-no-btn:hover { background: rgba(0,242,255,0.4); }
+        .wallet-address-display { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; margin: 1rem 0; font-family: 'Space Mono', monospace; font-size: 0.8rem; border: 1px solid var(--neon-blue); }
+        .copy-address-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.3rem 0.8rem; cursor: pointer; margin-top: 0.5rem; }
         @media (max-width: 1100px) { .dashboard-three-columns { grid-template-columns: 1fr; } .tactical-menu { position: relative; } }
     </style>
 </head>
@@ -237,19 +240,17 @@
 
 <div id="modalOverlay" class="modal-overlay"><div id="modalContent" class="modal-content"></div></div>
 
-<!-- Confirm Logout Modal -->
 <div id="confirmLogoutModal" class="confirm-modal">
     <div class="confirm-modal-content">
         <h3 id="confirmLogoutTitle">Confirm Logout</h3>
         <p id="confirmLogoutMessage">Are you sure you want to logout from your account?</p>
         <div class="confirm-buttons">
-            <button id="confirmLogoutYes" class="confirm-yes-btn" id="confirmYesText">YES</button>
-            <button id="confirmLogoutNo" class="confirm-no-btn" id="confirmNoText">NO</button>
+            <button id="confirmLogoutYes" class="confirm-yes-btn">YES</button>
+            <button id="confirmLogoutNo" class="confirm-no-btn">NO</button>
         </div>
     </div>
 </div>
 
-<!-- Profile Modal -->
 <div id="profileModal" class="profile-modal">
     <div class="profile-modal-content">
         <div class="profile-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -269,7 +270,6 @@
     </div>
 </div>
 
-<!-- KYC MODAL COMPLETO -->
 <div id="submitModal" class="submit-modal">
     <div class="submit-modal-content">
         <div class="submit-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -336,7 +336,6 @@
     </div>
     <div id="kycStatusBadge" class="kyc-status" style="display:none;"><i class="fas fa-shield-alt"></i> <span id="kycPendingText">KYC PENDING</span></div>
 
-    <!-- PÁGINA PRINCIPAL INSTITUCIONAL -->
     <div id="institutionalContent">
         <div class="institutional-section">
             <div class="hero-institutional">
@@ -412,7 +411,6 @@
         </div>
     </div>
 
-    <!-- DASHBOARD -->
     <div id="dashboardContainer" class="dashboard-container">
         <div class="dashboard-three-columns">
             <div class="tactical-menu">
@@ -476,7 +474,6 @@
             </div>
         </div>
 
-        <!-- FOOTER DO DASHBOARD -->
         <div class="footer-dashboard">
             <div class="payment-icons">
                 <i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-google-pay"></i><i class="fab fa-apple-pay"></i><i class="fab fa-bitcoin"></i><i class="fab fa-ethereum"></i>
@@ -574,13 +571,10 @@ const translations = {
     }
 };
 
-// ==================== DADOS GLOBAIS ====================
-let currentLang = 'en';
-let userBalances = { USD: 25000, EUR: 18000, GBP: 15000, BRL: 5280, BTC: 0.42, ETH: 4.2, BRADICOIN: 15000, SOL: 250, MATIC: 5000, USDT: 10000, LTC: 125, BNB: 85 };
+// ==================== DADOS GLOBAIS - SEM NÚMEROS DE EXEMPLO ====================
+let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, MATIC: 0, USDT: 0, LTC: 0, BNB: 0 };
 let messages = [
-    { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false },
-    { id: 2, type: "SECURITY", title: "Security Alert", desc: "New login detected from Chrome browser.", time: new Date(Date.now() - 3600000).toLocaleString(), read: false },
-    { id: 3, type: "TRANSACTION", title: "BTC Transfer Received", desc: "You received 0.05 BTC", time: new Date(Date.now() - 7200000).toLocaleString(), read: false }
+    { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false }
 ];
 let kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null };
 let currentKycStep = 1;
@@ -588,34 +582,346 @@ let profilePhoto = null;
 
 const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, MATIC: 0.85, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
 const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, MATIC: 6.5, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
+const walletAddresses = {
+    BTC: "bc1qzentronixbankbtcwallet12345678",
+    ETH: "0xZentronixBankEthWallet9876543210abcdef",
+    SOL: "ZentronixBankSolWalletABCDEFGHIJKLMN",
+    BRADICOIN: "BRCzentronixbankwallet2024",
+    USDT: "0xZentronixUSDTWalletTRC20",
+    LTC: "LTCzentronixbankwallet2024",
+    BNB: "bnb1zentronixbankbscwallet5678"
+};
 
-function copyAccountNumber() { navigator.clipboard.writeText('ZNTX-4821-7390-1256'); showToast("Account number copied!"); }
-function generateWallet(asset) { const wallets = { BTC: "bc1q" + Math.random().toString(36).substring(2, 15), ETH: "0x" + Math.random().toString(36).substring(2, 15), SOL: "Sol" + Math.random().toString(36).substring(2, 20), BRADICOIN: "BRC" + Math.random().toString(36).substring(2, 20).toUpperCase() }; return wallets[asset] || asset + "_" + Math.random().toString(36).substring(2, 10); }
-function addMessage(type, title, desc) { messages.unshift({ id: Date.now(), type, title, desc, time: new Date().toLocaleString(), read: false }); if (messages.length > 50) messages.pop(); updateMessagesDisplay(); updateNotificationCount(); }
-function deleteMessage(id) { messages = messages.filter(m => m.id !== id); updateMessagesDisplay(); updateNotificationCount(); showToast("Message deleted"); }
-function updateMessagesDisplay() { const container = document.getElementById('historyList'); if (!container) return; if (messages.length === 0) { container.innerHTML = '<p>No transactions yet</p>'; return; } container.innerHTML = messages.map(m => `<div class="history-item"><div class="history-content"><div class="history-type">${m.type} - ${m.title}</div><div class="history-detail">${m.desc}</div><div class="history-time">${m.time}</div></div><button class="delete-notification-btn" onclick="deleteMessage(${m.id})"><i class="fas fa-times"></i></button></div>`).join(''); }
-function updateNotificationCount() { document.getElementById('notificationCount').innerText = messages.filter(m => !m.read).length; }
-function showToast(msg) { let t = document.createElement('div'); t.className = 'toast-notification'; t.innerHTML = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
-function showModal(content) { const modal = document.getElementById('modalOverlay'); const modalContent = document.getElementById('modalContent'); modalContent.innerHTML = content; modal.classList.add('active'); }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+// ==================== FUNÇÕES SEND E RECEIVE ====================
 
-function showCurrencyHistory(currency) { const currencyMessages = messages.filter(m => m.desc.includes(currency) || m.title.includes(currency)); if (currencyMessages.length === 0) { showToast(`No history found for ${currency}`); return; } showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${currency} Transaction History</h3><div style="max-height:400px; overflow-y:auto;">${currencyMessages.map(m => `<div style="background:rgba(26,27,58,0.6); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem;"><div style="color:var(--neon-yellow);">${m.type}</div><div>${m.desc}</div><div style="font-size:0.6rem; opacity:0.5;">${m.time}</div></div>`).join('')}</div><button class="buy-btn" onclick="closeModal()" style="margin-top:1rem;">Close</button>`); }
+// Função para abrir modal de SEND
+function openSendModal(currency, symbol) {
+    const balance = userBalances[symbol] || 0;
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(8)} ${symbol}</div>
+        </div>
+        <div class="form-group">
+            <label>Recipient Wallet Address</label>
+            <input type="text" id="recipientAddress" class="form-input" placeholder="Enter wallet address">
+        </div>
+        <div class="form-group">
+            <label>Amount to Send</label>
+            <input type="number" id="sendAmount" class="form-input" placeholder="0.00" step="any">
+        </div>
+        <div class="form-group">
+            <label>Network Fee (estimated)</label>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                ${getNetworkFee(symbol)}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Transaction Note (optional)</label>
+            <input type="text" id="txNote" class="form-input" placeholder="Add a note">
+        </div>
+        <button class="send-crypto-btn" onclick="confirmSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem; margin-top: 1rem;">
+            <i class="fas fa-paper-plane"></i> CONFIRM SEND
+        </button>
+    `;
+    showModal(modalContent);
+}
 
-function openStakeModal(asset, symbol, price) { const apy = stakeAPYs[symbol] || 5.0; const balance = userBalances[symbol] || 0; showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>STAKE ${symbol}</h3><div>${apy}% APY</div><input type="number" id="stakeAmount" placeholder="Amount to stake"><div>Available: ${balance.toFixed(4)} ${symbol}</div><button class="buy-btn" onclick="confirmStake('${symbol}', ${apy})">Confirm Stake</button>`); }
-function confirmStake(symbol, apy) { let amount = parseFloat(document.getElementById('stakeAmount')?.value); if (isNaN(amount) || amount <= 0 || amount > userBalances[symbol]) { showToast("Invalid amount"); closeModal(); return; } userBalances[symbol] -= amount; addMessage("STAKE", `Staked ${symbol}`, `Staked ${amount.toFixed(4)} ${symbol} at ${apy}% APY`); showToast(`✅ Staked ${amount.toFixed(4)} ${symbol}!`); updateBalances(); closeModal(); }
-function openUnstakeModal(asset, symbol) { showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>UNSTAKE ${symbol}</h3><input type="number" id="unstakeAmount" placeholder="Amount to unstake"><button class="buy-btn" onclick="confirmUnstake('${symbol}')">Confirm Unstake</button>`); }
-function confirmUnstake(symbol) { let amount = parseFloat(document.getElementById('unstakeAmount')?.value); if (isNaN(amount) || amount <= 0) { showToast("Invalid amount"); closeModal(); return; } userBalances[symbol] += amount; addMessage("UNSTAKE", `Unstaked ${symbol}`, `Unstaked ${amount.toFixed(4)} ${symbol}`); showToast(`✅ Unstaked ${amount.toFixed(4)} ${symbol}!`); updateBalances(); closeModal(); }
-function openBuyModal(asset, symbol, price) { showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Buy ${symbol}</h3><p>Price: $${price}</p><input type="number" id="buyAmount" placeholder="Amount to buy"><div class="payment-methods-grid"><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'mastercard')"><i class="fab fa-cc-mastercard"></i><p>Mastercard</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'visa')"><i class="fab fa-cc-visa"></i><p>Visa</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'amex')"><i class="fab fa-cc-amex"></i><p>Amex</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'googlepay')"><i class="fab fa-google-pay"></i><p>Google Pay</p></div></div><div class="payment-method-card" onclick="processBuyWithLoan('${symbol}', ${price})"><i class="fas fa-hand-holding-usd"></i><p>💰 Zentronix Loan</p></div><button class="sell-btn" onclick="closeModal()">Cancel</button>`); }
-function processBuyWithCard(symbol, method) { let amount = parseFloat(document.getElementById('buyAmount')?.value); if (isNaN(amount) || amount <= 0) { showToast("Enter valid amount"); return; } const price = cryptoPrices[symbol] || 1; const cost = amount * price; userBalances[symbol] = (userBalances[symbol] || 0) + amount; addMessage("BUY", `Purchased ${symbol}`, `Purchased ${amount} ${symbol} via ${method.toUpperCase()} for $${cost.toFixed(2)}`); showToast(`✅ Purchased ${amount} ${symbol}!`); updateBalances(); closeModal(); }
-function processBuyWithLoan(symbol, price) { let amount = parseFloat(document.getElementById('buyAmount')?.value); if (isNaN(amount) || amount <= 0) { showToast("Enter valid amount"); return; } const cost = amount * price; userBalances[symbol] = (userBalances[symbol] || 0) + amount; addMessage("LOAN BUY", `Loan Purchase ${symbol}`, `Purchased ${amount} ${symbol} via Zentronix Loan - $${cost.toFixed(2)}`); showToast(`🏦 Loan approved! ${amount} ${symbol} added!`); updateBalances(); closeModal(); }
-function openWalletModal(asset, symbol) { const walletAddress = generateWallet(asset); const links = { BTC: "https://www.blockchain.com/explorer", ETH: "https://etherscan.io", SOL: "https://explorer.solana.com", BRADICOIN: "https://www.bradichain.com" }; showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${symbol} Wallet</h3><div style="background:rgba(0,0,0,0.4);padding:0.8rem;border-radius:0.8rem;word-break:break-all;">${walletAddress}</div><button class="buy-btn" onclick="navigator.clipboard.writeText('${walletAddress}');showToast('Copied!')">Copy</button><button class="sell-btn" onclick="window.open('${links[asset] || links.BRADICOIN}', '_blank')">🔗 Blockchain Explorer</button>`); }
-function openSwapModalFull() { showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap Center</h3><select id="swapFromSelect"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><i class="fas fa-arrow-down"></i><select id="swapToSelect"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><input type="number" id="swapAmountInput" placeholder="Amount"><button class="buy-btn" onclick="executeSwap()">Confirm Swap</button>`); }
-function executeSwap() { const from = document.getElementById('swapFromSelect')?.value; const to = document.getElementById('swapToSelect')?.value; let amount = parseFloat(document.getElementById('swapAmountInput')?.value); if (isNaN(amount) || amount <= 0) { showToast("Invalid amount"); closeModal(); return; } if (from === to) { showToast("Cannot swap same currency"); closeModal(); return; } const fromPrice = cryptoPrices[from] || 1; const toPrice = cryptoPrices[to] || 1; const received = (amount * fromPrice) / toPrice; addMessage("SWAP", `${from} → ${to}`, `Swapped ${amount} ${from} for ${received.toFixed(6)} ${to}`); showToast(`✅ Swapped ${amount} ${from} to ${received.toFixed(6)} ${to}`); closeModal(); }
+// Função para confirmar envio
+function confirmSend(currency, symbol) {
+    const amount = parseFloat(document.getElementById('sendAmount')?.value);
+    const address = document.getElementById('recipientAddress')?.value;
+    const note = document.getElementById('txNote')?.value || "";
+    const balance = userBalances[symbol] || 0;
+    
+    if (!address || address.trim() === "") {
+        showToast("❌ Please enter a valid wallet address");
+        return;
+    }
+    
+    if (isNaN(amount) || amount <= 0) {
+        showToast("❌ Please enter a valid amount");
+        return;
+    }
+    
+    if (amount > balance) {
+        showToast(`❌ Insufficient balance. You have ${balance.toFixed(8)} ${symbol}`);
+        return;
+    }
+    
+    // Processar o envio
+    userBalances[symbol] -= amount;
+    updateBalances();
+    
+    // Adicionar à história
+    addMessage("SEND", `Sent ${symbol}`, `Sent ${amount.toFixed(8)} ${symbol} to ${address.substring(0, 10)}...${address.substring(address.length - 6)}${note ? " - Note: " + note : ""}`);
+    
+    showToast(`✅ Successfully sent ${amount.toFixed(8)} ${symbol}!`);
+    closeModal();
+}
+
+// Função para obter taxa de rede
+function getNetworkFee(symbol) {
+    const fees = {
+        BTC: "~0.0001 BTC (~$6.70)",
+        ETH: "~0.002 ETH (~$6.88)",
+        SOL: "~0.0005 SOL (~$0.05)",
+        BRADICOIN: "~5 BRC (~$0.05)",
+        USDT: "~1 USDT (TRC-20)",
+        LTC: "~0.001 LTC (~$0.08)",
+        BNB: "~0.001 BNB (~$0.31)"
+    };
+    return fees[symbol] || "~$0.50";
+}
+
+// Função para abrir modal de RECEIVE
+function openReceiveModal(currency, symbol) {
+    const walletAddress = walletAddresses[symbol] || generateWalletAddress(symbol);
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow);"></i>
+        </div>
+        <div class="wallet-address-display" id="walletAddressDisplay">
+            ${walletAddress}
+        </div>
+        <button class="copy-address-btn" onclick="copyWalletAddress('${walletAddress}')" style="width: 100%; margin-bottom: 1rem;">
+            <i class="fas fa-copy"></i> COPY ADDRESS
+        </button>
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important</div>
+            <div style="font-size: 0.65rem;">Only send ${symbol} to this address. Sending other assets may result in permanent loss.</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <button class="buy-btn" onclick="generateQRCode('${walletAddress}')" style="flex: 1;"><i class="fas fa-qrcode"></i> Show QR Code</button>
+            <button class="wallet-btn" onclick="shareAddress('${walletAddress}')" style="flex: 1;"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+    `;
+    showModal(modalContent);
+}
+
+// Funções auxiliares
+function getIconName(symbol) {
+    const icons = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", USDT: "money-bill", LTC: "litecoin", BNB: "binance", BRADICOIN: "gem" };
+    return icons[symbol] || "coins";
+}
+
+function generateWalletAddress(symbol) {
+    const prefixes = { BTC: "bc1q", ETH: "0x", SOL: "Sol", BRADICOIN: "BRC", USDT: "0x", LTC: "ltc1", BNB: "bnb1" };
+    const randomPart = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 8);
+    return (prefixes[symbol] || "") + randomPart + symbol.toLowerCase() + "2024";
+}
+
+function copyWalletAddress(address) {
+    navigator.clipboard.writeText(address);
+    showToast("✅ Wallet address copied to clipboard!");
+}
+
+function generateQRCode(address) {
+    showToast("🔲 QR Code would be generated here in production");
+    // Em produção, você usaria uma biblioteca como qrcode.js
+}
+
+function shareAddress(address) {
+    if (navigator.share) {
+        navigator.share({
+            title: 'My Zentronix Bank Wallet',
+            text: 'Send crypto to my wallet:',
+            url: address
+        }).catch(() => showToast("Share canceled"));
+    } else {
+        copyWalletAddress(address);
+        showToast("Address copied! Share manually.");
+    }
+}
+
+// ==================== FUNÇÕES EXISTENTES MODIFICADAS ====================
+
+function copyAccountNumber() { 
+    navigator.clipboard.writeText('ZNTX-4821-7390-1256'); 
+    showToast("Account number copied!"); 
+}
+
+function generateWallet(asset) { 
+    return walletAddresses[asset] || generateWalletAddress(asset);
+}
+
+function addMessage(type, title, desc) { 
+    messages.unshift({ id: Date.now(), type, title, desc, time: new Date().toLocaleString(), read: false }); 
+    if (messages.length > 50) messages.pop(); 
+    updateMessagesDisplay(); 
+    updateNotificationCount(); 
+}
+
+function deleteMessage(id) { 
+    messages = messages.filter(m => m.id !== id); 
+    updateMessagesDisplay(); 
+    updateNotificationCount(); 
+    showToast("Message deleted"); 
+}
+
+function updateMessagesDisplay() { 
+    const container = document.getElementById('historyList'); 
+    if (!container) return; 
+    if (messages.length === 0) { 
+        container.innerHTML = '<p style="text-align:center; opacity:0.5;">No transactions yet</p>'; 
+        return; 
+    } 
+    container.innerHTML = messages.map(m => `<div class="history-item"><div class="history-content"><div class="history-type">${m.type} - ${m.title}</div><div class="history-detail">${m.desc}</div><div class="history-time">${m.time}</div></div><button class="delete-notification-btn" onclick="deleteMessage(${m.id})"><i class="fas fa-times"></i></button></div>`).join(''); 
+}
+
+function updateNotificationCount() { 
+    document.getElementById('notificationCount').innerText = messages.filter(m => !m.read).length; 
+}
+
+function showToast(msg) { 
+    let t = document.createElement('div'); 
+    t.className = 'toast-notification'; 
+    t.innerHTML = msg; 
+    document.body.appendChild(t); 
+    setTimeout(() => t.remove(), 3000); 
+}
+
+function showModal(content) { 
+    const modal = document.getElementById('modalOverlay'); 
+    const modalContent = document.getElementById('modalContent'); 
+    modalContent.innerHTML = content; 
+    modal.classList.add('active'); 
+}
+
+function closeModal() { 
+    document.getElementById('modalOverlay').classList.remove('active'); 
+}
+
+function showCurrencyHistory(currency) { 
+    const currencyMessages = messages.filter(m => m.desc.includes(currency) || m.title.includes(currency)); 
+    if (currencyMessages.length === 0) { 
+        showToast(`No history found for ${currency}`); 
+        return; 
+    } 
+    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${currency} Transaction History</h3><div style="max-height:400px; overflow-y:auto;">${currencyMessages.map(m => `<div style="background:rgba(26,27,58,0.6); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem;"><div style="color:var(--neon-yellow);">${m.type}</div><div>${m.desc}</div><div style="font-size:0.6rem; opacity:0.5;">${m.time}</div></div>`).join('')}</div><button class="buy-btn" onclick="closeModal()" style="margin-top:1rem;">Close</button>`); 
+}
+
+function openStakeModal(asset, symbol, price) { 
+    const apy = stakeAPYs[symbol] || 5.0; 
+    const balance = userBalances[symbol] || 0; 
+    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>STAKE ${symbol}</h3><div style="background:rgba(0,255,136,0.1); padding:0.5rem; border-radius:0.5rem; margin:0.5rem 0;">${apy}% APY</div><input type="number" id="stakeAmount" placeholder="Amount to stake"><div style="margin:0.5rem 0;">Available: ${balance.toFixed(8)} ${symbol}</div><button class="buy-btn" onclick="confirmStake('${symbol}', ${apy})" style="width:100%;">Confirm Stake</button>`); 
+}
+
+function confirmStake(symbol, apy) { 
+    let amount = parseFloat(document.getElementById('stakeAmount')?.value); 
+    if (isNaN(amount) || amount <= 0 || amount > userBalances[symbol]) { 
+        showToast("Invalid amount"); 
+        closeModal(); 
+        return; 
+    } 
+    userBalances[symbol] -= amount; 
+    addMessage("STAKE", `Staked ${symbol}`, `Staked ${amount.toFixed(8)} ${symbol} at ${apy}% APY`); 
+    showToast(`✅ Staked ${amount.toFixed(8)} ${symbol}!`); 
+    updateBalances(); 
+    closeModal(); 
+}
+
+function openUnstakeModal(asset, symbol) { 
+    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>UNSTAKE ${symbol}</h3><input type="number" id="unstakeAmount" placeholder="Amount to unstake"><button class="buy-btn" onclick="confirmUnstake('${symbol}')">Confirm Unstake</button>`); 
+}
+
+function confirmUnstake(symbol) { 
+    let amount = parseFloat(document.getElementById('unstakeAmount')?.value); 
+    if (isNaN(amount) || amount <= 0) { 
+        showToast("Invalid amount"); 
+        closeModal(); 
+        return; 
+    } 
+    userBalances[symbol] += amount; 
+    addMessage("UNSTAKE", `Unstaked ${symbol}`, `Unstaked ${amount.toFixed(8)} ${symbol}`); 
+    showToast(`✅ Unstaked ${amount.toFixed(8)} ${symbol}!`); 
+    updateBalances(); 
+    closeModal(); 
+}
+
+function openBuyModal(asset, symbol, price) { 
+    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Buy ${symbol}</h3><p>Price: $${price}</p><input type="number" id="buyAmount" placeholder="Amount to buy"><div class="payment-methods-grid"><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'mastercard')"><i class="fab fa-cc-mastercard"></i><p>Mastercard</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'visa')"><i class="fab fa-cc-visa"></i><p>Visa</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'amex')"><i class="fab fa-cc-amex"></i><p>Amex</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'googlepay')"><i class="fab fa-google-pay"></i><p>Google Pay</p></div></div><div class="payment-method-card" onclick="processBuyWithLoan('${symbol}', ${price})"><i class="fas fa-hand-holding-usd"></i><p>💰 Zentronix Loan</p></div><button class="sell-btn" onclick="closeModal()">Cancel</button>`); 
+}
+
+function processBuyWithCard(symbol, method) { 
+    let amount = parseFloat(document.getElementById('buyAmount')?.value); 
+    if (isNaN(amount) || amount <= 0) { 
+        showToast("Enter valid amount"); 
+        return; 
+    } 
+    const price = cryptoPrices[symbol] || 1; 
+    const cost = amount * price; 
+    userBalances[symbol] = (userBalances[symbol] || 0) + amount; 
+    addMessage("BUY", `Purchased ${symbol}`, `Purchased ${amount} ${symbol} via ${method.toUpperCase()} for $${cost.toFixed(2)}`); 
+    showToast(`✅ Purchased ${amount} ${symbol}!`); 
+    updateBalances(); 
+    closeModal(); 
+}
+
+function processBuyWithLoan(symbol, price) { 
+    let amount = parseFloat(document.getElementById('buyAmount')?.value); 
+    if (isNaN(amount) || amount <= 0) { 
+        showToast("Enter valid amount"); 
+        return; 
+    } 
+    const cost = amount * price; 
+    userBalances[symbol] = (userBalances[symbol] || 0) + amount; 
+    addMessage("LOAN BUY", `Loan Purchase ${symbol}`, `Purchased ${amount} ${symbol} via Zentronix Loan - $${cost.toFixed(2)}`); 
+    showToast(`🏦 Loan approved! ${amount} ${symbol} added!`); 
+    updateBalances(); 
+    closeModal(); 
+}
+
+function openWalletModal(asset, symbol) { 
+    const walletAddress = walletAddresses[asset] || generateWalletAddress(asset); 
+    const links = { BTC: "https://www.blockchain.com/explorer", ETH: "https://etherscan.io", SOL: "https://explorer.solana.com", BRADICOIN: "https://www.bradichain.com", USDT: "https://tronscan.org", LTC: "https://live.blockcypher.com/ltc/", BNB: "https://bscscan.com" }; 
+    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${symbol} Wallet</h3><div class="wallet-address-display">${walletAddress}</div><button class="copy-address-btn" onclick="copyWalletAddress('${walletAddress}')">Copy Address</button><button class="sell-btn" onclick="window.open('${links[asset] || links.BRADICOIN}', '_blank')" style="margin-top:0.5rem;">🔗 Blockchain Explorer</button>`); 
+}
+
+function openSwapModalFull() { 
+    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap Center</h3><select id="swapFromSelect"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><i class="fas fa-arrow-down" style="display:block; text-align:center; margin:0.5rem 0;"></i><select id="swapToSelect"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><input type="number" id="swapAmountInput" placeholder="Amount"><button class="buy-btn" onclick="executeSwap()" style="width:100%; margin-top:1rem;">Confirm Swap</button>`); 
+}
+
+function executeSwap() { 
+    const from = document.getElementById('swapFromSelect')?.value; 
+    const to = document.getElementById('swapToSelect')?.value; 
+    let amount = parseFloat(document.getElementById('swapAmountInput')?.value); 
+    if (isNaN(amount) || amount <= 0) { 
+        showToast("Invalid amount"); 
+        closeModal(); 
+        return; 
+    } 
+    if (from === to) { 
+        showToast("Cannot swap same currency"); 
+        closeModal(); 
+        return; 
+    } 
+    const fromPrice = cryptoPrices[from] || 1; 
+    const toPrice = cryptoPrices[to] || 1; 
+    const received = (amount * fromPrice) / toPrice; 
+    addMessage("SWAP", `${from} → ${to}`, `Swapped ${amount} ${from} for ${received.toFixed(8)} ${to}`); 
+    showToast(`✅ Swapped ${amount} ${from} to ${received.toFixed(8)} ${to}`); 
+    closeModal(); 
+}
+
+// ==================== RENDERIZAÇÃO DO DASHBOARD ====================
 
 function renderCryptoAssets() {
-    const cryptos = [{ name: "Bitcoin", symbol: "BTC", price: 67234 }, { name: "Ethereum", symbol: "ETH", price: 3441 }, { name: "Solana", symbol: "SOL", price: 98.07 }, { name: "Polygon", symbol: "MATIC", price: 0.85 }, { name: "Tether", symbol: "USDT", price: 1.00 }, { name: "Litecoin", symbol: "LTC", price: 82.50, change: "+1.8%" }, { name: "BNB", symbol: "BNB", price: 312.50, change: "+3.2%" }, { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42, change: "+2.3%" }];
+    const cryptos = [
+        { name: "Bitcoin", symbol: "BTC", price: 67234 },
+        { name: "Ethereum", symbol: "ETH", price: 3441 },
+        { name: "Solana", symbol: "SOL", price: 98.07 },
+        { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42 },
+        { name: "Tether", symbol: "USDT", price: 1.00 },
+        { name: "Litecoin", symbol: "LTC", price: 82.50 },
+        { name: "Binance Coin", symbol: "BNB", price: 312.50 }
+    ];
     const container = document.getElementById('cryptoAssetsGrid');
-    if (container) container.innerHTML = cryptos.map(c => `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price} <span style="color:var(--neon-green);">${c.change || ''}</span></div><div class="button-group"><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="sell-btn" onclick="openUnstakeModal('${c.symbol.toLowerCase()}', '${c.symbol}')">UNSTAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openBuyModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">BUY</button><button class="wallet-btn" onclick="openWalletModal('${c.symbol}', '${c.symbol}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HISTORY</button></div></div>`).join('');
+    if (container) container.innerHTML = cryptos.map(c => `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price}</div><div class="button-group"><button class="currency-send-btn" onclick="openSendModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-paper-plane"></i> SEND</button><button class="receive-btn" onclick="openReceiveModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-download"></i> RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${c.symbol}', '${c.symbol}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HIST</button></div></div>`).join('');
 }
 
 function updateBalances() {
@@ -626,14 +932,16 @@ function updateBalances() {
         const fiatCurrencies = ['USD', 'EUR', 'GBP', 'BRL'];
         const cryptos = ['BTC', 'ETH', 'SOL', 'BRADICOIN', 'USDT', 'LTC', 'BNB'];
         grid.innerHTML = [...fiatCurrencies, ...cryptos].map(curr => {
+            const balance = userBalances[curr] || 0;
             if (fiatCurrencies.includes(curr)) {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${userBalances[curr]?.toFixed(2) || 0}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="showToast('Send ${curr}')">SEND</button><button class="receive-btn" onclick="showToast('Receive ${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(2)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
             } else {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${userBalances[curr]?.toFixed(4) || 0}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="showToast('Send ${curr}')">SEND</button><button class="receive-btn" onclick="showToast('Receive ${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
             }
         }).join('');
     }
-    const militaryDiv = document.getElementById('militaryBalances'); if (militaryDiv) militaryDiv.innerHTML = Object.entries(userBalances).slice(0, 8).map(([k, v]) => `<div class="balance-item"><span>${k}</span><span>${v.toFixed(4)}</span></div>`).join('');
+    const militaryDiv = document.getElementById('militaryBalances'); 
+    if (militaryDiv) militaryDiv.innerHTML = Object.entries(userBalances).slice(0, 8).map(([k, v]) => `<div class="balance-item"><span>${k}</span><span>${v.toFixed(8)}</span></div>`).join('');
 }
 
 function renderSecurityCenter() {
@@ -665,9 +973,20 @@ function renderBankingServices() {
     if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="showToast('${service.name} application started')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); showToast('Apply for ${service.name}')">Apply Now</button></div>`).join('');
 }
 
-function initStakingChart() { const ctx = document.getElementById('stakingChart')?.getContext('2d'); if (ctx) new Chart(ctx, { type: 'line', data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Portfolio Value', data: [100, 105, 112, 120], borderColor: '#00f2ff', tension: 0.4 }] } }); }
-function initAnalyticsChart() { const ctx = document.getElementById('analyticsChart')?.getContext('2d'); if (ctx) new Chart(ctx, { type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr'], datasets: [{ label: 'Returns %', data: [5.2, 6.1, 5.8, 7.2], backgroundColor: '#00f2ff' }] } }); }
-function closeCurrentSection() { document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); document.getElementById('cryptoSec').classList.add('active'); }
+function initStakingChart() { 
+    const ctx = document.getElementById('stakingChart')?.getContext('2d'); 
+    if (ctx) new Chart(ctx, { type: 'line', data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Portfolio Value', data: [100, 105, 112, 120], borderColor: '#00f2ff', tension: 0.4 }] } }); 
+}
+
+function initAnalyticsChart() { 
+    const ctx = document.getElementById('analyticsChart')?.getContext('2d'); 
+    if (ctx) new Chart(ctx, { type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr'], datasets: [{ label: 'Returns %', data: [5.2, 6.1, 5.8, 7.2], backgroundColor: '#00f2ff' }] } }); 
+}
+
+function closeCurrentSection() { 
+    document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); 
+    document.getElementById('cryptoSec').classList.add('active'); 
+}
 
 function setupMenu() {
     document.querySelectorAll('.menu-item').forEach(item => {
@@ -728,8 +1047,9 @@ function setupLang() {
 // Profile Functions
 function openProfileModal() {
     document.getElementById('profileModal').classList.add('active');
-    document.getElementById('profileFirstName').value = document.getElementById('welcomeUser').innerText.split(' ')[0] || 'Alexander';
-    document.getElementById('profileLastName').value = document.getElementById('welcomeUser').innerText.split(' ')[1] || 'Vance';
+    const currentName = document.getElementById('welcomeUser').innerText.split(' ');
+    document.getElementById('profileFirstName').value = currentName[0] || 'Alexander';
+    document.getElementById('profileLastName').value = currentName[1] || 'Vance';
 }
 
 function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
@@ -743,7 +1063,6 @@ function saveProfile() {
     closeProfileModal();
 }
 
-// Logout with confirmation
 function showLogoutConfirmation() {
     document.getElementById('confirmLogoutModal').classList.add('active');
 }
@@ -760,18 +1079,77 @@ function performLogout() {
 }
 
 // KYC Functions
-function updateKycStep(step) { currentKycStep = step; document.getElementById('kycStep1').style.display = step === 1 ? 'block' : 'none'; document.getElementById('kycStep2').style.display = step === 2 ? 'block' : 'none'; document.getElementById('kycStep3').style.display = step === 3 ? 'block' : 'none'; document.getElementById('kycPrevBtn').style.display = step > 1 ? 'flex' : 'none'; document.getElementById('kycNextBtn').style.display = step < 3 ? 'flex' : 'none'; document.getElementById('submitKycBtn').style.display = step === 3 ? 'flex' : 'none'; document.querySelectorAll('.kyc-step').forEach((el, idx) => { el.classList.remove('active', 'completed'); if (idx + 1 === step) el.classList.add('active'); else if (idx + 1 < step) el.classList.add('completed'); }); if (step === 3) { document.getElementById('kycReviewInfo').innerHTML = `<strong>Name:</strong> ${kycData.fullName}<br><strong>Email:</strong> ${kycData.email}<br><strong>Phone:</strong> ${kycData.phone}<br><strong>Address:</strong> ${kycData.address}<br><strong>Nationality:</strong> ${kycData.nationality}<br><strong>ID Document:</strong> ${kycData.idDoc ? 'Uploaded' : 'Not uploaded'}<br><strong>Proof of Address:</strong> ${kycData.addressDoc ? 'Uploaded' : 'Not uploaded'}`; } }
-function validateKycStep1() { kycData.fullName = document.getElementById('fullNameDoc').value; kycData.email = document.getElementById('emailDocInput').value; kycData.phone = document.getElementById('phoneDoc').value; kycData.address = document.getElementById('addressDoc').value; kycData.nationality = document.getElementById('nationalityDoc').value; if (!kycData.fullName || !kycData.email || !kycData.phone || !kycData.address || !kycData.nationality) { showToast("Please fill all fields"); return false; } return true; }
-function submitKyc() { addMessage("KYC", "KYC Documents Submitted", `Dear ${kycData.fullName}, your KYC documents have been received. We will review and send your account details via email shortly.`); showToast("✅ Congratulations! Your documents have been submitted. You will receive an email with your account details shortly."); document.getElementById('submitModal').classList.remove('active'); document.getElementById('kycStatusText').innerText = 'Submitted - Pending Review'; document.getElementById('kycStatusBadge').innerHTML = '<i class="fas fa-shield-alt"></i> KYC SUBMITTED'; kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null }; currentKycStep = 1; updateKycStep(1); document.getElementById('fullNameDoc').value = ''; document.getElementById('emailDocInput').value = ''; document.getElementById('phoneDoc').value = ''; document.getElementById('addressDoc').value = ''; document.getElementById('nationalityDoc').value = ''; document.getElementById('uploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Click to upload document</p>'; document.getElementById('addressUploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Click to upload proof of address</p>'; }
+function updateKycStep(step) { 
+    currentKycStep = step; 
+    document.getElementById('kycStep1').style.display = step === 1 ? 'block' : 'none'; 
+    document.getElementById('kycStep2').style.display = step === 2 ? 'block' : 'none'; 
+    document.getElementById('kycStep3').style.display = step === 3 ? 'block' : 'none'; 
+    document.getElementById('kycPrevBtn').style.display = step > 1 ? 'flex' : 'none'; 
+    document.getElementById('kycNextBtn').style.display = step < 3 ? 'flex' : 'none'; 
+    document.getElementById('submitKycBtn').style.display = step === 3 ? 'flex' : 'none'; 
+    document.querySelectorAll('.kyc-step').forEach((el, idx) => { 
+        el.classList.remove('active', 'completed'); 
+        if (idx + 1 === step) el.classList.add('active'); 
+        else if (idx + 1 < step) el.classList.add('completed'); 
+    }); 
+    if (step === 3) { 
+        document.getElementById('kycReviewInfo').innerHTML = `<strong>Name:</strong> ${kycData.fullName}<br><strong>Email:</strong> ${kycData.email}<br><strong>Phone:</strong> ${kycData.phone}<br><strong>Address:</strong> ${kycData.address}<br><strong>Nationality:</strong> ${kycData.nationality}<br><strong>ID Document:</strong> ${kycData.idDoc ? 'Uploaded' : 'Not uploaded'}<br><strong>Proof of Address:</strong> ${kycData.addressDoc ? 'Uploaded' : 'Not uploaded'}`; 
+    } 
+}
+
+function validateKycStep1() { 
+    kycData.fullName = document.getElementById('fullNameDoc').value; 
+    kycData.email = document.getElementById('emailDocInput').value; 
+    kycData.phone = document.getElementById('phoneDoc').value; 
+    kycData.address = document.getElementById('addressDoc').value; 
+    kycData.nationality = document.getElementById('nationalityDoc').value; 
+    if (!kycData.fullName || !kycData.email || !kycData.phone || !kycData.address || !kycData.nationality) { 
+        showToast("Please fill all fields"); 
+        return false; 
+    } 
+    return true; 
+}
+
+function submitKyc() { 
+    addMessage("KYC", "KYC Documents Submitted", `Dear ${kycData.fullName}, your KYC documents have been received. We will review and send your account details via email shortly.`); 
+    showToast("✅ Congratulations! Your documents have been submitted. You will receive an email with your account details shortly."); 
+    document.getElementById('submitModal').classList.remove('active'); 
+    document.getElementById('kycStatusText').innerText = 'Submitted - Pending Review'; 
+    document.getElementById('kycStatusBadge').innerHTML = '<i class="fas fa-shield-alt"></i> KYC SUBMITTED'; 
+    kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null }; 
+    currentKycStep = 1; 
+    updateKycStep(1); 
+}
 
 // Event Listeners
 document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
 document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('loginModal').classList.remove('active'));
-document.getElementById('loginSubmitBtn').addEventListener('click', () => { document.getElementById('loginModal').classList.remove('active'); document.getElementById('dashboardContainer').style.display = 'block'; document.getElementById('institutionalContent').style.display = 'none'; document.getElementById('openLoginBtn').style.display = 'none'; document.getElementById('logoutMainBtn').style.display = 'flex'; document.getElementById('kycStatusBadge').style.display = 'flex'; document.getElementById('notificationBell').classList.add('visible'); updateBalances(); initStakingChart(); initAnalyticsChart(); renderSecurityCenter(); renderBankingServices(); showToast("✅ Welcome to Zentronix Bank!"); });
+document.getElementById('loginSubmitBtn').addEventListener('click', () => { 
+    document.getElementById('loginModal').classList.remove('active'); 
+    document.getElementById('dashboardContainer').style.display = 'block'; 
+    document.getElementById('institutionalContent').style.display = 'none'; 
+    document.getElementById('openLoginBtn').style.display = 'none'; 
+    document.getElementById('logoutMainBtn').style.display = 'flex'; 
+    document.getElementById('kycStatusBadge').style.display = 'flex'; 
+    document.getElementById('notificationBell').classList.add('visible'); 
+    updateBalances(); 
+    initStakingChart(); 
+    initAnalyticsChart(); 
+    renderSecurityCenter(); 
+    renderBankingServices(); 
+    showToast("✅ Welcome to Zentronix Bank!"); 
+});
 document.getElementById('logoutMainBtn').addEventListener('click', showLogoutConfirmation);
 document.getElementById('confirmLogoutYes').addEventListener('click', performLogout);
 document.getElementById('confirmLogoutNo').addEventListener('click', () => { document.getElementById('confirmLogoutModal').classList.remove('active'); });
-document.getElementById('notificationBell').addEventListener('click', () => { messages.forEach(m => m.read = true); updateMessagesDisplay(); updateNotificationCount(); document.getElementById('historySec').classList.add('active'); document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); document.getElementById('historySec').classList.add('active'); });
+document.getElementById('notificationBell').addEventListener('click', () => { 
+    messages.forEach(m => m.read = true); 
+    updateMessagesDisplay(); 
+    updateNotificationCount(); 
+    document.getElementById('historySec').classList.add('active'); 
+    document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); 
+    document.getElementById('historySec').classList.add('active'); 
+});
 document.getElementById('kycBtn').addEventListener('click', () => document.getElementById('submitModal').classList.add('active'));
 document.getElementById('closeSubmitModalBtn').addEventListener('click', () => document.getElementById('submitModal').classList.remove('active'));
 document.getElementById('kycNextBtn').addEventListener('click', () => { if (validateKycStep1()) updateKycStep(2); });
@@ -798,11 +1176,48 @@ document.getElementById('saveProfileBtn')?.addEventListener('click', saveProfile
 document.getElementById('uploadPhotoBtn')?.addEventListener('click', () => document.getElementById('profilePhotoInput').click());
 document.getElementById('profilePhotoInput')?.addEventListener('change', (e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { profilePhoto = event.target.result; document.querySelector('.profile-avatar').innerHTML = `<img src="${profilePhoto}">`; document.querySelector('#profileAvatarLarge').innerHTML = `<img src="${profilePhoto}">`; }; reader.readAsDataURL(e.target.files[0]); } });
 
+// Password toggle
+document.getElementById('togglePasswordBtn')?.addEventListener('click', () => {
+    const passwordInput = document.getElementById('loginPassword');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    document.getElementById('togglePasswordBtn').innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+});
+
 // Expor funções globais
-window.closeModal = closeModal; window.openStakeModal = openStakeModal; window.openUnstakeModal = openUnstakeModal; window.openBuyModal = openBuyModal; window.openWalletModal = openWalletModal; window.openSwapModalFull = openSwapModalFull; window.processBuyWithCard = processBuyWithCard; window.processBuyWithLoan = processBuyWithLoan; window.confirmStake = confirmStake; window.confirmUnstake = confirmUnstake; window.executeSwap = executeSwap; window.closeCurrentSection = closeCurrentSection; window.showToast = showToast; window.deleteMessage = deleteMessage; window.addMessage = addMessage; window.showCurrencyHistory = showCurrencyHistory; window.copyAccountNumber = copyAccountNumber;
+window.closeModal = closeModal;
+window.openSendModal = openSendModal;
+window.openReceiveModal = openReceiveModal;
+window.confirmSend = confirmSend;
+window.copyWalletAddress = copyWalletAddress;
+window.generateQRCode = generateQRCode;
+window.shareAddress = shareAddress;
+window.openStakeModal = openStakeModal;
+window.openUnstakeModal = openUnstakeModal;
+window.openBuyModal = openBuyModal;
+window.openWalletModal = openWalletModal;
+window.openSwapModalFull = openSwapModalFull;
+window.processBuyWithCard = processBuyWithCard;
+window.processBuyWithLoan = processBuyWithLoan;
+window.confirmStake = confirmStake;
+window.confirmUnstake = confirmUnstake;
+window.executeSwap = executeSwap;
+window.closeCurrentSection = closeCurrentSection;
+window.showToast = showToast;
+window.deleteMessage = deleteMessage;
+window.addMessage = addMessage;
+window.showCurrencyHistory = showCurrencyHistory;
+window.copyAccountNumber = copyAccountNumber;
 
 // Inicialização
-renderCryptoAssets(); updateBalances(); setupMenu(); setupLang(); applyLanguage(); updateMessagesDisplay(); updateNotificationCount(); updateKycStep(1);
+renderCryptoAssets();
+updateBalances();
+setupMenu();
+setupLang();
+applyLanguage();
+updateMessagesDisplay();
+updateNotificationCount();
+updateKycStep(1);
 </script>
 </body>
 </html>
