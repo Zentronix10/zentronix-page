@@ -209,6 +209,8 @@
         .confirm-no-btn:hover { background: rgba(0,242,255,0.4); }
         .wallet-address-display { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; margin: 1rem 0; font-family: 'Space Mono', monospace; font-size: 0.8rem; border: 1px solid var(--neon-blue); }
         .copy-address-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.3rem 0.8rem; cursor: pointer; margin-top: 0.5rem; }
+        .create-wallet-btn { background: linear-gradient(95deg, var(--neon-green), var(--neon-blue)); border: none; padding: 0.6rem 1.5rem; border-radius: 2rem; color: #0a0b1e; font-weight: bold; cursor: pointer; margin-top: 1rem; width: 100%; }
+        .create-wallet-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(0,255,136,0.3); }
         @media (max-width: 1100px) { .dashboard-three-columns { grid-template-columns: 1fr; } .tactical-menu { position: relative; } }
     </style>
 </head>
@@ -499,6 +501,251 @@
 </div>
 
 <script>
+// ==================== WALLET GENERATOR (REAL, SEM SEED PHRASE) ====================
+// Armazenamento das wallets criadas pelo usuário
+let userWallets = {
+    BTC: null,
+    ETH: null,
+    SOL: null,
+    USDT: null,
+    BNB: null,
+    LTC: null
+};
+
+// Endereços padrão de depósito do banco (para RECEIVE - onde o usuário recebe)
+const bankWalletAddresses = {
+    BTC: "bc1qzentronixbankbtcwallet2024",
+    ETH: "0xZentronixBankEthWallet2024",
+    SOL: "ZentronixBankSolWallet2024",
+    USDT: "0xZentronixUSDTWallet2024",
+    BNB: "0xZentronixBNBWallet2024",
+    LTC: "ltc1qzentronixbankltcwallet2024"
+};
+
+// Função para gerar wallet REAL (simula backend - você deve substituir pela chamada à sua API)
+async function generateRealWallet(blockchain, symbol) {
+    showToast(`🔄 Generating ${symbol} wallet...`);
+    
+    // 🔴 IMPORTANTE: Aqui você deve substituir pela chamada REAL ao seu backend
+    // Exemplo: const response = await fetch('/api/wallet/generate', { method: 'POST', body: JSON.stringify({ blockchain }) });
+    
+    // Simulação de resposta do backend (substituir pela sua API real)
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            // Geração simulada de endereço (SUBSTITUIR PELA SUA API REAL)
+            const prefixes = {
+                BTC: "bc1q",
+                ETH: "0x",
+                SOL: "Sol",
+                USDT: "0x",
+                BNB: "0x",
+                LTC: "ltc1q"
+            };
+            const randomPart = Array(32).fill(0).map(() => Math.random().toString(36)[2]).join('');
+            const address = prefixes[blockchain] + randomPart.toLowerCase() + blockchain.toLowerCase();
+            
+            // Salva no "banco" local (simulado)
+            userWallets[symbol] = address;
+            
+            // Adiciona à história
+            addMessage("WALLET", `${symbol} Wallet Created`, `New ${symbol} wallet address generated: ${address.substring(0, 15)}...`);
+            
+            resolve({ success: true, address: address, symbol: symbol });
+        }, 1500);
+    });
+}
+
+// Função para abrir modal de CREATE WALLET
+function openCreateWalletModal(symbol, cryptoName) {
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <div style="text-align: center;">
+            <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>
+            <h3 style="color: var(--neon-blue); margin-bottom: 0.5rem;">Create ${symbol} Wallet</h3>
+            <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 1rem;">${cryptoName} - Zentronix Secure Wallet</p>
+        </div>
+        
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Wallet Status</div>
+            <div style="font-size: 0.9rem; font-weight: bold; margin-top: 0.3rem;">
+                ${userWallets[symbol] ? '✅ Wallet already exists' : '⚠️ No wallet detected'}
+            </div>
+        </div>
+        
+        ${userWallets[symbol] ? `
+            <div class="wallet-address-display">
+                <i class="fas fa-wallet"></i> Your ${symbol} Wallet<br>
+                <span style="font-size: 0.7rem; word-break: break-all;">${userWallets[symbol]}</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="copy-address-btn" onclick="copyWalletAddress('${userWallets[symbol]}')" style="flex: 1;"><i class="fas fa-copy"></i> Copy Address</button>
+                <button class="receive-btn" onclick="openReceiveWalletModal('${symbol}')" style="flex: 1;"><i class="fas fa-download"></i> Receive</button>
+                <button class="currency-send-btn" onclick="openSendWalletModal('${symbol}')" style="flex: 1;"><i class="fas fa-paper-plane"></i> Send</button>
+            </div>
+        ` : `
+            <div style="background: rgba(255,68,102,0.15); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">
+                <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--neon-yellow); margin-bottom: 0.5rem;"></i>
+                <p style="font-size: 0.7rem;">Generate a new ${symbol} wallet. Your private keys will be securely stored and encrypted.</p>
+            </div>
+            <button class="create-wallet-btn" onclick="confirmCreateWallet('${symbol}', '${cryptoName}')">
+                <i class="fas fa-plus-circle"></i> CREATE ${symbol} WALLET
+            </button>
+        `}
+        
+        <div style="margin-top: 1rem; font-size: 0.6rem; opacity: 0.5; text-align: center;">
+            🔒 Your keys, your coins. Zentronix uses military-grade encryption.
+        </div>
+    `;
+    showModal(modalContent);
+}
+
+// Confirmar criação da wallet
+async function confirmCreateWallet(symbol, cryptoName) {
+    closeModal();
+    showToast(`🔐 Creating your ${symbol} wallet... Please wait`);
+    
+    const result = await generateRealWallet(symbol === 'USDT' ? 'ETH' : symbol, symbol);
+    
+    if (result.success) {
+        showToast(`✅ ${symbol} wallet created successfully!`);
+        openCreateWalletModal(symbol, cryptoName);
+    } else {
+        showToast(`❌ Failed to create ${symbol} wallet. Please try again.`);
+    }
+}
+
+// Abrir modal de RECEIVE (mostra endereço do banco)
+function openReceiveWalletModal(symbol) {
+    const bankAddress = bankWalletAddresses[symbol] || userWallets[symbol] || "Address not available";
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow);"></i>
+        </div>
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 0.5rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7; text-align: center;">YOUR ${symbol} WALLET ADDRESS</div>
+            <div class="wallet-address-display" style="margin-top: 0.5rem;">
+                ${bankAddress}
+            </div>
+            <button class="copy-address-btn" onclick="copyWalletAddress('${bankAddress}')" style="width: 100%;">
+                <i class="fas fa-copy"></i> COPY ADDRESS
+            </button>
+        </div>
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important</div>
+            <div style="font-size: 0.65rem;">
+                • Only send ${symbol} to this address<br>
+                                • Minimum deposit: 0.001 ${symbol}<br>
+                • Funds will appear after 3 confirmations<br>
+                • Estimated time: 10-30 minutes
+            </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <button class="buy-btn" onclick="showToast('QR Code feature coming soon')" style="flex: 1;"><i class="fas fa-qrcode"></i> QR Code</button>
+            <button class="wallet-btn" onclick="shareAddress('${bankAddress}')" style="flex: 1;"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+    `;
+    showModal(modalContent);
+}
+
+// Abrir modal de SEND (consulta de envio)
+function openSendWalletModal(symbol) {
+    const balance = userBalances[symbol] || 0;
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
+        
+        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(8)} ${symbol}</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Recipient Wallet Address *</label>
+            <input type="text" id="sendToAddress" class="form-input" placeholder="Enter ${symbol} wallet address">
+        </div>
+        
+        <div class="form-group">
+            <label>Amount to Send *</label>
+            <input type="number" id="sendCryptoAmount" class="form-input" placeholder="0.00" step="any">
+        </div>
+        
+        <div class="form-group">
+            <label>Network Fee (estimated)</label>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                ${getNetworkFee(symbol)}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Transaction Note (optional)</label>
+            <input type="text" id="txNoteSend" class="form-input" placeholder="Add a note for this transaction">
+        </div>
+        
+        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Before you send</div>
+            <div style="font-size: 0.65rem;">
+                • Double-check the recipient address<br>
+                • Crypto transactions are irreversible<br>
+                • Minimum send: 0.001 ${symbol}
+            </div>
+        </div>
+        
+        <button class="send-crypto-btn" onclick="confirmSendTransaction('${symbol}')" style="width: 100%; padding: 0.8rem;">
+            <i class="fas fa-paper-plane"></i> CONFIRM SEND
+        </button>
+    `;
+    showModal(modalContent);
+}
+
+// Confirmar transação de envio
+function confirmSendTransaction(symbol) {
+    const amount = parseFloat(document.getElementById('sendCryptoAmount')?.value);
+    const toAddress = document.getElementById('sendToAddress')?.value;
+    const note = document.getElementById('txNoteSend')?.value || "";
+    const balance = userBalances[symbol] || 0;
+    
+    if (!toAddress || toAddress.trim() === "") {
+        showToast("❌ Please enter a valid wallet address");
+        return;
+    }
+    
+    if (isNaN(amount) || amount <= 0) {
+        showToast("❌ Please enter a valid amount");
+        return;
+    }
+    
+    if (amount > balance) {
+        showToast(`❌ Insufficient balance. You have ${balance.toFixed(8)} ${symbol}`);
+        return;
+    }
+    
+    // Processar o envio
+    userBalances[symbol] -= amount;
+    updateBalances();
+    
+    // Adicionar à história
+    addMessage("SEND", `Sent ${symbol}`, `Sent ${amount.toFixed(8)} ${symbol} to ${toAddress.substring(0, 10)}...${toAddress.substring(toAddress.length - 6)}${note ? " - Note: " + note : ""}`);
+    
+    showToast(`✅ Successfully sent ${amount.toFixed(8)} ${symbol}!`);
+    closeModal();
+}
+
+// Função para obter taxa de rede
+function getNetworkFee(symbol) {
+    const fees = {
+        BTC: "~0.0001 BTC (~$6.70)",
+        ETH: "~0.002 ETH (~$6.88)",
+        SOL: "~0.0005 SOL (~$0.05)",
+        USDT: "~1 USDT (TRC-20)",
+        LTC: "~0.001 LTC (~$0.08)",
+        BNB: "~0.001 BNB (~$0.31)",
+        BRADICOIN: "~5 BRC (~$0.05)"
+    };
+    return fees[symbol] || "~$0.50";
+}
+
 // ==================== TRADUÇÕES ====================
 const translations = {
     en: { 
@@ -571,8 +818,8 @@ const translations = {
     }
 };
 
-// ==================== DADOS GLOBAIS - SEM NÚMEROS DE EXEMPLO ====================
-let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, MATIC: 0, USDT: 0, LTC: 0, BNB: 0 };
+// ==================== DADOS GLOBAIS ====================
+let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
 let messages = [
     { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false }
 ];
@@ -580,441 +827,14 @@ let kycData = { fullName: "", email: "", phone: "", address: "", nationality: ""
 let currentKycStep = 1;
 let profilePhoto = null;
 
-const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, MATIC: 0.85, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
-const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, MATIC: 6.5, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
-const walletAddresses = {
-    BTC: "bc1qzentronixbankbtcwallet12345678",
-    ETH: "0xZentronixBankEthWallet9876543210abcdef",
-    SOL: "ZentronixBankSolWalletABCDEFGHIJKLMN",
-    BRADICOIN: "BRCzentronixbankwallet2024",
-    USDT: "0xZentronixUSDTWalletTRC20",
-    LTC: "LTCzentronixbankwallet2024",
-    BNB: "bnb1zentronixbankbscwallet5678"
-};
+const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
+const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
 
-// ==================== FUNÇÕES SEND E RECEIVE ====================
-
-// Função para abrir modal de SEND
-function openSendModal(currency, symbol) {
-    const balance = userBalances[symbol] || 0;
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
-        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
-            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(8)} ${symbol}</div>
-        </div>
-        <div class="form-group">
-            <label>Recipient Wallet Address</label>
-            <input type="text" id="recipientAddress" class="form-input" placeholder="Enter wallet address">
-        </div>
-        <div class="form-group">
-            <label>Amount to Send</label>
-            <input type="number" id="sendAmount" class="form-input" placeholder="0.00" step="any">
-        </div>
-        <div class="form-group">
-            <label>Network Fee (estimated)</label>
-            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
-                ${getNetworkFee(symbol)}
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Transaction Note (optional)</label>
-            <input type="text" id="txNote" class="form-input" placeholder="Add a note">
-        </div>
-        <button class="send-crypto-btn" onclick="confirmSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem; margin-top: 1rem;">
-            <i class="fas fa-paper-plane"></i> CONFIRM SEND
-        </button>
-    `;
-    showModal(modalContent);
-}
-
-// Função para confirmar envio
-function confirmSend(currency, symbol) {
-    const amount = parseFloat(document.getElementById('sendAmount')?.value);
-    const address = document.getElementById('recipientAddress')?.value;
-    const note = document.getElementById('txNote')?.value || "";
-    const balance = userBalances[symbol] || 0;
-    
-    if (!address || address.trim() === "") {
-        showToast("❌ Please enter a valid wallet address");
-        return;
-    }
-    
-    if (isNaN(amount) || amount <= 0) {
-        showToast("❌ Please enter a valid amount");
-        return;
-    }
-    
-    if (amount > balance) {
-        showToast(`❌ Insufficient balance. You have ${balance.toFixed(8)} ${symbol}`);
-        return;
-    }
-    
-    // Processar o envio
-    userBalances[symbol] -= amount;
-    updateBalances();
-    
-    // Adicionar à história
-    addMessage("SEND", `Sent ${symbol}`, `Sent ${amount.toFixed(8)} ${symbol} to ${address.substring(0, 10)}...${address.substring(address.length - 6)}${note ? " - Note: " + note : ""}`);
-    
-    showToast(`✅ Successfully sent ${amount.toFixed(8)} ${symbol}!`);
-    closeModal();
-}
-
-// Função para obter taxa de rede
-function getNetworkFee(symbol) {
-    const fees = {
-        BTC: "~0.0001 BTC (~$6.70)",
-        ETH: "~0.002 ETH (~$6.88)",
-        SOL: "~0.0005 SOL (~$0.05)",
-        BRADICOIN: "~5 BRC (~$0.05)",
-        USDT: "~1 USDT (TRC-20)",
-        LTC: "~0.001 LTC (~$0.08)",
-        BNB: "~0.001 BNB (~$0.31)"
-    };
-    return fees[symbol] || "~$0.50";
-}
-
-// Função para abrir modal de RECEIVE
-function openReceiveModal(currency, symbol) {
-    const walletAddress = walletAddresses[symbol] || generateWalletAddress(symbol);
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
-        <div style="text-align: center; margin-bottom: 1rem;">
-            <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow);"></i>
-        </div>
-        <div class="wallet-address-display" id="walletAddressDisplay">
-            ${walletAddress}
-        </div>
-        <button class="copy-address-btn" onclick="copyWalletAddress('${walletAddress}')" style="width: 100%; margin-bottom: 1rem;">
-            <i class="fas fa-copy"></i> COPY ADDRESS
-        </button>
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important</div>
-            <div style="font-size: 0.65rem;">Only send ${symbol} to this address. Sending other assets may result in permanent loss.</div>
-        </div>
-        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-            <button class="buy-btn" onclick="generateQRCode('${walletAddress}')" style="flex: 1;"><i class="fas fa-qrcode"></i> Show QR Code</button>
-            <button class="wallet-btn" onclick="shareAddress('${walletAddress}')" style="flex: 1;"><i class="fas fa-share-alt"></i> Share</button>
-        </div>
-    `;
-    showModal(modalContent);
-}
-
-// Funções auxiliares
-function getIconName(symbol) {
-    const icons = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", USDT: "money-bill", LTC: "litecoin", BNB: "binance", BRADICOIN: "gem" };
-    return icons[symbol] || "coins";
-}
-
-function generateWalletAddress(symbol) {
-    const prefixes = { BTC: "bc1q", ETH: "0x", SOL: "Sol", BRADICOIN: "BRC", USDT: "0x", LTC: "ltc1", BNB: "bnb1" };
-    const randomPart = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 8);
-    return (prefixes[symbol] || "") + randomPart + symbol.toLowerCase() + "2024";
-}
-
-function copyWalletAddress(address) {
-    navigator.clipboard.writeText(address);
-    showToast("✅ Wallet address copied to clipboard!");
-}
-// ==================== BANKING DETAILS FOR RECEIVE (Zentronix Accounts) ====================
-const bankReceiveDetails = {
-    USD: {
-        bankName: "JPMorgan Chase Bank N.A.",
-        swiftCode: "CHASUS33XXX",
-        routingNumber: "021000021",
-        accountNumber: "ZNTX-4821-7390-1256",
-        bankAddress: "270 Park Avenue, New York, NY 10017, USA",
-        beneficiaryName: "Zentronix Bank International",
-        beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001"
-    },
-    EUR: {
-        bankName: "Deutsche Bank AG",
-        swiftCode: "DEUTDEFFXXX",
-        iban: "DE89370400440532013000",
-        accountNumber: "ZNTX-EU-7390-1256",
-        bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany",
-        beneficiaryName: "Zentronix Bank Europe",
-        beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany"
-    },
-    GBP: {
-        bankName: "Barclays Bank PLC",
-        swiftCode: "BARCLGB22XXX",
-        sortCode: "20-00-00",
-        accountNumber: "ZNTX-UK-7390-1256",
-        bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom",
-        beneficiaryName: "Zentronix Bank UK Ltd",
-        beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY"
-    },
-    BRL: {
-        bankName: "Banco Itaú Unibanco S.A.",
-        swiftCode: "ITAUBRSPXXX",
-        cnpj: "60.701.190/0001-04",
-        accountNumber: "ZNTX-BR-7390-1256",
-        agency: "1234",
-        bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil",
-        beneficiaryName: "Zentronix Bank Brasil",
-        beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP"
-    }
-};
-
-// ==================== FUNCTIONS FOR FIAT CURRENCIES (USD, EUR, GBP, BRL) ====================
-
-// Function to open SEND modal for fiat currencies
-function openFiatSendModal(currency, symbol) {
-    const balance = userBalances[symbol] || 0;
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
-        
-        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
-            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(2)} ${symbol}</div>
-        </div>
-        
-        <!-- BENEFICIARY DATA -->
-        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
-            <div class="form-group">
-                <label>Full Name *</label>
-                <input type="text" id="beneficiaryName" class="form-input" placeholder="Full name of the recipient">
-            </div>
-            <div class="form-group">
-                <label>Beneficiary Address</label>
-                <input type="text" id="beneficiaryAddress" class="form-input" placeholder="Street, City, Country">
-            </div>
-        </div>
-        
-        <!-- BENEFICIARY BANK DETAILS -->
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BENEFICIARY BANK DETAILS</div>
-            <div class="form-group">
-                <label>Bank Name *</label>
-                <input type="text" id="bankName" class="form-input" placeholder="Name of the beneficiary's bank">
-            </div>
-            <div class="form-group">
-                <label>Bank Address</label>
-                <input type="text" id="bankAddress" class="form-input" placeholder="Bank address (optional)">
-            </div>
-            <div class="form-group">
-                <label>SWIFT/BIC Code *</label>
-                <input type="text" id="swiftCode" class="form-input" placeholder="Example: BARCLGB22XXX">
-                <div style="font-size: 0.6rem; opacity: 0.6; margin-top: 0.2rem;">8-11 characters: Bank code + Country code + Location code</div>
-            </div>
-        </div>
-        
-        <!-- BENEFICIARY ACCOUNT DETAILS -->
-        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">💳 BENEFICIARY ACCOUNT DETAILS</div>
-            <div class="form-group">
-                <label>Account Number / IBAN *</label>
-                <input type="text" id="accountNumber" class="form-input" placeholder="Account number or IBAN">
-            </div>
-            ${symbol === 'EUR' ? `<div class="form-group"><label>IBAN (for SEPA transfers)</label><input type="text" id="ibanNumber" class="form-input" placeholder="International Bank Account Number"></div>` : ''}
-            ${symbol === 'GBP' ? `<div class="form-group"><label>Sort Code</label><input type="text" id="sortCode" class="form-input" placeholder="6-digit sort code (e.g., 20-00-00)"></div>` : ''}
-            ${symbol === 'USD' ? `<div class="form-group"><label>Routing Number (ABA)</label><input type="text" id="routingNumber" class="form-input" placeholder="9-digit routing number"></div>` : ''}
-            ${symbol === 'BRL' ? `<div class="form-group"><label>CPF/CNPJ</label><input type="text" id="cpfCnpj" class="form-input" placeholder="Document number for Brazilian transfers"></div><div class="form-group"><label>Agency / Bank Branch</label><input type="text" id="agencyNumber" class="form-input" placeholder="Bank agency number"></div>` : ''}
-        </div>
-        
-        <!-- TRANSFER DETAILS -->
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">📊 TRANSFER DETAILS</div>
-            <div class="form-group">
-                <label>Amount to Send *</label>
-                <input type="number" id="sendAmountFiat" class="form-input" placeholder="0.00" step="any">
-            </div>
-            <div class="form-group">
-                <label>Transfer Type</label>
-                <select id="transferType" class="form-input">
-                    <option value="SWIFT">🌍 SWIFT (International Wire)</option>
-                    ${symbol === 'EUR' ? '<option value="SEPA">🇪🇺 SEPA (Single Euro Payments Area)</option>' : ''}
-                    ${symbol === 'USD' ? '<option value="FEDWIRE">🇺🇸 Fedwire (Domestic Wire)</option><option value="ACH">🇺🇸 ACH (Batch Transfer)</option>' : ''}
-                    ${symbol === 'GBP' ? '<option value="FPS">🇬🇧 Faster Payments (FPS)</option><option value="CHAPS">🇬🇧 CHAPS (Large Amount)</option>' : ''}
-                    ${symbol === 'BRL' ? '<option value="TED">🇧🇷 TED (Same Day)</option>' : ''}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Purpose of Payment</label>
-                <select id="paymentPurpose" class="form-input">
-                    <option value="Personal Transfer">👤 Personal Transfer</option>
-                    <option value="Business Payment">💼 Business Payment</option>
-                    <option value="Investment">📈 Investment</option>
-                    <option value="Real Estate">🏠 Real Estate</option>
-                    <option value="Education">🎓 Education</option>
-                    <option value="Family Support">👨‍👩‍👧 Family Support</option>
-                    <option value="Trade">📦 Trade / Commercial</option>
-                    <option value="Salary">💰 Salary / Payroll</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Reference / Invoice Number</label>
-                <input type="text" id="referenceNumber" class="form-input" placeholder="Optional reference">
-            </div>
-            <div class="form-group">
-                <label>Transaction Note</label>
-                <input type="text" id="txNoteFiat" class="form-input" placeholder="Add a note to the beneficiary">
-            </div>
-        </div>
-        
-        <!-- FEES AND OPTIONS -->
-        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">💰 FEES & OPTIONS</div>
-            <div class="form-group">
-                <label>Fee Option</label>
-                <select id="feeOption" class="form-input">
-                    <option value="OUR">🏦 OUR (Sender pays all fees)</option>
-                    <option value="SHA">🤝 SHA (Fees shared - recommended)</option>
-                    <option value="BEN">📥 BEN (Beneficiary pays fees)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Estimated Fee</label>
-                <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
-                    ${getFiatFeeEstimate(symbol)}
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Estimated Delivery Time</label>
-                <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
-                    ${getFiatDeliveryTime(symbol)}
-                </div>
-            </div>
-        </div>
-        
-        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
-            <div style="font-size: 0.65rem;">
-                • Verify all details before confirming<br>
-                • International transfers may be subject to intermediary bank fees<br>
-                • Funds will be credited within the estimated timeframe
-            </div>
-        </div>
-        
-        <button class="send-crypto-btn" onclick="confirmFiatSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem;">
-            <i class="fas fa-paper-plane"></i> CONFIRM TRANSFER
-        </button>
-    `;
-    showModal(modalContent);
-}
-
-function getFiatFeeEstimate(symbol) {
-    const fees = { USD: "~$25 - $45 (International SWIFT)", EUR: "~€15 - €35 (SEPA: free - €5 / SWIFT: €15-€35)", GBP: "~£10 - £30 (FPS: free / CHAPS: £20-£30)", BRL: "~R$10 - R$50 (TED: R$10-20)" };
-    return fees[symbol] || "~$30";
-}
-
-function getFiatDeliveryTime(symbol) {
-    const times = { USD: "1-3 business days (SWIFT)", EUR: "1-2 business days (SEPA: 1 day / SWIFT: 1-2 days)", GBP: "Same day - 2 business days", BRL: "Instant - 1 business day" };
-    return times[symbol] || "1-3 business days";
-}
-
-function confirmFiatSend(currency, symbol) {
-    const amount = parseFloat(document.getElementById('sendAmountFiat')?.value);
-    const beneficiaryName = document.getElementById('beneficiaryName')?.value;
-    const bankName = document.getElementById('bankName')?.value;
-    const swiftCode = document.getElementById('swiftCode')?.value;
-    const accountNumber = document.getElementById('accountNumber')?.value;
-    const transferType = document.getElementById('transferType')?.value;
-    const paymentPurpose = document.getElementById('paymentPurpose')?.value;
-    const reference = document.getElementById('referenceNumber')?.value || "";
-    const feeOption = document.getElementById('feeOption')?.value;
-    const txNote = document.getElementById('txNoteFiat')?.value || "";
-    
-    const balance = userBalances[symbol] || 0;
-    
-    if (!beneficiaryName || beneficiaryName.trim() === "") { showToast("❌ Please enter beneficiary name"); return; }
-    if (!bankName || bankName.trim() === "") { showToast("❌ Please enter bank name"); return; }
-    if (!swiftCode || swiftCode.trim() === "") { showToast("❌ Please enter SWIFT/BIC code"); return; }
-    if (!accountNumber || accountNumber.trim() === "") { showToast("❌ Please enter account number/IBAN"); return; }
-    if (isNaN(amount) || amount <= 0) { showToast("❌ Please enter a valid amount"); return; }
-    if (amount > balance) { showToast(`❌ Insufficient balance. You have ${balance.toFixed(2)} ${symbol}`); return; }
-    
-    userBalances[symbol] -= amount;
-    updateBalances();
-    
-    const feeOptionText = feeOption === 'OUR' ? 'Sender pays all fees' : (feeOption === 'SHA' ? 'Fees shared' : 'Beneficiary pays fees');
-    addMessage("BANK TRANSFER", `Sent ${symbol}`, `💰 Sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}\n🏦 Bank: ${bankName} (${swiftCode})\n💳 Account: ${accountNumber}\n📊 Type: ${transferType}\n🎯 Purpose: ${paymentPurpose}\n💸 Fee: ${feeOptionText}${reference ? '\n📋 Ref: ' + reference : ''}${txNote ? '\n📝 Note: ' + txNote : ''}`);
-    
-    showToast(`✅ Successfully sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}!`);
-    closeModal();
-}
-
-// Open RECEIVE modal for fiat currencies
-function openFiatReceiveModal(currency, symbol) {
-    const bankInfo = bankReceiveDetails[symbol];
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
-        <div style="text-align: center; margin-bottom: 1rem;"><i class="fas fa-university" style="font-size: 3rem; color: var(--neon-yellow);"></i></div>
-        
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7; text-align: center;">YOUR ZENTRONIX ACCOUNT</div>
-            <div style="font-size: 1rem; font-weight: bold; text-align: center; font-family: monospace;">ZNTX-4821-7390-1256</div>
-            <button class="copy-address-btn" onclick="copyWalletAddress('ZNTX-4821-7390-1256')" style="margin-top: 0.3rem; width: 100%;">COPY ACCOUNT NUMBER</button>
-        </div>
-        
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BANK INFORMATION FOR WIRE TRANSFER</div>
-            <div class="form-group"><label>Bank Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.bankName}</div></div>
-            <div class="form-group"><label>Bank Address</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.bankAddress}</div></div>
-            <div class="form-group"><label>SWIFT/BIC Code</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.swiftCode}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.swiftCode}')" style="margin-left: 0.5rem;">COPY</button></div></div>
-            ${symbol === 'USD' ? `<div class="form-group"><label>Routing Number (ABA)</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.routingNumber}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.routingNumber}')" style="margin-left: 0.5rem;">COPY</button></div></div>` : ''}
-            ${symbol === 'EUR' ? `<div class="form-group"><label>IBAN</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.iban}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.iban}')" style="margin-left: 0.5rem;">COPY</button></div></div>` : ''}
-            ${symbol === 'GBP' ? `<div class="form-group"><label>Sort Code</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.sortCode}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.sortCode}')" style="margin-left: 0.5rem;">COPY</button></div></div>` : ''}
-            ${symbol === 'BRL' ? `<div class="form-group"><label>CNPJ</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.cnpj}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.cnpj}')" style="margin-left: 0.5rem;">COPY</button></div></div><div class="form-group"><label>Agency</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.agency}</div></div>` : ''}
-        </div>
-        
-        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
-            <div class="form-group"><label>Beneficiary Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.beneficiaryName}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.beneficiaryName}')" style="margin-left: 0.5rem;">COPY</button></div></div>
-            <div class="form-group"><label>Beneficiary Address</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.beneficiaryAddress}</div></div>
-        </div>
-        
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
-            <div style="font-size: 0.65rem;">
-                • Include your account number (ZNTX-4821-7390-1256) in the transfer reference<br>
-                • Funds typically arrive within 1-3 business days<br>
-                • Minimum deposit: $1,000 equivalent
-            </div>
-        </div>
-        
-        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-            <button class="buy-btn" onclick="showToast('Wire instructions sent to your email')" style="flex: 1;"><i class="fas fa-file-pdf"></i> Wire Instructions</button>
-            <button class="wallet-btn" onclick="copyWalletAddress('ZNTX-4821-7390-1256')" style="flex: 1;"><i class="fas fa-share-alt"></i> Share Details</button>
-        </div>
-    `;
-    showModal(modalContent);
-}
-
-function generateQRCode(address) {
-    showToast("🔲 QR Code would be generated here in production");
-    // Em produção, você usaria uma biblioteca como qrcode.js
-}
-
-function shareAddress(address) {
-    if (navigator.share) {
-        navigator.share({
-            title: 'My Zentronix Bank Wallet',
-            text: 'Send crypto to my wallet:',
-            url: address
-        }).catch(() => showToast("Share canceled"));
-    } else {
-        copyWalletAddress(address);
-        showToast("Address copied! Share manually.");
-    }
-}
-
-// ==================== FUNÇÕES EXISTENTES MODIFICADAS ====================
+// ==================== FUNÇÕES EXISTENTES (MODIFICADAS) ====================
 
 function copyAccountNumber() { 
     navigator.clipboard.writeText('ZNTX-4821-7390-1256'); 
     showToast("Account number copied!"); 
-}
-
-function generateWallet(asset) { 
-    return walletAddresses[asset] || generateWalletAddress(asset);
 }
 
 function addMessage(type, title, desc) { 
@@ -1093,24 +913,6 @@ function confirmStake(symbol, apy) {
     closeModal(); 
 }
 
-function openUnstakeModal(asset, symbol) { 
-    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>UNSTAKE ${symbol}</h3><input type="number" id="unstakeAmount" placeholder="Amount to unstake"><button class="buy-btn" onclick="confirmUnstake('${symbol}')">Confirm Unstake</button>`); 
-}
-
-function confirmUnstake(symbol) { 
-    let amount = parseFloat(document.getElementById('unstakeAmount')?.value); 
-    if (isNaN(amount) || amount <= 0) { 
-        showToast("Invalid amount"); 
-        closeModal(); 
-        return; 
-    } 
-    userBalances[symbol] += amount; 
-    addMessage("UNSTAKE", `Unstaked ${symbol}`, `Unstaked ${amount.toFixed(8)} ${symbol}`); 
-    showToast(`✅ Unstaked ${amount.toFixed(8)} ${symbol}!`); 
-    updateBalances(); 
-    closeModal(); 
-}
-
 function openBuyModal(asset, symbol, price) { 
     showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Buy ${symbol}</h3><p>Price: $${price}</p><input type="number" id="buyAmount" placeholder="Amount to buy"><div class="payment-methods-grid"><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'mastercard')"><i class="fab fa-cc-mastercard"></i><p>Mastercard</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'visa')"><i class="fab fa-cc-visa"></i><p>Visa</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'amex')"><i class="fab fa-cc-amex"></i><p>Amex</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'googlepay')"><i class="fab fa-google-pay"></i><p>Google Pay</p></div></div><div class="payment-method-card" onclick="processBuyWithLoan('${symbol}', ${price})"><i class="fas fa-hand-holding-usd"></i><p>💰 Zentronix Loan</p></div><button class="sell-btn" onclick="closeModal()">Cancel</button>`); 
 }
@@ -1144,259 +946,8 @@ function processBuyWithLoan(symbol, price) {
     closeModal(); 
 }
 
-function openWalletModal(asset, symbol) { 
-    const walletAddress = walletAddresses[asset] || generateWalletAddress(asset); 
-    const links = { BTC: "https://www.blockchain.com/explorer", ETH: "https://etherscan.io", SOL: "https://explorer.solana.com", BRADICOIN: "https://www.bradichain.com", USDT: "https://tronscan.org", LTC: "https://live.blockcypher.com/ltc/", BNB: "https://bscscan.com" }; 
-    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${symbol} Wallet</h3><div class="wallet-address-display">${walletAddress}</div><button class="copy-address-btn" onclick="copyWalletAddress('${walletAddress}')">Copy Address</button><button class="sell-btn" onclick="window.open('${links[asset] || links.BRADICOIN}', '_blank')" style="margin-top:0.5rem;">🔗 Blockchain Explorer</button>`); 
-}
-
 function openSwapModalFull() { 
     showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap Center</h3><select id="swapFromSelect"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><i class="fas fa-arrow-down" style="display:block; text-align:center; margin:0.5rem 0;"></i><select id="swapToSelect"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><input type="number" id="swapAmountInput" placeholder="Amount"><button class="buy-btn" onclick="executeSwap()" style="width:100%; margin-top:1rem;">Confirm Swap</button>`); 
-}
-    // ==================== LOAN APPLICATION FUNCTION ====================
-
-// Function to open loan application modal
-function openLoanApplicationModal(serviceName) {
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📋 ${serviceName} APPLICATION</h3>
-        
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Zentronix Bank - Credit Analysis</div>
-            <div style="font-size: 0.8rem; margin-top: 0.3rem;">Competitive rates from 3.99% APR</div>
-        </div>
-        
-        <!-- LOAN AMOUNT -->
-        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">💰 LOAN AMOUNT</div>
-            <div class="form-group">
-                <label>Amount *</label>
-                <input type="number" id="loanAmount" class="form-input" placeholder="0.00" step="any">
-            </div>
-            <div class="form-group">
-                <label>Currency *</label>
-                <select id="loanCurrency" class="form-input">
-                    <option value="USD">🇺🇸 US Dollar (USD)</option>
-                    <option value="EUR">🇪🇺 Euro (EUR)</option>
-                    <option value="GBP">🇬🇧 British Pound (GBP)</option>
-                    <option value="BRL">🇧🇷 Brazilian Real (BRL)</option>
-                    <option value="BRADICOIN">🪙 BradiCoin (BRC)</option>
-                </select>
-            </div>
-        </div>
-        
-        <!-- LOAN PURPOSE -->
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">📝 LOAN PURPOSE</div>
-            <div class="form-group">
-                <label>Purpose of Loan *</label>
-                <select id="loanPurpose" class="form-input">
-                    <option value="Personal">👤 Personal Expenses</option>
-                    <option value="Business">💼 Business Investment</option>
-                    <option value="Education">🎓 Education / Tuition</option>
-                    <option value="Real Estate">🏠 Real Estate / Property</option>
-                    <option value="Debt Consolidation">📊 Debt Consolidation</option>
-                    <option value="Medical">🏥 Medical Expenses</option>
-                    <option value="Vehicle">🚗 Vehicle Purchase</option>
-                    <option value="Travel">✈️ Travel / Vacation</option>
-                    <option value="Crypto Investment">📈 Crypto Investment</option>
-                    <option value="Other">🔧 Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Additional Details</label>
-                <textarea id="loanDetails" class="form-input" rows="2" placeholder="Please provide more information about your loan request..."></textarea>
-            </div>
-        </div>
-        
-        <!-- LOAN TERM -->
-        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">⏱️ LOAN TERM</div>
-            <div class="form-group">
-                <label>Loan Term</label>
-                <select id="loanTerm" class="form-input">
-                    <option value="6">6 months</option>
-                    <option value="12" selected>12 months (1 year)</option>
-                    <option value="24">24 months (2 years)</option>
-                    <option value="36">36 months (3 years)</option>
-                    <option value="48">48 months (4 years)</option>
-                    <option value="60">60 months (5 years)</option>
-                </select>
-            </div>
-        </div>
-        
-        <!-- PERSONAL INFORMATION -->
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">👤 PERSONAL INFORMATION</div>
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="loanFullName" class="form-input" value="Alexander Vance" placeholder="Your full name">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="loanEmail" class="form-input" value="alexander.vance@zentronix.com" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Phone</label>
-                <input type="tel" id="loanPhone" class="form-input" value="+41 78 123 4567" placeholder="Your phone number">
-            </div>
-            <div class="form-group">
-                <label>Monthly Income (approx.)</label>
-                <input type="number" id="loanIncome" class="form-input" placeholder="Monthly income amount">
-            </div>
-        </div>
-        
-        <!-- SUMMARY & RATES -->
-        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">📊 SUMMARY & RATES</div>
-            <div id="loanSummary" style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.7rem;">
-                Select amount and currency to see estimated rates
-            </div>
-        </div>
-        
-        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
-            <div style="font-size: 0.65rem;">
-                • Credit analysis subject to approval<br>
-                • Terms and conditions apply<br>
-                • Loan amount may vary based on credit history<br>
-                • Zentronix Bank reserves the right to adjust rates
-            </div>
-        </div>
-        
-        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
-            <button class="send-crypto-btn" onclick="submitLoanApplication()" style="flex: 1; padding: 0.8rem;">
-                <i class="fas fa-paper-plane"></i> SUBMIT APPLICATION
-            </button>
-            <button class="sell-btn" onclick="closeModal()" style="flex: 1; padding: 0.8rem;">
-                <i class="fas fa-times"></i> CANCEL
-            </button>
-        </div>
-    `;
-    showModal(modalContent);
-    
-    // Add event listeners to update summary
-    setTimeout(() => {
-        const amountInput = document.getElementById('loanAmount');
-        const currencySelect = document.getElementById('loanCurrency');
-        const termSelect = document.getElementById('loanTerm');
-        if (amountInput) amountInput.addEventListener('input', updateLoanSummary);
-        if (currencySelect) currencySelect.addEventListener('change', updateLoanSummary);
-        if (termSelect) termSelect.addEventListener('change', updateLoanSummary);
-    }, 100);
-}
-
-// Function to update loan summary
-function updateLoanSummary() {
-    const amount = parseFloat(document.getElementById('loanAmount')?.value);
-    const currency = document.getElementById('loanCurrency')?.value;
-    const termMonths = parseInt(document.getElementById('loanTerm')?.value) || 12;
-    
-    if (!amount || amount <= 0 || !currency) {
-        document.getElementById('loanSummary').innerHTML = 'Select amount and currency to see estimated rates';
-        return;
-    }
-    
-    // Interest rates by currency
-    const interestRates = {
-        USD: 4.99,
-        EUR: 5.49,
-        GBP: 5.29,
-        BRL: 12.99,
-        BRADICOIN: 8.50
-    };
-    
-    const rate = interestRates[currency] || 6.99;
-    const monthlyRate = rate / 100 / 12;
-    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
-    const totalPayment = monthlyPayment * termMonths;
-    const totalInterest = totalPayment - amount;
-    
-    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
-    const symbol = currencySymbols[currency] || '$';
-    
-    document.getElementById('loanSummary').innerHTML = `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Loan Amount:</span>
-            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Interest Rate (APR):</span>
-            <span style="color: var(--neon-yellow);">${rate}%</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Term:</span>
-            <span>${termMonths} months</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Monthly Payment:</span>
-            <span style="color: var(--neon-blue);">${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Total Interest:</span>
-            <span style="color: var(--neon-red);">${symbol}${totalInterest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-            <span>Total Payment:</span>
-            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${totalPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-    `;
-}
-
-// Function to submit loan application
-function submitLoanApplication() {
-    const amount = parseFloat(document.getElementById('loanAmount')?.value);
-    const currency = document.getElementById('loanCurrency')?.value;
-    const purpose = document.getElementById('loanPurpose')?.value;
-    const details = document.getElementById('loanDetails')?.value || "";
-    const term = document.getElementById('loanTerm')?.value;
-    const fullName = document.getElementById('loanFullName')?.value;
-    const email = document.getElementById('loanEmail')?.value;
-    const phone = document.getElementById('loanPhone')?.value;
-    const income = document.getElementById('loanIncome')?.value;
-    
-    // Validations
-    if (!amount || amount <= 0) {
-        showToast("❌ Please enter a valid loan amount");
-        return;
-    }
-    
-    if (!fullName || fullName.trim() === "") {
-        showToast("❌ Please enter your full name");
-        return;
-    }
-    
-    if (!email || email.trim() === "") {
-        showToast("❌ Please enter your email");
-        return;
-    }
-    
-    // Interest rates by currency
-    const interestRates = { USD: 4.99, EUR: 5.49, GBP: 5.29, BRL: 12.99, BRADICOIN: 8.50 };
-    const rate = interestRates[currency] || 6.99;
-    const termMonths = parseInt(term);
-    const monthlyRate = rate / 100 / 12;
-    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
-    
-    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
-    const symbol = currencySymbols[currency] || '$';
-    
-    // Add to history
-    addMessage("LOAN APPLICATION", `Loan Request - ${currency} ${amount.toFixed(2)}`, 
-        `📋 Loan Application Submitted
-        👤 Name: ${fullName}
-        💰 Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
-        📊 Currency: ${currency}
-        🎯 Purpose: ${purpose}
-        ⏱️ Term: ${termMonths} months
-        📅 Monthly Payment: ${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2})}
-        📧 Contact: ${email}
-        ${details ? '📝 Details: ' + details : ''}
-        ${income ? '💰 Income: ' + income : ''}`
-    );
-    
-    showToast(`✅ Loan application submitted successfully! Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}. You will receive a response within 24 hours.`);
-    closeModal();
 }
 
 function executeSwap() { 
@@ -1423,6 +974,11 @@ function executeSwap() {
 
 // ==================== RENDERIZAÇÃO DO DASHBOARD ====================
 
+function getIconName(symbol) {
+    const icons = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", USDT: "money-bill", LTC: "litecoin", BNB: "binance", BRADICOIN: "gem" };
+    return icons[symbol] || "coins";
+}
+
 function renderCryptoAssets() {
     const cryptos = [
         { name: "Bitcoin", symbol: "BTC", price: 67234 },
@@ -1434,7 +990,15 @@ function renderCryptoAssets() {
         { name: "Binance Coin", symbol: "BNB", price: 312.50 }
     ];
     const container = document.getElementById('cryptoAssetsGrid');
-    if (container) container.innerHTML = cryptos.map(c => `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price}</div><div class="button-group"><button class="currency-send-btn" onclick="openSendModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-paper-plane"></i> SEND</button><button class="receive-btn" onclick="openReceiveModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-download"></i> RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${c.symbol}', '${c.symbol}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HIST</button></div></div>`).join('');
+    if (container) container.innerHTML = cryptos.map(c => {
+        if (c.symbol === 'BRADICOIN') {
+            // BradiCoin mantém apenas SEND, RECEIVE, STAKE, SWAP, HIST (sem WALLET)
+            return `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price}</div><div class="button-group"><button class="currency-send-btn" onclick="openSendModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-paper-plane"></i> SEND</button><button class="receive-btn" onclick="openReceiveModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-download"></i> RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+        } else {
+            // Para BTC, ETH, SOL, USDT, LTC, BNB: botão WALLET que abre o gerador
+            return `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price}</div><div class="button-group"><button class="currency-send-btn" onclick="openSendModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-paper-plane"></i> SEND</button><button class="receive-btn" onclick="openReceiveModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-download"></i> RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openCreateWalletModal('${c.symbol}', '${c.name}')"><i class="fas fa-wallet"></i> WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+        }
+    }).join('');
 }
 
 function updateBalances() {
@@ -1448,8 +1012,10 @@ function updateBalances() {
             const balance = userBalances[curr] || 0;
             if (fiatCurrencies.includes(curr)) {
                 return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(2)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openFiatSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openFiatReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+            } else if (curr === 'BRADICOIN') {
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
             } else {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
+                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openCreateWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
             }
         }).join('');
     }
@@ -1483,7 +1049,7 @@ function renderBankingServices() {
         { name: "Education Loan", desc: "Student financing", icon: "fas fa-graduation-cap" }
     ];
     const container = document.getElementById('bankingServicesList');
-    if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="if('${service.name}' === 'Personal Loan') { openLoanApplicationModal('${service.name}'); } else { showToast('${service.name} application started'); }"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); if('${service.name}' === 'Personal Loan') { openLoanApplicationModal('${service.name}'); } else { showToast('Apply for ${service.name}'); }">Apply Now</button></div>`).join('');
+    if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="openLoanApplicationModal('${service.name}')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); openLoanApplicationModal('${service.name}')">Apply Now</button></div>`).join('');
 }
 
 function initStakingChart() { 
@@ -1634,7 +1200,378 @@ function submitKyc() {
     updateKycStep(1); 
 }
 
-// Event Listeners
+// Loan Application Functions
+function openLoanApplicationModal(serviceName) {
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📋 ${serviceName} APPLICATION</h3>
+        
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Zentronix Bank - Credit Analysis</div>
+            <div style="font-size: 0.8rem; margin-top: 0.3rem;">Competitive rates from 3.99% APR</div>
+        </div>
+        
+        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">💰 LOAN AMOUNT</div>
+            <div class="form-group">
+                <label>Amount *</label>
+                <input type="number" id="loanAmount" class="form-input" placeholder="0.00" step="any">
+            </div>
+            <div class="form-group">
+                <label>Currency *</label>
+                <select id="loanCurrency" class="form-input">
+                    <option value="USD">🇺🇸 US Dollar (USD)</option>
+                    <option value="EUR">🇪🇺 Euro (EUR)</option>
+                    <option value="GBP">🇬🇧 British Pound (GBP)</option>
+                    <option value="BRL">🇧🇷 Brazilian Real (BRL)</option>
+                    <option value="BRADICOIN">🪙 BradiCoin (BRC)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">📝 LOAN PURPOSE</div>
+            <div class="form-group">
+                <label>Purpose of Loan *</label>
+                <select id="loanPurpose" class="form-input">
+                    <option value="Personal">👤 Personal Expenses</option>
+                    <option value="Business">💼 Business Investment</option>
+                    <option value="Education">🎓 Education / Tuition</option>
+                    <option value="Real Estate">🏠 Real Estate / Property</option>
+                    <option value="Debt Consolidation">📊 Debt Consolidation</option>
+                    <option value="Medical">🏥 Medical Expenses</option>
+                    <option value="Vehicle">🚗 Vehicle Purchase</option>
+                    <option value="Travel">✈️ Travel / Vacation</option>
+                    <option value="Crypto Investment">📈 Crypto Investment</option>
+                    <option value="Other">🔧 Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Additional Details</label>
+                <textarea id="loanDetails" class="form-input" rows="2" placeholder="Please provide more information about your loan request..."></textarea>
+            </div>
+        </div>
+        
+        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">⏱️ LOAN TERM</div>
+            <div class="form-group">
+                <label>Loan Term</label>
+                <select id="loanTerm" class="form-input">
+                    <option value="6">6 months</option>
+                    <option value="12" selected>12 months (1 year)</option>
+                    <option value="24">24 months (2 years)</option>
+                    <option value="36">36 months (3 years)</option>
+                    <option value="48">48 months (4 years)</option>
+                    <option value="60">60 months (5 years)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">👤 PERSONAL INFORMATION</div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="loanFullName" class="form-input" value="Alexander Vance" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loanEmail" class="form-input" value="alexander.vance@zentronix.com" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="loanPhone" class="form-input" value="+41 78 123 4567" placeholder="Your phone number">
+            </div>
+            <div class="form-group">
+                <label>Monthly Income (approx.)</label>
+                <input type="number" id="loanIncome" class="form-input" placeholder="Monthly income amount">
+            </div>
+        </div>
+        
+        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">📊 SUMMARY & RATES</div>
+            <div id="loanSummary" style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.7rem;">
+                Select amount and currency to see estimated rates
+            </div>
+        </div>
+        
+        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
+            <div style="font-size: 0.65rem;">
+                • Credit analysis subject to approval<br>
+                • Terms and conditions apply<br>
+                • Loan amount may vary based on credit history<br>
+                • Zentronix Bank reserves the right to adjust rates
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+            <button class="send-crypto-btn" onclick="submitLoanApplication()" style="flex: 1; padding: 0.8rem;">
+                <i class="fas fa-paper-plane"></i> SUBMIT APPLICATION
+            </button>
+            <button class="sell-btn" onclick="closeModal()" style="flex: 1; padding: 0.8rem;">
+                <i class="fas fa-times"></i> CANCEL
+            </button>
+        </div>
+    `;
+    showModal(modalContent);
+    
+    setTimeout(() => {
+        const amountInput = document.getElementById('loanAmount');
+        const currencySelect = document.getElementById('loanCurrency');
+        const termSelect = document.getElementById('loanTerm');
+        if (amountInput) amountInput.addEventListener('input', updateLoanSummary);
+        if (currencySelect) currencySelect.addEventListener('change', updateLoanSummary);
+        if (termSelect) termSelect.addEventListener('change', updateLoanSummary);
+    }, 100);
+}
+
+function updateLoanSummary() {
+    const amount = parseFloat(document.getElementById('loanAmount')?.value);
+    const currency = document.getElementById('loanCurrency')?.value;
+    const termMonths = parseInt(document.getElementById('loanTerm')?.value) || 12;
+    
+    if (!amount || amount <= 0 || !currency) {
+        document.getElementById('loanSummary').innerHTML = 'Select amount and currency to see estimated rates';
+        return;
+    }
+    
+    const interestRates = { USD: 4.99, EUR: 5.49, GBP: 5.29, BRL: 12.99, BRADICOIN: 8.50 };
+    const rate = interestRates[currency] || 6.99;
+    const monthlyRate = rate / 100 / 12;
+    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
+    const totalPayment = monthlyPayment * termMonths;
+    const totalInterest = totalPayment - amount;
+    
+    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
+    const symbol = currencySymbols[currency] || '$';
+    
+    document.getElementById('loanSummary').innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Loan Amount:</span>
+            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Interest Rate (APR):</span>
+            <span style="color: var(--neon-yellow);">${rate}%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Term:</span>
+            <span>${termMonths} months</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Monthly Payment:</span>
+            <span style="color: var(--neon-blue);">${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Total Interest:</span>
+            <span style="color: var(--neon-red);">${symbol}${totalInterest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>Total Payment:</span>
+            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${totalPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+    `;
+}
+
+function submitLoanApplication() {
+    const amount = parseFloat(document.getElementById('loanAmount')?.value);
+    const currency = document.getElementById('loanCurrency')?.value;
+    const purpose = document.getElementById('loanPurpose')?.value;
+    const details = document.getElementById('loanDetails')?.value || "";
+    const term = document.getElementById('loanTerm')?.value;
+    const fullName = document.getElementById('loanFullName')?.value;
+    const email = document.getElementById('loanEmail')?.value;
+    const phone = document.getElementById('loanPhone')?.value;
+    const income = document.getElementById('loanIncome')?.value;
+    
+    if (!amount || amount <= 0) { showToast("❌ Please enter a valid loan amount"); return; }
+    if (!fullName || fullName.trim() === "") { showToast("❌ Please enter your full name"); return; }
+    if (!email || email.trim() === "") { showToast("❌ Please enter your email"); return; }
+    
+    const interestRates = { USD: 4.99, EUR: 5.49, GBP: 5.29, BRL: 12.99, BRADICOIN: 8.50 };
+    const rate = interestRates[currency] || 6.99;
+    const termMonths = parseInt(term);
+    const monthlyRate = rate / 100 / 12;
+    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
+    
+    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
+    const symbol = currencySymbols[currency] || '$';
+    
+    addMessage("LOAN APPLICATION", `Loan Request - ${currency} ${amount.toFixed(2)}`, 
+        `📋 Loan Application Submitted
+        👤 Name: ${fullName}
+        💰 Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
+        📊 Currency: ${currency}
+        🎯 Purpose: ${purpose}
+        ⏱️ Term: ${termMonths} months
+        📅 Monthly Payment: ${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2})}
+        📧 Contact: ${email}
+        ${details ? '📝 Details: ' + details : ''}
+        ${income ? '💰 Income: ' + income : ''}`
+    );
+    
+    showToast(`✅ Loan application submitted successfully! Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}. You will receive a response within 24 hours.`);
+    closeModal();
+}
+
+// ==================== FIAT SEND/RECEIVE FUNCTIONS ====================
+const bankReceiveDetails = {
+    USD: { bankName: "JPMorgan Chase Bank N.A.", swiftCode: "CHASUS33XXX", routingNumber: "021000021", accountNumber: "ZNTX-4821-7390-1256", bankAddress: "270 Park Avenue, New York, NY 10017, USA", beneficiaryName: "Zentronix Bank International", beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001" },
+    EUR: { bankName: "Deutsche Bank AG", swiftCode: "DEUTDEFFXXX", iban: "DE89370400440532013000", accountNumber: "ZNTX-EU-7390-1256", bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany", beneficiaryName: "Zentronix Bank Europe", beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany" },
+    GBP: { bankName: "Barclays Bank PLC", swiftCode: "BARCLGB22XXX", sortCode: "20-00-00", accountNumber: "ZNTX-UK-7390-1256", bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom", beneficiaryName: "Zentronix Bank UK Ltd", beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY" },
+    BRL: { bankName: "Banco Itaú Unibanco S.A.", swiftCode: "ITAUBRSPXXX", cnpj: "60.701.190/0001-04", accountNumber: "ZNTX-BR-7390-1256", agency: "1234", bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil", beneficiaryName: "Zentronix Bank Brasil", beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP" }
+};
+
+function openFiatSendModal(currency, symbol) {
+    const balance = userBalances[symbol] || 0;
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(2)} ${symbol}</div>
+        </div>
+        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
+            <div class="form-group"><label>Full Name *</label><input type="text" id="beneficiaryName" class="form-input" placeholder="Full name of the recipient"></div>
+            <div class="form-group"><label>Beneficiary Address</label><input type="text" id="beneficiaryAddress" class="form-input" placeholder="Street, City, Country"></div>
+        </div>
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BENEFICIARY BANK DETAILS</div>
+            <div class="form-group"><label>Bank Name *</label><input type="text" id="bankName" class="form-input" placeholder="Name of the beneficiary's bank"></div>
+            <div class="form-group"><label>SWIFT/BIC Code *</label><input type="text" id="swiftCode" class="form-input" placeholder="Example: BARCLGB22XXX"></div>
+        </div>
+        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">💳 BENEFICIARY ACCOUNT DETAILS</div>
+            <div class="form-group"><label>Account Number / IBAN *</label><input type="text" id="accountNumber" class="form-input" placeholder="Account number or IBAN"></div>
+        </div>
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">📊 TRANSFER DETAILS</div>
+            <div class="form-group"><label>Amount to Send *</label><input type="number" id="sendAmountFiat" class="form-input" placeholder="0.00" step="any"></div>
+            <div class="form-group"><label>Transaction Note</label><input type="text" id="txNoteFiat" class="form-input" placeholder="Add a note to the beneficiary"></div>
+        </div>
+        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">💰 FEES & OPTIONS</div>
+            <div class="form-group"><label>Estimated Fee</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">~$25 - $45 (International SWIFT)</div></div>
+        </div>
+        <button class="send-crypto-btn" onclick="confirmFiatSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem;">CONFIRM TRANSFER</button>
+    `;
+    showModal(modalContent);
+}
+
+function confirmFiatSend(currency, symbol) {
+    const amount = parseFloat(document.getElementById('sendAmountFiat')?.value);
+    const beneficiaryName = document.getElementById('beneficiaryName')?.value;
+    const bankName = document.getElementById('bankName')?.value;
+    const swiftCode = document.getElementById('swiftCode')?.value;
+    const accountNumber = document.getElementById('accountNumber')?.value;
+    const txNote = document.getElementById('txNoteFiat')?.value || "";
+    const balance = userBalances[symbol] || 0;
+    
+    if (!beneficiaryName || beneficiaryName.trim() === "") { showToast("❌ Please enter beneficiary name"); return; }
+    if (!bankName || bankName.trim() === "") { showToast("❌ Please enter bank name"); return; }
+    if (!swiftCode || swiftCode.trim() === "") { showToast("❌ Please enter SWIFT/BIC code"); return; }
+    if (!accountNumber || accountNumber.trim() === "") { showToast("❌ Please enter account number/IBAN"); return; }
+    if (isNaN(amount) || amount <= 0) { showToast("❌ Please enter a valid amount"); return; }
+    if (amount > balance) { showToast(`❌ Insufficient balance. You have ${balance.toFixed(2)} ${symbol}`); return; }
+    
+    userBalances[symbol] -= amount;
+    updateBalances();
+    addMessage("BANK TRANSFER", `Sent ${symbol}`, `💰 Sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}\n🏦 Bank: ${bankName} (${swiftCode})\n💳 Account: ${accountNumber}${txNote ? '\n📝 Note: ' + txNote : ''}`);
+    showToast(`✅ Successfully sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}!`);
+    closeModal();
+}
+
+function openFiatReceiveModal(currency, symbol) {
+    const bankInfo = bankReceiveDetails[symbol];
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
+        <div style="text-align: center; margin-bottom: 1rem;"><i class="fas fa-university" style="font-size: 3rem; color: var(--neon-yellow);"></i></div>
+        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7; text-align: center;">YOUR ZENTRONIX ACCOUNT</div>
+            <div style="font-size: 1rem; font-weight: bold; text-align: center; font-family: monospace;">ZNTX-4821-7390-1256</div>
+            <button class="copy-address-btn" onclick="copyWalletAddress('ZNTX-4821-7390-1256')" style="margin-top: 0.3rem; width: 100%;">COPY ACCOUNT NUMBER</button>
+        </div>
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BANK INFORMATION FOR WIRE TRANSFER</div>
+            <div class="form-group"><label>Bank Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.bankName}</div></div>
+            <div class="form-group"><label>SWIFT/BIC Code</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.swiftCode}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.swiftCode}')" style="margin-left: 0.5rem;">COPY</button></div></div>
+        </div>
+        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
+            <div class="form-group"><label>Beneficiary Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.beneficiaryName}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.beneficiaryName}')" style="margin-left: 0.5rem;">COPY</button></div></div>
+        </div>
+        <button class="buy-btn" onclick="showToast('Wire instructions sent to your email')" style="width: 100%;"><i class="fas fa-file-pdf"></i> Wire Instructions</button>
+    `;
+    showModal(modalContent);
+}
+
+function copyWalletAddress(address) {
+    navigator.clipboard.writeText(address);
+    showToast("✅ Address copied to clipboard!");
+}
+
+function shareAddress(address) {
+    if (navigator.share) {
+        navigator.share({ title: 'My Zentronix Bank Wallet', text: 'Send crypto to my wallet:', url: address }).catch(() => showToast("Share canceled"));
+    } else {
+        copyWalletAddress(address);
+        showToast("Address copied! Share manually.");
+    }
+}
+
+function openSendModal(currency, symbol) {
+    const balance = userBalances[symbol] || 0;
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(8)} ${symbol}</div>
+        </div>
+        <div class="form-group"><label>Recipient Wallet Address</label><input type="text" id="recipientAddress" class="form-input" placeholder="Enter wallet address"></div>
+        <div class="form-group"><label>Amount to Send</label><input type="number" id="sendAmount" class="form-input" placeholder="0.00" step="any"></div>
+        <div class="form-group"><label>Network Fee (estimated)</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">${getNetworkFee(symbol)}</div></div>
+        <button class="send-crypto-btn" onclick="confirmSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem;">CONFIRM SEND</button>
+    `;
+    showModal(modalContent);
+}
+
+function confirmSend(currency, symbol) {
+    const amount = parseFloat(document.getElementById('sendAmount')?.value);
+    const address = document.getElementById('recipientAddress')?.value;
+    const balance = userBalances[symbol] || 0;
+    
+    if (!address || address.trim() === "") { showToast("❌ Please enter a valid wallet address"); return; }
+    if (isNaN(amount) || amount <= 0) { showToast("❌ Please enter a valid amount"); return; }
+    if (amount > balance) { showToast(`❌ Insufficient balance. You have ${balance.toFixed(8)} ${symbol}`); return; }
+    
+    userBalances[symbol] -= amount;
+    updateBalances();
+    addMessage("SEND", `Sent ${symbol}`, `Sent ${amount.toFixed(8)} ${symbol} to ${address.substring(0, 10)}...`);
+    showToast(`✅ Successfully sent ${amount.toFixed(8)} ${symbol}!`);
+    closeModal();
+}
+
+function openReceiveModal(currency, symbol) {
+    const walletAddress = bankWalletAddresses[symbol] || "Address not available";
+    const modalContent = `
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
+        <div class="wallet-address-display">${walletAddress}</div>
+        <button class="copy-address-btn" onclick="copyWalletAddress('${walletAddress}')" style="width: 100%; margin-bottom: 1rem;">COPY ADDRESS</button>
+        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem;">
+            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important</div>
+            <div style="font-size: 0.65rem;">Only send ${symbol} to this address.</div>
+        </div>
+    `;
+    showModal(modalContent);
+}
+
+// ==================== EVENT LISTENERS & INITIALIZATION ====================
+let currentLang = 'en';
+
 document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
 document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('loginModal').classList.remove('active'));
 document.getElementById('loginSubmitBtn').addEventListener('click', () => { 
@@ -1676,7 +1613,7 @@ document.getElementById('startKycBtn')?.addEventListener('click', () => document
 document.getElementById('doSwapBtn')?.addEventListener('click', () => { const from = document.getElementById('swapFrom')?.value; const to = document.getElementById('swapTo')?.value; const amt = parseFloat(document.getElementById('swapAmount')?.value); if (amt > 0) { addMessage("SWAP", `${from} → ${to}`, `Swapped ${amt} ${from} to ${to}`); showToast(`Swapped ${amt} ${from} to ${to}`); } });
 document.getElementById('doConvertBtn')?.addEventListener('click', () => showToast("Conversion feature"));
 document.getElementById('stealthSwitch')?.addEventListener('click', function() { this.classList.toggle('active'); document.querySelectorAll('.currency-balance, .balance-item span:last-child').forEach(el => el.style.filter = this.classList.contains('active') ? 'blur(5px)' : 'none'); });
-document.getElementById('deleteAccountBtn')?.addEventListener('click', () => { if (confirm("WARNING: This action will permanently delete your account. Are you sure?")) { showToast("Account deletion request submitted. You will receive confirmation via email."); } });
+document.getElementById('deleteAccountBtn')?.addEventListener('click', () => { if (confirm("WARNING: This action will permanently delete your account. Are you sure?")) { showToast("Account deletion request submitted."); } });
 document.getElementById('copyAccountBtn')?.addEventListener('click', copyAccountNumber);
 document.getElementById('ghostModeBtn')?.addEventListener('click', () => showToast("Ghost Mode: Your balances are now hidden from view"));
 document.getElementById('simulatorBtn')?.addEventListener('click', () => showToast("Scenario Simulator: Project your investment growth"));
@@ -1688,8 +1625,6 @@ document.getElementById('closeProfileModalBtn')?.addEventListener('click', close
 document.getElementById('saveProfileBtn')?.addEventListener('click', saveProfile);
 document.getElementById('uploadPhotoBtn')?.addEventListener('click', () => document.getElementById('profilePhotoInput').click());
 document.getElementById('profilePhotoInput')?.addEventListener('change', (e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { profilePhoto = event.target.result; document.querySelector('.profile-avatar').innerHTML = `<img src="${profilePhoto}">`; document.querySelector('#profileAvatarLarge').innerHTML = `<img src="${profilePhoto}">`; }; reader.readAsDataURL(e.target.files[0]); } });
-
-// Password toggle
 document.getElementById('togglePasswordBtn')?.addEventListener('click', () => {
     const passwordInput = document.getElementById('loginPassword');
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -1699,36 +1634,29 @@ document.getElementById('togglePasswordBtn')?.addEventListener('click', () => {
 
 // Expor funções globais
 window.closeModal = closeModal;
-window.openSendModal = openSendModal;
-window.openReceiveModal = openReceiveModal;
-window.openLoanApplicationModal = openLoanApplicationModal;
-window.submitLoanApplication = submitLoanApplication;
-window.updateLoanSummary = updateLoanSummary;    
-window.confirmSend = confirmSend;
 window.copyWalletAddress = copyWalletAddress;
-window.generateQRCode = generateQRCode;
 window.shareAddress = shareAddress;
-window.openStakeModal = openStakeModal;
-window.openUnstakeModal = openUnstakeModal;
-window.openBuyModal = openBuyModal;
-window.openWalletModal = openWalletModal;
-window.openSwapModalFull = openSwapModalFull;
-window.processBuyWithCard = processBuyWithCard;
-window.processBuyWithLoan = processBuyWithLoan;
-window.confirmStake = confirmStake;
-window.confirmUnstake = confirmUnstake;
-window.executeSwap = executeSwap;
-window.closeCurrentSection = closeCurrentSection;
 window.showToast = showToast;
 window.deleteMessage = deleteMessage;
 window.addMessage = addMessage;
 window.showCurrencyHistory = showCurrencyHistory;
 window.copyAccountNumber = copyAccountNumber;
+window.openCreateWalletModal = openCreateWalletModal;
+window.openSendWalletModal = openSendWalletModal;
+window.openReceiveWalletModal = openReceiveWalletModal;
+window.confirmCreateWallet = confirmCreateWallet;
+window.confirmSendTransaction = confirmSendTransaction;
+window.openStakeModal = openStakeModal;
+window.openBuyModal = openBuyModal;
+window.openSwapModalFull = openSwapModalFull;
+window.openLoanApplicationModal = openLoanApplicationModal;
 window.openFiatSendModal = openFiatSendModal;
 window.openFiatReceiveModal = openFiatReceiveModal;
 window.confirmFiatSend = confirmFiatSend;
-window.getFiatFeeEstimate = getFiatFeeEstimate;
-window.getFiatDeliveryTime = getFiatDeliveryTime;
+window.openSendModal = openSendModal;
+window.openReceiveModal = openReceiveModal;
+window.confirmSend = confirmSend;
+window.getNetworkFee = getNetworkFee;
 
 // Inicialização
 renderCryptoAssets();
