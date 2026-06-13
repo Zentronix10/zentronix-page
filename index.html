@@ -531,7 +531,7 @@ function registrarCliente(cliente) {
     return false;
 }
 
-// Função para solicitar empréstimo (USADA PELO BOTÃO)
+// Função para solicitar empréstimo
 function solicitarEmprestimo(clienteId, clienteNome, valor, moeda) {
     const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
     const cliente = clientes.find(c => c.id == clienteId || c.nome === clienteNome);
@@ -563,6 +563,34 @@ function syncAdminData() {
     const clients = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
     console.log(`🔄 Sincronizando Admin: ${clients.length} clientes, ${loans.length} empréstimos`);
     return { loans, clients };
+}
+
+// ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
+function salvarClienteNoLocalStorage(dadosCliente) {
+    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    const existe = clientes.some(c => c.email === dadosCliente.email);
+    
+    if (!existe) {
+        const novoCliente = {
+            id: Date.now(),
+            nome: dadosCliente.nome,
+            email: dadosCliente.email,
+            documento: dadosCliente.documento || '',
+            telefone: dadosCliente.telefone || '',
+            saldoUSD: dadosCliente.saldoUSD || 0,
+            saldoEUR: dadosCliente.saldoEUR || 0,
+            saldoBRL: dadosCliente.saldoBRL || 0,
+            saldoGBP: dadosCliente.saldoGBP || 0,
+            kyc: dadosCliente.kyc || "Pending",
+            dataCadastro: new Date().toISOString()
+        };
+        
+        clientes.push(novoCliente);
+        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
+        console.log("✅ Cliente salvo no localStorage:", novoCliente.nome);
+        return true;
+    }
+    return false;
 }
 
 // Inicialização
@@ -1419,6 +1447,21 @@ function validateKycStep1() {
 }
 
 function submitKyc() { 
+    // ⭐ SALVAR CLIENTE NO LOCALSTORAGE PARA O ADMIN ⭐
+    const dadosCliente = {
+        nome: kycData.fullName,
+        email: kycData.email,
+        documento: '',
+        telefone: kycData.phone,
+        saldoUSD: 0,
+        saldoEUR: 0,
+        saldoBRL: 0,
+        saldoGBP: 0,
+        kyc: "Pending"
+    };
+    salvarClienteNoLocalStorage(dadosCliente);
+    
+    // Código original continua...
     addMessage("KYC", "KYC Documents Submitted", `Dear ${kycData.fullName}, your KYC documents have been received. We will review and send your account details via email shortly.`); 
     showToast("✅ Congratulations! Your documents have been submitted. You will receive an email with your account details shortly."); 
     document.getElementById('submitModal').classList.remove('active'); 
