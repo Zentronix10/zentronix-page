@@ -501,6 +501,130 @@
 </div>
 
 <script>
+    
+// ==================== CONFIGURAÇÃO DA API RENDER ====================
+const API_BASE_URL = 'https://zentronix-api.onrender.com';
+
+// ==================== FUNÇÕES DE API ====================
+
+// Health check
+async function checkApiHealth() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/health`);
+        const data = await response.json();
+        console.log('✅ API Zentronix conectada:', data.status);
+        if (data.demoMode) {
+            console.log('⚠️ API em modo demo - configure DATABASE_URL no Render');
+        }
+        return data;
+    } catch (error) {
+        console.warn('⚠️ API offline, usando modo demo local');
+        return null;
+    }
+}
+
+// Login via API
+async function apiLogin(email, password) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+            localStorage.setItem('api_token', data.token);
+            localStorage.setItem('api_user', JSON.stringify(data.user));
+            return { success: true, data };
+        }
+        return { success: false, error: data.error || 'Invalid credentials' };
+    } catch (error) {
+        return { success: false, error: 'Network error - API may be offline' };
+    }
+}
+
+// Buscar wallets do usuário via API
+async function apiGetWallets() {
+    const token = localStorage.getItem('api_token');
+    if (!token) return { success: false };
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/wallets`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+            return { success: true, wallets: data.wallets };
+        }
+        return { success: false };
+    } catch (error) {
+        return { success: false };
+    }
+}
+
+// Buscar saldos via API
+async function apiGetBalances() {
+    const token = localStorage.getItem('api_token');
+    if (!token) return { success: false };
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/balances`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+            return { success: true, balances: data.balances };
+        }
+        return { success: false };
+    } catch (error) {
+        return { success: false };
+    }
+}
+
+// Gerar wallet via API
+async function apiGenerateWallet(blockchain) {
+    const token = localStorage.getItem('api_token');
+    if (!token) return { success: false, error: 'Not logged in' };
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/wallet/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ blockchain })
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+            return { success: true, address: data.address, explorerUrl: data.explorerUrl };
+        }
+        if (response.status === 409) {
+            return { success: false, error: 'Wallet already exists', address: data.address };
+        }
+        return { success: false, error: data.error };
+    } catch (error) {
+        return { success: false, error: 'Network error' };
+    }
+}
+
+// Buscar blockchains suportadas
+async function apiGetSupportedChains() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/supported-chains`);
+        const data = await response.json();
+        return data.success ? data.blockchains : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+// Verificar API ao carregar
+checkApiHealth();
+
+// ==================== FIM CONFIGURAÇÃO API RENDER ====================
+
+
 // ==================== WALLET GENERATOR (REAL, SEM SEED PHRASE) ====================
 // Armazenamento das wallets criadas pelo usuário
 let userWallets = {
@@ -524,35 +648,73 @@ const bankWalletAddresses = {
 
 // Função para gerar wallet REAL (simula backend - você deve substituir pela chamada à sua API)
 async function generateRealWallet(blockchain, symbol) {
-    showToast(`🔄 Generating ${symbol} wallet...`);
+    const token = localStorage.getItem('api_token');
     
-    // 🔴 IMPORTANTE: Aqui você deve substituir pela chamada REAL ao seu backend
-    // Exemplo: const response = await fetch('/api/wallet/generate', { method: 'POST', body: JSON.stringify({ blockchain }) });
+    if (!token) {
+        showToast("❌ Please login first to generate a wallet");
+        return { success: false, error: "Not logged in" };
+    }
     
-    // Simulação de resposta do backend (substituir pela sua API real)
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            // Geração simulada de endereço (SUBSTITUIR PELA SUA API REAL)
-            const prefixes = {
-                BTC: "bc1q",
-                ETH: "0x",
-                SOL: "Sol",
-                USDT: "0x",
-                BNB: "0x",
-                LTC: "ltc1q"
-            };
-            const randomPart = Array(32).fill(0).map(() => Math.random().toString(36)[2]).join('');
-            const address = prefixes[blockchain] + randomPart.toLowerCase() + blockchain.toLowerCase();
-            
-            // Salva no "banco" local (simulado)
-            userWallets[symbol] = address;
+    showToast(`🔄 Generating ${symbol} wallet on blockchain...`);
+    
+    try {
+        // Chamada REAL para sua API no Render
+        const response = await fetch(`${API_BASE_URL}/api/wallet/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ blockchain: blockchain === 'USDT' ? 'ETH' : blockchain })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            // Salva a wallet gerada
+            userWallets[symbol] = data.address;
             
             // Adiciona à história
-            addMessage("WALLET", `${symbol} Wallet Created`, `New ${symbol} wallet address generated: ${address.substring(0, 15)}...`);
+            addMessage("WALLET", `${symbol} Wallet Created`, 
+                `New ${symbol} wallet address generated: ${data.address.substring(0, 15)}...`);
             
-            resolve({ success: true, address: address, symbol: symbol });
-        }, 1500);
-    });
+            showToast(`✅ ${symbol} wallet created successfully!`);
+            return { success: true, address: data.address };
+            
+        } else if (response.status === 409) {
+            // Wallet já existe
+            userWallets[symbol] = data.address;
+            showToast(`ℹ️ ${symbol} wallet already exists: ${data.address.substring(0, 15)}...`);
+            return { success: true, address: data.address, alreadyExists: true };
+            
+        } else {
+            showToast(`❌ Failed to create wallet: ${data.error || 'Unknown error'}`);
+            return { success: false, error: data.error };
+        }
+        
+    } catch (error) {
+        console.error('API error:', error);
+        showToast(`❌ Network error: Could not reach API. Check if backend is running.`);
+        
+        // FALLBACK: Se a API estiver offline, gera wallet demo local
+        console.warn('⚠️ Using demo fallback - API offline');
+        const prefixes = {
+            BTC: "bc1q",
+            ETH: "0x",
+            SOL: "Sol",
+            USDT: "0x",
+            BNB: "0x",
+            LTC: "ltc1q"
+        };
+        const randomPart = Array(32).fill(0).map(() => Math.random().toString(36)[2]).join('');
+        const address = prefixes[blockchain] + randomPart.toLowerCase();
+        
+        userWallets[symbol] = address;
+        addMessage("WALLET", `${symbol} Wallet Created (Demo)`, 
+            `Demo ${symbol} wallet: ${address.substring(0, 15)}... (API offline)`);
+        showToast(`⚠️ ${symbol} wallet created in DEMO MODE (API offline)`);
+        return { success: true, address: address, demoMode: true };
+    }
 }
 
 // Função para abrir modal de CREATE WALLET
