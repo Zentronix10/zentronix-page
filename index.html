@@ -502,6 +502,73 @@
 
 <script>
     
+// ========== ZENTRONIX BANK INTEGRATION (ATUALIZADO) ==========
+
+// Função para carregar dados do banco
+function carregarDadosBanco() {
+    let clientes = localStorage.getItem('zentronix_bank_clients');
+    let reservas = localStorage.getItem('zentronix_bank_reserves');
+    if (clientes) console.log("✅ Clientes carregados:", JSON.parse(clientes).length);
+    return { 
+        clientes: clientes ? JSON.parse(clientes) : [], 
+        reservas: reservas ? JSON.parse(reservas) : {} 
+    };
+}
+
+// Função para registrar um novo cliente
+function registrarCliente(cliente) {
+    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    const exists = clientes.some(c => c.email === cliente.email);
+    
+    if (!exists) {
+        cliente.id = Date.now();
+        cliente.dataCadastro = new Date().toISOString();
+        clientes.push(cliente);
+        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
+        console.log(`✅ Cliente ${cliente.nome} registrado com sucesso!`);
+        return true;
+    }
+    return false;
+}
+
+// Função para solicitar empréstimo (USADA PELO BOTÃO)
+function solicitarEmprestimo(clienteId, clienteNome, valor, moeda) {
+    const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    const cliente = clientes.find(c => c.id == clienteId || c.nome === clienteNome);
+    
+    let loans = JSON.parse(localStorage.getItem('zentronix_loans') || '[]');
+    const newLoan = { 
+        id: Date.now(), 
+        clientId: clienteId, 
+        clientName: clienteNome, 
+        clientEmail: cliente?.email || 'não informado',
+        amount: parseFloat(valor), 
+        currency: moeda,
+        status: "pending", 
+        requestedCurrency: moeda,
+        date: new Date().toLocaleString(),
+        timestamp: Date.now()
+    };
+    loans.push(newLoan);
+    localStorage.setItem('zentronix_loans', JSON.stringify(loans));
+    
+    console.log(`✅ Empréstimo solicitado para ${clienteNome}: ${valor} ${moeda}`);
+    alert(`✅ Empréstimo de ${valor} ${moeda} solicitado com sucesso!`);
+    return true;
+}
+
+// Função para o ADMIN (será chamada pelo painel)
+function syncAdminData() {
+    const loans = JSON.parse(localStorage.getItem('zentronix_loans') || '[]');
+    const clients = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    console.log(`🔄 Sincronizando Admin: ${clients.length} clientes, ${loans.length} empréstimos`);
+    return { loans, clients };
+}
+
+// Inicialização
+carregarDadosBanco();
+console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
+
 // ==================== CONFIGURAÇÃO DA API RENDER ====================
 const API_BASE_URL = 'https://zentronix-api.onrender.com';
 
