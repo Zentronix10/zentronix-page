@@ -1313,15 +1313,64 @@ function renderBankingServices() {
     if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="openLoanApplicationModal('${service.name}')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); openLoanApplicationModal('${service.name}')">Apply Now</button></div>`).join('');
 }
 
+    let stakingChart = null;
+
 function initStakingChart() { 
-    const ctx = document.getElementById('stakingChart')?.getContext('2d'); 
-    if (ctx) new Chart(ctx, { type: 'line', data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Portfolio Value', data: [100, 105, 112, 120], borderColor: '#00f2ff', tension: 0.4 }] } }); 
+    const canvas = document.getElementById('stakingChart');
+    if (!canvas) return;
+    
+    if (stakingChart) {
+        stakingChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d'); 
+    stakingChart = new Chart(ctx, { 
+        type: 'line', 
+        data: { 
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], 
+            datasets: [{ 
+                label: 'Portfolio Value', 
+                data: [100, 105, 112, 120], 
+                borderColor: '#00f2ff', 
+                tension: 0.4,
+                fill: false
+            }] 
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    }); 
 }
 
+    let analyticsChart = null;
+
 function initAnalyticsChart() { 
-    const ctx = document.getElementById('analyticsChart')?.getContext('2d'); 
-    if (ctx) new Chart(ctx, { type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr'], datasets: [{ label: 'Returns %', data: [5.2, 6.1, 5.8, 7.2], backgroundColor: '#00f2ff' }] } }); 
+    const canvas = document.getElementById('analyticsChart');
+    if (!canvas) return;
+    
+    if (analyticsChart) {
+        analyticsChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d'); 
+    analyticsChart = new Chart(ctx, { 
+        type: 'bar', 
+        data: { 
+            labels: ['Jan', 'Feb', 'Mar', 'Apr'], 
+            datasets: [{ 
+                label: 'Returns %', 
+                data: [5.2, 6.1, 5.8, 7.2], 
+                backgroundColor: '#00f2ff' 
+            }] 
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    }); 
 }
+
 
 function closeCurrentSection() { 
     document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); 
