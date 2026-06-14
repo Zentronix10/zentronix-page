@@ -506,6 +506,103 @@
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_SuO6Cg93lJIbCbpG4hT6UA_6VMRuNuW';
 
+// ========== TATUM API CONFIG ==========
+const TATUM_API_KEY = 'SUA_API_KEY_AQUI';
+const TATUM_API_URL = 'https://api.tatum.io/v3';
+
+// Função para gerar wallet REAL
+async function gerarWalletReal(blockchain, symbol) {
+    try {
+        const response = await fetch(`${TATUM_API_URL}/${blockchain}/wallet`, {
+            method: 'GET',
+            headers: {
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Salvar wallet no Supabase
+            await salvarWalletNoSupabase(symbol, data.address, data.xpub);
+            
+            return {
+                success: true,
+                address: data.address,
+                xpub: data.xpub,
+                mnemonic: data.mnemonic // Guarde isso com segurança!
+            };
+        } else {
+            return { success: false, error: data.message };
+        }
+    } catch (error) {
+        console.error("Erro ao gerar wallet:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Salvar wallet no Supabase
+async function salvarWalletNoSupabase(symbol, address, xpub) {
+    const token = localStorage.getItem('api_token');
+    
+    await fetch(`${SUPABASE_URL}/rest/v1/wallets`, {
+        method: 'POST',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user_id: JSON.parse(sessionStorage.getItem('cliente_logado')).id,
+            moeda: symbol,
+            endereco: address,
+            xpub: xpub,
+            created_at: new Date().toISOString()
+        })
+    });
+}
+
+// Função para verificar saldo REAL da wallet
+async function verificarSaldoReal(blockchain, address) {
+    try {
+        const response = await fetch(`${TATUM_API_URL}/${blockchain}/address/${address}`, {
+            headers: { 'x-api-key': TATUM_API_KEY }
+        });
+        
+        const data = await response.json();
+        return data.balance || 0;
+    } catch (error) {
+        console.error("Erro ao verificar saldo:", error);
+        return 0;
+    }
+}
+
+// Função para enviar cripto REAL
+async function enviarCriptoReal(blockchain, fromAddress, toAddress, amount, privateKey) {
+    try {
+        const response = await fetch(`${TATUM_API_URL}/${blockchain}/transaction`, {
+            method: 'POST',
+            headers: {
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fromAddress: fromAddress,
+                toAddress: toAddress,
+                amount: amount,
+                privateKey: privateKey
+            })
+        });
+        
+        const data = await response.json();
+        return { success: true, txId: data.txId };
+    } catch (error) {
+        console.error("Erro ao enviar:", error);
+        return { success: false, error: error.message };
+    }
+}
+    
 // ========== ZENTRONIX BANK INTEGRATION (ATUALIZADO) ==========
 
 // Função para carregar dados do banco
@@ -818,94 +915,86 @@ async function generateRealWallet(blockchain, symbol) {
 
 // Função para abrir modal de CREATE WALLET
 function openCreateWalletModal(symbol, cryptoName) {
+    const blockchainMap = {
+        BTC: 'bitcoin',
+        ETH: 'ethereum',
+        SOL: 'solana',
+        USDT: 'ethereum',
+        LTC: 'litecoin',
+        BNB: 'binance'
+    };
+    
+    const blockchain = blockchainMap[symbol];
+    
     const modalContent = `
         <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
         <div style="text-align: center;">
             <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>
             <h3 style="color: var(--neon-blue); margin-bottom: 0.5rem;">Create ${symbol} Wallet</h3>
-            <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 1rem;">${cryptoName} - Zentronix Secure Wallet</p>
+            <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 1rem;">${cryptoName} - Real Blockchain Wallet</p>
         </div>
         
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Wallet Status</div>
-            <div style="font-size: 0.9rem; font-weight: bold; margin-top: 0.3rem;">
-                ${userWallets[symbol] ? '✅ Wallet already exists' : '⚠️ No wallet detected'}
-            </div>
+        <div style="background: rgba(255,68,102,0.15); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">
+            <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--neon-yellow); margin-bottom: 0.5rem;"></i>
+            <p style="font-size: 0.7rem;">This will create a REAL ${symbol} wallet on the ${blockchain.toUpperCase()} blockchain.</p>
+            <p style="font-size: 0.65rem; margin-top: 0.5rem;">⚠️ You will receive a recovery phrase. Save it securely!</p>
         </div>
         
-        ${userWallets[symbol] ? `
-            <div class="wallet-address-display">
-                <i class="fas fa-wallet"></i> Your ${symbol} Wallet<br>
-                <span style="font-size: 0.7rem; word-break: break-all;">${userWallets[symbol]}</span>
-            </div>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="copy-address-btn" onclick="copyWalletAddress('${userWallets[symbol]}')" style="flex: 1;"><i class="fas fa-copy"></i> Copy Address</button>
-                <button class="receive-btn" onclick="openReceiveWalletModal('${symbol}')" style="flex: 1;"><i class="fas fa-download"></i> Receive</button>
-                <button class="currency-send-btn" onclick="openSendWalletModal('${symbol}')" style="flex: 1;"><i class="fas fa-paper-plane"></i> Send</button>
-            </div>
-        ` : `
-            <div style="background: rgba(255,68,102,0.15); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">
-                <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--neon-yellow); margin-bottom: 0.5rem;"></i>
-                <p style="font-size: 0.7rem;">Generate a new ${symbol} wallet. Your private keys will be securely stored and encrypted.</p>
-            </div>
-            <button class="create-wallet-btn" onclick="confirmCreateWallet('${symbol}', '${cryptoName}')">
-                <i class="fas fa-plus-circle"></i> CREATE ${symbol} WALLET
-            </button>
-        `}
+        <button class="create-wallet-btn" onclick="confirmCreateRealWallet('${symbol}', '${cryptoName}', '${blockchain}')">
+            <i class="fas fa-plus-circle"></i> CREATE REAL ${symbol} WALLET
+        </button>
         
         <div style="margin-top: 1rem; font-size: 0.6rem; opacity: 0.5; text-align: center;">
-            🔒 Your keys, your coins. Zentronix uses military-grade encryption.
+            🔒 Powered by Tatum Blockchain API
         </div>
     `;
     showModal(modalContent);
 }
 
-// Confirmar criação da wallet
-async function confirmCreateWallet(symbol, cryptoName) {
+async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
     closeModal();
-    showToast(`🔐 Creating your ${symbol} wallet... Please wait`);
+    showToast(`🔐 Creating your ${symbol} wallet on ${blockchain.toUpperCase()}...`);
     
-    const result = await generateRealWallet(symbol === 'USDT' ? 'ETH' : symbol, symbol);
+    const result = await gerarWalletReal(blockchain, symbol);
     
     if (result.success) {
-        showToast(`✅ ${symbol} wallet created successfully!`);
-        openCreateWalletModal(symbol, cryptoName);
+        showRecoveryPhraseModal(symbol, result.address, result.mnemonic);
+        userWallets[symbol] = result.address;
+        
+        addMessage("WALLET", `${symbol} Real Wallet Created`, 
+            `New ${symbol} wallet created on ${blockchain.toUpperCase()}!\nAddress: ${result.address.substring(0, 20)}...`);
     } else {
-        showToast(`❌ Failed to create ${symbol} wallet. Please try again.`);
+        showToast(`❌ Failed to create ${symbol} wallet: ${result.error}`);
     }
 }
 
-// Abrir modal de RECEIVE (mostra endereço do banco)
-function openReceiveWalletModal(symbol) {
-    const bankAddress = bankWalletAddresses[symbol] || userWallets[symbol] || "Address not available";
+function showRecoveryPhraseModal(symbol, address, mnemonic) {
     const modalContent = `
         <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
-        <div style="text-align: center; margin-bottom: 1rem;">
-            <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow);"></i>
+        <div style="text-align: center;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>
+            <h3 style="color: var(--neon-red); margin-bottom: 0.5rem;">⚠️ SAVE YOUR RECOVERY PHRASE</h3>
+            <p style="font-size: 0.7rem; opacity: 0.7;">This is the ONLY way to recover your wallet</p>
         </div>
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 0.5rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7; text-align: center;">YOUR ${symbol} WALLET ADDRESS</div>
-            <div class="wallet-address-display" style="margin-top: 0.5rem;">
-                ${bankAddress}
+        
+        <div style="background: rgba(0,0,0,0.6); border-radius: 0.8rem; padding: 1rem; margin: 1rem 0;">
+            <div style="font-size: 0.65rem; word-break: break-all; font-family: monospace; line-height: 1.5;">
+                ${mnemonic}
             </div>
-            <button class="copy-address-btn" onclick="copyWalletAddress('${bankAddress}')" style="width: 100%;">
-                <i class="fas fa-copy"></i> COPY ADDRESS
+            <button class="copy-address-btn" onclick="copyWalletAddress('${mnemonic}')" style="margin-top: 0.5rem; width: 100%;">
+                <i class="fas fa-copy"></i> COPY PHRASE
             </button>
         </div>
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important</div>
+        
+        <div style="background: rgba(0,255,136,0.2); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
             <div style="font-size: 0.65rem;">
-                • Only send ${symbol} to this address<br>
-                                • Minimum deposit: 0.001 ${symbol}<br>
-                • Funds will appear after 3 confirmations<br>
-                • Estimated time: 10-30 minutes
+                ✅ Wallet Address: <strong>${address.substring(0, 30)}...</strong>
             </div>
         </div>
-        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-            <button class="buy-btn" onclick="showToast('QR Code feature coming soon')" style="flex: 1;"><i class="fas fa-qrcode"></i> QR Code</button>
-            <button class="wallet-btn" onclick="shareAddress('${bankAddress}')" style="flex: 1;"><i class="fas fa-share-alt"></i> Share</button>
-        </div>
+        
+        <button class="send-crypto-btn" onclick="closeModal(); showToast('Wallet created successfully!')" style="width: 100%;">
+            <i class="fas fa-check"></i> I HAVE SAVED MY PHRASE
+        </button>
     `;
     showModal(modalContent);
 }
