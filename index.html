@@ -1313,7 +1313,7 @@ function renderBankingServices() {
     if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="openLoanApplicationModal('${service.name}')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); openLoanApplicationModal('${service.name}')">Apply Now</button></div>`).join('');
 }
 
-    let stakingChart = null;
+let stakingChart = null;
 
 function initStakingChart() { 
     const canvas = document.getElementById('stakingChart');
@@ -1321,6 +1321,7 @@ function initStakingChart() {
     
     if (stakingChart) {
         stakingChart.destroy();
+        stakingChart = null;
     }
     
     const ctx = canvas.getContext('2d'); 
@@ -1351,6 +1352,7 @@ function initAnalyticsChart() {
     
     if (analyticsChart) {
         analyticsChart.destroy();
+        analyticsChart = null;
     }
     
     const ctx = canvas.getContext('2d'); 
@@ -1370,7 +1372,6 @@ function initAnalyticsChart() {
         }
     }); 
 }
-
 
 function closeCurrentSection() { 
     document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); 
