@@ -1854,6 +1854,8 @@ function openReceiveModal(currency, symbol) {
 
 // ==================== EVENT LISTENERS & INITIALIZATION ====================
 let currentLang = 'en';
+
+document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
 document.getElementById('loginSubmitBtn').addEventListener('click', async () => {
     const userId = document.getElementById('loginId').value;
     const password = document.getElementById('loginPassword').value;
