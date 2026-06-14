@@ -1854,42 +1854,64 @@ function openReceiveModal(currency, symbol) {
 
 // ==================== EVENT LISTENERS & INITIALIZATION ====================
 let currentLang = 'en';
-
-document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
-document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('loginModal').classList.remove('active'));
-document.getElementById('loginSubmitBtn').addEventListener('click', () => {
+document.getElementById('loginSubmitBtn').addEventListener('click', async () => {
     const userId = document.getElementById('loginId').value;
     const password = document.getElementById('loginPassword').value;
     
-    // Buscar clientes do localStorage (cadastrados pelo painel admin)
-    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    showToast("🔐 Verificando credenciais...");
     
-    // Tentar encontrar o cliente pelo email (ou nome) e senha
-    const clienteEncontrado = clientes.find(c => 
-        (c.email === userId || c.nome === userId) && 
-        c.senha === password
-    );
-    
-    if (clienteEncontrado) {
-        // SALVAR DADOS DO CLIENTE LOGADO NA SESSÃO
-        sessionStorage.setItem('cliente_logado', JSON.stringify(clienteEncontrado));
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/clientes?email=eq.${encodeURIComponent(userId)}`, {
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+        });
         
-        // CARREGAR OS DADOS REAIS DO CLIENTE
-        carregarDadosClienteLogado(clienteEncontrado);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
         
-        document.getElementById('loginModal').classList.remove('active');
-        document.getElementById('dashboardContainer').style.display = 'block';
-        document.getElementById('institutionalContent').style.display = 'none';
-        document.getElementById('openLoginBtn').style.display = 'none';
-        document.getElementById('logoutMainBtn').style.display = 'flex';
-        document.getElementById('kycStatusBadge').style.display = 'flex';
-        document.getElementById('notificationBell').classList.add('visible');
+        const clientes = await response.json();
+        const clienteEncontrado = clientes.find(c => c.senha === password);
         
-        showToast(`✅ Welcome ${clienteEncontrado.nome}!`);
-    } else {
-        showToast("❌ Invalid credentials. Please check your User ID and Password.");
+        if (clienteEncontrado) {
+            const cliente = {
+                id: clienteEncontrado.id,
+                nome: clienteEncontrado.nome,
+                email: clienteEncontrado.email,
+                saldoUSD: clienteEncontrado.saldo_usd || 10000,
+                saldoEUR: clienteEncontrado.saldo_eur || 5000,
+                saldoBRL: clienteEncontrado.saldo_brl || 25000,
+                saldoGBP: clienteEncontrado.saldo_gbp || 3000,
+                saldoBTC: clienteEncontrado.saldo_btc || 0.05,
+                saldoETH: clienteEncontrado.saldo_eth || 1.2,
+                saldoBRD: clienteEncontrado.saldo_brd || 500,
+                kyc: clienteEncontrado.kyc_status || 'approved',
+                numeroConta: clienteEncontrado.numero_conta || 'ZNTX-4821-7390-1256'
+            };
+            
+            sessionStorage.setItem('cliente_logado', JSON.stringify(cliente));
+            carregarDadosClienteLogado(cliente);
+            
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('dashboardContainer').style.display = 'block';
+            document.getElementById('institutionalContent').style.display = 'none';
+            document.getElementById('openLoginBtn').style.display = 'none';
+            document.getElementById('logoutMainBtn').style.display = 'flex';
+            document.getElementById('kycStatusBadge').style.display = 'flex';
+            document.getElementById('notificationBell').classList.add('visible');
+            
+            showToast(`✅ Welcome ${cliente.nome}!`);
+        } else {
+            showToast("❌ Invalid credentials. Please check your User ID and Password.");
+        }
+    } catch (error) {
+        console.error("Erro no login:", error);
+        showToast("❌ Connection error. Please try again.");
     }
 });
+
 document.getElementById('logoutMainBtn').addEventListener('click', showLogoutConfirmation);
 document.getElementById('confirmLogoutYes').addEventListener('click', performLogout);
 document.getElementById('confirmLogoutNo').addEventListener('click', () => { document.getElementById('confirmLogoutModal').classList.remove('active'); });
