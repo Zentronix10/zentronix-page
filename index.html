@@ -1404,12 +1404,19 @@ function showLogoutConfirmation() {
 }
 
 function performLogout() {
+    // Limpar sessão do cliente
+    sessionStorage.removeItem('cliente_logado');
+    
+    // Resetar saldos
+    userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
+    
     document.getElementById('dashboardContainer').style.display = 'none';
     document.getElementById('institutionalContent').style.display = 'block';
     document.getElementById('openLoginBtn').style.display = 'flex';
     document.getElementById('logoutMainBtn').style.display = 'none';
     document.getElementById('kycStatusBadge').style.display = 'none';
     document.getElementById('notificationBell').classList.remove('visible');
+    
     showToast("Logged out successfully");
     document.getElementById('confirmLogoutModal').classList.remove('active');
 }
@@ -1846,20 +1853,38 @@ let currentLang = 'en';
 
 document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
 document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('loginModal').classList.remove('active'));
-document.getElementById('loginSubmitBtn').addEventListener('click', () => { 
-    document.getElementById('loginModal').classList.remove('active'); 
-    document.getElementById('dashboardContainer').style.display = 'block'; 
-    document.getElementById('institutionalContent').style.display = 'none'; 
-    document.getElementById('openLoginBtn').style.display = 'none'; 
-    document.getElementById('logoutMainBtn').style.display = 'flex'; 
-    document.getElementById('kycStatusBadge').style.display = 'flex'; 
-    document.getElementById('notificationBell').classList.add('visible'); 
-    updateBalances(); 
-    initStakingChart(); 
-    initAnalyticsChart(); 
-    renderSecurityCenter(); 
-    renderBankingServices(); 
-    showToast("✅ Welcome to Zentronix Bank!"); 
+document.getElementById('loginSubmitBtn').addEventListener('click', () => {
+    const userId = document.getElementById('loginId').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Buscar clientes do localStorage (cadastrados pelo painel admin)
+    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    
+    // Tentar encontrar o cliente pelo email (ou nome) e senha
+    const clienteEncontrado = clientes.find(c => 
+        (c.email === userId || c.nome === userId) && 
+        c.senha === password
+    );
+    
+    if (clienteEncontrado) {
+        // SALVAR DADOS DO CLIENTE LOGADO NA SESSÃO
+        sessionStorage.setItem('cliente_logado', JSON.stringify(clienteEncontrado));
+        
+        // CARREGAR OS DADOS REAIS DO CLIENTE
+        carregarDadosClienteLogado(clienteEncontrado);
+        
+        document.getElementById('loginModal').classList.remove('active');
+        document.getElementById('dashboardContainer').style.display = 'block';
+        document.getElementById('institutionalContent').style.display = 'none';
+        document.getElementById('openLoginBtn').style.display = 'none';
+        document.getElementById('logoutMainBtn').style.display = 'flex';
+        document.getElementById('kycStatusBadge').style.display = 'flex';
+        document.getElementById('notificationBell').classList.add('visible');
+        
+        showToast(`✅ Welcome ${clienteEncontrado.nome}!`);
+    } else {
+        showToast("❌ Invalid credentials. Please check your User ID and Password.");
+    }
 });
 document.getElementById('logoutMainBtn').addEventListener('click', showLogoutConfirmation);
 document.getElementById('confirmLogoutYes').addEventListener('click', performLogout);
@@ -1939,6 +1964,68 @@ applyLanguage();
 updateMessagesDisplay();
 updateNotificationCount();
 updateKycStep(1);
+
+// ========== FUNÇÃO PARA CARREGAR DADOS DO CLIENTE LOGADO ==========
+function carregarDadosClienteLogado(cliente) {
+    document.getElementById('welcomeUser').innerText = cliente.nome || "Cliente";
+    
+    let numeroConta = cliente.numeroConta;
+    if (!numeroConta) {
+        numeroConta = 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + 
+                      Math.floor(Math.random() * 9000 + 1000) + '-' + 
+                      Math.floor(Math.random() * 9000 + 1000);
+    }
+    document.getElementById('accountNumberValue').innerText = numeroConta;
+    
+    userBalances = {
+        USD: cliente.saldoUSD || 0,
+        EUR: cliente.saldoEUR || 0,
+        GBP: cliente.saldoGBP || 0,
+        BRL: cliente.saldoBRL || 0,
+        BTC: cliente.saldoBTC || 0,
+        ETH: cliente.saldoETH || 0,
+        SOL: cliente.saldoSOL || 0,
+        BRADICOIN: cliente.saldoBRD || 100,
+        USDT: cliente.saldoUSDT || 0,
+        LTC: cliente.saldoLTC || 0,
+        BNB: cliente.saldoBNB || 0
+    };
+    
+    const nomeParts = (cliente.nome || "Cliente").split(' ');
+    document.getElementById('profileFirstName').value = nomeParts[0] || "Cliente";
+    document.getElementById('profileLastName').value = nomeParts.slice(1).join(' ') || "";
+    document.getElementById('profileEmail').value = cliente.email || "";
+    document.getElementById('profilePhone').value = cliente.telefone || "";
+    
+    updateBalances();
+    renderCryptoAssets();
+    initStakingChart();
+    initAnalyticsChart();
+    renderSecurityCenter();
+    renderBankingServices();
+    
+    addMessage("LOGIN", "Welcome Back", `Logged in as ${cliente.nome} at ${new Date().toLocaleString()}`);
+}
+
+// ========== VERIFICAR SESSÃO EXISTENTE AO CARREGAR ==========
+function verificarSessaoExistente() {
+    const clienteSalvo = sessionStorage.getItem('cliente_logado');
+    if (clienteSalvo) {
+        const cliente = JSON.parse(clienteSalvo);
+        carregarDadosClienteLogado(cliente);
+        
+        document.getElementById('dashboardContainer').style.display = 'block';
+        document.getElementById('institutionalContent').style.display = 'none';
+        document.getElementById('openLoginBtn').style.display = 'none';
+        document.getElementById('logoutMainBtn').style.display = 'flex';
+        document.getElementById('kycStatusBadge').style.display = 'flex';
+        document.getElementById('notificationBell').classList.add('visible');
+    }
+}
+
+// Chamar verificação ao carregar
+verificarSessaoExistente();
+
 </script>
 </body>
 </html>
