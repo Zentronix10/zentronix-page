@@ -2075,16 +2075,17 @@ function carregarDadosClienteLogado(cliente) {
     document.getElementById('profileEmail').value = cliente.email || "";
     document.getElementById('profilePhone').value = cliente.telefone || "";
     
+    // initStakingChart();  ← COMENTADO
+    // initAnalyticsChart(); ← COMENTADO
+    
     updateBalances();
     renderCryptoAssets();
-    initStakingChart();
-    initAnalyticsChart();
     renderSecurityCenter();
     renderBankingServices();
     
     addMessage("LOGIN", "Welcome Back", `Logged in as ${cliente.nome} at ${new Date().toLocaleString()}`);
 }
-
+    
 // ========== VERIFICAR SESSÃO EXISTENTE AO CARREGAR ==========
 function verificarSessaoExistente() {
     const clienteSalvo = sessionStorage.getItem('cliente_logado');
