@@ -504,7 +504,7 @@
 
 // ========== CONFIGURAÇÃO SUPABASE ==========
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_SuO6Cg93lJIbCbpG4hT6UA_6VMRuNuW';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
 
 // ========== TATUM API CONFIG ==========
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
@@ -1996,63 +1996,88 @@ let currentLang = 'en';
 
 document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
 document.getElementById('loginSubmitBtn').addEventListener('click', async () => {
-    const userId = document.getElementById('loginId').value;
+    const email = document.getElementById('loginId').value;
     const password = document.getElementById('loginPassword').value;
     
-    showToast("🔐 Verificando credenciais...");
+    if (!email || !password) {
+        showToast("❌ Please enter both email and password");
+        return;
+    }
+    
+    showToast("🔐 Verifying credentials...");
     
     try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/clientes?email=eq.${encodeURIComponent(userId)}`, {
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-            }
+        // 1. Login com Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
         });
         
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+        if (authError) {
+            console.error("Auth error:", authError);
+            showToast("❌ Invalid email or password");
+            return;
         }
         
-        const clientes = await response.json();
-        const clienteEncontrado = clientes.find(c => c.senha === password);
+        // 2. Buscar dados do cliente na tabela 'clientes'
+        const { data: cliente, error: clientError } = await supabase
+            .from('clientes')
+            .select('*')
+            .eq('id', authData.user.id)
+            .single();
         
-        if (clienteEncontrado) {
-            const cliente = {
-                id: clienteEncontrado.id,
-                nome: clienteEncontrado.nome,
-                email: clienteEncontrado.email,
-                saldoUSD: clienteEncontrado.saldo_usd || 10000,
-                saldoEUR: clienteEncontrado.saldo_eur || 5000,
-                saldoBRL: clienteEncontrado.saldo_brl || 25000,
-                saldoGBP: clienteEncontrado.saldo_gbp || 3000,
-                saldoBTC: clienteEncontrado.saldo_btc || 0.05,
-                saldoETH: clienteEncontrado.saldo_eth || 1.2,
-                saldoBRD: clienteEncontrado.saldo_brd || 500,
-                kyc: clienteEncontrado.kyc_status || 'approved',
-                numeroConta: clienteEncontrado.numero_conta || 'ZNTX-4821-7390-1256'
-            };
-            
-            sessionStorage.setItem('cliente_logado', JSON.stringify(cliente));
-            carregarDadosClienteLogado(cliente);
-            
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('dashboardContainer').style.display = 'block';
-            document.getElementById('institutionalContent').style.display = 'none';
-            document.getElementById('openLoginBtn').style.display = 'none';
-            document.getElementById('logoutMainBtn').style.display = 'flex';
-            document.getElementById('kycStatusBadge').style.display = 'flex';
-            document.getElementById('notificationBell').classList.add('visible');
-            
-            showToast(`✅ Welcome ${cliente.nome}!`);
+        if (clientError) {
+            console.error("Error fetching client:", clientError);
+            showToast("❌ Error loading customer data");
+            return;
+        }
+        
+        if (!cliente) {
+            showToast("❌ Cliente não encontrado");
+            return;
+        }
+        
+        // 3. Montar objeto do cliente logado
+        const clienteLogado = {
+            id: cliente.id,
+            nome: cliente.nome,
+            email: cliente.email,
+            saldoUSD: cliente.saldo_usd || 0,
+            saldoEUR: cliente.saldo_eur || 0,
+            saldoBRL: cliente.saldo_brl || 0,
+            saldoGBP: cliente.saldo_gbp || 0,
+            kyc_status: cliente.kyc_status || 'Pending',
+            numeroConta: cliente.account_id
+        };
+        
+        // 4. Salvar sessão
+        sessionStorage.setItem('cliente_logado', JSON.stringify(clienteLogado));
+        
+        // 5. Carregar dados no dashboard
+        if (typeof carregarDadosClienteLogado === 'function') {
+            carregarDadosClienteLogado(clienteLogado);
         } else {
-            showToast("❌ Invalid credentials. Please check your User ID and Password.");
+            const welcomeElement = document.getElementById('welcomeUser');
+            if (welcomeElement) welcomeElement.innerText = cliente.nome;
         }
+        
+        // 6. Alternar telas
+        document.getElementById('loginModal').classList.remove('active');
+        document.getElementById('dashboardContainer').style.display = 'block';
+        document.getElementById('institutionalContent').style.display = 'none';
+        document.getElementById('openLoginBtn').style.display = 'none';
+        document.getElementById('logoutMainBtn').style.display = 'flex';
+        document.getElementById('kycStatusBadge').style.display = 'flex';
+        document.getElementById('notificationBell').classList.add('visible');
+        
+        showToast(`✅ Welcome ${cliente.nome}!`);
+        
     } catch (error) {
-        console.error("Erro no login:", error);
+        console.error("Login error:", error);
         showToast("❌ Connection error. Please try again.");
     }
 });
-
+        
 document.getElementById('logoutMainBtn').addEventListener('click', showLogoutConfirmation);
 document.getElementById('confirmLogoutYes').addEventListener('click', performLogout);
 document.getElementById('confirmLogoutNo').addEventListener('click', () => { document.getElementById('confirmLogoutModal').classList.remove('active'); });
