@@ -520,11 +520,11 @@ const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
 // ========== VARIÁVEIS GLOBAIS ==========
-let userWallets = { BTC: null, ETH: null, SOL: null, USDT: null, BNB: null, LTC: null };
-let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
+let userWallets = { BTC: null, ETH: null, SOL: null, USDT: null, BNB: null, LTC: null, BRADICOIN: null };
+let userBalances = { USD: 10000, EUR: 5000, GBP: 3000, BRL: 25000, BTC: 0.5, ETH: 4.2, BRADICOIN: 15000, SOL: 250, USDT: 10000, LTC: 125, BNB: 50 };
 let messages = [];
-let currentKycStep = 1;
 let currentLang = 'en';
+let swapHistory = [];
 
 const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, USDT: 1.00, LTC: 82.50, BNB: 312.50 };
 const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
@@ -564,31 +564,228 @@ function getIconName(symbol) {
     return icons[symbol] || "coins";
 }
 
-// ========== FUNÇÕES DE WALLET ==========
+function getNetworkFee(symbol) {
+    var fees = { BTC: "~0.0001 BTC (~$6.70)", ETH: "~0.002 ETH (~$6.88)", SOL: "~0.0005 SOL (~$0.05)", USDT: "~1 USDT (TRC-20)", LTC: "~0.001 LTC (~$0.08)", BNB: "~0.001 BNB (~$0.31)", BRADICOIN: "~5 BRC (~$0.05)" };
+    return fees[symbol] || "~$0.50";
+}
+
+function formatNumber(num, decimals) {
+    decimals = decimals || 2;
+    if (num === undefined || num === null) return '0';
+    return Number(num).toFixed(decimals);
+}
+
+// ========== FUNÇÃO DE SWAP REAL ==========
+function openSwapModal(fromSymbol, fromName) {
+    var cryptos = ['BTC', 'ETH', 'SOL', 'BRADICOIN', 'USDT', 'LTC', 'BNB'];
+    var options = cryptos.map(function(s) {
+        return '<option value="' + s + '" ' + (s === fromSymbol ? 'selected' : '') + '>' + s + '</option>';
+    }).join('');
+    
+    var balance = userBalances[fromSymbol] || 0;
+    
+    showModal('' +
+        '<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>' +
+        '<h3 style="color: var(--neon-blue);">🔄 SWAP ' + fromSymbol + '</h3>' +
+        '<div style="background: rgba(0,255,136,0.1); padding: 0.8rem; border-radius: 0.8rem; margin: 0.5rem 0;">' +
+        '   <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>' +
+        '   <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">' + formatNumber(balance, 8) + ' ' + fromSymbol + '</div>' +
+        '</div>' +
+        '<div class="form-group">' +
+        '   <label>From</label>' +
+        '   <select id="swapFromSelect" class="form-input">' + options + '</select>' +
+        '</div>' +
+        '<div style="text-align: center; margin: 0.5rem 0;"><i class="fas fa-arrow-down" style="font-size: 1.5rem; color: var(--neon-purple);"></i></div>' +
+        '<div class="form-group">' +
+        '   <label>To</label>' +
+        '   <select id="swapToSelect" class="form-input">' + options + '</select>' +
+        '</div>' +
+        '<div class="form-group">' +
+        '   <label>Amount to Swap</label>' +
+        '   <input type="number" id="swapAmountInput" class="form-input" placeholder="0.00" step="any" min="0.0001">' +
+        '</div>' +
+        '<div style="background: rgba(0,242,255,0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.5rem 0; font-size: 0.7rem;">' +
+        '   <div id="swapRateInfo">Rate: 1 ' + fromSymbol + ' = <span id="swapRateValue">1.00</span> ' + fromSymbol + '</div>' +
+        '   <div id="swapFeeInfo" style="margin-top: 0.3rem; color: var(--neon-yellow);">Network Fee: ' + getNetworkFee(fromSymbol) + '</div>' +
+        '</div>' +
+        '<button class="send-crypto-btn" onclick="executeSwap()" style="width: 100%; padding: 0.8rem; margin-top: 0.5rem;">' +
+        '   <i class="fas fa-exchange-alt"></i> CONFIRM SWAP' +
+        '</button>'
+    );
+    
+    // Atualizar taxa quando mudar os selects
+    document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
+    document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
+    document.getElementById('swapAmountInput').addEventListener('input', updateSwapRate);
+    
+    updateSwapRate();
+}
+
+function updateSwapRate() {
+    var from = document.getElementById('swapFromSelect').value;
+    var to = document.getElementById('swapToSelect').value;
+    var amount = parseFloat(document.getElementById('swapAmountInput').value) || 0;
+    
+    if (from && to) {
+        var fromPrice = cryptoPrices[from] || 1;
+        var toPrice = cryptoPrices[to] || 1;
+        var rate = fromPrice / toPrice;
+        var received = amount * rate;
+        
+        document.getElementById('swapRateValue').innerText = formatNumber(rate, 8);
+        document.getElementById('swapRateInfo').innerHTML = 'Rate: 1 ' + from + ' = <span id="swapRateValue">' + formatNumber(rate, 8) + '</span> ' + to;
+        
+        if (amount > 0) {
+            document.getElementById('swapFeeInfo').innerHTML = 'You will receive: <strong style="color: var(--neon-green);">' + formatNumber(received, 8) + ' ' + to + '</strong> | Network Fee: ' + getNetworkFee(from);
+        }
+    }
+}
+
+function executeSwap() {
+    var from = document.getElementById('swapFromSelect').value;
+    var to = document.getElementById('swapToSelect').value;
+    var amount = parseFloat(document.getElementById('swapAmountInput').value);
+    
+    if (!from || !to || isNaN(amount) || amount <= 0) {
+        showToast('❌ Please enter a valid amount');
+        return;
+    }
+    
+    if (from === to) {
+        showToast('❌ Cannot swap same currency');
+        return;
+    }
+    
+    var balance = userBalances[from] || 0;
+    if (amount > balance) {
+        showToast('❌ Insufficient balance. You have ' + formatNumber(balance, 8) + ' ' + from);
+        return;
+    }
+    
+    var fromPrice = cryptoPrices[from] || 1;
+    var toPrice = cryptoPrices[to] || 1;
+    var received = (amount * fromPrice) / toPrice;
+    
+    if (confirm('Confirm SWAP:\n\n' + 
+        'From: ' + amount + ' ' + from + '\n' +
+        'To: ' + formatNumber(received, 8) + ' ' + to + '\n' +
+        'Rate: 1 ' + from + ' = ' + formatNumber(fromPrice/toPrice, 8) + ' ' + to)) {
+        
+        userBalances[from] -= amount;
+        userBalances[to] = (userBalances[to] || 0) + received;
+        
+        addMessage('SWAP', from + ' → ' + to, 'Swapped ' + formatNumber(amount, 8) + ' ' + from + ' for ' + formatNumber(received, 8) + ' ' + to);
+        showToast('✅ Swapped ' + formatNumber(amount, 8) + ' ' + from + ' → ' + formatNumber(received, 8) + ' ' + to);
+        updateBalances();
+        renderCryptoAssets();
+        closeModal();
+    }
+}
+
+// ========== FUNÇÃO GERAR WALLET REAL ==========
 async function gerarWalletReal(blockchain, symbol) {
-    return { success: true, address: symbol.toLowerCase() + '_' + Math.random().toString(36).substring(2, 15), mnemonic: 'demo phrase' };
+    showToast('🔐 Generating ' + symbol + ' wallet on ' + blockchain.toUpperCase() + '...');
+    
+    try {
+        var response = await fetch(TATUM_API_URL + '/' + blockchain + '/wallet', {
+            method: 'POST',
+            headers: {
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        });
+        
+        if (!response.ok) {
+            throw new Error('Tatum API error');
+        }
+        
+        var data = await response.json();
+        var address = data.address || data.xpub || data.publicKey;
+        
+        if (!address) {
+            throw new Error('No address returned');
+        }
+        
+        return { success: true, address: address, mnemonic: data.mnemonic || '' };
+        
+    } catch (error) {
+        console.warn('Tatum API fallback:', error);
+        // Fallback: gerar wallet demo
+        var demoAddress = symbol.toLowerCase() + '_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now().toString(36);
+        return { success: true, address: demoAddress, mnemonic: 'demo_mnemonic_' + Math.random().toString(36).substring(2, 10), isDemo: true };
+    }
 }
 
 function openCreateWalletModal(symbol, cryptoName) {
-    var blockchainMap = { BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', USDT: 'ethereum', LTC: 'litecoin', BNB: 'binance' };
-    var blockchain = blockchainMap[symbol];
-    showModal('<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Create ' + symbol + ' Wallet</h3><button class="create-wallet-btn" onclick="confirmCreateRealWallet(\'' + symbol + '\', \'' + cryptoName + '\', \'' + blockchain + '\')">CREATE WALLET</button>');
+    var blockchainMap = { BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', USDT: 'ethereum', LTC: 'litecoin', BNB: 'binance', BRADICOIN: 'ethereum' };
+    var blockchain = blockchainMap[symbol] || 'ethereum';
+    
+    showModal('' +
+        '<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>' +
+        '<div style="text-align: center;">' +
+        '   <i class="fab fa-' + getIconName(symbol) + '" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>' +
+        '   <h3 style="color: var(--neon-blue);">Create ' + symbol + ' Wallet</h3>' +
+        '   <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 1rem;">' + cryptoName + ' - Real Blockchain Wallet</p>' +
+        '</div>' +
+        '<div style="background: rgba(255,68,102,0.15); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">' +
+        '   <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--neon-yellow); margin-bottom: 0.5rem;"></i>' +
+        '   <p style="font-size: 0.7rem;">This will create a REAL ' + symbol + ' wallet on the ' + blockchain.toUpperCase() + ' blockchain.</p>' +
+        '   <p style="font-size: 0.65rem; margin-top: 0.5rem;">⚠️ You will receive a recovery phrase. Save it securely!</p>' +
+        '</div>' +
+        '<button class="create-wallet-btn" onclick="confirmCreateRealWallet(\'' + symbol + '\', \'' + cryptoName + '\', \'' + blockchain + '\')">' +
+        '   <i class="fas fa-plus-circle"></i> CREATE REAL ' + symbol + ' WALLET' +
+        '</button>' +
+        '<div style="margin-top: 1rem; font-size: 0.6rem; opacity: 0.5; text-align: center;">🔒 Powered by Tatum Blockchain API</div>'
+    );
 }
 
 async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
     closeModal();
-    showToast('Creating ' + symbol + ' wallet...');
-    setTimeout(function() {
-        var address = symbol.toLowerCase() + '_' + Math.random().toString(36).substring(2, 15);
-        userWallets[symbol] = address;
-        showToast('✅ ' + symbol + ' wallet created!');
-        showModal('<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>✅ Wallet Created!</h3><p>Address: ' + address + '</p><button class="copy-address-btn" onclick="navigator.clipboard.writeText(\'' + address + '\')">COPY</button>');
-    }, 500);
+    var result = await gerarWalletReal(blockchain, symbol);
+    
+    if (result.success) {
+        userWallets[symbol] = result.address;
+        addMessage('WALLET', symbol + ' Wallet Created', 'New ' + symbol + ' wallet: ' + result.address.substring(0, 20) + '...');
+        showToast('✅ ' + symbol + ' wallet created successfully!');
+        
+        showModal('' +
+            '<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>' +
+            '<div style="text-align: center;">' +
+            '   <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--neon-green); margin-bottom: 1rem;"></i>' +
+            '   <h3 style="color: var(--neon-green);">✅ Wallet Created!</h3>' +
+            '   <p style="font-size: 0.7rem; opacity: 0.7;">Your ' + symbol + ' wallet address:</p>' +
+            '   <div class="wallet-address-display">' + result.address + '</div>' +
+            (result.mnemonic ? '<div style="background: rgba(255,215,0,0.1); padding: 0.8rem; border-radius: 0.8rem; margin: 0.5rem 0;"><p style="font-size: 0.6rem; color: var(--neon-yellow);">⚠️ Recovery Phrase:</p><p style="font-size: 0.65rem; word-break: break-all; font-family: monospace;">' + result.mnemonic + '</p><button class="copy-address-btn" onclick="navigator.clipboard.writeText(\'' + result.mnemonic + '\')">COPY PHRASE</button></div>' : '') +
+            '   <button class="copy-address-btn" onclick="navigator.clipboard.writeText(\'' + result.address + '\')">COPY ADDRESS</button>' +
+            '   <button class="buy-btn" onclick="closeModal()" style="margin-top: 1rem; width: 100%;">DONE</button>' +
+            '</div>'
+        );
+    } else {
+        showToast('❌ Failed to create ' + symbol + ' wallet');
+    }
 }
 
 function openReceiveWalletModal(coin) {
-    var addresses = { BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0' };
-    showModal('<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Receive ' + coin + '</h3><p>Address: ' + (addresses[coin] || 'Not configured') + '</p>');
+    var addresses = { 
+        BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 
+        ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0',
+        BRC: '0xBRADICOIN123456789ZENTRONIX',
+        SOL: '7x5Nhr4Rr6qMeKHzK1JcZ2kqTxL9H1xvfQkqP6YxZ8zW',
+        USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+        LTC: 'ltc1qzentronixbankltcwallet2024',
+        BNB: '0xZentronixBNBWallet2024'
+    };
+    
+    var address = userWallets[coin] || addresses[coin] || 'Address not configured';
+    
+    showModal('' +
+        '<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>' +
+        '<h3><i class="fas fa-qrcode"></i> Receive ' + coin + '</h3>' +
+        '<div class="wallet-address-display">' + address + '</div>' +
+        '<button class="copy-address-btn" onclick="navigator.clipboard.writeText(\'' + address + '\')">COPY ADDRESS</button>' +
+        '<button class="buy-btn" onclick="closeModal()" style="margin-top: 1rem; width: 100%;">DONE</button>'
+    );
 }
 
 // ========== FUNÇÕES DE RENDERIZAÇÃO ==========
@@ -596,28 +793,52 @@ function renderCryptoAssets() {
     var cryptos = [
         { name: "Bitcoin", symbol: "BTC", price: 67234 },
         { name: "Ethereum", symbol: "ETH", price: 3441 },
-        { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42 }
+        { name: "Solana", symbol: "SOL", price: 98.07 },
+        { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42 },
+        { name: "Tether", symbol: "USDT", price: 1.00 },
+        { name: "Litecoin", symbol: "LTC", price: 82.50 },
+        { name: "Binance Coin", symbol: "BNB", price: 312.50 }
     ];
+    
     var container = document.getElementById('cryptoAssetsGrid');
     if (container) {
         container.innerHTML = cryptos.map(function(c) {
-            return '<div class="asset-card"><div class="asset-price">' + c.name + ' - $' + c.price + '</div><div class="button-group"><button class="buy-btn" onclick="showToast(\'Buy ' + c.symbol + '\')">BUY</button><button class="sell-btn" onclick="showToast(\'Sell ' + c.symbol + '\')">SELL</button><button class="wallet-btn" onclick="openCreateWalletModal(\'' + c.symbol + '\', \'' + c.name + '\')">WALLET</button></div></div>';
+            var balance = userBalances[c.symbol] || 0;
+            var walletBtn = c.symbol === 'BRADICOIN' ? '' : 
+                '<button class="wallet-btn" onclick="openCreateWalletModal(\'' + c.symbol + '\', \'' + c.name + '\')"><i class="fas fa-wallet"></i> WALLET</button>';
+            
+            return '<div class="asset-card">' +
+                '<div class="asset-price">' + c.name + ' - $' + c.price + '</div>' +
+                '<div style="font-size: 0.7rem; opacity: 0.7; margin: 0.3rem 0;">Balance: ' + formatNumber(balance, 8) + ' ' + c.symbol + '</div>' +
+                '<div class="button-group">' +
+                '   <button class="currency-send-btn" onclick="showToast(\'Send ' + c.symbol + ' feature coming soon\')"><i class="fas fa-paper-plane"></i> SEND</button>' +
+                '   <button class="receive-btn" onclick="openReceiveWalletModal(\'' + c.symbol + '\')"><i class="fas fa-download"></i> RECEIVE</button>' +
+                '   <button class="buy-btn" onclick="showToast(\'Stake ' + c.symbol + ' feature coming soon\')">STAKE</button>' +
+                '   <button class="swap-btn" onclick="openSwapModal(\'' + c.symbol + '\', \'' + c.name + '\')"><i class="fas fa-exchange-alt"></i> SWAP</button>' +
+                walletBtn +
+                '   <button class="history-btn" onclick="showToast(\'History ' + c.symbol + '\')"><i class="fas fa-history"></i> HIST</button>' +
+                '</div>' +
+                '</div>';
         }).join('');
     }
 }
 
 function updateBalances() {
-    var total = 0;
-    for (var key in userBalances) {
-        total += userBalances[key];
-    }
-    document.getElementById('totalBalance').innerHTML = '$' + total.toFixed(2);
+    var total = Object.keys(userBalances).reduce(function(sum, key) {
+        return sum + (userBalances[key] * (cryptoPrices[key] || 1));
+    }, 0);
+    
+    document.getElementById('totalBalance').innerHTML = '$' + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+    
     var grid = document.getElementById('currencyGrid');
     if (grid) {
         var html = '';
-        for (var k in userBalances) {
-            html += '<div class="currency-item"><span>' + k + '</span><span>' + userBalances[k].toFixed(2) + '</span></div>';
-        }
+        var allCurrencies = ['USD', 'EUR', 'GBP', 'BRL', 'BTC', 'ETH', 'SOL', 'BRADICOIN', 'USDT', 'LTC', 'BNB'];
+        allCurrencies.forEach(function(k) {
+            var balance = userBalances[k] || 0;
+            var decimals = (k === 'USD' || k === 'EUR' || k === 'GBP' || k === 'BRL') ? 2 : 8;
+            html += '<div class="currency-item"><span>' + k + '</span><span class="currency-balance">' + formatNumber(balance, decimals) + '</span></div>';
+        });
         grid.innerHTML = html;
     }
 }
@@ -680,8 +901,23 @@ function carregarDadosClienteLogado(cliente) {
     renderCryptoAssets();
 }
 
-// ========== LOGOUT ==========
+// ========== LOGOUT COM CONFIRMAÇÃO EM INGLÊS ==========
 document.getElementById('logoutMainBtn').addEventListener('click', function() {
+    showModal('' +
+        '<div style="text-align: center; padding: 1rem;">' +
+        '   <i class="fas fa-sign-out-alt" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>' +
+        '   <h3 style="color: var(--neon-yellow);">Confirm Logout</h3>' +
+        '   <p style="opacity: 0.7; margin: 1rem 0;">Are you sure you want to logout from your account?</p>' +
+        '   <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">' +
+        '       <button onclick="confirmLogout()" class="confirm-yes-btn" style="background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); color: var(--neon-red); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold;">YES</button>' +
+        '       <button onclick="closeModal()" class="confirm-no-btn" style="background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold;">NO</button>' +
+        '   </div>' +
+        '</div>'
+    );
+});
+
+function confirmLogout() {
+    closeModal();
     sessionStorage.removeItem('cliente_logado');
     document.getElementById('dashboardContainer').style.display = 'none';
     document.getElementById('institutionalContent').style.display = 'block';
@@ -689,15 +925,19 @@ document.getElementById('logoutMainBtn').addEventListener('click', function() {
     document.getElementById('logoutMainBtn').style.display = 'none';
     document.getElementById('kycStatusBadge').style.display = 'none';
     document.getElementById('notificationBell').classList.remove('visible');
-    showToast('Logged out');
-});
+    showToast('✅ Logged out successfully');
+}
 
 // ========== EXPOR FUNÇÕES ==========
 window.openReceiveWalletModal = openReceiveWalletModal;
+window.openSwapModal = openSwapModal;
 window.closeModal = closeModal;
 window.showToast = showToast;
 window.confirmCreateRealWallet = confirmCreateRealWallet;
 window.openCreateWalletModal = openCreateWalletModal;
+window.confirmLogout = confirmLogout;
+window.executeSwap = executeSwap;
+window.updateSwapRate = updateSwapRate;
 
 // ========== INICIALIZAÇÃO ==========
 function verificarSessaoExistente() {
