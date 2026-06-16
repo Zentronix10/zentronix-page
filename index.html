@@ -556,118 +556,107 @@ function updateMessagesDisplay() {
     const container = document.getElementById('historyList'); 
     if (!container) return; 
     container.innerHTML = messages.length === 0 ? '<p>No transactions</p>' : 
-        messages.map(m => `<div class="history-item"><div class="history-type">${m.type}</div><div>${m.desc}</div></div>`).join(''); 
+        messages.map(m => '<div class="history-item"><div class="history-type">' + m.type + '</div><div>' + m.desc + '</div></div>').join(''); 
 }
 
 function getIconName(symbol) {
-    const icons = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", USDT: "money-bill", LTC: "litecoin", BNB: "binance", BRADICOIN: "gem" };
+    var icons = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", USDT: "money-bill", LTC: "litecoin", BNB: "binance", BRADICOIN: "gem" };
     return icons[symbol] || "coins";
 }
 
 // ========== FUNÇÕES DE WALLET ==========
 async function gerarWalletReal(blockchain, symbol) {
-    return { success: true, address: `${symbol.toLowerCase()}_${Math.random().toString(36).substring(2, 15)}`, mnemonic: 'demo phrase' };
+    return { success: true, address: symbol.toLowerCase() + '_' + Math.random().toString(36).substring(2, 15), mnemonic: 'demo phrase' };
 }
 
 function openCreateWalletModal(symbol, cryptoName) {
-    const blockchainMap = { BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', USDT: 'ethereum', LTC: 'litecoin', BNB: 'binance' };
-    const blockchain = blockchainMap[symbol];
-    showModal(`
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3>Create ${symbol} Wallet</h3>
-        <button class="create-wallet-btn" onclick="confirmCreateRealWallet('${symbol}', '${cryptoName}', '${blockchain}')">CREATE WALLET</button>
-    `);
+    var blockchainMap = { BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', USDT: 'ethereum', LTC: 'litecoin', BNB: 'binance' };
+    var blockchain = blockchainMap[symbol];
+    showModal('<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Create ' + symbol + ' Wallet</h3><button class="create-wallet-btn" onclick="confirmCreateRealWallet(\'' + symbol + '\', \'' + cryptoName + '\', \'' + blockchain + '\')">CREATE WALLET</button>');
 }
 
 async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
     closeModal();
-    showToast(`Creating ${symbol} wallet...`);
-    setTimeout(() => {
-        const address = `${symbol.toLowerCase()}_${Math.random().toString(36).substring(2, 15)}`;
+    showToast('Creating ' + symbol + ' wallet...');
+    setTimeout(function() {
+        var address = symbol.toLowerCase() + '_' + Math.random().toString(36).substring(2, 15);
         userWallets[symbol] = address;
-        showToast(`✅ ${symbol} wallet created!`);
-        showModal(`
-            <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-            <h3>✅ Wallet Created!</h3>
-            <p>Address: ${address}</p>
-            <button class="copy-address-btn" onclick="navigator.clipboard.writeText('${address}')">COPY</button>
-        `);
+        showToast('✅ ' + symbol + ' wallet created!');
+        showModal('<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>✅ Wallet Created!</h3><p>Address: ' + address + '</p><button class="copy-address-btn" onclick="navigator.clipboard.writeText(\'' + address + '\')">COPY</button>');
     }, 500);
 }
 
 function openReceiveWalletModal(coin) {
-    const addresses = { BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0' };
-    showModal(`
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3>Receive ${coin}</h3>
-        <p>Address: ${addresses[coin] || 'Not configured'}</p>
-    `);
+    var addresses = { BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0' };
+    showModal('<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Receive ' + coin + '</h3><p>Address: ' + (addresses[coin] || 'Not configured') + '</p>');
 }
 
 // ========== FUNÇÕES DE RENDERIZAÇÃO ==========
 function renderCryptoAssets() {
-    const cryptos = [
+    var cryptos = [
         { name: "Bitcoin", symbol: "BTC", price: 67234 },
         { name: "Ethereum", symbol: "ETH", price: 3441 },
         { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42 }
     ];
-    const container = document.getElementById('cryptoAssetsGrid');
+    var container = document.getElementById('cryptoAssetsGrid');
     if (container) {
-        container.innerHTML = cryptos.map(c => `
-            <div class="asset-card">
-                <div class="asset-price">${c.name} - $${c.price}</div>
-                <div class="button-group">
-                    <button class="buy-btn" onclick="showToast('Buy ${c.symbol}')">BUY</button>
-                    <button class="sell-btn" onclick="showToast('Sell ${c.symbol}')">SELL</button>
-                    <button class="wallet-btn" onclick="openCreateWalletModal('${c.symbol}', '${c.name}')">WALLET</button>
-                </div>
-            </div>
-        `).join('');
+        container.innerHTML = cryptos.map(function(c) {
+            return '<div class="asset-card"><div class="asset-price">' + c.name + ' - $' + c.price + '</div><div class="button-group"><button class="buy-btn" onclick="showToast(\'Buy ' + c.symbol + '\')">BUY</button><button class="sell-btn" onclick="showToast(\'Sell ' + c.symbol + '\')">SELL</button><button class="wallet-btn" onclick="openCreateWalletModal(\'' + c.symbol + '\', \'' + c.name + '\')">WALLET</button></div></div>';
+        }).join('');
     }
 }
 
 function updateBalances() {
-    const total = Object.values(userBalances).reduce((a, b) => a + b, 0);
-    document.getElementById('totalBalance').innerHTML = `$${total.toFixed(2)}`;
-    const grid = document.getElementById('currencyGrid');
+    var total = 0;
+    for (var key in userBalances) {
+        total += userBalances[key];
+    }
+    document.getElementById('totalBalance').innerHTML = '$' + total.toFixed(2);
+    var grid = document.getElementById('currencyGrid');
     if (grid) {
-        grid.innerHTML = Object.entries(userBalances).map(([k, v]) => `
-            <div class="currency-item"><span>${k}</span><span>${v.toFixed(2)}</span></div>
-        `).join('');
+        var html = '';
+        for (var k in userBalances) {
+            html += '<div class="currency-item"><span>' + k + '</span><span>' + userBalances[k].toFixed(2) + '</span></div>';
+        }
+        grid.innerHTML = html;
     }
 }
 
 function setupMenu() {
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', () => {
-            document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active'));
-            const section = item.dataset.section;
-            const map = { crypto: 'cryptoSec', history: 'historySec', swap: 'swapSec' };
+    document.querySelectorAll('.menu-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.investment-section').forEach(function(s) { s.classList.remove('active'); });
+            var section = item.dataset.section;
+            var map = { crypto: 'cryptoSec', history: 'historySec', swap: 'swapSec' };
             if (map[section]) document.getElementById(map[section]).classList.add('active');
         });
     });
 }
 
 // ========== FUNÇÕES DE LOGIN ==========
-document.getElementById('openLoginBtn').addEventListener('click', () => {
+document.getElementById('openLoginBtn').addEventListener('click', function() {
     document.getElementById('loginModal').classList.add('active');
 });
 
 document.getElementById('loginSubmitBtn').addEventListener('click', function() {
-    const email = document.getElementById('loginId').value;
-    if (!email) { showToast("❌ Enter email"); return; }
+    var email = document.getElementById('loginId').value;
+    if (!email) { showToast('❌ Enter email'); return; }
     
-    showToast("🔐 Logging in...");
-    const clientesSalvos = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    let cliente = clientesSalvos.find(c => c.email === email) || {
-        id: 'demo_' + Date.now(),
-        nome: email.split('@')[0] || 'Cliente',
-        email: email,
-        saldoUSD: 10000,
-        saldoEUR: 5000,
-        saldoBRL: 25000,
-        account_id: 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000)
-    };
+    showToast('🔐 Logging in...');
+    var clientesSalvos = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    var cliente = clientesSalvos.find(function(c) { return c.email === email; });
+    
+    if (!cliente) {
+        cliente = {
+            id: 'demo_' + Date.now(),
+            nome: email.split('@')[0] || 'Cliente',
+            email: email,
+            saldoUSD: 10000,
+            saldoEUR: 5000,
+            saldoBRL: 25000,
+            account_id: 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000)
+        };
+    }
     
     sessionStorage.setItem('cliente_logado', JSON.stringify(cliente));
     carregarDadosClienteLogado(cliente);
@@ -678,11 +667,11 @@ document.getElementById('loginSubmitBtn').addEventListener('click', function() {
     document.getElementById('logoutMainBtn').style.display = 'flex';
     document.getElementById('kycStatusBadge').style.display = 'flex';
     document.getElementById('notificationBell').classList.add('visible');
-    showToast(`✅ Welcome ${cliente.nome}!`);
+    showToast('✅ Welcome ' + cliente.nome + '!');
 });
 
 function carregarDadosClienteLogado(cliente) {
-    document.getElementById('welcomeUser').innerText = cliente.nome || "Cliente";
+    document.getElementById('welcomeUser').innerText = cliente.nome || 'Cliente';
     document.getElementById('accountNumberValue').innerText = cliente.account_id || 'ZNTX-0000';
     if (cliente.saldoUSD) userBalances.USD = cliente.saldoUSD;
     if (cliente.saldoEUR) userBalances.EUR = cliente.saldoEUR;
@@ -700,7 +689,7 @@ document.getElementById('logoutMainBtn').addEventListener('click', function() {
     document.getElementById('logoutMainBtn').style.display = 'none';
     document.getElementById('kycStatusBadge').style.display = 'none';
     document.getElementById('notificationBell').classList.remove('visible');
-    showToast("Logged out");
+    showToast('Logged out');
 });
 
 // ========== EXPOR FUNÇÕES ==========
@@ -712,7 +701,7 @@ window.openCreateWalletModal = openCreateWalletModal;
 
 // ========== INICIALIZAÇÃO ==========
 function verificarSessaoExistente() {
-    const cliente = sessionStorage.getItem('cliente_logado');
+    var cliente = sessionStorage.getItem('cliente_logado');
     if (cliente) {
         carregarDadosClienteLogado(JSON.parse(cliente));
         document.getElementById('dashboardContainer').style.display = 'block';
@@ -728,7 +717,7 @@ renderCryptoAssets();
 updateBalances();
 setupMenu();
 verificarSessaoExistente();
-console.log("🚀 Zentronix Bank iniciado!");
+console.log('🚀 Zentronix Bank iniciado!');
 </script>
 </body>
 </html>
