@@ -530,6 +530,18 @@ const API_BASE_URL = 'https://zentronix-api.onrender.com';
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
+let userWallets = {
+    BTC: null,
+    ETH: null,
+    SOL: null,
+    USDT: null,
+    BNB: null,
+    LTC: null
+};
+
+// ========== DADOS GLOBAIS ==========
+let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
+
 // Função para gerar wallet REAL (CORRIGIDA)
 async function gerarWalletReal(blockchain, symbol) {
     try {
@@ -886,6 +898,79 @@ async function checkApiHealth() {
 // Chamar health check
 checkApiHealth();
 
+// ========== GARANTIR QUE O BOTÃO DE LOGIN FUNCIONE ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('loginSubmitBtn');
+    if (loginBtn) {
+        // Remove todos os eventos antigos
+        const newLoginBtn = loginBtn.cloneNode(true);
+        loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
+        
+        // Adiciona o evento novo
+        newLoginBtn.addEventListener('click', function() {
+            const email = document.getElementById('loginId').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showToast("❌ Please enter both email and password");
+                return;
+            }
+            
+            showToast("🔐 Logging in...");
+            
+            // Buscar cliente no localStorage
+            const clientesSalvos = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+            let clienteEncontrado = clientesSalvos.find(c => c.email === email);
+            
+            setTimeout(() => {
+                let clienteDemo;
+                
+                if (clienteEncontrado) {
+                    clienteDemo = {
+                        id: clienteEncontrado.id || 'demo_' + Date.now(),
+                        nome: clienteEncontrado.nome || email.split('@')[0] || 'Cliente',
+                        email: email,
+                        saldoUSD: clienteEncontrado.saldoUSD || 1000,
+                        saldoEUR: clienteEncontrado.saldoEUR || 500,
+                        saldoBRL: clienteEncontrado.saldoBRL || 2500,
+                        saldoGBP: clienteEncontrado.saldoGBP || 300,
+                        kyc_status: clienteEncontrado.kyc || 'Pending',
+                        account_id: clienteEncontrado.accountId || 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000)
+                    };
+                    showToast(`✅ Welcome back ${clienteDemo.nome}!`);
+                } else {
+                    clienteDemo = {
+                        id: 'demo_' + Date.now(),
+                        nome: email.split('@')[0] || 'Cliente',
+                        email: email,
+                        saldoUSD: 10000,
+                        saldoEUR: 5000,
+                        saldoBRL: 25000,
+                        saldoGBP: 3000,
+                        kyc_status: 'Approved',
+                        account_id: 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000)
+                    };
+                    showToast(`✅ Welcome ${clienteDemo.nome}!`);
+                }
+                
+                sessionStorage.setItem('cliente_logado', JSON.stringify(clienteDemo));
+                
+                if (typeof carregarDadosClienteLogado === 'function') {
+                    carregarDadosClienteLogado(clienteDemo);
+                }
+                
+                document.getElementById('loginModal').classList.remove('active');
+                document.getElementById('dashboardContainer').style.display = 'block';
+                document.getElementById('institutionalContent').style.display = 'none';
+                document.getElementById('openLoginBtn').style.display = 'none';
+                document.getElementById('logoutMainBtn').style.display = 'flex';
+                document.getElementById('kycStatusBadge').style.display = 'flex';
+                document.getElementById('notificationBell').classList.add('visible');
+                
+            }, 500);
+        });
+    }
+});
 // ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
 function salvarClienteNoLocalStorage(dadosCliente) {
     let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
@@ -1061,125 +1146,7 @@ console.log("🚀 Sistema Zentronix Bank inicializado com sucesso!");
 carregarDadosBanco();
 console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
 
-// ==================== FUNÇÕES DE API ====================
-
-// Health check
-async function checkApiHealth() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/health`);
-        const data = await response.json();
-        console.log('✅ API Zentronix conectada:', data.status);
-        if (data.demoMode) {
-            console.log('⚠️ API em modo demo - configure DATABASE_URL no Render');
-        }
-        return data;
-    } catch (error) {
-        console.warn('⚠️ API offline, usando modo demo local');
-        return null;
-    }
-}
-
-// Login via API
-async function apiLogin(email, password) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-        const data = await response.json();
-        if (response.ok && data.success) {
-            localStorage.setItem('api_token', data.token);
-            localStorage.setItem('api_user', JSON.stringify(data.user));
-            return { success: true, data };
-        }
-        return { success: false, error: data.error || 'Invalid credentials' };
-    } catch (error) {
-        return { success: false, error: 'Network error - API may be offline' };
-    }
-}
-
-// Buscar wallets do usuário via API
-async function apiGetWallets() {
-    const token = localStorage.getItem('api_token');
-    if (!token) return { success: false };
-    
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/wallets`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await response.json();
-        if (response.ok && data.success) {
-            return { success: true, wallets: data.wallets };
-        }
-        return { success: false };
-    } catch (error) {
-        return { success: false };
-    }
-}
-
-// Buscar saldos via API
-async function apiGetBalances() {
-    const token = localStorage.getItem('api_token');
-    if (!token) return { success: false };
-    
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/balances`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await response.json();
-        if (response.ok && data.success) {
-            return { success: true, balances: data.balances };
-        }
-        return { success: false };
-    } catch (error) {
-        return { success: false };
-    }
-}
-
-// Gerar wallet via API
-async function apiGenerateWallet(blockchain) {
-    const token = localStorage.getItem('api_token');
-    if (!token) return { success: false, error: 'Not logged in' };
-    
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/wallet/generate`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ blockchain })
-        });
-        const data = await response.json();
-        if (response.ok && data.success) {
-            return { success: true, address: data.address, explorerUrl: data.explorerUrl };
-        }
-        if (response.status === 409) {
-            return { success: false, error: 'Wallet already exists', address: data.address };
-        }
-        return { success: false, error: data.error };
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Buscar blockchains suportadas
-async function apiGetSupportedChains() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/supported-chains`);
-        const data = await response.json();
-        return data.success ? data.blockchains : [];
-    } catch (error) {
-        return [];
-    }
-}
-
-// Verificar API ao carregar
-checkApiHealth();
-
 // ==================== FIM CONFIGURAÇÃO API RENDER ====================
-
 
 // ==================== WALLET GENERATOR (REAL, SEM SEED PHRASE) ====================
 // Armazenamento das wallets criadas pelo usuário
