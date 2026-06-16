@@ -511,7 +511,8 @@
 
 <script>
 
-// ============ CONFIGURAÇÃO DO SUPABASE (adicione no início do script) ==========
+<script>
+// ============ CONFIGURAÇÃO DO SUPABASE ==========
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
 
@@ -523,13 +524,14 @@ if (typeof supabase === 'undefined') {
     console.log("✅ Supabase configurado na página do banco");
 }
 
-// ============ CONFIGURAÇÃO DA API RENDER (UMA VEZ SÓ) ============
+// ============ CONFIGURAÇÃO DA API RENDER ============
 const API_BASE_URL = 'https://zentronix-api.onrender.com';
 
 // ========== TATUM API CONFIG ==========
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
+// VARIÁVEIS GLOBAIS - DECLARADAS AQUI NO TOPO
 let userWallets = {
     BTC: null,
     ETH: null,
@@ -539,8 +541,52 @@ let userWallets = {
     LTC: null
 };
 
-// ========== DADOS GLOBAIS ==========
-let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
+let userBalances = { 
+    USD: 0, 
+    EUR: 0, 
+    GBP: 0, 
+    BRL: 0, 
+    BTC: 0, 
+    ETH: 0, 
+    BRADICOIN: 0, 
+    SOL: 0, 
+    USDT: 0, 
+    LTC: 0, 
+    BNB: 0 
+};
+
+let messages = [
+    { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false }
+];
+
+let kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null };
+let currentKycStep = 1;
+let profilePhoto = null;
+let currentLang = 'en';
+let stakingChart = null;
+let analyticsChart = null;
+
+// ========== DADOS DE CRIPTO ==========
+const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
+const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
+
+// ========== ENDEREÇOS DO BANCO ==========
+const bankWalletAddresses = {
+    BTC: "bc1qzentronixbankbtcwallet2024",
+    ETH: "0xZentronixBankEthWallet2024",
+    SOL: "ZentronixBankSolWallet2024",
+    USDT: "0xZentronixUSDTWallet2024",
+    BNB: "0xZentronixBNBWallet2024",
+    LTC: "ltc1qzentronixbankltcwallet2024"
+};
+
+// ========== DADOS PARA RECEBER FIAT ==========
+const bankReceiveDetails = {
+    USD: { bankName: "JPMorgan Chase Bank N.A.", swiftCode: "CHASUS33XXX", routingNumber: "021000021", accountNumber: "ZNTX-4821-7390-1256", bankAddress: "270 Park Avenue, New York, NY 10017, USA", beneficiaryName: "Zentronix Bank International", beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001" },
+    EUR: { bankName: "Deutsche Bank AG", swiftCode: "DEUTDEFFXXX", iban: "DE89370400440532013000", accountNumber: "ZNTX-EU-7390-1256", bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany", beneficiaryName: "Zentronix Bank Europe", beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany" },
+    GBP: { bankName: "Barclays Bank PLC", swiftCode: "BARCLGB22XXX", sortCode: "20-00-00", accountNumber: "ZNTX-UK-7390-1256", bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom", beneficiaryName: "Zentronix Bank UK Ltd", beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY" },
+    BRL: { bankName: "Banco Itaú Unibanco S.A.", swiftCode: "ITAUBRSPXXX", cnpj: "60.701.190/0001-04", accountNumber: "ZNTX-BR-7390-1256", agency: "1234", bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil", beneficiaryName: "Zentronix Bank Brasil", beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP" }
+};
 
 // Função para gerar wallet REAL (CORRIGIDA)
 async function gerarWalletReal(blockchain, symbol) {
@@ -2472,45 +2518,23 @@ updateKycStep(1);
 
 // ========== FUNÇÃO PARA CARREGAR DADOS DO CLIENTE LOGADO ==========
 function carregarDadosClienteLogado(cliente) {
-    document.getElementById('welcomeUser').innerText = cliente.nome || "Cliente";
+    const welcomeElement = document.getElementById('welcomeUser');
+    if (welcomeElement) welcomeElement.innerText = cliente.nome || "Cliente";
     
-    let numeroConta = cliente.numeroConta;
-    if (!numeroConta) {
-        numeroConta = 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + 
-                      Math.floor(Math.random() * 9000 + 1000) + '-' + 
-                      Math.floor(Math.random() * 9000 + 1000);
-    }
-    document.getElementById('accountNumberValue').innerText = numeroConta;
+    const accountElement = document.getElementById('accountNumberValue');
+    if (accountElement) accountElement.innerText = cliente.account_id || 'ZNTX-0000-0000-0000';
     
-    userBalances = {
-        USD: cliente.saldoUSD || 0,
-        EUR: cliente.saldoEUR || 0,
-        GBP: cliente.saldoGBP || 0,
-        BRL: cliente.saldoBRL || 0,
-        BTC: cliente.saldoBTC || 0,
-        ETH: cliente.saldoETH || 0,
-        SOL: cliente.saldoSOL || 0,
-        BRADICOIN: cliente.saldoBRD || 100,
-        USDT: cliente.saldoUSDT || 0,
-        LTC: cliente.saldoLTC || 0,
-        BNB: cliente.saldoBNB || 0
-    };
-    
-    const nomeParts = (cliente.nome || "Cliente").split(' ');
-    document.getElementById('profileFirstName').value = nomeParts[0] || "Cliente";
-    document.getElementById('profileLastName').value = nomeParts.slice(1).join(' ') || "";
-    document.getElementById('profileEmail').value = cliente.email || "";
-    document.getElementById('profilePhone').value = cliente.telefone || "";
-    
-    // initStakingChart();  ← COMENTADO
-    // initAnalyticsChart(); ← COMENTADO
+    if (cliente.saldoUSD !== undefined) userBalances.USD = cliente.saldoUSD;
+    if (cliente.saldoEUR !== undefined) userBalances.EUR = cliente.saldoEUR;
+    if (cliente.saldoBRL !== undefined) userBalances.BRL = cliente.saldoBRL;
+    if (cliente.saldoGBP !== undefined) userBalances.GBP = cliente.saldoGBP;
     
     updateBalances();
     renderCryptoAssets();
     renderSecurityCenter();
     renderBankingServices();
-    
     addMessage("LOGIN", "Welcome Back", `Logged in as ${cliente.nome} at ${new Date().toLocaleString()}`);
+    console.log("🎉 Dashboard carregado para:", cliente.nome);
 }
     
 // ========== VERIFICAR SESSÃO EXISTENTE AO CARREGAR ==========
