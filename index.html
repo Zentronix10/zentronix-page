@@ -512,974 +512,26 @@
 <script>
 
 <script>
-// ============ CONFIGURAÇÃO DO SUPABASE ==========
+// ============ CONFIGURAÇÕES ============
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
+var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Inicializar Supabase
-if (typeof supabase === 'undefined') {
-    console.error("❌ Supabase não carregado! Verifique a CDN.");
-} else {
-    var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log("✅ Supabase configurado na página do banco");
-}
-
-// ============ CONFIGURAÇÃO DA API RENDER ============
 const API_BASE_URL = 'https://zentronix-api.onrender.com';
-
-// ========== TATUM API CONFIG ==========
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
-// VARIÁVEIS GLOBAIS - DECLARADAS AQUI NO TOPO
-let userWallets = {
-    BTC: null,
-    ETH: null,
-    SOL: null,
-    USDT: null,
-    BNB: null,
-    LTC: null
-};
-
-let userBalances = { 
-    USD: 0, 
-    EUR: 0, 
-    GBP: 0, 
-    BRL: 0, 
-    BTC: 0, 
-    ETH: 0, 
-    BRADICOIN: 0, 
-    SOL: 0, 
-    USDT: 0, 
-    LTC: 0, 
-    BNB: 0 
-};
-
-let messages = [
-    { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false }
-];
-
-let kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null };
-let currentKycStep = 1;
-let profilePhoto = null;
-let currentLang = 'en';
-let stakingChart = null;
-let analyticsChart = null;
-
-// ========== DADOS DE CRIPTO ==========
-const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
-const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
-
-// ========== ENDEREÇOS DO BANCO ==========
-const bankWalletAddresses = {
-    BTC: "bc1qzentronixbankbtcwallet2024",
-    ETH: "0xZentronixBankEthWallet2024",
-    SOL: "ZentronixBankSolWallet2024",
-    USDT: "0xZentronixUSDTWallet2024",
-    BNB: "0xZentronixBNBWallet2024",
-    LTC: "ltc1qzentronixbankltcwallet2024"
-};
-
-// ========== DADOS PARA RECEBER FIAT ==========
-const bankReceiveDetails = {
-    USD: { bankName: "JPMorgan Chase Bank N.A.", swiftCode: "CHASUS33XXX", routingNumber: "021000021", accountNumber: "ZNTX-4821-7390-1256", bankAddress: "270 Park Avenue, New York, NY 10017, USA", beneficiaryName: "Zentronix Bank International", beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001" },
-    EUR: { bankName: "Deutsche Bank AG", swiftCode: "DEUTDEFFXXX", iban: "DE89370400440532013000", accountNumber: "ZNTX-EU-7390-1256", bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany", beneficiaryName: "Zentronix Bank Europe", beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany" },
-    GBP: { bankName: "Barclays Bank PLC", swiftCode: "BARCLGB22XXX", sortCode: "20-00-00", accountNumber: "ZNTX-UK-7390-1256", bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom", beneficiaryName: "Zentronix Bank UK Ltd", beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY" },
-    BRL: { bankName: "Banco Itaú Unibanco S.A.", swiftCode: "ITAUBRSPXXX", cnpj: "60.701.190/0001-04", accountNumber: "ZNTX-BR-7390-1256", agency: "1234", bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil", beneficiaryName: "Zentronix Bank Brasil", beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP" }
-};
-
-// Função para gerar wallet REAL (CORRIGIDA)
-async function gerarWalletReal(blockchain, symbol) {
-    try {
-        let endpoint = '';
-        let body = {};
-        
-        // Configurar endpoint e corpo conforme a blockchain
-        switch(blockchain) {
-            case 'bitcoin':
-                endpoint = '/bitcoin/wallet';
-                body = { mnemonic: generateMnemonic() };
-                break;
-            case 'ethereum':
-                endpoint = '/ethereum/wallet';
-                body = { mnemonic: generateMnemonic() };
-                break;
-            case 'solana':
-                endpoint = '/solana/wallet';
-                body = {};
-                break;
-            case 'bnb':
-                endpoint = '/bnb/wallet';
-                body = { mnemonic: generateMnemonic() };
-                break;
-            default:
-                console.error('Blockchain não suportada:', blockchain);
-                return null;
-        }
-        
-        const response = await fetch(`${TATUM_API_URL}${endpoint}`, {
-            method: 'POST',  // ← Mudar de GET para POST
-            headers: {
-                'x-api-key': TATUM_API_KEY,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-        
-        if(!response.ok) {
-            const error = await response.text();
-            console.error(`Erro Tatum API (${blockchain}):`, error);
-            
-            // Se falhar, usar wallet demo
-            console.log(`⚠️ Usando wallet demo para ${symbol}`);
-            return gerarWalletDemo(blockchain, symbol);
-        }
-        
-        const data = await response.json();
-        
-        // Estrutura de retorno padrão
-        return {
-            address: data.address || data.xpub || data.publicKey,
-            privateKey: data.privateKey || 'PRIVATE_KEY_SALVA_NO_BACKEND',
-            mnemonic: data.mnemonic || '',
-            blockchain: blockchain,
-            symbol: symbol
-        };
-        
-    } catch(erro) {
-        console.error(`Erro ao gerar wallet ${blockchain}:`, erro);
-        // Fallback para wallet demo
-        return gerarWalletDemo(blockchain, symbol);
-    }
-}
-
-// Função auxiliar para gerar mnemonic (24 palavras)
-function generateMnemonic() {
-    const words = ['abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract', 'absurd', 'abuse', 'access', 'accident', 'account', 'accuse', 'achieve', 'acid', 'acoustic', 'acquire', 'across', 'act', 'action', 'actor', 'actress', 'actual'];
-    let mnemonic = '';
-    for(let i = 0; i < 12; i++) {
-        if(i > 0) mnemonic += ' ';
-        mnemonic += words[Math.floor(Math.random() * words.length)];
-    }
-    return mnemonic;
-}
-
-// Função de fallback para wallet demo (quando API falha)
-function gerarWalletDemo(blockchain, symbol) {
-    const demoWallets = {
-        bitcoin: { address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', privateKey: 'demo_btc_key' },
-        ethereum: { address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0', privateKey: 'demo_eth_key' },
-        solana: { address: '7x5Nhr4Rr6qMeKHzK1JcZ2kqTxL9H1xvfQkqP6YxZ8zW', privateKey: 'demo_sol_key' },
-        bnb: { address: 'bnb1xqw6w3ujn48j42xr9qyl0z6kz9qyl0z6kz9qyl', privateKey: 'demo_bnb_key' }
-    };
-    
-    const demo = demoWallets[blockchain] || demoWallets.ethereum;
-    
-    return {
-        address: demo.address,
-        privateKey: demo.privateKey,
-        mnemonic: '',
-        blockchain: blockchain,
-        symbol: symbol,
-        isDemo: true
-    };
-}
-
-// ============ FUNÇÃO PARA MODAL DE RECEBER CRYPTO ============
-function openReceiveWalletModal(coin) {
-    console.log("📥 Abrir modal para receber:", coin);
-    
-    const walletAddresses = {
-        BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-        ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0',
-        BRC: '0xBRADICOIN123456789ZENTRONIX',
-        SOL: '7x5Nhr4Rr6qMeKHzK1JcZ2kqTxL9H1xvfQkqP6YxZ8zW',
-        USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
-    };
-    
-    const address = walletAddresses[coin] || 'Endereço não configurado';
-    
-    const modalHtml = `
-        <div id="receiveWalletModal" class="modal-overlay" style="display: flex; z-index: 10000;">
-            <div class="modal-content" style="max-width: 500px; background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid #00f2ff;">
-                <h3><i class="fas fa-qrcode"></i> Receber ${coin}</h3>
-                <div style="text-align: center; padding: 20px;">
-                    <i class="fas fa-wallet" style="font-size: 60px; color: #bc13fe; margin-bottom: 15px;"></i>
-                    <p><strong>Endereço para depósito:</strong></p>
-                    <div style="background: #0d1117; padding: 12px; border-radius: 10px; margin: 10px 0; word-break: break-all; border: 1px solid #bc13fe;">
-                        <code id="walletAddress" style="font-size: 12px;">${address}</code>
-                    </div>
-                    <button onclick="copyWalletAddress()" class="success" style="margin-top: 10px;">
-                        <i class="fas fa-copy"></i> COPIAR ENDEREÇO
-                    </button>
-                    <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">
-                        ⚠️ Envie apenas ${coin} para este endereço.
-                    </p>
-                </div>
-                <div class="modal-buttons">
-                    <button onclick="closeReceiveWalletModal()" class="secondary">FECHAR</button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    const existingModal = document.getElementById('receiveWalletModal');
-    if(existingModal) existingModal.remove();
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-}
-
-function closeReceiveWalletModal() {
-    const modal = document.getElementById('receiveWalletModal');
-    if(modal) modal.remove();
-}
-
-function copyWalletAddress() {
-    const addressElement = document.getElementById('walletAddress');
-    if(addressElement) {
-        navigator.clipboard.writeText(addressElement.innerText);
-        alert("✅ Endereço copiado!");
-    }
-}
-
-// ========== ZENTRONIX BANK INTEGRATION (ATUALIZADO) ==========
-
-// Função para carregar dados do banco
-function carregarDadosBanco() {
-    let clientes = localStorage.getItem('zentronix_bank_clients');
-    let reservas = localStorage.getItem('zentronix_bank_reserves');
-    if (clientes) console.log("✅ Clientes carregados:", JSON.parse(clientes).length);
-    return { 
-        clientes: clientes ? JSON.parse(clientes) : [], 
-        reservas: reservas ? JSON.parse(reservas) : {} 
-    };
-}
-
-// Função para registrar um novo cliente
-function registrarCliente(cliente) {
-    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    const exists = clientes.some(c => c.email === cliente.email);
-    
-    if (!exists) {
-        cliente.id = Date.now();
-        cliente.dataCadastro = new Date().toISOString();
-        clientes.push(cliente);
-        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
-        console.log(`✅ Cliente ${cliente.nome} registrado com sucesso!`);
-        return true;
-    }
-    return false;
-}
-
-// Função para solicitar empréstimo
-function solicitarEmprestimo(clienteId, clienteNome, valor, moeda) {
-    const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    const cliente = clientes.find(c => c.id == clienteId || c.nome === clienteNome);
-    
-    let loans = JSON.parse(localStorage.getItem('zentronix_loans') || '[]');
-    const newLoan = { 
-        id: Date.now(), 
-        clientId: clienteId, 
-        clientName: clienteNome, 
-        clientEmail: cliente?.email || 'não informado',
-        amount: parseFloat(valor), 
-        currency: moeda,
-        status: "pending", 
-        requestedCurrency: moeda,
-        date: new Date().toLocaleString(),
-        timestamp: Date.now()
-    };
-    loans.push(newLoan);
-    localStorage.setItem('zentronix_loans', JSON.stringify(loans));
-    
-    console.log(`✅ Empréstimo solicitado para ${clienteNome}: ${valor} ${moeda}`);
-    alert(`✅ Empréstimo de ${valor} ${moeda} solicitado com sucesso!`);
-    return true;
-}
-
-// Função para o ADMIN (será chamada pelo painel)
-function syncAdminData() {
-    const loans = JSON.parse(localStorage.getItem('zentronix_loans') || '[]');
-    const clients = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    console.log(`🔄 Sincronizando Admin: ${clients.length} clientes, ${loans.length} empréstimos`);
-    return { loans, clients };
-}
-
-// ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
-function salvarClienteNoLocalStorage(dadosCliente) {
-    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    const existe = clientes.some(c => c.email === dadosCliente.email);
-    
-    if (!existe) {
-        const novoCliente = {
-            id: Date.now(),
-            nome: dadosCliente.nome,
-            email: dadosCliente.email,
-            documento: dadosCliente.documento || '',
-            telefone: dadosCliente.telefone || '',
-            saldoUSD: dadosCliente.saldoUSD || 0,
-            saldoEUR: dadosCliente.saldoEUR || 0,
-            saldoBRL: dadosCliente.saldoBRL || 0,
-            saldoGBP: dadosCliente.saldoGBP || 0,
-            kyc: dadosCliente.kyc || "Pending",
-            dataCadastro: new Date().toISOString()
-        };
-        
-        clientes.push(novoCliente);
-        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
-        console.log("✅ Cliente salvo no localStorage:", novoCliente.nome);
-        return true;
-    }
-    return false;
-}
-
-// ========== FUNÇÃO DE LOGIN DO CLIENTE ==========
-async function doClientLogin() {
-    const email = document.getElementById('loginEmail')?.value;
-    const password = document.getElementById('loginPassword')?.value;
-    const errorDiv = document.getElementById('loginError');
-    
-    if(!email || !password) {
-        if(errorDiv) errorDiv.innerText = "Preencha email e senha";
-        return;
-    }
-    
-    if(!supabaseClient) {
-        if(errorDiv) errorDiv.innerText = "Sistema em inicialização. Aguarde...";
-        return;
-    }
-    
-    try {
-        console.log("🔐 Tentando login com:", email);
-        
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-        
-        if(error) {
-            console.error("Erro de autenticação:", error);
-            if(errorDiv) errorDiv.innerText = "Email ou senha inválidos";
-            return;
-        }
-        
-        if(data && data.user) {
-            console.log("✅ Login bem-sucedido:", data.user.id);
-            
-            const { data: cliente, error: clienteError } = await supabaseClient
-                .from('clientes')
-                .select('*')
-                .eq('email', email)
-                .single();
-            
-            if(clienteError) {
-                console.error("Erro ao buscar cliente:", clienteError);
-            }
-            
-            sessionStorage.setItem('clienteLogado', JSON.stringify({
-                id: data.user.id,
-                email: email,
-                nome: cliente?.nome || email.split('@')[0],
-                account_id: cliente?.account_id || 'N/A'
-            }));
-            
-            showClientDashboard(cliente || { nome: email.split('@')[0], email: email });
-            
-            if(errorDiv) errorDiv.innerText = "";
-        }
-        
-    } catch(erro) {
-        console.error("Login error:", erro);
-        if(errorDiv) errorDiv.innerText = "Erro de conexão. Tente novamente.";
-    }
-}
-
-// ========== FUNÇÃO PARA MOSTRAR DASHBOARD DO CLIENTE ==========
-function showClientDashboard(cliente) {
-    // Esconder tela de login
-    const loginSection = document.getElementById('loginSection');
-    const dashboardSection = document.getElementById('dashboardSection');
-    
-    if(loginSection) loginSection.style.display = 'none';
-    if(dashboardSection) {
-        dashboardSection.style.display = 'block';
-        
-        // Atualizar nome do usuário
-        const welcomeName = document.getElementById('welcomeUserName');
-        if(welcomeName) welcomeName.innerText = cliente.nome || cliente.email;
-        
-        // Atualizar account ID se existir
-        const accountIdSpan = document.getElementById('userAccountId');
-        if(accountIdSpan && cliente.account_id) {
-            accountIdSpan.innerText = cliente.account_id;
-        }
-    }
-    
-    console.log("🎉 Dashboard carregado para:", cliente.nome);
-}
-
-// ========== INICIALIZAÇÃO ==========
-carregarDadosBanco();
-console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
-
-// Health check
-async function checkApiHealth() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/health`);
-        const data = await response.json();
-        console.log('✅ API Zentronix conectada:', data.status);
-        if (data.demoMode) {
-            console.log('⚠️ API em modo demo - configure DATABASE_URL no Render');
-        }
-        return data;
-    } catch (error) {
-        console.warn('⚠️ API offline, usando modo demo local');
-        return null;
-    }
-}
-
-// Chamar health check
-checkApiHealth();
-
-// ========== GARANTIR QUE O BOTÃO DE LOGIN FUNCIONE ==========
-document.addEventListener('DOMContentLoaded', function() {
-    const loginBtn = document.getElementById('loginSubmitBtn');
-    if (loginBtn) {
-        // Remove todos os eventos antigos
-        const newLoginBtn = loginBtn.cloneNode(true);
-        loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
-        
-        // Adiciona o evento novo
-        newLoginBtn.addEventListener('click', function() {
-            const email = document.getElementById('loginId').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showToast("❌ Please enter both email and password");
-                return;
-            }
-            
-            showToast("🔐 Logging in...");
-            
-            // Buscar cliente no localStorage
-            const clientesSalvos = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-            let clienteEncontrado = clientesSalvos.find(c => c.email === email);
-            
-            setTimeout(() => {
-                let clienteDemo;
-                
-                if (clienteEncontrado) {
-                    clienteDemo = {
-                        id: clienteEncontrado.id || 'demo_' + Date.now(),
-                        nome: clienteEncontrado.nome || email.split('@')[0] || 'Cliente',
-                        email: email,
-                        saldoUSD: clienteEncontrado.saldoUSD || 1000,
-                        saldoEUR: clienteEncontrado.saldoEUR || 500,
-                        saldoBRL: clienteEncontrado.saldoBRL || 2500,
-                        saldoGBP: clienteEncontrado.saldoGBP || 300,
-                        kyc_status: clienteEncontrado.kyc || 'Pending',
-                        account_id: clienteEncontrado.accountId || 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000)
-                    };
-                    showToast(`✅ Welcome back ${clienteDemo.nome}!`);
-                } else {
-                    clienteDemo = {
-                        id: 'demo_' + Date.now(),
-                        nome: email.split('@')[0] || 'Cliente',
-                        email: email,
-                        saldoUSD: 10000,
-                        saldoEUR: 5000,
-                        saldoBRL: 25000,
-                        saldoGBP: 3000,
-                        kyc_status: 'Approved',
-                        account_id: 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000)
-                    };
-                    showToast(`✅ Welcome ${clienteDemo.nome}!`);
-                }
-                
-                sessionStorage.setItem('cliente_logado', JSON.stringify(clienteDemo));
-                
-                if (typeof carregarDadosClienteLogado === 'function') {
-                    carregarDadosClienteLogado(clienteDemo);
-                }
-                
-                document.getElementById('loginModal').classList.remove('active');
-                document.getElementById('dashboardContainer').style.display = 'block';
-                document.getElementById('institutionalContent').style.display = 'none';
-                document.getElementById('openLoginBtn').style.display = 'none';
-                document.getElementById('logoutMainBtn').style.display = 'flex';
-                document.getElementById('kycStatusBadge').style.display = 'flex';
-                document.getElementById('notificationBell').classList.add('visible');
-                
-            }, 500);
-        });
-    }
-});
-
-
-// ========== EXPOR FUNÇÕES GLOBALMENTE ==========
-window.openReceiveWalletModal = openReceiveWalletModal;
-window.closeReceiveWalletModal = closeReceiveWalletModal;
-window.copyWalletAddress = copyWalletAddress;
-window.doClientLogin = doClientLogin;
-window.gerarWalletReal = gerarWalletReal;
-
-// Inicialização
-carregarDadosBanco();
-console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
-
-// ========== FUNÇÃO PARA CONFIRMAR CRIAÇÃO DE WALLET ==========
-function confirmCreateWallet(symbol, cryptoName, blockchain) {
-    closeModal();
-    showToast(`🔐 Creating your ${symbol} wallet on ${blockchain.toUpperCase()}...`);
-    
-    setTimeout(() => {
-        const address = `${symbol.toLowerCase()}_${Math.random().toString(36).substring(2, 15)}`;
-        userWallets[symbol] = address;
-        
-        addMessage("WALLET", `${symbol} Wallet Created`, 
-            `New ${symbol} wallet created on ${blockchain.toUpperCase()}!\nAddress: ${address.substring(0, 20)}...`);
-        
-        showToast(`✅ ${symbol} wallet created successfully!`);
-        
-        showModal(`
-            <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-            <div style="text-align: center;">
-                <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--neon-green); margin-bottom: 1rem;"></i>
-                <h3 style="color: var(--neon-green);">✅ Wallet Created!</h3>
-                <p style="font-size: 0.7rem; opacity: 0.7;">Your ${symbol} wallet address:</p>
-                <div class="wallet-address-display">${address}</div>
-                <button class="copy-address-btn" onclick="copyWalletAddress('${address}')">COPY ADDRESS</button>
-                <button class="buy-btn" onclick="closeModal()" style="margin-top: 1rem; width: 100%;">DONE</button>
-            </div>
-        `);
-    }, 1000);
-}
-
-// ========== FUNÇÃO PARA CONFIRMAR CRIAÇÃO DE WALLET REAL ==========
-async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
-    closeModal();
-    showToast(`🔐 Creating your ${symbol} wallet on ${blockchain.toUpperCase()}...`);
-    
-    try {
-        const result = await gerarWalletReal(blockchain, symbol);
-        
-        if (result && result.address) {
-            userWallets[symbol] = result.address;
-            
-            addMessage("WALLET", `${symbol} Real Wallet Created`, 
-                `New ${symbol} wallet created on ${blockchain.toUpperCase()}!\nAddress: ${result.address.substring(0, 20)}...`);
-            
-            showModal(`
-                <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-                <div style="text-align: center;">
-                    <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--neon-green); margin-bottom: 1rem;"></i>
-                    <h3 style="color: var(--neon-green);">✅ Wallet Created!</h3>
-                    <p style="font-size: 0.7rem; opacity: 0.7;">Your ${symbol} wallet address:</p>
-                    <div class="wallet-address-display">${result.address}</div>
-                    ${result.mnemonic ? `<div style="background: rgba(255,215,0,0.1); padding: 0.8rem; border-radius: 0.8rem; margin: 0.5rem 0;"><p style="font-size: 0.6rem; color: var(--neon-yellow);">⚠️ Recovery Phrase:</p><p style="font-size: 0.65rem; word-break: break-all;">${result.mnemonic}</p><button class="copy-address-btn" onclick="copyWalletAddress('${result.mnemonic}')">COPY PHRASE</button></div>` : ''}
-                    <button class="copy-address-btn" onclick="copyWalletAddress('${result.address}')">COPY ADDRESS</button>
-                    <button class="buy-btn" onclick="closeModal()" style="margin-top: 1rem; width: 100%;">DONE</button>
-                </div>
-            `);
-            
-            showToast(`✅ ${symbol} wallet created successfully!`);
-        } else {
-            showToast(`❌ Failed to create ${symbol} wallet`);
-        }
-    } catch (error) {
-        console.error('Error creating wallet:', error);
-        showToast(`❌ Error creating ${symbol} wallet`);
-    }
-}
-
-// Inicialização
-carregarDadosBanco();
-console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
-
-// ==================== FIM CONFIGURAÇÃO API RENDER ====================
-
-// ==================== WALLET GENERATOR (REAL, SEM SEED PHRASE) ====================
-// Endereços padrão de depósito do banco (para RECEIVE - onde o usuário recebe)
-const bankWalletAddresses = {
-    BTC: "bc1qzentronixbankbtcwallet2024",
-    ETH: "0xZentronixBankEthWallet2024",
-    SOL: "ZentronixBankSolWallet2024",
-    USDT: "0xZentronixUSDTWallet2024",
-    BNB: "0xZentronixBNBWallet2024",
-    LTC: "ltc1qzentronixbankltcwallet2024"
-};
-// Função para gerar wallet REAL (simula backend - você deve substituir pela chamada à sua API)
-async function generateRealWallet(blockchain, symbol) {
-    const token = localStorage.getItem('api_token');
-    
-    if (!token) {
-        showToast("❌ Please login first to generate a wallet");
-        return { success: false, error: "Not logged in" };
-    }
-    
-    showToast(`🔄 Generating ${symbol} wallet on blockchain...`);
-    
-    try {
-        // Chamada REAL para sua API no Render
-        const response = await fetch(`${API_BASE_URL}/api/wallet/generate`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ blockchain: blockchain === 'USDT' ? 'ETH' : blockchain })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.success) {
-            // Salva a wallet gerada
-            userWallets[symbol] = data.address;
-            
-            // Adiciona à história
-            addMessage("WALLET", `${symbol} Wallet Created`, 
-                `New ${symbol} wallet address generated: ${data.address.substring(0, 15)}...`);
-            
-            showToast(`✅ ${symbol} wallet created successfully!`);
-            return { success: true, address: data.address };
-            
-        } else if (response.status === 409) {
-            // Wallet já existe
-            userWallets[symbol] = data.address;
-            showToast(`ℹ️ ${symbol} wallet already exists: ${data.address.substring(0, 15)}...`);
-            return { success: true, address: data.address, alreadyExists: true };
-            
-        } else {
-            showToast(`❌ Failed to create wallet: ${data.error || 'Unknown error'}`);
-            return { success: false, error: data.error };
-        }
-        
-    } catch (error) {
-        console.error('API error:', error);
-        showToast(`❌ Network error: Could not reach API. Check if backend is running.`);
-        
-        // FALLBACK: Se a API estiver offline, gera wallet demo local
-        console.warn('⚠️ Using demo fallback - API offline');
-        const prefixes = {
-            BTC: "bc1q",
-            ETH: "0x",
-            SOL: "Sol",
-            USDT: "0x",
-            BNB: "0x",
-            LTC: "ltc1q"
-        };
-        const randomPart = Array(32).fill(0).map(() => Math.random().toString(36)[2]).join('');
-        const address = prefixes[blockchain] + randomPart.toLowerCase();
-        
-        userWallets[symbol] = address;
-        addMessage("WALLET", `${symbol} Wallet Created (Demo)`, 
-            `Demo ${symbol} wallet: ${address.substring(0, 15)}... (API offline)`);
-        showToast(`⚠️ ${symbol} wallet created in DEMO MODE (API offline)`);
-        return { success: true, address: address, demoMode: true };
-    }
-}
-
-// Função para abrir modal de CREATE WALLET
-function openCreateWalletModal(symbol, cryptoName) {
-    const blockchainMap = {
-        BTC: 'bitcoin',
-        ETH: 'ethereum',
-        SOL: 'solana',
-        USDT: 'ethereum',
-        LTC: 'litecoin',
-        BNB: 'binance'
-    };
-    
-    const blockchain = blockchainMap[symbol];
-    
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <div style="text-align: center;">
-            <i class="fab fa-${getIconName(symbol)}" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>
-            <h3 style="color: var(--neon-blue); margin-bottom: 0.5rem;">Create ${symbol} Wallet</h3>
-            <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 1rem;">${cryptoName} - Real Blockchain Wallet</p>
-        </div>
-        
-        <div style="background: rgba(255,68,102,0.15); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; text-align: center;">
-            <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--neon-yellow); margin-bottom: 0.5rem;"></i>
-            <p style="font-size: 0.7rem;">This will create a REAL ${symbol} wallet on the ${blockchain.toUpperCase()} blockchain.</p>
-            <p style="font-size: 0.65rem; margin-top: 0.5rem;">⚠️ You will receive a recovery phrase. Save it securely!</p>
-        </div>
-        
-        <button class="create-wallet-btn" onclick="confirmCreateRealWallet('${symbol}', '${cryptoName}', '${blockchain}')">
-            <i class="fas fa-plus-circle"></i> CREATE REAL ${symbol} WALLET
-        </button>
-        
-        <div style="margin-top: 1rem; font-size: 0.6rem; opacity: 0.5; text-align: center;">
-            🔒 Powered by Tatum Blockchain API
-        </div>
-    `;
-    showModal(modalContent);
-}
-
-async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
-    closeModal();
-    showToast(`🔐 Creating your ${symbol} wallet on ${blockchain.toUpperCase()}...`);
-    
-    const result = await gerarWalletReal(blockchain, symbol);
-    
-    if (result.success) {
-        showRecoveryPhraseModal(symbol, result.address, result.mnemonic);
-        userWallets[symbol] = result.address;
-        
-        addMessage("WALLET", `${symbol} Real Wallet Created`, 
-            `New ${symbol} wallet created on ${blockchain.toUpperCase()}!\nAddress: ${result.address.substring(0, 20)}...`);
-    } else {
-        showToast(`❌ Failed to create ${symbol} wallet: ${result.error}`);
-    }
-}
-
-function showRecoveryPhraseModal(symbol, address, mnemonic) {
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <div style="text-align: center;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--neon-yellow); margin-bottom: 1rem;"></i>
-            <h3 style="color: var(--neon-red); margin-bottom: 0.5rem;">⚠️ SAVE YOUR RECOVERY PHRASE</h3>
-            <p style="font-size: 0.7rem; opacity: 0.7;">This is the ONLY way to recover your wallet</p>
-        </div>
-        
-        <div style="background: rgba(0,0,0,0.6); border-radius: 0.8rem; padding: 1rem; margin: 1rem 0;">
-            <div style="font-size: 0.65rem; word-break: break-all; font-family: monospace; line-height: 1.5;">
-                ${mnemonic}
-            </div>
-            <button class="copy-address-btn" onclick="copyWalletAddress('${mnemonic}')" style="margin-top: 0.5rem; width: 100%;">
-                <i class="fas fa-copy"></i> COPY PHRASE
-            </button>
-        </div>
-        
-        <div style="background: rgba(0,255,136,0.2); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.65rem;">
-                ✅ Wallet Address: <strong>${address.substring(0, 30)}...</strong>
-            </div>
-        </div>
-        
-        <button class="send-crypto-btn" onclick="closeModal(); showToast('Wallet created successfully!')" style="width: 100%;">
-            <i class="fas fa-check"></i> I HAVE SAVED MY PHRASE
-        </button>
-    `;
-    showModal(modalContent);
-}
-
-// Abrir modal de SEND (consulta de envio)
-function openSendWalletModal(symbol) {
-    const balance = userBalances[symbol] || 0;
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
-        
-        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
-            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(8)} ${symbol}</div>
-        </div>
-        
-        <div class="form-group">
-            <label>Recipient Wallet Address *</label>
-            <input type="text" id="sendToAddress" class="form-input" placeholder="Enter ${symbol} wallet address">
-        </div>
-        
-        <div class="form-group">
-            <label>Amount to Send *</label>
-            <input type="number" id="sendCryptoAmount" class="form-input" placeholder="0.00" step="any">
-        </div>
-        
-        <div class="form-group">
-            <label>Network Fee (estimated)</label>
-            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">
-                ${getNetworkFee(symbol)}
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label>Transaction Note (optional)</label>
-            <input type="text" id="txNoteSend" class="form-input" placeholder="Add a note for this transaction">
-        </div>
-        
-        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Before you send</div>
-            <div style="font-size: 0.65rem;">
-                • Double-check the recipient address<br>
-                • Crypto transactions are irreversible<br>
-                • Minimum send: 0.001 ${symbol}
-            </div>
-        </div>
-        
-        <button class="send-crypto-btn" onclick="confirmSendTransaction('${symbol}')" style="width: 100%; padding: 0.8rem;">
-            <i class="fas fa-paper-plane"></i> CONFIRM SEND
-        </button>
-    `;
-    showModal(modalContent);
-}
-
-// Confirmar transação de envio
-function confirmSendTransaction(symbol) {
-    const amount = parseFloat(document.getElementById('sendCryptoAmount')?.value);
-    const toAddress = document.getElementById('sendToAddress')?.value;
-    const note = document.getElementById('txNoteSend')?.value || "";
-    const balance = userBalances[symbol] || 0;
-    
-    if (!toAddress || toAddress.trim() === "") {
-        showToast("❌ Please enter a valid wallet address");
-        return;
-    }
-    
-    if (isNaN(amount) || amount <= 0) {
-        showToast("❌ Please enter a valid amount");
-        return;
-    }
-    
-    if (amount > balance) {
-        showToast(`❌ Insufficient balance. You have ${balance.toFixed(8)} ${symbol}`);
-        return;
-    }
-    
-    // Processar o envio
-    userBalances[symbol] -= amount;
-    updateBalances();
-    
-    // Adicionar à história
-    addMessage("SEND", `Sent ${symbol}`, `Sent ${amount.toFixed(8)} ${symbol} to ${toAddress.substring(0, 10)}...${toAddress.substring(toAddress.length - 6)}${note ? " - Note: " + note : ""}`);
-    
-    showToast(`✅ Successfully sent ${amount.toFixed(8)} ${symbol}!`);
-    closeModal();
-}
-
-// Função para obter taxa de rede
-function getNetworkFee(symbol) {
-    const fees = {
-        BTC: "~0.0001 BTC (~$6.70)",
-        ETH: "~0.002 ETH (~$6.88)",
-        SOL: "~0.0005 SOL (~$0.05)",
-        USDT: "~1 USDT (TRC-20)",
-        LTC: "~0.001 LTC (~$0.08)",
-        BNB: "~0.001 BNB (~$0.31)",
-        BRADICOIN: "~5 BRC (~$0.05)"
-    };
-    return fees[symbol] || "~$0.50";
-}
-
-// ==================== TRADUÇÕES ====================
-const translations = {
-    en: { 
-        bankSubtitle: "Offshore Private Banking", accessHub: "ACCESS HUB", kyc: "KYC", logout: "LOGOUT", 
-        heroTitle: "Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite", heroBadge: "🏆 Leading the Offshore Revolution since 2017", 
-        heroDesc: "Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.", 
-        card1Title: "🌍 Total Convergence: Fiat and Crypto", card1Desc: "Unlike traditional banks, Zentronix was designed for the digital age.", 
-        card2Title: "📈 Next-Generation Investment Portfolio", card2Desc: "Our financial product shelf is the most complete in the offshore sector.", 
-        card3Title: "🔐 Technology, Privacy and Succession", card3Desc: "Zentronix Bank goes beyond simple transactions; we take care of your legacy.", 
-        impactPhrase: "✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨", impactSmall: "Founded in 2017. Connected to the Future.", 
-        aboutTitle: "🌟 ABOUT ZENTRONIX BANK", aboutHistoryTitle: "Our History", aboutHistoryDesc: "Founded in 2018, serving 156+ countries", 
-        aboutSecurityTitle: "Security First", aboutSecurityDesc: "Quantum-resistant protocols", aboutReachTitle: "Global Reach", aboutReachDesc: "Offices in Switzerland, Singapore, Dubai", 
-        aboutReturnsTitle: "Premium Returns", aboutReturnsDesc: "Up to 12% annual yield", 
-        currenciesTitle: "💱 CURRENCIES WE ACCEPT", cryptoTitles: "💎 SUPPORTED CRYPTOCURRENCIES", 
-        statAum: "AUM", statClients: "Clients", statCountries: "Countries", statEncryption: "Encryption", 
-        regulatoryText: "Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.", 
-        copyrightText: "© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024",
-        confirmLogoutTitle: "Confirm Logout", confirmLogoutMessage: "Are you sure you want to logout from your account?", confirmYes: "YES", confirmNo: "NO"
-    },
-    pt: { 
-        bankSubtitle: "Banco Offshore Privado", accessHub: "ACESSAR HUB", kyc: "KYC", logout: "SAIR", 
-        heroTitle: "Zentronix Banco Offshore: Soberania, Tecnologia e Elite Financeira", heroBadge: "🏆 Liderando a Revolução Offshore desde 2017", 
-        heroDesc: "Fundado em 2017, o Zentronix Bank não é apenas uma instituição financeira; é uma fortaleza para capital global.", 
-        card1Title: "🌍 Convergência Total: Fiat e Cripto", card1Desc: "Ao contrário dos bancos tradicionais, a Zentronix foi projetada para a era digital.", 
-        card2Title: "📈 Portfólio de Investimentos de Próxima Geração", card2Desc: "Nossa prateleira de produtos financeiros é a mais completa do setor offshore.", 
-        card3Title: "🔐 Tecnologia, Privacidade e Sucessão", card3Desc: "O Zentronix Bank vai além de simples transações; cuidamos do seu legado.", 
-        impactPhrase: "✨ Zentronix Banco Offshore: A evolução do seu poder financeiro começa aqui. ✨", impactSmall: "Fundado em 2017. Conectado ao Futuro.", 
-        aboutTitle: "🌟 SOBRE O ZENTRONIX BANK", aboutHistoryTitle: "Nossa História", aboutHistoryDesc: "Fundado em 2018, atendendo 156+ países", 
-        aboutSecurityTitle: "Segurança em Primeiro Lugar", aboutSecurityDesc: "Protocolos resistentes a quantum", aboutReachTitle: "Alcance Global", aboutReachDesc: "Escritórios na Suíça, Singapura, Dubai", 
-        aboutReturnsTitle: "Retornos Premium", aboutReturnsDesc: "Até 12% de rendimento anual", 
-        currenciesTitle: "💱 MOEDAS QUE ACEITAMOS", cryptoTitles: "💎 CRIPTOMOEDAS SUPORTADAS", 
-        statAum: "PATRIMÔNIO", statClients: "Clientes", statCountries: "Países", statEncryption: "Criptografia", 
-        regulatoryText: "O Zentronix Bank está atualmente passando por licenciamento regulatório como Provedor de Serviços de Ativos Virtuais.", 
-        copyrightText: "© 2024 Zentronix Bank - Edição Azul e Roxa | Licença Bancária Offshore Nº ZNTX-2024",
-        confirmLogoutTitle: "Confirmar Saída", confirmLogoutMessage: "Tem certeza que deseja sair da sua conta?", confirmYes: "SIM", confirmNo: "NÃO"
-    },
-    es: { 
-        bankSubtitle: "Banca Offshore Privada", accessHub: "ACCESO HUB", kyc: "KYC", logout: "SALIR", 
-        heroTitle: "Zentronix Banco Offshore: Soberanía, Tecnología y Elite Financiera", heroBadge: "🏆 Liderando la Revolución Offshore desde 2017", 
-        heroDesc: "Fundado en 2017, Zentronix Bank no es solo una institución financiera; es una fortaleza para el capital global.", 
-        card1Title: "🌍 Convergencia Total: Fiat y Cripto", card1Desc: "A diferencia de los bancos tradicionales, Zentronix fue diseñado para la era digital.", 
-        card2Title: "📈 Cartera de Inversiones de Próxima Generación", card2Desc: "Nuestra gama de productos financieros es la más completa del sector offshore.", 
-        card3Title: "🔐 Tecnología, Privacidad y Sucesión", card3Desc: "Zentronix Bank va más allá de las simples transacciones; cuidamos su legado.", 
-        impactPhrase: "✨ Zentronix Banco Offshore: La evolución de su poder financiero comienza aquí. ✨", impactSmall: "Fundado en 2017. Conectado al Futuro.", 
-        aboutTitle: "🌟 SOBRE ZENTRONIX BANK", aboutHistoryTitle: "Nuestra Historia", aboutHistoryDesc: "Fundado en 2018, sirviendo a 156+ países", 
-        aboutSecurityTitle: "Seguridad Primero", aboutSecurityDesc: "Protocolos resistentes a cuánticos", aboutReachTitle: "Alcance Global", aboutReachDesc: "Oficinas en Suiza, Singapur, Dubái", 
-        aboutReturnsTitle: "Rendimientos Premium", aboutReturnsDesc: "Hasta 12% de rendimiento anual", 
-        currenciesTitle: "💱 MONEDAS QUE ACEPTAMOS", cryptoTitles: "💎 CRIPTOMONEDAS SOPORTADAS", 
-        statAum: "PATRIMONIO", statClients: "Clientes", statCountries: "Países", statEncryption: "Cifrado", 
-        regulatoryText: "Zentronix Bank se encuentra actualmente en proceso de licenciamiento regulatorio como Proveedor de Servicios de Activos Virtuales.", 
-        copyrightText: "© 2024 Zentronix Bank - Edición Azul y Púrpura | Licencia Bancaria Offshore Nº ZNTX-2024",
-        confirmLogoutTitle: "Confirmar Salida", confirmLogoutMessage: "¿Estás seguro de que quieres salir de tu cuenta?", confirmYes: "SÍ", confirmNo: "NO"
-    },
-    ar: { 
-        bankSubtitle: "الخدمات المصرفية الخارجية الخاصة", accessHub: "الوصول إلى المركز", kyc: "التحقق", logout: "تسجيل خروج", 
-        heroTitle: "بنك Zentronix الخارجي: السيادة والتكنولوجيا والنخبة المالية", heroBadge: "🏆 قيادة الثورة الخارجية منذ 2017", 
-        heroDesc: "تأسس بنك Zentronix في عام 2017، ليس مجرد مؤسسة مالية؛ إنه حصن لرأس المال العالمي.", 
-        card1Title: "🌍 التقارب الكلي: العملات التقليدية والرقمية", card1Desc: "على عكس البنوك التقليدية، تم تصميم Zentronix للعصر الرقمي.", 
-        card2Title: "📈 محفظة استثمارات الجيل القادم", card2Desc: "مجموعة منتجاتنا المالية هي الأكثر اكتمالاً في القطاع الخارجي.", 
-        card3Title: "🔐 التكنولوجيا والخصوصية والخلافة", card3Desc: "بنك Zentronix يتجاوز المعاملات البسيطة؛ نحن نعتني بإرثك.", 
-        impactPhrase: "✨ بنك Zentronix الخارجي: تطور قوتك المالية يبدأ هنا. ✨", impactSmall: "تأسس في 2017. متصل بالمستقبل.", 
-        aboutTitle: "🌟 حول بنك Zentronix", aboutHistoryTitle: "تاريخنا", aboutHistoryDesc: "تأسس في 2018، يخدم 156+ دولة", 
-        aboutSecurityTitle: "الأمن أولاً", aboutSecurityDesc: "بروتوكولات مقاومة الكم", aboutReachTitle: "الوصول العالمي", aboutReachDesc: "مكاتب في سويسرا وسنغافورة ودبي", 
-        aboutReturnsTitle: "عوائد ممتازة", aboutReturnsDesc: "حتى 12% عائد سنوي", 
-        currenciesTitle: "💱 العملات التي نقبلها", cryptoTitles: "💎 العملات الرقمية المدعومة", 
-        statAum: "الأصول المدارة", statClients: "العملاء", statCountries: "الدول", statEncryption: "التشفير", 
-        regulatoryText: "يخضع بنك Zentronix حالياً للترخيص التنظيمي كمزود خدمات الأصول الافتراضية.", 
-        copyrightText: "© 2024 بنك Zentronix - الإصدار الأزرق والأرجواني | رخصة مصرفية خارجية رقم ZNTX-2024",
-        confirmLogoutTitle: "تأكيد تسجيل الخروج", confirmLogoutMessage: "هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟", confirmYes: "نعم", confirmNo: "لا"
-    }
-};
-
-// ==================== DADOS GLOBAIS ====================
+// ========== VARIÁVEIS GLOBAIS ==========
+let userWallets = { BTC: null, ETH: null, SOL: null, USDT: null, BNB: null, LTC: null };
 let userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
-let messages = [
-    { id: 1, type: "WELCOME", title: "Welcome to Zentronix Bank!", desc: "Your account has been successfully created.", time: new Date().toLocaleString(), read: false }
-];
-let kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null };
+let messages = [];
 let currentKycStep = 1;
-let profilePhoto = null;
+let currentLang = 'en';
 
-const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, USDT: 1.00, LTC: 82.50, BNB: 312.50, USD: 1, EUR: 1.09, GBP: 1.27, BRL: 0.19 };
+const cryptoPrices = { BTC: 67234, ETH: 3441, BRADICOIN: 10.42, SOL: 98.07, USDT: 1.00, LTC: 82.50, BNB: 312.50 };
 const stakeAPYs = { BTC: 4.5, ETH: 5.2, SOL: 7.8, USDT: 8.0, BRADICOIN: 12.5, LTC: 4.0, BNB: 6.0 };
 
-// ==================== FUNÇÕES EXISTENTES (MODIFICADAS) ====================
-
-function copyAccountNumber() { 
-    navigator.clipboard.writeText('ZNTX-4821-7390-1256'); 
-    showToast("Account number copied!"); 
-}
-
-function addMessage(type, title, desc) { 
-    messages.unshift({ id: Date.now(), type, title, desc, time: new Date().toLocaleString(), read: false }); 
-    if (messages.length > 50) messages.pop(); 
-    updateMessagesDisplay(); 
-    updateNotificationCount(); 
-}
-
-function deleteMessage(id) { 
-    messages = messages.filter(m => m.id !== id); 
-    updateMessagesDisplay(); 
-    updateNotificationCount(); 
-    showToast("Message deleted"); 
-}
-
-function updateMessagesDisplay() { 
-    const container = document.getElementById('historyList'); 
-    if (!container) return; 
-    if (messages.length === 0) { 
-        container.innerHTML = '<p style="text-align:center; opacity:0.5;">No transactions yet</p>'; 
-        return; 
-    } 
-    container.innerHTML = messages.map(m => `<div class="history-item"><div class="history-content"><div class="history-type">${m.type} - ${m.title}</div><div class="history-detail">${m.desc}</div><div class="history-time">${m.time}</div></div><button class="delete-notification-btn" onclick="deleteMessage(${m.id})"><i class="fas fa-times"></i></button></div>`).join(''); 
-}
-
-function updateNotificationCount() { 
-    document.getElementById('notificationCount').innerText = messages.filter(m => !m.read).length; 
-}
-
+// ========== FUNÇÕES AUXILIARES ==========
 function showToast(msg) { 
     let t = document.createElement('div'); 
     t.className = 'toast-notification'; 
@@ -1489,817 +541,196 @@ function showToast(msg) {
 }
 
 function showModal(content) { 
-    const modal = document.getElementById('modalOverlay'); 
-    const modalContent = document.getElementById('modalContent'); 
-    modalContent.innerHTML = content; 
-    modal.classList.add('active'); 
+    document.getElementById('modalContent').innerHTML = content; 
+    document.getElementById('modalOverlay').classList.add('active'); 
 }
 
 function closeModal() { 
     document.getElementById('modalOverlay').classList.remove('active'); 
 }
 
-function showCurrencyHistory(currency) { 
-    const currencyMessages = messages.filter(m => m.desc.includes(currency) || m.title.includes(currency)); 
-    if (currencyMessages.length === 0) { 
-        showToast(`No history found for ${currency}`); 
-        return; 
-    } 
-    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>${currency} Transaction History</h3><div style="max-height:400px; overflow-y:auto;">${currencyMessages.map(m => `<div style="background:rgba(26,27,58,0.6); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem;"><div style="color:var(--neon-yellow);">${m.type}</div><div>${m.desc}</div><div style="font-size:0.6rem; opacity:0.5;">${m.time}</div></div>`).join('')}</div><button class="buy-btn" onclick="closeModal()" style="margin-top:1rem;">Close</button>`); 
+function addMessage(type, title, desc) { 
+    messages.unshift({ id: Date.now(), type, title, desc, time: new Date().toLocaleString() }); 
+    updateMessagesDisplay(); 
 }
 
-function openStakeModal(asset, symbol, price) { 
-    const apy = stakeAPYs[symbol] || 5.0; 
-    const balance = userBalances[symbol] || 0; 
-    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>STAKE ${symbol}</h3><div style="background:rgba(0,255,136,0.1); padding:0.5rem; border-radius:0.5rem; margin:0.5rem 0;">${apy}% APY</div><input type="number" id="stakeAmount" placeholder="Amount to stake"><div style="margin:0.5rem 0;">Available: ${balance.toFixed(8)} ${symbol}</div><button class="buy-btn" onclick="confirmStake('${symbol}', ${apy})" style="width:100%;">Confirm Stake</button>`); 
+function updateMessagesDisplay() { 
+    const container = document.getElementById('historyList'); 
+    if (!container) return; 
+    container.innerHTML = messages.length === 0 ? '<p>No transactions</p>' : 
+        messages.map(m => `<div class="history-item"><div class="history-type">${m.type}</div><div>${m.desc}</div></div>`).join(''); 
 }
-
-function confirmStake(symbol, apy) { 
-    let amount = parseFloat(document.getElementById('stakeAmount')?.value); 
-    if (isNaN(amount) || amount <= 0 || amount > userBalances[symbol]) { 
-        showToast("Invalid amount"); 
-        closeModal(); 
-        return; 
-    } 
-    userBalances[symbol] -= amount; 
-    addMessage("STAKE", `Staked ${symbol}`, `Staked ${amount.toFixed(8)} ${symbol} at ${apy}% APY`); 
-    showToast(`✅ Staked ${amount.toFixed(8)} ${symbol}!`); 
-    updateBalances(); 
-    closeModal(); 
-}
-
-function openBuyModal(asset, symbol, price) { 
-    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Buy ${symbol}</h3><p>Price: $${price}</p><input type="number" id="buyAmount" placeholder="Amount to buy"><div class="payment-methods-grid"><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'mastercard')"><i class="fab fa-cc-mastercard"></i><p>Mastercard</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'visa')"><i class="fab fa-cc-visa"></i><p>Visa</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'amex')"><i class="fab fa-cc-amex"></i><p>Amex</p></div><div class="payment-method-card" onclick="processBuyWithCard('${symbol}', 'googlepay')"><i class="fab fa-google-pay"></i><p>Google Pay</p></div></div><div class="payment-method-card" onclick="processBuyWithLoan('${symbol}', ${price})"><i class="fas fa-hand-holding-usd"></i><p>💰 Zentronix Loan</p></div><button class="sell-btn" onclick="closeModal()">Cancel</button>`); 
-}
-
-function processBuyWithCard(symbol, method) { 
-    let amount = parseFloat(document.getElementById('buyAmount')?.value); 
-    if (isNaN(amount) || amount <= 0) { 
-        showToast("Enter valid amount"); 
-        return; 
-    } 
-    const price = cryptoPrices[symbol] || 1; 
-    const cost = amount * price; 
-    userBalances[symbol] = (userBalances[symbol] || 0) + amount; 
-    addMessage("BUY", `Purchased ${symbol}`, `Purchased ${amount} ${symbol} via ${method.toUpperCase()} for $${cost.toFixed(2)}`); 
-    showToast(`✅ Purchased ${amount} ${symbol}!`); 
-    updateBalances(); 
-    closeModal(); 
-}
-
-function processBuyWithLoan(symbol, price) { 
-    let amount = parseFloat(document.getElementById('buyAmount')?.value); 
-    if (isNaN(amount) || amount <= 0) { 
-        showToast("Enter valid amount"); 
-        return; 
-    } 
-    const cost = amount * price; 
-    userBalances[symbol] = (userBalances[symbol] || 0) + amount; 
-    addMessage("LOAN BUY", `Loan Purchase ${symbol}`, `Purchased ${amount} ${symbol} via Zentronix Loan - $${cost.toFixed(2)}`); 
-    showToast(`🏦 Loan approved! ${amount} ${symbol} added!`); 
-    updateBalances(); 
-    closeModal(); 
-}
-
-function openSwapModalFull() { 
-    showModal(`<button class="close-wallet-modal-btn" onclick="closeModal()">✕</button><h3>Swap Center</h3><select id="swapFromSelect"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>LTC</option><option>BNB</option></select><i class="fas fa-arrow-down" style="display:block; text-align:center; margin:0.5rem 0;"></i><select id="swapToSelect"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option><option>USDT</option><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><input type="number" id="swapAmountInput" placeholder="Amount"><button class="buy-btn" onclick="executeSwap()" style="width:100%; margin-top:1rem;">Confirm Swap</button>`); 
-}
-
-function executeSwap() { 
-    const from = document.getElementById('swapFromSelect')?.value; 
-    const to = document.getElementById('swapToSelect')?.value; 
-    let amount = parseFloat(document.getElementById('swapAmountInput')?.value); 
-    if (isNaN(amount) || amount <= 0) { 
-        showToast("Invalid amount"); 
-        closeModal(); 
-        return; 
-    } 
-    if (from === to) { 
-        showToast("Cannot swap same currency"); 
-        closeModal(); 
-        return; 
-    } 
-    const fromPrice = cryptoPrices[from] || 1; 
-    const toPrice = cryptoPrices[to] || 1; 
-    const received = (amount * fromPrice) / toPrice; 
-    addMessage("SWAP", `${from} → ${to}`, `Swapped ${amount} ${from} for ${received.toFixed(8)} ${to}`); 
-    showToast(`✅ Swapped ${amount} ${from} to ${received.toFixed(8)} ${to}`); 
-    closeModal(); 
-}
-
-// ==================== RENDERIZAÇÃO DO DASHBOARD ====================
 
 function getIconName(symbol) {
     const icons = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", USDT: "money-bill", LTC: "litecoin", BNB: "binance", BRADICOIN: "gem" };
     return icons[symbol] || "coins";
 }
 
+// ========== FUNÇÕES DE WALLET ==========
+async function gerarWalletReal(blockchain, symbol) {
+    return { success: true, address: `${symbol.toLowerCase()}_${Math.random().toString(36).substring(2, 15)}`, mnemonic: 'demo phrase' };
+}
+
+function openCreateWalletModal(symbol, cryptoName) {
+    const blockchainMap = { BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', USDT: 'ethereum', LTC: 'litecoin', BNB: 'binance' };
+    const blockchain = blockchainMap[symbol];
+    showModal(`
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3>Create ${symbol} Wallet</h3>
+        <button class="create-wallet-btn" onclick="confirmCreateRealWallet('${symbol}', '${cryptoName}', '${blockchain}')">CREATE WALLET</button>
+    `);
+}
+
+async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
+    closeModal();
+    showToast(`Creating ${symbol} wallet...`);
+    setTimeout(() => {
+        const address = `${symbol.toLowerCase()}_${Math.random().toString(36).substring(2, 15)}`;
+        userWallets[symbol] = address;
+        showToast(`✅ ${symbol} wallet created!`);
+        showModal(`
+            <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+            <h3>✅ Wallet Created!</h3>
+            <p>Address: ${address}</p>
+            <button class="copy-address-btn" onclick="navigator.clipboard.writeText('${address}')">COPY</button>
+        `);
+    }, 500);
+}
+
+function openReceiveWalletModal(coin) {
+    const addresses = { BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0' };
+    showModal(`
+        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
+        <h3>Receive ${coin}</h3>
+        <p>Address: ${addresses[coin] || 'Not configured'}</p>
+    `);
+}
+
+// ========== FUNÇÕES DE RENDERIZAÇÃO ==========
 function renderCryptoAssets() {
     const cryptos = [
         { name: "Bitcoin", symbol: "BTC", price: 67234 },
         { name: "Ethereum", symbol: "ETH", price: 3441 },
-        { name: "Solana", symbol: "SOL", price: 98.07 },
-        { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42 },
-        { name: "Tether", symbol: "USDT", price: 1.00 },
-        { name: "Litecoin", symbol: "LTC", price: 82.50 },
-        { name: "Binance Coin", symbol: "BNB", price: 312.50 }
+        { name: "BradiCoin", symbol: "BRADICOIN", price: 10.42 }
     ];
     const container = document.getElementById('cryptoAssetsGrid');
-    if (container) container.innerHTML = cryptos.map(c => {
-        if (c.symbol === 'BRADICOIN') {
-            // BradiCoin mantém apenas SEND, RECEIVE, STAKE, SWAP, HIST (sem WALLET)
-            return `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price}</div><div class="button-group"><button class="currency-send-btn" onclick="openSendModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-paper-plane"></i> SEND</button><button class="receive-btn" onclick="openReceiveModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-download"></i> RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
-        } else {
-            // Para BTC, ETH, SOL, USDT, LTC, BNB: botão WALLET que abre o gerador
-            return `<div class="asset-card"><div class="asset-price">${c.name} - $${c.price}</div><div class="button-group"><button class="currency-send-btn" onclick="openSendModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-paper-plane"></i> SEND</button><button class="receive-btn" onclick="openReceiveModal('${c.symbol.toLowerCase()}', '${c.symbol}')"><i class="fas fa-download"></i> RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${c.symbol.toLowerCase()}', '${c.symbol}', ${c.price})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openCreateWalletModal('${c.symbol}', '${c.name}')"><i class="fas fa-wallet"></i> WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${c.symbol}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
-        }
-    }).join('');
+    if (container) {
+        container.innerHTML = cryptos.map(c => `
+            <div class="asset-card">
+                <div class="asset-price">${c.name} - $${c.price}</div>
+                <div class="button-group">
+                    <button class="buy-btn" onclick="showToast('Buy ${c.symbol}')">BUY</button>
+                    <button class="sell-btn" onclick="showToast('Sell ${c.symbol}')">SELL</button>
+                    <button class="wallet-btn" onclick="openCreateWalletModal('${c.symbol}', '${c.name}')">WALLET</button>
+                </div>
+            </div>
+        `).join('');
+    }
 }
 
 function updateBalances() {
-    const total = Object.entries(userBalances).reduce((sum, [key, val]) => sum + (val * (cryptoPrices[key] || 1)), 0);
-    document.getElementById('totalBalance').innerHTML = `$${total.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+    const total = Object.values(userBalances).reduce((a, b) => a + b, 0);
+    document.getElementById('totalBalance').innerHTML = `$${total.toFixed(2)}`;
     const grid = document.getElementById('currencyGrid');
     if (grid) {
-        const fiatCurrencies = ['USD', 'EUR', 'GBP', 'BRL'];
-        const cryptos = ['BTC', 'ETH', 'SOL', 'BRADICOIN', 'USDT', 'LTC', 'BNB'];
-        grid.innerHTML = [...fiatCurrencies, ...cryptos].map(curr => {
-            const balance = userBalances[curr] || 0;
-            if (fiatCurrencies.includes(curr)) {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(2)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openFiatSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openFiatReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', 1)">STAKE</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
-            } else if (curr === 'BRADICOIN') {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
-            } else {
-                return `<div class="currency-item"><span>${curr}</span><span class="currency-balance">${balance.toFixed(8)}</span><div style="display:flex; gap:5px;"><button class="currency-send-btn" onclick="openSendModal('${curr.toLowerCase()}', '${curr}')">SEND</button><button class="receive-btn" onclick="openReceiveModal('${curr.toLowerCase()}', '${curr}')">RECEIVE</button><button class="buy-btn" onclick="openStakeModal('${curr.toLowerCase()}', '${curr}', ${cryptoPrices[curr] || 1})">STAKE</button><button class="swap-btn" onclick="openSwapModalFull()">SWAP</button><button class="wallet-btn" onclick="openCreateWalletModal('${curr}', '${curr}')">WALLET</button><button class="history-btn" onclick="showCurrencyHistory('${curr}')"><i class="fas fa-history"></i> HIST</button></div></div>`;
-            }
-        }).join('');
+        grid.innerHTML = Object.entries(userBalances).map(([k, v]) => `
+            <div class="currency-item"><span>${k}</span><span>${v.toFixed(2)}</span></div>
+        `).join('');
     }
-    const militaryDiv = document.getElementById('militaryBalances'); 
-    if (militaryDiv) militaryDiv.innerHTML = Object.entries(userBalances).slice(0, 8).map(([k, v]) => `<div class="balance-item"><span>${k}</span><span>${v.toFixed(8)}</span></div>`).join('');
-}
-    
-function renderSecurityCenter() {
-    const securityItems = [
-        { name: "Two-Factor Authentication (2FA)", status: "Disabled", action: "Enable" },
-        { name: "Biometric Login", status: "Disabled", action: "Setup" },
-        { name: "Address Whitelist", status: "0 Addresses", action: "Configure" },
-        { name: "Withdrawal Limit", status: "$50,000/day", action: "Change" },
-        { name: "Session Timeout", status: "30 minutes", action: "Change" },
-        { name: "Login Notifications", status: "Enabled", action: "Configure" },
-        { name: "Transaction PIN", status: "Not Set", action: "Set PIN" },
-        { name: "Anti-Phishing Code", status: "Not Set", action: "Set Code" },
-        { name: "IP Whitelist", status: "Not Set", action: "Configure" },
-        { name: "Cold Storage", status: "Inactive", action: "Activate" }
-    ];
-    const container = document.getElementById('securityCenterList');
-    if (container) container.innerHTML = securityItems.map(item => `<div class="security-item"><span><i class="fas fa-shield-alt"></i> ${item.name}</span><span style="color:var(--neon-yellow);">${item.status}</span><button class="buy-btn" style="padding:0.2rem 0.5rem; font-size:0.6rem;" onclick="showToast('${item.action} ${item.name}')">${item.action}</button></div>`).join('');
-}
-
-function renderBankingServices() {
-    const services = [
-        { name: "Personal Loan", desc: "Up to $500,000 with competitive rates", icon: "fas fa-user" },
-        { name: "Corporate Loan", desc: "Business financing up to $5M", icon: "fas fa-building" },
-        { name: "Investor Profile", desc: "Personalized investment strategy", icon: "fas fa-chart-line" },
-        { name: "Mortgage", desc: "Property financing worldwide", icon: "fas fa-home" },
-        { name: "Education Loan", desc: "Student financing", icon: "fas fa-graduation-cap" }
-    ];
-    const container = document.getElementById('bankingServicesList');
-    if (container) container.innerHTML = services.map(service => `<div class="service-card" onclick="openLoanApplicationModal('${service.name}')"><div style="display:flex; align-items:center; gap:10px;"><i class="${service.icon}" style="font-size:1.5rem; color:var(--neon-blue);"></i><div><strong>${service.name}</strong><br><small style="opacity:0.7;">${service.desc}</small></div></div><button class="buy-btn" style="margin-top:0.5rem; width:100%;" onclick="event.stopPropagation(); openLoanApplicationModal('${service.name}')">Apply Now</button></div>`).join('');
-}
-
-let stakingChart = null;
-
-function initStakingChart() { 
-    const canvas = document.getElementById('stakingChart');
-    if (!canvas) return;
-    
-    if (stakingChart) {
-        stakingChart.destroy();
-        stakingChart = null;
-    }
-    
-    const ctx = canvas.getContext('2d'); 
-    stakingChart = new Chart(ctx, { 
-        type: 'line', 
-        data: { 
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], 
-            datasets: [{ 
-                label: 'Portfolio Value', 
-                data: [100, 105, 112, 120], 
-                borderColor: '#00f2ff', 
-                tension: 0.4,
-                fill: false
-            }] 
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true
-        }
-    }); 
-}
-
-    let analyticsChart = null;
-
-function initAnalyticsChart() { 
-    const canvas = document.getElementById('analyticsChart');
-    if (!canvas) return;
-    
-    if (analyticsChart) {
-        analyticsChart.destroy();
-        analyticsChart = null;
-    }
-    
-    const ctx = canvas.getContext('2d'); 
-    analyticsChart = new Chart(ctx, { 
-        type: 'bar', 
-        data: { 
-            labels: ['Jan', 'Feb', 'Mar', 'Apr'], 
-            datasets: [{ 
-                label: 'Returns %', 
-                data: [5.2, 6.1, 5.8, 7.2], 
-                backgroundColor: '#00f2ff' 
-            }] 
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true
-        }
-    }); 
-}
-
-function closeCurrentSection() { 
-    document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); 
-    document.getElementById('cryptoSec').classList.add('active'); 
 }
 
 function setupMenu() {
     document.querySelectorAll('.menu-item').forEach(item => {
         item.addEventListener('click', () => {
-            const section = item.dataset.section;
             document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active'));
-            const sections = { crypto: 'cryptoSec', cryptoTransactions: 'cryptoTransactionsSec', history: 'historySec', trading: 'tradingSec', conversion: 'conversionSec', treasuries: 'treasuriesSec', cds: 'cdsSec', debentures: 'debenturesSec', reits: 'reitsSec', privateCredit: 'privateCreditSec', structuredNotes: 'structuredNotesSec', municipalBonds: 'municipalBondsSec', cards: 'cardsSec', payments: 'paymentsSec', swap: 'swapSec', analytics: 'analyticsSec', reports: 'reportsSec', security: 'securitySec', securityCenter: 'securityCenterSec', sessions: 'sessionsSec', compliance: 'complianceSec', antihack: 'antihackSec', services: 'servicesSec', digitalPayment: 'digitalPaymentSec' };
-            if (sections[section]) document.getElementById(sections[section]).classList.add('active');
+            const section = item.dataset.section;
+            const map = { crypto: 'cryptoSec', history: 'historySec', swap: 'swapSec' };
+            if (map[section]) document.getElementById(map[section]).classList.add('active');
         });
     });
 }
 
-function applyLanguage() { 
-    const t = translations[currentLang]; 
-    document.getElementById('bankSubtitle').innerText = t.bankSubtitle; 
-    document.getElementById('accessHubBtn').innerText = t.accessHub; 
-    document.getElementById('kycBtnText').innerText = t.kyc; 
-    document.getElementById('logoutBtnText').innerText = t.logout; 
-    document.getElementById('heroTitle').innerText = t.heroTitle; 
-    document.getElementById('heroBadge').innerText = t.heroBadge; 
-    document.getElementById('heroDesc').innerText = t.heroDesc; 
-    document.getElementById('card1Title').innerHTML = t.card1Title; 
-    document.getElementById('card1Desc').innerText = t.card1Desc; 
-    document.getElementById('card2Title').innerHTML = t.card2Title; 
-    document.getElementById('card2Desc').innerText = t.card2Desc; 
-    document.getElementById('card3Title').innerHTML = t.card3Title; 
-    document.getElementById('card3Desc').innerText = t.card3Desc; 
-    document.getElementById('impactPhrase').innerHTML = t.impactPhrase; 
-    document.getElementById('impactSmall').innerText = t.impactSmall; 
-    document.getElementById('aboutTitle').innerHTML = t.aboutTitle; 
-    document.getElementById('aboutHistoryTitle').innerText = t.aboutHistoryTitle; 
-    document.getElementById('aboutHistoryDesc').innerText = t.aboutHistoryDesc; 
-    document.getElementById('aboutSecurityTitle').innerText = t.aboutSecurityTitle; 
-    document.getElementById('aboutSecurityDesc').innerText = t.aboutSecurityDesc; 
-    document.getElementById('aboutReachTitle').innerText = t.aboutReachTitle; 
-    document.getElementById('aboutReachDesc').innerText = t.aboutReachDesc; 
-    document.getElementById('aboutReturnsTitle').innerText = t.aboutReturnsTitle; 
-    document.getElementById('aboutReturnsDesc').innerText = t.aboutReturnsDesc; 
-    document.getElementById('currenciesTitle').innerHTML = t.currenciesTitle; 
-    document.getElementById('cryptoTitles').innerHTML = t.cryptoTitles; 
-    document.getElementById('statAum').innerText = t.statAum; 
-    document.getElementById('statClients').innerText = t.statClients; 
-    document.getElementById('statCountries').innerText = t.statCountries; 
-    document.getElementById('statEncryption').innerText = t.statEncryption; 
-    document.getElementById('regulatoryTextFooter').innerText = t.regulatoryText; 
-    document.getElementById('copyrightTextFooter').innerText = t.copyrightText;
-    document.getElementById('confirmLogoutTitle').innerText = t.confirmLogoutTitle;
-    document.getElementById('confirmLogoutMessage').innerText = t.confirmLogoutMessage;
-    document.getElementById('confirmLogoutYes').innerText = t.confirmYes;
-    document.getElementById('confirmLogoutNo').innerText = t.confirmNo;
+// ========== FUNÇÕES DE LOGIN ==========
+document.getElementById('openLoginBtn').addEventListener('click', () => {
+    document.getElementById('loginModal').classList.add('active');
+});
+
+document.getElementById('loginSubmitBtn').addEventListener('click', function() {
+    const email = document.getElementById('loginId').value;
+    if (!email) { showToast("❌ Enter email"); return; }
+    
+    showToast("🔐 Logging in...");
+    const clientesSalvos = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    let cliente = clientesSalvos.find(c => c.email === email) || {
+        id: 'demo_' + Date.now(),
+        nome: email.split('@')[0] || 'Cliente',
+        email: email,
+        saldoUSD: 10000,
+        saldoEUR: 5000,
+        saldoBRL: 25000,
+        account_id: 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000)
+    };
+    
+    sessionStorage.setItem('cliente_logado', JSON.stringify(cliente));
+    carregarDadosClienteLogado(cliente);
+    document.getElementById('loginModal').classList.remove('active');
+    document.getElementById('dashboardContainer').style.display = 'block';
+    document.getElementById('institutionalContent').style.display = 'none';
+    document.getElementById('openLoginBtn').style.display = 'none';
+    document.getElementById('logoutMainBtn').style.display = 'flex';
+    document.getElementById('kycStatusBadge').style.display = 'flex';
+    document.getElementById('notificationBell').classList.add('visible');
+    showToast(`✅ Welcome ${cliente.nome}!`);
+});
+
+function carregarDadosClienteLogado(cliente) {
+    document.getElementById('welcomeUser').innerText = cliente.nome || "Cliente";
+    document.getElementById('accountNumberValue').innerText = cliente.account_id || 'ZNTX-0000';
+    if (cliente.saldoUSD) userBalances.USD = cliente.saldoUSD;
+    if (cliente.saldoEUR) userBalances.EUR = cliente.saldoEUR;
+    if (cliente.saldoBRL) userBalances.BRL = cliente.saldoBRL;
+    updateBalances();
+    renderCryptoAssets();
 }
 
-function setupLang() {
-    document.getElementById('langTrigger').addEventListener('click', () => document.getElementById('langContainer').classList.toggle('active'));
-    document.querySelectorAll('.lang-option').forEach(btn => { btn.addEventListener('click', () => { currentLang = btn.dataset.lang; document.getElementById('currentLangText').innerText = currentLang.toUpperCase(); applyLanguage(); document.getElementById('langContainer').classList.remove('active'); if (currentLang === 'ar') document.body.classList.add('rtl'); else document.body.classList.remove('rtl'); }); });
-}
-
-// Profile Functions
-function openProfileModal() {
-    document.getElementById('profileModal').classList.add('active');
-    const currentName = document.getElementById('welcomeUser').innerText.split(' ');
-    document.getElementById('profileFirstName').value = currentName[0] || 'Alexander';
-    document.getElementById('profileLastName').value = currentName[1] || 'Vance';
-}
-
-function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
-
-function saveProfile() {
-    const firstName = document.getElementById('profileFirstName').value;
-    const lastName = document.getElementById('profileLastName').value;
-    const fullName = `${firstName} ${lastName}`;
-    document.getElementById('welcomeUser').innerText = fullName;
-    showToast("Profile updated successfully!");
-    closeProfileModal();
-}
-
-function showLogoutConfirmation() {
-    document.getElementById('confirmLogoutModal').classList.add('active');
-}
-
-function performLogout() {
-    // Limpar sessão do cliente
+// ========== LOGOUT ==========
+document.getElementById('logoutMainBtn').addEventListener('click', function() {
     sessionStorage.removeItem('cliente_logado');
-    
-    // Resetar saldos
-    userBalances = { USD: 0, EUR: 0, GBP: 0, BRL: 0, BTC: 0, ETH: 0, BRADICOIN: 0, SOL: 0, USDT: 0, LTC: 0, BNB: 0 };
-    
     document.getElementById('dashboardContainer').style.display = 'none';
     document.getElementById('institutionalContent').style.display = 'block';
     document.getElementById('openLoginBtn').style.display = 'flex';
     document.getElementById('logoutMainBtn').style.display = 'none';
     document.getElementById('kycStatusBadge').style.display = 'none';
     document.getElementById('notificationBell').classList.remove('visible');
-    
-    showToast("Logged out successfully");
-    document.getElementById('confirmLogoutModal').classList.remove('active');
-}
+    showToast("Logged out");
+});
 
-// KYC Functions
-function updateKycStep(step) { 
-    currentKycStep = step; 
-    document.getElementById('kycStep1').style.display = step === 1 ? 'block' : 'none'; 
-    document.getElementById('kycStep2').style.display = step === 2 ? 'block' : 'none'; 
-    document.getElementById('kycStep3').style.display = step === 3 ? 'block' : 'none'; 
-    document.getElementById('kycPrevBtn').style.display = step > 1 ? 'flex' : 'none'; 
-    document.getElementById('kycNextBtn').style.display = step < 3 ? 'flex' : 'none'; 
-    document.getElementById('submitKycBtn').style.display = step === 3 ? 'flex' : 'none'; 
-    document.querySelectorAll('.kyc-step').forEach((el, idx) => { 
-        el.classList.remove('active', 'completed'); 
-        if (idx + 1 === step) el.classList.add('active'); 
-        else if (idx + 1 < step) el.classList.add('completed'); 
-    }); 
-    if (step === 3) { 
-        document.getElementById('kycReviewInfo').innerHTML = `<strong>Name:</strong> ${kycData.fullName}<br><strong>Email:</strong> ${kycData.email}<br><strong>Phone:</strong> ${kycData.phone}<br><strong>Address:</strong> ${kycData.address}<br><strong>Nationality:</strong> ${kycData.nationality}<br><strong>ID Document:</strong> ${kycData.idDoc ? 'Uploaded' : 'Not uploaded'}<br><strong>Proof of Address:</strong> ${kycData.addressDoc ? 'Uploaded' : 'Not uploaded'}`; 
-    } 
-}
+// ========== EXPOR FUNÇÕES ==========
+window.openReceiveWalletModal = openReceiveWalletModal;
+window.closeModal = closeModal;
+window.showToast = showToast;
+window.confirmCreateRealWallet = confirmCreateRealWallet;
+window.openCreateWalletModal = openCreateWalletModal;
 
-function validateKycStep1() { 
-    kycData.fullName = document.getElementById('fullNameDoc').value; 
-    kycData.email = document.getElementById('emailDocInput').value; 
-    kycData.phone = document.getElementById('phoneDoc').value; 
-    kycData.address = document.getElementById('addressDoc').value; 
-    kycData.nationality = document.getElementById('nationalityDoc').value; 
-    if (!kycData.fullName || !kycData.email || !kycData.phone || !kycData.address || !kycData.nationality) { 
-        showToast("Please fill all fields"); 
-        return false; 
-    } 
-    return true; 
-}
-
-function submitKyc() { 
-    // ⭐ SALVAR CLIENTE NO LOCALSTORAGE PARA O ADMIN ⭐
-    const dadosCliente = {
-        nome: kycData.fullName,
-        email: kycData.email,
-        documento: '',
-        telefone: kycData.phone,
-        saldoUSD: 0,
-        saldoEUR: 0,
-        saldoBRL: 0,
-        saldoGBP: 0,
-        kyc: "Pending"
-    };
-    salvarClienteNoLocalStorage(dadosCliente);
-    
-    // Código original continua...
-    addMessage("KYC", "KYC Documents Submitted", `Dear ${kycData.fullName}, your KYC documents have been received. We will review and send your account details via email shortly.`); 
-    showToast("✅ Congratulations! Your documents have been submitted. You will receive an email with your account details shortly."); 
-    document.getElementById('submitModal').classList.remove('active'); 
-    document.getElementById('kycStatusText').innerText = 'Submitted - Pending Review'; 
-    document.getElementById('kycStatusBadge').innerHTML = '<i class="fas fa-shield-alt"></i> KYC SUBMITTED'; 
-    kycData = { fullName: "", email: "", phone: "", address: "", nationality: "", idDoc: null, addressDoc: null }; 
-    currentKycStep = 1; 
-    updateKycStep(1); 
-}
-
-// Loan Application Functions
-function openLoanApplicationModal(serviceName) {
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📋 ${serviceName} APPLICATION</h3>
-        
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Zentronix Bank - Credit Analysis</div>
-            <div style="font-size: 0.8rem; margin-top: 0.3rem;">Competitive rates from 3.99% APR</div>
-        </div>
-        
-        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">💰 LOAN AMOUNT</div>
-            <div class="form-group">
-                <label>Amount *</label>
-                <input type="number" id="loanAmount" class="form-input" placeholder="0.00" step="any">
-            </div>
-            <div class="form-group">
-                <label>Currency *</label>
-                <select id="loanCurrency" class="form-input">
-                    <option value="USD">🇺🇸 US Dollar (USD)</option>
-                    <option value="EUR">🇪🇺 Euro (EUR)</option>
-                    <option value="GBP">🇬🇧 British Pound (GBP)</option>
-                    <option value="BRL">🇧🇷 Brazilian Real (BRL)</option>
-                    <option value="BRADICOIN">🪙 BradiCoin (BRC)</option>
-                </select>
-            </div>
-        </div>
-        
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">📝 LOAN PURPOSE</div>
-            <div class="form-group">
-                <label>Purpose of Loan *</label>
-                <select id="loanPurpose" class="form-input">
-                    <option value="Personal">👤 Personal Expenses</option>
-                    <option value="Business">💼 Business Investment</option>
-                    <option value="Education">🎓 Education / Tuition</option>
-                    <option value="Real Estate">🏠 Real Estate / Property</option>
-                    <option value="Debt Consolidation">📊 Debt Consolidation</option>
-                    <option value="Medical">🏥 Medical Expenses</option>
-                    <option value="Vehicle">🚗 Vehicle Purchase</option>
-                    <option value="Travel">✈️ Travel / Vacation</option>
-                    <option value="Crypto Investment">📈 Crypto Investment</option>
-                    <option value="Other">🔧 Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Additional Details</label>
-                <textarea id="loanDetails" class="form-input" rows="2" placeholder="Please provide more information about your loan request..."></textarea>
-            </div>
-        </div>
-        
-        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">⏱️ LOAN TERM</div>
-            <div class="form-group">
-                <label>Loan Term</label>
-                <select id="loanTerm" class="form-input">
-                    <option value="6">6 months</option>
-                    <option value="12" selected>12 months (1 year)</option>
-                    <option value="24">24 months (2 years)</option>
-                    <option value="36">36 months (3 years)</option>
-                    <option value="48">48 months (4 years)</option>
-                    <option value="60">60 months (5 years)</option>
-                </select>
-            </div>
-        </div>
-        
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">👤 PERSONAL INFORMATION</div>
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="loanFullName" class="form-input" value="Alexander Vance" placeholder="Your full name">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="loanEmail" class="form-input" value="alexander.vance@zentronix.com" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Phone</label>
-                <input type="tel" id="loanPhone" class="form-input" value="+41 78 123 4567" placeholder="Your phone number">
-            </div>
-            <div class="form-group">
-                <label>Monthly Income (approx.)</label>
-                <input type="number" id="loanIncome" class="form-input" placeholder="Monthly income amount">
-            </div>
-        </div>
-        
-        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">📊 SUMMARY & RATES</div>
-            <div id="loanSummary" style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.7rem;">
-                Select amount and currency to see estimated rates
-            </div>
-        </div>
-        
-        <div style="background: rgba(188,19,254,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important Information</div>
-            <div style="font-size: 0.65rem;">
-                • Credit analysis subject to approval<br>
-                • Terms and conditions apply<br>
-                • Loan amount may vary based on credit history<br>
-                • Zentronix Bank reserves the right to adjust rates
-            </div>
-        </div>
-        
-        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
-            <button class="send-crypto-btn" onclick="submitLoanApplication()" style="flex: 1; padding: 0.8rem;">
-                <i class="fas fa-paper-plane"></i> SUBMIT APPLICATION
-            </button>
-            <button class="sell-btn" onclick="closeModal()" style="flex: 1; padding: 0.8rem;">
-                <i class="fas fa-times"></i> CANCEL
-            </button>
-        </div>
-    `;
-    showModal(modalContent);
-    
-    setTimeout(() => {
-        const amountInput = document.getElementById('loanAmount');
-        const currencySelect = document.getElementById('loanCurrency');
-        const termSelect = document.getElementById('loanTerm');
-        if (amountInput) amountInput.addEventListener('input', updateLoanSummary);
-        if (currencySelect) currencySelect.addEventListener('change', updateLoanSummary);
-        if (termSelect) termSelect.addEventListener('change', updateLoanSummary);
-    }, 100);
-}
-
-function updateLoanSummary() {
-    const amount = parseFloat(document.getElementById('loanAmount')?.value);
-    const currency = document.getElementById('loanCurrency')?.value;
-    const termMonths = parseInt(document.getElementById('loanTerm')?.value) || 12;
-    
-    if (!amount || amount <= 0 || !currency) {
-        document.getElementById('loanSummary').innerHTML = 'Select amount and currency to see estimated rates';
-        return;
-    }
-    
-    const interestRates = { USD: 4.99, EUR: 5.49, GBP: 5.29, BRL: 12.99, BRADICOIN: 8.50 };
-    const rate = interestRates[currency] || 6.99;
-    const monthlyRate = rate / 100 / 12;
-    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
-    const totalPayment = monthlyPayment * termMonths;
-    const totalInterest = totalPayment - amount;
-    
-    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
-    const symbol = currencySymbols[currency] || '$';
-    
-    document.getElementById('loanSummary').innerHTML = `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Loan Amount:</span>
-            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Interest Rate (APR):</span>
-            <span style="color: var(--neon-yellow);">${rate}%</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Term:</span>
-            <span>${termMonths} months</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Monthly Payment:</span>
-            <span style="color: var(--neon-blue);">${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Total Interest:</span>
-            <span style="color: var(--neon-red);">${symbol}${totalInterest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-            <span>Total Payment:</span>
-            <span style="color: var(--neon-green); font-weight: bold;">${symbol}${totalPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-    `;
-}
-
-function submitLoanApplication() {
-    const amount = parseFloat(document.getElementById('loanAmount')?.value);
-    const currency = document.getElementById('loanCurrency')?.value;
-    const purpose = document.getElementById('loanPurpose')?.value;
-    const details = document.getElementById('loanDetails')?.value || "";
-    const term = document.getElementById('loanTerm')?.value;
-    const fullName = document.getElementById('loanFullName')?.value;
-    const email = document.getElementById('loanEmail')?.value;
-    const phone = document.getElementById('loanPhone')?.value;
-    const income = document.getElementById('loanIncome')?.value;
-    
-    if (!amount || amount <= 0) { showToast("❌ Please enter a valid loan amount"); return; }
-    if (!fullName || fullName.trim() === "") { showToast("❌ Please enter your full name"); return; }
-    if (!email || email.trim() === "") { showToast("❌ Please enter your email"); return; }
-    
-    const interestRates = { USD: 4.99, EUR: 5.49, GBP: 5.29, BRL: 12.99, BRADICOIN: 8.50 };
-    const rate = interestRates[currency] || 6.99;
-    const termMonths = parseInt(term);
-    const monthlyRate = rate / 100 / 12;
-    const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
-    
-    const currencySymbols = { USD: '$', EUR: '€', GBP: '£', BRL: 'R$', BRADICOIN: 'BRC ' };
-    const symbol = currencySymbols[currency] || '$';
-    
-    addMessage("LOAN APPLICATION", `Loan Request - ${currency} ${amount.toFixed(2)}`, 
-        `📋 Loan Application Submitted
-        👤 Name: ${fullName}
-        💰 Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
-        📊 Currency: ${currency}
-        🎯 Purpose: ${purpose}
-        ⏱️ Term: ${termMonths} months
-        📅 Monthly Payment: ${symbol}${monthlyPayment.toLocaleString(undefined, {minimumFractionDigits: 2})}
-        📧 Contact: ${email}
-        ${details ? '📝 Details: ' + details : ''}
-        ${income ? '💰 Income: ' + income : ''}`
-    );
-    
-    showToast(`✅ Loan application submitted successfully! Amount: ${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}. You will receive a response within 24 hours.`);
-    closeModal();
-}
-
-    // ==================== FIAT SEND/RECEIVE FUNCTIONS ====================
-const bankReceiveDetails = {
-    USD: { bankName: "JPMorgan Chase Bank N.A.", swiftCode: "CHASUS33XXX", routingNumber: "021000021", accountNumber: "ZNTX-4821-7390-1256", bankAddress: "270 Park Avenue, New York, NY 10017, USA", beneficiaryName: "Zentronix Bank International", beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001" },
-    EUR: { bankName: "Deutsche Bank AG", swiftCode: "DEUTDEFFXXX", iban: "DE89370400440532013000", accountNumber: "ZNTX-EU-7390-1256", bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany", beneficiaryName: "Zentronix Bank Europe", beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany" },
-    GBP: { bankName: "Barclays Bank PLC", swiftCode: "BARCLGB22XXX", sortCode: "20-00-00", accountNumber: "ZNTX-UK-7390-1256", bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom", beneficiaryName: "Zentronix Bank UK Ltd", beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY" },
-    BRL: { bankName: "Banco Itaú Unibanco S.A.", swiftCode: "ITAUBRSPXXX", cnpj: "60.701.190/0001-04", accountNumber: "ZNTX-BR-7390-1256", agency: "1234", bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil", beneficiaryName: "Zentronix Bank Brasil", beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP" }
-};
-// ==================== EVENT LISTENERS & INITIALIZATION ====================
-let currentLang = 'en';
-
-document.getElementById('openLoginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
-
-// ========== BOTÃO DE LOGIN (CORRIGIDO - SEM SUPABASE) ==========
-document.getElementById('loginSubmitBtn').addEventListener('click', function() {
-    const email = document.getElementById('loginId').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    if (!email || !password) {
-        showToast("❌ Please enter both email and password");
-        return;
-    }
-    
-    showToast("🔐 Logging in...");
-    
-    // Buscar cliente no localStorage
-    const clientesSalvos = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    let clienteEncontrado = clientesSalvos.find(c => c.email === email);
-    
-    setTimeout(() => {
-        let clienteDemo;
-        
-        if (clienteEncontrado) {
-            clienteDemo = {
-                id: clienteEncontrado.id || 'demo_' + Date.now(),
-                nome: clienteEncontrado.nome || email.split('@')[0] || 'Cliente',
-                email: email,
-                saldoUSD: clienteEncontrado.saldoUSD || 1000,
-                saldoEUR: clienteEncontrado.saldoEUR || 500,
-                saldoBRL: clienteEncontrado.saldoBRL || 2500,
-                saldoGBP: clienteEncontrado.saldoGBP || 300,
-                kyc_status: clienteEncontrado.kyc || 'Pending',
-                account_id: clienteEncontrado.accountId || 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000)
-            };
-            showToast(`✅ Welcome back ${clienteDemo.nome}!`);
-        } else {
-            clienteDemo = {
-                id: 'demo_' + Date.now(),
-                nome: email.split('@')[0] || 'Cliente',
-                email: email,
-                saldoUSD: 10000,
-                saldoEUR: 5000,
-                saldoBRL: 25000,
-                saldoGBP: 3000,
-                kyc_status: 'Approved',
-                account_id: 'ZNTX-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000) + '-' + Math.floor(Math.random() * 9000 + 1000)
-            };
-            showToast(`✅ Welcome ${clienteDemo.nome}!`);
-        }
-        
-        // Salvar sessão
-        sessionStorage.setItem('cliente_logado', JSON.stringify(clienteDemo));
-        
-        // Carregar dados do cliente
-        if (typeof carregarDadosClienteLogado === 'function') {
-            carregarDadosClienteLogado(clienteDemo);
-        }
-        
-        // Alternar telas
-        document.getElementById('loginModal').classList.remove('active');
+// ========== INICIALIZAÇÃO ==========
+function verificarSessaoExistente() {
+    const cliente = sessionStorage.getItem('cliente_logado');
+    if (cliente) {
+        carregarDadosClienteLogado(JSON.parse(cliente));
         document.getElementById('dashboardContainer').style.display = 'block';
         document.getElementById('institutionalContent').style.display = 'none';
         document.getElementById('openLoginBtn').style.display = 'none';
         document.getElementById('logoutMainBtn').style.display = 'flex';
         document.getElementById('kycStatusBadge').style.display = 'flex';
         document.getElementById('notificationBell').classList.add('visible');
-        
-    }, 500);
-});
-        
-document.getElementById('logoutMainBtn').addEventListener('click', showLogoutConfirmation);
-document.getElementById('confirmLogoutYes').addEventListener('click', performLogout);
-document.getElementById('confirmLogoutNo').addEventListener('click', () => { document.getElementById('confirmLogoutModal').classList.remove('active'); });
-document.getElementById('notificationBell').addEventListener('click', () => { 
-    messages.forEach(m => m.read = true); 
-    updateMessagesDisplay(); 
-    updateNotificationCount(); 
-    document.getElementById('historySec').classList.add('active'); 
-    document.querySelectorAll('.investment-section').forEach(s => s.classList.remove('active')); 
-    document.getElementById('historySec').classList.add('active'); 
-});
-document.getElementById('kycBtn').addEventListener('click', () => document.getElementById('submitModal').classList.add('active'));
-document.getElementById('closeSubmitModalBtn').addEventListener('click', () => document.getElementById('submitModal').classList.remove('active'));
-document.getElementById('kycNextBtn').addEventListener('click', () => { if (validateKycStep1()) updateKycStep(2); });
-document.getElementById('kycPrevBtn').addEventListener('click', () => updateKycStep(currentKycStep - 1));
-document.getElementById('submitKycBtn').addEventListener('click', submitKyc);
-document.getElementById('uploadArea').addEventListener('click', () => document.getElementById('fileInput').click());
-document.getElementById('addressUploadArea').addEventListener('click', () => document.getElementById('addressFileInput').click());
-document.getElementById('fileInput').addEventListener('change', (e) => { if (e.target.files[0]) { kycData.idDoc = e.target.files[0]; document.getElementById('uploadArea').innerHTML = `<i class="fas fa-check-circle" style="color: var(--neon-green);"></i><p>Uploaded: ${e.target.files[0].name}</p>`; } });
-document.getElementById('addressFileInput').addEventListener('change', (e) => { if (e.target.files[0]) { kycData.addressDoc = e.target.files[0]; document.getElementById('addressUploadArea').innerHTML = `<i class="fas fa-check-circle" style="color: var(--neon-green);"></i><p>Uploaded: ${e.target.files[0].name}</p>`; } });
-document.getElementById('startKycBtn')?.addEventListener('click', () => document.getElementById('submitModal').classList.add('active'));
-document.getElementById('doSwapBtn')?.addEventListener('click', () => { const from = document.getElementById('swapFrom')?.value; const to = document.getElementById('swapTo')?.value; const amt = parseFloat(document.getElementById('swapAmount')?.value); if (amt > 0) { addMessage("SWAP", `${from} → ${to}`, `Swapped ${amt} ${from} to ${to}`); showToast(`Swapped ${amt} ${from} to ${to}`); } });
-document.getElementById('doConvertBtn')?.addEventListener('click', () => showToast("Conversion feature"));
-document.getElementById('stealthSwitch')?.addEventListener('click', function() { this.classList.toggle('active'); document.querySelectorAll('.currency-balance, .balance-item span:last-child').forEach(el => el.style.filter = this.classList.contains('active') ? 'blur(5px)' : 'none'); });
-document.getElementById('deleteAccountBtn')?.addEventListener('click', () => { if (confirm("WARNING: This action will permanently delete your account. Are you sure?")) { showToast("Account deletion request submitted."); } });
-document.getElementById('copyAccountBtn')?.addEventListener('click', copyAccountNumber);
-document.getElementById('ghostModeBtn')?.addEventListener('click', () => showToast("Ghost Mode: Your balances are now hidden from view"));
-document.getElementById('simulatorBtn')?.addEventListener('click', () => showToast("Scenario Simulator: Project your investment growth"));
-document.getElementById('themesBtn')?.addEventListener('click', () => showToast("Theme Weaver: Choose your preferred color scheme"));
-document.getElementById('auditBtn')?.addEventListener('click', () => showToast("Audit Logs: Download your complete transaction history"));
-document.getElementById('createCardBtn')?.addEventListener('click', () => showToast("New virtual card created! Check your email for details."));
-document.getElementById('profileAvatarBtn')?.addEventListener('click', openProfileModal);
-document.getElementById('closeProfileModalBtn')?.addEventListener('click', closeProfileModal);
-document.getElementById('saveProfileBtn')?.addEventListener('click', saveProfile);
-document.getElementById('uploadPhotoBtn')?.addEventListener('click', () => document.getElementById('profilePhotoInput').click());
-document.getElementById('profilePhotoInput')?.addEventListener('change', (e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { profilePhoto = event.target.result; document.querySelector('.profile-avatar').innerHTML = `<img src="${profilePhoto}">`; document.querySelector('#profileAvatarLarge').innerHTML = `<img src="${profilePhoto}">`; }; reader.readAsDataURL(e.target.files[0]); } });
-document.getElementById('togglePasswordBtn')?.addEventListener('click', () => {
-    const passwordInput = document.getElementById('loginPassword');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    document.getElementById('togglePasswordBtn').innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-});
+    }
+}
 
-// ========== EXPOR FUNÇÕES GLOBAIS ==========
-window.closeModal = closeModal;
-window.copyWalletAddress = copyWalletAddress;
-window.shareAddress = shareAddress;
-window.showToast = showToast;
-window.deleteMessage = deleteMessage;
-window.addMessage = addMessage;
-window.showCurrencyHistory = showCurrencyHistory;
-window.copyAccountNumber = copyAccountNumber;
-window.openCreateWalletModal = openCreateWalletModal;
-window.openSendWalletModal = openSendWalletModal;
-window.openReceiveWalletModal = openReceiveWalletModal;
-window.confirmCreateWallet = confirmCreateWallet;
-window.confirmCreateRealWallet = confirmCreateRealWallet;
-window.confirmSendTransaction = confirmSendTransaction;
-window.openStakeModal = openStakeModal;
-window.openBuyModal = openBuyModal;
-window.openSwapModalFull = openSwapModalFull;
-window.openLoanApplicationModal = openLoanApplicationModal;
-window.openFiatSendModal = openFiatSendModal;
-window.openFiatReceiveModal = openFiatReceiveModal;
-window.confirmFiatSend = confirmFiatSend;
-window.openSendModal = openSendModal;
-window.openReceiveModal = openReceiveModal;
-window.confirmSend = confirmSend;
-window.getNetworkFee = getNetworkFee;
-
-// ========== INICIALIZAÇÃO ==========
 renderCryptoAssets();
 updateBalances();
 setupMenu();
-setupLang();
-applyLanguage();
-updateMessagesDisplay();
-updateNotificationCount();
-updateKycStep(1);
-
-// ========== FUNÇÃO PARA CARREGAR DADOS DO CLIENTE LOGADO ==========
-function carregarDadosClienteLogado(cliente) {
-    const welcomeElement = document.getElementById('welcomeUser');
-    if (welcomeElement) welcomeElement.innerText = cliente.nome || "Cliente";
-    
-    const accountElement = document.getElementById('accountNumberValue');
-    if (accountElement) accountElement.innerText = cliente.account_id || 'ZNTX-0000-0000-0000';
-    
-    if (cliente.saldoUSD !== undefined) userBalances.USD = cliente.saldoUSD;
-    if (cliente.saldoEUR !== undefined) userBalances.EUR = cliente.saldoEUR;
-    if (cliente.saldoBRL !== undefined) userBalances.BRL = cliente.saldoBRL;
-    if (cliente.saldoGBP !== undefined) userBalances.GBP = cliente.saldoGBP;
-    
-    updateBalances();
-    renderCryptoAssets();
-    renderSecurityCenter();
-    renderBankingServices();
-    addMessage("LOGIN", "Welcome Back", `Logged in as ${cliente.nome} at ${new Date().toLocaleString()}`);
-    console.log("🎉 Dashboard carregado para:", cliente.nome);
-}
-    
-// ========== VERIFICAR SESSÃO EXISTENTE AO CARREGAR ==========
-function verificarSessaoExistente() {
-    const clienteSalvo = sessionStorage.getItem('cliente_logado');
-    if (clienteSalvo) {
-        const cliente = JSON.parse(clienteSalvo);
-        carregarDadosClienteLogado(cliente);
-        
-        document.getElementById('dashboardContainer').style.display = 'block';
-        document.getElementById('institutionalContent').style.display = 'none';
-        document.getElementById('openLoginBtn').style.display = 'none';
-        document.getElementById('logoutMainBtn').style.display = 'flex';
-        document.getElementById('kycStatusBadge').style.display = 'flex';
-        document.getElementById('notificationBell').classList.add('visible');
-    }
-}
-
-// Chamar verificação ao carregar
 verificarSessaoExistente();
-
+console.log("🚀 Zentronix Bank iniciado!");
 </script>
 </body>
 </html>
