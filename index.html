@@ -523,6 +523,9 @@ if (typeof supabase === 'undefined') {
     console.log("✅ Supabase configurado na página do banco");
 }
 
+// ============ CONFIGURAÇÃO DA API RENDER (UMA VEZ SÓ) ============
+const API_BASE_URL = 'https://zentronix-api.onrender.com';
+
 // ========== TATUM API CONFIG ==========
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
@@ -864,9 +867,6 @@ window.gerarWalletReal = gerarWalletReal;
 carregarDadosBanco();
 console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
 
-// ==================== CONFIGURAÇÃO DA API RENDER ====================
-const API_BASE_URL = 'https://zentronix-api.onrender.com';
-
 // Health check
 async function checkApiHealth() {
     try {
@@ -1012,9 +1012,6 @@ window.gerarWalletReal = gerarWalletReal;
 // Inicialização
 carregarDadosBanco();
 console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
-
-// ==================== CONFIGURAÇÃO DA API RENDER ====================
-const API_BASE_URL = 'https://zentronix-api.onrender.com';
 
 // Health check
 async function checkApiHealth() {
@@ -1163,9 +1160,6 @@ console.log("🚀 Sistema Zentronix Bank inicializado com sucesso!");
 // Inicialização
 carregarDadosBanco();
 console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
-
-// ==================== CONFIGURAÇÃO DA API RENDER ====================
-const API_BASE_URL = 'https://zentronix-api.onrender.com';
 
 // ==================== FUNÇÕES DE API ====================
 
