@@ -624,6 +624,62 @@ function gerarWalletDemo(blockchain, symbol) {
     };
 }
 
+// ============ FUNÇÃO PARA MODAL DE RECEBER CRYPTO ============
+function openReceiveWalletModal(coin) {
+    console.log("📥 Abrir modal para receber:", coin);
+    
+    const walletAddresses = {
+        BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        ETH: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0',
+        BRC: '0xBRADICOIN123456789ZENTRONIX',
+        SOL: '7x5Nhr4Rr6qMeKHzK1JcZ2kqTxL9H1xvfQkqP6YxZ8zW',
+        USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+    };
+    
+    const address = walletAddresses[coin] || 'Endereço não configurado';
+    
+    const modalHtml = `
+        <div id="receiveWalletModal" class="modal-overlay" style="display: flex; z-index: 10000;">
+            <div class="modal-content" style="max-width: 500px; background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid #00f2ff;">
+                <h3><i class="fas fa-qrcode"></i> Receber ${coin}</h3>
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fas fa-wallet" style="font-size: 60px; color: #bc13fe; margin-bottom: 15px;"></i>
+                    <p><strong>Endereço para depósito:</strong></p>
+                    <div style="background: #0d1117; padding: 12px; border-radius: 10px; margin: 10px 0; word-break: break-all; border: 1px solid #bc13fe;">
+                        <code id="walletAddress" style="font-size: 12px;">${address}</code>
+                    </div>
+                    <button onclick="copyWalletAddress()" class="success" style="margin-top: 10px;">
+                        <i class="fas fa-copy"></i> COPIAR ENDEREÇO
+                    </button>
+                    <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">
+                        ⚠️ Envie apenas ${coin} para este endereço.
+                    </p>
+                </div>
+                <div class="modal-buttons">
+                    <button onclick="closeReceiveWalletModal()" class="secondary">FECHAR</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const existingModal = document.getElementById('receiveWalletModal');
+    if(existingModal) existingModal.remove();
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function closeReceiveWalletModal() {
+    const modal = document.getElementById('receiveWalletModal');
+    if(modal) modal.remove();
+}
+
+function copyWalletAddress() {
+    const addressElement = document.getElementById('walletAddress');
+    if(addressElement) {
+        navigator.clipboard.writeText(addressElement.innerText);
+        alert("✅ Endereço copiado!");
+    }
+}
+
 // ========== ZENTRONIX BANK INTEGRATION (ATUALIZADO) ==========
 
 // Função para carregar dados do banco
@@ -714,6 +770,395 @@ function salvarClienteNoLocalStorage(dadosCliente) {
     }
     return false;
 }
+
+// ========== FUNÇÃO DE LOGIN DO CLIENTE ==========
+async function doClientLogin() {
+    const email = document.getElementById('loginEmail')?.value;
+    const password = document.getElementById('loginPassword')?.value;
+    const errorDiv = document.getElementById('loginError');
+    
+    if(!email || !password) {
+        if(errorDiv) errorDiv.innerText = "Preencha email e senha";
+        return;
+    }
+    
+    if(!supabaseClient) {
+        if(errorDiv) errorDiv.innerText = "Sistema em inicialização. Aguarde...";
+        return;
+    }
+    
+    try {
+        console.log("🔐 Tentando login com:", email);
+        
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if(error) {
+            console.error("Erro de autenticação:", error);
+            if(errorDiv) errorDiv.innerText = "Email ou senha inválidos";
+            return;
+        }
+        
+        if(data && data.user) {
+            console.log("✅ Login bem-sucedido:", data.user.id);
+            
+            const { data: cliente, error: clienteError } = await supabaseClient
+                .from('clientes')
+                .select('*')
+                .eq('email', email)
+                .single();
+            
+            if(clienteError) {
+                console.error("Erro ao buscar cliente:", clienteError);
+            }
+            
+            sessionStorage.setItem('clienteLogado', JSON.stringify({
+                id: data.user.id,
+                email: email,
+                nome: cliente?.nome || email.split('@')[0],
+                account_id: cliente?.account_id || 'N/A'
+            }));
+            
+            showClientDashboard(cliente || { nome: email.split('@')[0], email: email });
+            
+            if(errorDiv) errorDiv.innerText = "";
+        }
+        
+    } catch(erro) {
+        console.error("Login error:", erro);
+        if(errorDiv) errorDiv.innerText = "Erro de conexão. Tente novamente.";
+    }
+}
+
+// ========== FUNÇÃO PARA MOSTRAR DASHBOARD DO CLIENTE ==========
+function showClientDashboard(cliente) {
+    const loginSection = document.getElementById('loginSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    
+    if(loginSection) loginSection.style.display = 'none';
+    if(dashboardSection) {
+        dashboardSection.style.display = 'block';
+        
+        const welcomeName = document.getElementById('welcomeUserName');
+        if(welcomeName) welcomeName.innerText = cliente.nome || cliente.email;
+        
+        const accountIdSpan = document.getElementById('userAccountId');
+        if(accountIdSpan && cliente.account_id) {
+            accountIdSpan.innerText = cliente.account_id;
+        }
+    }
+    
+    console.log("🎉 Dashboard carregado para:", cliente.nome);
+}
+
+// ========== EXPOR FUNÇÕES GLOBALMENTE ==========
+window.openReceiveWalletModal = openReceiveWalletModal;
+window.closeReceiveWalletModal = closeReceiveWalletModal;
+window.copyWalletAddress = copyWalletAddress;
+window.doClientLogin = doClientLogin;
+window.gerarWalletReal = gerarWalletReal;
+
+// ========== INICIALIZAÇÃO ==========
+carregarDadosBanco();
+console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
+
+// ==================== CONFIGURAÇÃO DA API RENDER ====================
+const API_BASE_URL = 'https://zentronix-api.onrender.com';
+
+// Health check
+async function checkApiHealth() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/health`);
+        const data = await response.json();
+        console.log('✅ API Zentronix conectada:', data.status);
+        if (data.demoMode) {
+            console.log('⚠️ API em modo demo - configure DATABASE_URL no Render');
+        }
+        return data;
+    } catch (error) {
+        console.warn('⚠️ API offline, usando modo demo local');
+        return null;
+    }
+}
+
+// Chamar health check
+checkApiHealth();
+
+// ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
+function salvarClienteNoLocalStorage(dadosCliente) {
+    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    const existe = clientes.some(c => c.email === dadosCliente.email);
+    
+    if (!existe) {
+        const novoCliente = {
+            id: Date.now(),
+            nome: dadosCliente.nome,
+            email: dadosCliente.email,
+            documento: dadosCliente.documento || '',
+            telefone: dadosCliente.telefone || '',
+            saldoUSD: dadosCliente.saldoUSD || 0,
+            saldoEUR: dadosCliente.saldoEUR || 0,
+            saldoBRL: dadosCliente.saldoBRL || 0,
+            saldoGBP: dadosCliente.saldoGBP || 0,
+            kyc: dadosCliente.kyc || "Pending",
+            dataCadastro: new Date().toISOString()
+        };
+        
+        clientes.push(novoCliente);
+        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
+        console.log("✅ Cliente salvo no localStorage:", novoCliente.nome);
+        return true;
+    }
+    return false;
+}
+
+// ========== FUNÇÃO DE LOGIN DO CLIENTE ==========
+async function doClientLogin() {
+    const email = document.getElementById('loginEmail')?.value;
+    const password = document.getElementById('loginPassword')?.value;
+    const errorDiv = document.getElementById('loginError');
+    
+    if(!email || !password) {
+        if(errorDiv) errorDiv.innerText = "Preencha email e senha";
+        return;
+    }
+    
+    if(!supabaseClient) {
+        if(errorDiv) errorDiv.innerText = "Sistema em inicialização. Aguarde...";
+        return;
+    }
+    
+    try {
+        console.log("🔐 Tentando login com:", email);
+        
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if(error) {
+            console.error("Erro de autenticação:", error);
+            if(errorDiv) errorDiv.innerText = "Email ou senha inválidos";
+            return;
+        }
+        
+        if(data && data.user) {
+            console.log("✅ Login bem-sucedido:", data.user.id);
+            
+            // Buscar dados do cliente
+            const { data: cliente, error: clienteError } = await supabaseClient
+                .from('clientes')
+                .select('*')
+                .eq('email', email)
+                .single();
+            
+            if(clienteError) {
+                console.error("Erro ao buscar cliente:", clienteError);
+            }
+            
+            // Salvar sessão
+            sessionStorage.setItem('clienteLogado', JSON.stringify({
+                id: data.user.id,
+                email: email,
+                nome: cliente?.nome || email.split('@')[0],
+                account_id: cliente?.account_id || 'N/A'
+            }));
+            
+            // Mostrar dashboard
+            showClientDashboard(cliente || { nome: email.split('@')[0], email: email });
+            
+            if(errorDiv) errorDiv.innerText = "";
+        }
+        
+    } catch(erro) {
+        console.error("Login error:", erro);
+        if(errorDiv) errorDiv.innerText = "Erro de conexão. Tente novamente.";
+    }
+}
+
+// ========== FUNÇÃO PARA MOSTRAR DASHBOARD DO CLIENTE ==========
+function showClientDashboard(cliente) {
+    // Esconder tela de login
+    const loginSection = document.getElementById('loginSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    
+    if(loginSection) loginSection.style.display = 'none';
+    if(dashboardSection) {
+        dashboardSection.style.display = 'block';
+        
+        // Atualizar nome do usuário
+        const welcomeName = document.getElementById('welcomeUserName');
+        if(welcomeName) welcomeName.innerText = cliente.nome || cliente.email;
+        
+        // Atualizar account ID se existir
+        const accountIdSpan = document.getElementById('userAccountId');
+        if(accountIdSpan && cliente.account_id) {
+            accountIdSpan.innerText = cliente.account_id;
+        }
+    }
+    
+    console.log("🎉 Dashboard carregado para:", cliente.nome);
+}
+
+// ========== EXPOR FUNÇÕES GLOBALMENTE ==========
+window.openReceiveWalletModal = openReceiveWalletModal;
+window.closeReceiveWalletModal = closeReceiveWalletModal;
+window.copyWalletAddress = copyWalletAddress;
+window.doClientLogin = doClientLogin;
+window.gerarWalletReal = gerarWalletReal;
+
+// Inicialização
+carregarDadosBanco();
+console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
+
+// ==================== CONFIGURAÇÃO DA API RENDER ====================
+const API_BASE_URL = 'https://zentronix-api.onrender.com';
+
+// Health check
+async function checkApiHealth() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/health`);
+        const data = await response.json();
+        console.log('✅ API Zentronix conectada:', data.status);
+        if (data.demoMode) {
+            console.log('⚠️ API em modo demo - configure DATABASE_URL no Render');
+        }
+        return data;
+    } catch (error) {
+        console.warn('⚠️ API offline, usando modo demo local');
+        return null;
+    }
+}
+
+// Chamar health check
+checkApiHealth();
+
+// ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
+function salvarClienteNoLocalStorage(dadosCliente) {
+    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+    const existe = clientes.some(c => c.email === dadosCliente.email);
+    
+    if (!existe) {
+        const novoCliente = {
+            id: Date.now(),
+            nome: dadosCliente.nome,
+            email: dadosCliente.email,
+            documento: dadosCliente.documento || '',
+            telefone: dadosCliente.telefone || '',
+            saldoUSD: dadosCliente.saldoUSD || 0,
+            saldoEUR: dadosCliente.saldoEUR || 0,
+            saldoBRL: dadosCliente.saldoBRL || 0,
+            saldoGBP: dadosCliente.saldoGBP || 0,
+            kyc: dadosCliente.kyc || "Pending",
+            dataCadastro: new Date().toISOString()
+        };
+        
+        clientes.push(novoCliente);
+        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
+        console.log("✅ Cliente salvo no localStorage:", novoCliente.nome);
+            return true;
+    }
+    return false;
+}
+
+// ========== FUNÇÃO DE LOGIN DO CLIENTE ==========
+async function doClientLogin() {
+    const email = document.getElementById('loginEmail')?.value;
+    const password = document.getElementById('loginPassword')?.value;
+    const errorDiv = document.getElementById('loginError');
+    
+    if(!email || !password) {
+        if(errorDiv) errorDiv.innerText = "Preencha email e senha";
+        return;
+    }
+    
+    if(!supabaseClient) {
+        if(errorDiv) errorDiv.innerText = "Sistema em inicialização. Aguarde...";
+        return;
+    }
+    
+    try {
+        console.log("🔐 Tentando login com:", email);
+        
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if(error) {
+            console.error("Erro de autenticação:", error);
+            if(errorDiv) errorDiv.innerText = "Email ou senha inválidos";
+            return;
+        }
+        
+        if(data && data.user) {
+            console.log("✅ Login bem-sucedido:", data.user.id);
+            
+            // Buscar dados do cliente
+            const { data: cliente, error: clienteError } = await supabaseClient
+                .from('clientes')
+                .select('*')
+                .eq('email', email)
+                .single();
+            
+            if(clienteError) {
+                console.error("Erro ao buscar cliente:", clienteError);
+            }
+            
+            // Salvar sessão
+            sessionStorage.setItem('clienteLogado', JSON.stringify({
+                id: data.user.id,
+                email: email,
+                nome: cliente?.nome || email.split('@')[0],
+                account_id: cliente?.account_id || 'N/A'
+            }));
+            
+            // Mostrar dashboard
+            showClientDashboard(cliente || { nome: email.split('@')[0], email: email });
+            
+            if(errorDiv) errorDiv.innerText = "";
+        }
+        
+    } catch(erro) {
+        console.error("Login error:", erro);
+        if(errorDiv) errorDiv.innerText = "Erro de conexão. Tente novamente.";
+    }
+}
+
+// ========== FUNÇÃO PARA MOSTRAR DASHBOARD DO CLIENTE ==========
+function showClientDashboard(cliente) {
+    // Esconder tela de login
+    const loginSection = document.getElementById('loginSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    
+    if(loginSection) loginSection.style.display = 'none';
+    if(dashboardSection) {
+        dashboardSection.style.display = 'block';
+        
+        // Atualizar nome do usuário
+        const welcomeName = document.getElementById('welcomeUserName');
+        if(welcomeName) welcomeName.innerText = cliente.nome || cliente.email;
+        
+        // Atualizar account ID se existir
+        const accountIdSpan = document.getElementById('userAccountId');
+        if(accountIdSpan && cliente.account_id) {
+            accountIdSpan.innerText = cliente.account_id;
+        }
+    }
+    
+    console.log("🎉 Dashboard carregado para:", cliente.nome);
+}
+
+// ========== EXPOR FUNÇÕES GLOBALMENTE ==========
+window.openReceiveWalletModal = openReceiveWalletModal;
+window.closeReceiveWalletModal = closeReceiveWalletModal;
+window.copyWalletAddress = copyWalletAddress;
+window.doClientLogin = doClientLogin;
+window.gerarWalletReal = gerarWalletReal;
+
+console.log("🚀 Sistema Zentronix Bank inicializado com sucesso!");
 
 // Inicialização
 carregarDadosBanco();
