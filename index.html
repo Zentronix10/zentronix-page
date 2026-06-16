@@ -895,6 +895,7 @@ async function doClientLogin() {
 
 // ========== FUNÇÃO PARA MOSTRAR DASHBOARD DO CLIENTE ==========
 function showClientDashboard(cliente) {
+    // Esconder tela de login
     const loginSection = document.getElementById('loginSection');
     const dashboardSection = document.getElementById('dashboardSection');
     
@@ -902,9 +903,11 @@ function showClientDashboard(cliente) {
     if(dashboardSection) {
         dashboardSection.style.display = 'block';
         
+        // Atualizar nome do usuário
         const welcomeName = document.getElementById('welcomeUserName');
         if(welcomeName) welcomeName.innerText = cliente.nome || cliente.email;
         
+        // Atualizar account ID se existir
         const accountIdSpan = document.getElementById('userAccountId');
         if(accountIdSpan && cliente.account_id) {
             accountIdSpan.innerText = cliente.account_id;
@@ -913,13 +916,6 @@ function showClientDashboard(cliente) {
     
     console.log("🎉 Dashboard carregado para:", cliente.nome);
 }
-    
-// ========== EXPOR FUNÇÕES GLOBALMENTE ==========
-window.openReceiveWalletModal = openReceiveWalletModal;
-window.closeReceiveWalletModal = closeReceiveWalletModal;
-window.copyWalletAddress = copyWalletAddress;
-window.doClientLogin = doClientLogin;
-window.gerarWalletReal = gerarWalletReal;
 
 // ========== INICIALIZAÇÃO ==========
 carregarDadosBanco();
@@ -1017,57 +1013,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-// ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
-function salvarClienteNoLocalStorage(dadosCliente) {
-    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    const existe = clientes.some(c => c.email === dadosCliente.email);
-    
-    if (!existe) {
-        const novoCliente = {
-            id: Date.now(),
-            nome: dadosCliente.nome,
-            email: dadosCliente.email,
-            documento: dadosCliente.documento || '',
-            telefone: dadosCliente.telefone || '',
-            saldoUSD: dadosCliente.saldoUSD || 0,
-            saldoEUR: dadosCliente.saldoEUR || 0,
-            saldoBRL: dadosCliente.saldoBRL || 0,
-            saldoGBP: dadosCliente.saldoGBP || 0,
-            kyc: dadosCliente.kyc || "Pending",
-            dataCadastro: new Date().toISOString()
-        };
-        
-        clientes.push(novoCliente);
-        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
-        console.log("✅ Cliente salvo no localStorage:", novoCliente.nome);
-        return true;
-    }
-    return false;
-}
 
-// ========== FUNÇÃO PARA MOSTRAR DASHBOARD DO CLIENTE ==========
-function showClientDashboard(cliente) {
-    // Esconder tela de login
-    const loginSection = document.getElementById('loginSection');
-    const dashboardSection = document.getElementById('dashboardSection');
-    
-    if(loginSection) loginSection.style.display = 'none';
-    if(dashboardSection) {
-        dashboardSection.style.display = 'block';
-        
-        // Atualizar nome do usuário
-        const welcomeName = document.getElementById('welcomeUserName');
-        if(welcomeName) welcomeName.innerText = cliente.nome || cliente.email;
-        
-        // Atualizar account ID se existir
-        const accountIdSpan = document.getElementById('userAccountId');
-        if(accountIdSpan && cliente.account_id) {
-            accountIdSpan.innerText = cliente.account_id;
-        }
-    }
-    
-    console.log("🎉 Dashboard carregado para:", cliente.nome);
-}
 
 // ========== EXPOR FUNÇÕES GLOBALMENTE ==========
 window.openReceiveWalletModal = openReceiveWalletModal;
@@ -1079,34 +1025,6 @@ window.gerarWalletReal = gerarWalletReal;
 // Inicialização
 carregarDadosBanco();
 console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
-
-// ========== FUNÇÃO PARA SALVAR CLIENTE NO LOCALSTORAGE ==========
-function salvarClienteNoLocalStorage(dadosCliente) {
-    let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-    const existe = clientes.some(c => c.email === dadosCliente.email);
-    
-    if (!existe) {
-        const novoCliente = {
-            id: Date.now(),
-            nome: dadosCliente.nome,
-            email: dadosCliente.email,
-            documento: dadosCliente.documento || '',
-            telefone: dadosCliente.telefone || '',
-            saldoUSD: dadosCliente.saldoUSD || 0,
-            saldoEUR: dadosCliente.saldoEUR || 0,
-            saldoBRL: dadosCliente.saldoBRL || 0,
-            saldoGBP: dadosCliente.saldoGBP || 0,
-            kyc: dadosCliente.kyc || "Pending",
-            dataCadastro: new Date().toISOString()
-        };
-        
-        clientes.push(novoCliente);
-        localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
-        console.log("✅ Cliente salvo no localStorage:", novoCliente.nome);
-            return true;
-    }
-    return false;
-}
 
 // ========== FUNÇÃO PARA CONFIRMAR CRIAÇÃO DE WALLET ==========
 function confirmCreateWallet(symbol, cryptoName, blockchain) {
@@ -1173,21 +1091,6 @@ async function confirmCreateRealWallet(symbol, cryptoName, blockchain) {
     }
 }
 
-// ========== EXPOR FUNÇÕES GLOBALMENTE ==========
-window.openReceiveWalletModal = openReceiveWalletModal;
-window.closeReceiveWalletModal = closeReceiveWalletModal;
-window.copyWalletAddress = copyWalletAddress;
-window.doClientLogin = doClientLogin;
-window.gerarWalletReal = gerarWalletReal;
-window.confirmCreateWallet = confirmCreateWallet;
-window.confirmCreateRealWallet = confirmCreateRealWallet;
-window.showToast = showToast;
-window.closeModal = closeModal;
-window.showModal = showModal;
-window.addMessage = addMessage;
-window.userWallets = userWallets;
-console.log("🚀 Sistema Zentronix Bank inicializado com sucesso!");
-
 // Inicialização
 carregarDadosBanco();
 console.log("🏦 Integração Zentronix Bank ativa. Dados serão sincronizados com o Painel Admin.");
@@ -1204,7 +1107,6 @@ const bankWalletAddresses = {
     BNB: "0xZentronixBNBWallet2024",
     LTC: "ltc1qzentronixbankltcwallet2024"
 };
-
 // Função para gerar wallet REAL (simula backend - você deve substituir pela chamada à sua API)
 async function generateRealWallet(blockchain, symbol) {
     const token = localStorage.getItem('api_token');
@@ -2199,161 +2101,13 @@ function submitLoanApplication() {
     closeModal();
 }
 
-// ==================== FIAT SEND/RECEIVE FUNCTIONS ====================
+    // ==================== FIAT SEND/RECEIVE FUNCTIONS ====================
 const bankReceiveDetails = {
     USD: { bankName: "JPMorgan Chase Bank N.A.", swiftCode: "CHASUS33XXX", routingNumber: "021000021", accountNumber: "ZNTX-4821-7390-1256", bankAddress: "270 Park Avenue, New York, NY 10017, USA", beneficiaryName: "Zentronix Bank International", beneficiaryAddress: "Zentronix Tower, 123 Financial District, New York, NY 10001" },
     EUR: { bankName: "Deutsche Bank AG", swiftCode: "DEUTDEFFXXX", iban: "DE89370400440532013000", accountNumber: "ZNTX-EU-7390-1256", bankAddress: "Taunusanlage 12, 60325 Frankfurt am Main, Germany", beneficiaryName: "Zentronix Bank Europe", beneficiaryAddress: "Zentronix Platz 1, 60325 Frankfurt, Germany" },
     GBP: { bankName: "Barclays Bank PLC", swiftCode: "BARCLGB22XXX", sortCode: "20-00-00", accountNumber: "ZNTX-UK-7390-1256", bankAddress: "1 Churchill Place, London E14 5HP, United Kingdom", beneficiaryName: "Zentronix Bank UK Ltd", beneficiaryAddress: "Zentronix House, Canary Wharf, London E14 4AY" },
     BRL: { bankName: "Banco Itaú Unibanco S.A.", swiftCode: "ITAUBRSPXXX", cnpj: "60.701.190/0001-04", accountNumber: "ZNTX-BR-7390-1256", agency: "1234", bankAddress: "Av. Paulista, 1340, São Paulo - SP, 01310-100, Brazil", beneficiaryName: "Zentronix Bank Brasil", beneficiaryAddress: "Av. Brigadeiro Faria Lima, 3500, São Paulo - SP" }
 };
-
-function openFiatSendModal(currency, symbol) {
-    const balance = userBalances[symbol] || 0;
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
-        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
-            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(2)} ${symbol}</div>
-        </div>
-        <div style="background: rgba(188,19,254,0.15); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
-            <div class="form-group"><label>Full Name *</label><input type="text" id="beneficiaryName" class="form-input" placeholder="Full name of the recipient"></div>
-            <div class="form-group"><label>Beneficiary Address</label><input type="text" id="beneficiaryAddress" class="form-input" placeholder="Street, City, Country"></div>
-        </div>
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BENEFICIARY BANK DETAILS</div>
-            <div class="form-group"><label>Bank Name *</label><input type="text" id="bankName" class="form-input" placeholder="Name of the beneficiary's bank"></div>
-            <div class="form-group"><label>SWIFT/BIC Code *</label><input type="text" id="swiftCode" class="form-input" placeholder="Example: BARCLGB22XXX"></div>
-        </div>
-        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">💳 BENEFICIARY ACCOUNT DETAILS</div>
-            <div class="form-group"><label>Account Number / IBAN *</label><input type="text" id="accountNumber" class="form-input" placeholder="Account number or IBAN"></div>
-        </div>
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-green); margin-bottom: 0.5rem;">📊 TRANSFER DETAILS</div>
-            <div class="form-group"><label>Amount to Send *</label><input type="number" id="sendAmountFiat" class="form-input" placeholder="0.00" step="any"></div>
-            <div class="form-group"><label>Transaction Note</label><input type="text" id="txNoteFiat" class="form-input" placeholder="Add a note to the beneficiary"></div>
-        </div>
-        <div style="background: rgba(255,68,102,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-red); margin-bottom: 0.5rem;">💰 FEES & OPTIONS</div>
-            <div class="form-group"><label>Estimated Fee</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">~$25 - $45 (International SWIFT)</div></div>
-        </div>
-        <button class="send-crypto-btn" onclick="confirmFiatSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem;">CONFIRM TRANSFER</button>
-    `;
-    showModal(modalContent);
-}
-
-function confirmFiatSend(currency, symbol) {
-    const amount = parseFloat(document.getElementById('sendAmountFiat')?.value);
-    const beneficiaryName = document.getElementById('beneficiaryName')?.value;
-    const bankName = document.getElementById('bankName')?.value;
-    const swiftCode = document.getElementById('swiftCode')?.value;
-    const accountNumber = document.getElementById('accountNumber')?.value;
-    const txNote = document.getElementById('txNoteFiat')?.value || "";
-    const balance = userBalances[symbol] || 0;
-    
-    if (!beneficiaryName || beneficiaryName.trim() === "") { showToast("❌ Please enter beneficiary name"); return; }
-    if (!bankName || bankName.trim() === "") { showToast("❌ Please enter bank name"); return; }
-    if (!swiftCode || swiftCode.trim() === "") { showToast("❌ Please enter SWIFT/BIC code"); return; }
-    if (!accountNumber || accountNumber.trim() === "") { showToast("❌ Please enter account number/IBAN"); return; }
-    if (isNaN(amount) || amount <= 0) { showToast("❌ Please enter a valid amount"); return; }
-    if (amount > balance) { showToast(`❌ Insufficient balance. You have ${balance.toFixed(2)} ${symbol}`); return; }
-    
-    userBalances[symbol] -= amount;
-    updateBalances();
-    addMessage("BANK TRANSFER", `Sent ${symbol}`, `💰 Sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}\n🏦 Bank: ${bankName} (${swiftCode})\n💳 Account: ${accountNumber}${txNote ? '\n📝 Note: ' + txNote : ''}`);
-    showToast(`✅ Successfully sent ${amount.toFixed(2)} ${symbol} to ${beneficiaryName}!`);
-    closeModal();
-}
-
-function openFiatReceiveModal(currency, symbol) {
-    const bankInfo = bankReceiveDetails[symbol];
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
-        <div style="text-align: center; margin-bottom: 1rem;"><i class="fas fa-university" style="font-size: 3rem; color: var(--neon-yellow);"></i></div>
-        <div style="background: rgba(0,255,136,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7; text-align: center;">YOUR ZENTRONIX ACCOUNT</div>
-            <div style="font-size: 1rem; font-weight: bold; text-align: center; font-family: monospace;">ZNTX-4821-7390-1256</div>
-            <button class="copy-address-btn" onclick="copyWalletAddress('ZNTX-4821-7390-1256')" style="margin-top: 0.3rem; width: 100%;">COPY ACCOUNT NUMBER</button>
-        </div>
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 0.5rem;">🏦 BANK INFORMATION FOR WIRE TRANSFER</div>
-            <div class="form-group"><label>Bank Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.bankName}</div></div>
-            <div class="form-group"><label>SWIFT/BIC Code</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.swiftCode}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.swiftCode}')" style="margin-left: 0.5rem;">COPY</button></div></div>
-        </div>
-        <div style="background: rgba(255,215,0,0.1); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 1rem;">
-            <div style="font-size: 0.7rem; color: var(--neon-yellow); margin-bottom: 0.5rem;">👤 BENEFICIARY INFORMATION</div>
-            <div class="form-group"><label>Beneficiary Name</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem;">${bankInfo.beneficiaryName}<button class="copy-address-btn" onclick="copyWalletAddress('${bankInfo.beneficiaryName}')" style="margin-left: 0.5rem;">COPY</button></div></div>
-        </div>
-        <button class="buy-btn" onclick="showToast('Wire instructions sent to your email')" style="width: 100%;"><i class="fas fa-file-pdf"></i> Wire Instructions</button>
-    `;
-    showModal(modalContent);
-}
-
-function copyWalletAddress(address) {
-    navigator.clipboard.writeText(address);
-    showToast("✅ Address copied to clipboard!");
-}
-
-function shareAddress(address) {
-    if (navigator.share) {
-        navigator.share({ title: 'My Zentronix Bank Wallet', text: 'Send crypto to my wallet:', url: address }).catch(() => showToast("Share canceled"));
-    } else {
-        copyWalletAddress(address);
-        showToast("Address copied! Share manually.");
-    }
-}
-
-function openSendModal(currency, symbol) {
-    const balance = userBalances[symbol] || 0;
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📤 SEND ${symbol}</h3>
-        <div style="background: rgba(0,0,0,0.3); padding: 0.8rem; border-radius: 0.8rem; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">Available Balance</div>
-            <div style="font-size: 1.2rem; font-weight: bold; color: var(--neon-green);">${balance.toFixed(8)} ${symbol}</div>
-        </div>
-        <div class="form-group"><label>Recipient Wallet Address</label><input type="text" id="recipientAddress" class="form-input" placeholder="Enter wallet address"></div>
-        <div class="form-group"><label>Amount to Send</label><input type="number" id="sendAmount" class="form-input" placeholder="0.00" step="any"></div>
-        <div class="form-group"><label>Network Fee (estimated)</label><div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem;">${getNetworkFee(symbol)}</div></div>
-        <button class="send-crypto-btn" onclick="confirmSend('${currency}', '${symbol}')" style="width: 100%; padding: 0.8rem;">CONFIRM SEND</button>
-    `;
-    showModal(modalContent);
-}
-
-function confirmSend(currency, symbol) {
-    const amount = parseFloat(document.getElementById('sendAmount')?.value);
-    const address = document.getElementById('recipientAddress')?.value;
-    const balance = userBalances[symbol] || 0;
-    
-    if (!address || address.trim() === "") { showToast("❌ Please enter a valid wallet address"); return; }
-    if (isNaN(amount) || amount <= 0) { showToast("❌ Please enter a valid amount"); return; }
-    if (amount > balance) { showToast(`❌ Insufficient balance. You have ${balance.toFixed(8)} ${symbol}`); return; }
-    
-    userBalances[symbol] -= amount;
-    updateBalances();
-    addMessage("SEND", `Sent ${symbol}`, `Sent ${amount.toFixed(8)} ${symbol} to ${address.substring(0, 10)}...`);
-    showToast(`✅ Successfully sent ${amount.toFixed(8)} ${symbol}!`);
-    closeModal();
-}
-
-function openReceiveModal(currency, symbol) {
-    const walletAddress = bankWalletAddresses[symbol] || "Address not available";
-    const modalContent = `
-        <button class="close-wallet-modal-btn" onclick="closeModal()">✕</button>
-        <h3 style="color: var(--neon-blue); margin-bottom: 1rem;">📥 RECEIVE ${symbol}</h3>
-        <div class="wallet-address-display">${walletAddress}</div>
-        <button class="copy-address-btn" onclick="copyWalletAddress('${walletAddress}')" style="width: 100%; margin-bottom: 1rem;">COPY ADDRESS</button>
-        <div style="background: rgba(0,242,255,0.1); border-radius: 0.8rem; padding: 0.8rem;">
-            <div style="font-size: 0.7rem; opacity: 0.7;">⚠️ Important</div>
-            <div style="font-size: 0.65rem;">Only send ${symbol} to this address.</div>
-        </div>
-    `;
-    showModal(modalContent);
-}
-
 // ==================== EVENT LISTENERS & INITIALIZATION ====================
 let currentLang = 'en';
 
