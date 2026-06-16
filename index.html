@@ -509,7 +509,7 @@
             <div class="tactical-menu">
                 <div class="profile-card">
                     <div class="profile-avatar" id="profileAvatarBtn"><i class="fas fa-user-astronaut"></i></div>
-                    <div class="profile-name" id="welcomeUser"></div>
+                    <div class="profile-name" id="welcomeUser">Welcome, Admin</div>
                     <div class="profile-role" id="profileRole">Private Banking Elite</div>
                     <div class="account-number-display">
                         <div class="label"><i class="fas fa-credit-card"></i> <span id="accountLabel">ACCOUNT NUMBER</span></div>
@@ -591,8 +591,14 @@
     </div>
 </div>
 
-<!-- ====== SCRIPT COMPLETO COM TRADUÇÃO E API RENDER ====== -->
 <script>
+// ============================================
+//  CONFIGURAÇÃO DO SUPABASE
+// ============================================
+const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ============================================
 //  CONFIGURAÇÃO DA API
 // ============================================
@@ -605,7 +611,6 @@ const TATUM_API_URL = 'https://api.tatum.io/v3';
 // ============================================
 const translations = {
     'en': {
-        // Geral
         'bankName': 'ZENTRONIX BANK',
         'bankSubtitle': 'Offshore Private Banking',
         'accessHub': 'ACCESS HUB',
@@ -634,8 +639,6 @@ const translations = {
         'militaryHub': 'MILITARY HUB',
         'stealthMode': 'STEALTH MODE',
         'stakingPerformance': 'Staking Performance',
-        
-        // Login
         'loginTitle': 'ACCESS INVESTMENT HUB',
         'userId': 'User ID',
         'password': 'Password',
@@ -644,8 +647,6 @@ const translations = {
         'loginSuccess': '✅ Login successful!',
         'logoutConfirm': 'Are you sure you want to logout from your account?',
         'logoutTitle': 'Confirm Logout',
-        
-        // Menu
         'securitySettings': '⚙️ SECURITY SETTINGS',
         'securityCenter': 'Security Center',
         'cryptoDefi': '⛓️ CRYPTO & DEFI',
@@ -683,8 +684,6 @@ const translations = {
         'bankingServices': '✨ BANKING SERVICES',
         'completeServices': 'Complete Services',
         'digitalPayment': 'Payment Digital',
-        
-        // Modals
         'walletGenerated': '💰 Wallet Generated',
         'address': 'Address',
         'privateKey': 'Private Key',
@@ -714,12 +713,8 @@ const translations = {
         'next': 'Next',
         'submitKyc': 'SUBMIT KYC',
         'kycPending': 'KYC PENDING',
-        
-        // Footer
         'regulatoryText': 'Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.',
         'copyright': '© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024',
-        
-        // Messages
         'swapSuccess': '✅ Swapped {amount} {from} → {result} {to}',
         'copySuccess': '✅ Account number copied!',
         'copyManual': '📋 Copy manually: ',
@@ -734,23 +729,7 @@ const translations = {
         'logoutSuccess': '🔒 You have been logged out.',
         'differentCurrencies': '⚠️ Please select different currencies to swap',
         'validAmount': '⚠️ Please enter a valid amount',
-        'rateNotAvailable': '❌ Exchange rate not available for this pair',
-        'terms': 'By using this service you agree to our Terms and Conditions',
-        'privacy': 'Privacy Policy',
-        'cookie': 'Cookie Policy',
-        'support': 'Support',
-        'faq': 'FAQ',
-        'about': 'About',
-        'careers': 'Careers',
-        'press': 'Press',
-        'blog': 'Blog',
-        'contact': 'Contact',
-        'status': 'Status',
-        'security': 'Security',
-        'compliance': 'Compliance',
-        'legal': 'Legal',
-        'license': 'License',
-        'regulation': 'Regulation'
+        'rateNotAvailable': '❌ Exchange rate not available for this pair'
     },
     'pt': {
         'bankName': 'ZENTRONIX BANK',
@@ -871,23 +850,7 @@ const translations = {
         'logoutSuccess': '🔒 Você foi desconectado.',
         'differentCurrencies': '⚠️ Selecione moedas diferentes para trocar',
         'validAmount': '⚠️ Digite um valor válido',
-        'rateNotAvailable': '❌ Taxa de câmbio não disponível para este par',
-        'terms': 'Ao usar este serviço você concorda com nossos Termos e Condições',
-        'privacy': 'Política de Privacidade',
-        'cookie': 'Política de Cookies',
-        'support': 'Suporte',
-        'faq': 'FAQ',
-        'about': 'Sobre',
-        'careers': 'Carreiras',
-        'press': 'Imprensa',
-        'blog': 'Blog',
-        'contact': 'Contato',
-        'status': 'Status',
-        'security': 'Segurança',
-        'compliance': 'Compliance',
-        'legal': 'Legal',
-        'license': 'Licença',
-        'regulation': 'Regulação'
+        'rateNotAvailable': '❌ Taxa de câmbio não disponível para este par'
     },
     'es': {
         'bankName': 'ZENTRONIX BANK',
@@ -1008,23 +971,7 @@ const translations = {
         'logoutSuccess': '🔒 Sesión cerrada.',
         'differentCurrencies': '⚠️ Seleccione monedas diferentes para intercambiar',
         'validAmount': '⚠️ Ingrese un monto válido',
-        'rateNotAvailable': '❌ Tasa de cambio no disponible para este par',
-        'terms': 'Al usar este servicio acepta nuestros Términos y Condiciones',
-        'privacy': 'Política de Privacidad',
-        'cookie': 'Política de Cookies',
-        'support': 'Soporte',
-        'faq': 'FAQ',
-        'about': 'Acerca de',
-        'careers': 'Carreras',
-        'press': 'Prensa',
-        'blog': 'Blog',
-        'contact': 'Contacto',
-        'status': 'Estado',
-        'security': 'Seguridad',
-        'compliance': 'Cumplimiento',
-        'legal': 'Legal',
-        'license': 'Licencia',
-        'regulation': 'Regulación'
+        'rateNotAvailable': '❌ Tasa de cambio no disponible para este par'
     },
     'ar': {
         'bankName': 'ZENTRONIX BANK',
@@ -1145,23 +1092,7 @@ const translations = {
         'logoutSuccess': '🔒 تم تسجيل الخروج.',
         'differentCurrencies': '⚠️ يرجى تحديد عملات مختلفة للمبادلة',
         'validAmount': '⚠️ يرجى إدخال مبلغ صحيح',
-        'rateNotAvailable': '❌ سعر الصرف غير متاح لهذا الزوج',
-        'terms': 'باستخدام هذه الخدمة فإنك توافق على الشروط والأحكام الخاصة بنا',
-        'privacy': 'سياسة الخصوصية',
-        'cookie': 'سياسة ملفات تعريف الارتباط',
-        'support': 'الدعم',
-        'faq': 'الأسئلة الشائعة',
-        'about': 'حول',
-        'careers': 'وظائف',
-        'press': 'الصحافة',
-        'blog': 'المدونة',
-        'contact': 'اتصل بنا',
-        'status': 'الحالة',
-        'security': 'الأمان',
-        'compliance': 'الامتثال',
-        'legal': 'قانوني',
-        'license': 'الترخيص',
-        'regulation': 'التنظيم'
+        'rateNotAvailable': '❌ سعر الصرف غير متاح لهذا الزوج'
     }
 };
 
@@ -1226,6 +1157,118 @@ function setLanguage(lang) {
     
     // Salvar preferência
     localStorage.setItem('preferredLanguage', lang);
+}
+
+// ============================================
+//  FUNÇÕES DA API SUPABASE
+// ============================================
+async function saveUserToSupabase(userData) {
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .insert([{
+                name: userData.name,
+                email: userData.email,
+                phone: userData.phone,
+                account_number: userData.accountNumber,
+                created_at: new Date().toISOString()
+            }]);
+        
+        if (error) {
+            console.error('Supabase insert error:', error);
+            return null;
+        }
+        return data;
+    } catch (error) {
+        console.error('Error saving to Supabase:', error);
+        return null;
+    }
+}
+
+async function getUserFromSupabase(email) {
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email);
+        
+        if (error) {
+            console.error('Supabase select error:', error);
+            return null;
+        }
+        return data;
+    } catch (error) {
+        console.error('Error fetching from Supabase:', error);
+        return null;
+    }
+}
+
+async function saveKYCToSupabase(kycData) {
+    try {
+        const { data, error } = await supabase
+            .from('kyc_submissions')
+            .insert([{
+                full_name: kycData.fullName,
+                email: kycData.email,
+                phone: kycData.phone,
+                address: kycData.address,
+                nationality: kycData.nationality,
+                status: 'pending',
+                submitted_at: new Date().toISOString()
+            }]);
+        
+        if (error) {
+            console.error('Supabase KYC insert error:', error);
+            return null;
+        }
+        return data;
+    } catch (error) {
+        console.error('Error saving KYC to Supabase:', error);
+        return null;
+    }
+}
+
+async function saveTransactionToSupabase(transactionData) {
+    try {
+        const { data, error } = await supabase
+            .from('transactions')
+            .insert([{
+                user_id: transactionData.userId || 'admin',
+                type: transactionData.type,
+                amount: transactionData.amount,
+                currency: transactionData.currency,
+                status: 'completed',
+                created_at: new Date().toISOString()
+            }]);
+        
+        if (error) {
+            console.error('Supabase transaction insert error:', error);
+            return null;
+        }
+        return data;
+    } catch (error) {
+        console.error('Error saving transaction to Supabase:', error);
+        return null;
+    }
+}
+
+async function getTransactionsFromSupabase(userId) {
+    try {
+        const { data, error } = await supabase
+            .from('transactions')
+            .select('*')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('Supabase transactions select error:', error);
+            return [];
+        }
+        return data;
+    } catch (error) {
+        console.error('Error fetching transactions from Supabase:', error);
+        return [];
+    }
 }
 
 // ============================================
@@ -1512,7 +1555,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  ELEMENTOS DO LOGIN
+    //  ELEMENTOS DO LOGIN - VERSÃO CORRIGIDA
     // ============================================
     const openLoginBtn = document.getElementById('openLoginBtn');
     const loginModal = document.getElementById('loginModal');
@@ -1542,7 +1585,10 @@ document.addEventListener('DOMContentLoaded', function() {
         loginModal.classList.remove('active');
     }
 
-    function handleLogin() {
+    // ============================================
+    //  FUNÇÃO DE LOGIN CORRIGIDA
+    // ============================================
+    async function handleLogin() {
         const username = loginId.value.trim();
         const password = loginPassword.value.trim();
         const t = translations[currentLang];
@@ -1551,15 +1597,36 @@ document.addEventListener('DOMContentLoaded', function() {
             isLoggedIn = true;
             closeLoginModal();
             
+            // Esconder conteúdo institucional e mostrar dashboard
             institutionalContent.style.display = 'none';
             dashboardContainer.style.display = 'block';
             
+            // Atualizar nome do usuário
             welcomeUser.textContent = 'Welcome, ' + username;
+            
+            // Mostrar/Esconder botões
             openLoginBtn.style.display = 'none';
             logoutMainBtn.style.display = 'flex';
             logoutBtnText.textContent = t.logout || 'LOGOUT';
             
-            initDashboard();
+            // INICIALIZAR DASHBOARD (chamada correta)
+            try {
+                initDashboard();
+            } catch (e) {
+                console.error('Erro ao inicializar dashboard:', e);
+            }
+            
+            // Tentar salvar usuário no Supabase
+            try {
+                await saveUserToSupabase({
+                    name: username,
+                    email: 'admin@zentronix.com',
+                    phone: '+41 78 123 4567',
+                    accountNumber: 'ZNTX-4821-7390-1256'
+                });
+            } catch (e) {
+                console.log('Supabase não disponível:', e);
+            }
             
             showToast(t.loginSuccess || '✅ Login successful!');
         } else {
@@ -1576,10 +1643,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function confirmLogout() {
         confirmLogoutModal.classList.remove('active');
         isLoggedIn = false;
+        
+        // Mostrar conteúdo institucional e esconder dashboard
         dashboardContainer.style.display = 'none';
         institutionalContent.style.display = 'block';
+        
+        // Mostrar/Esconder botões
         openLoginBtn.style.display = 'flex';
         logoutMainBtn.style.display = 'none';
+        
         const t = translations[currentLang];
         showToast(t.logoutSuccess || '🔒 You have been logged out.');
     }
@@ -1589,20 +1661,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================
-    //  INICIALIZAR DASHBOARD
+    //  INICIALIZAR DASHBOARD - FUNÇÃO GLOBAL
     // ============================================
-    function initDashboard() {
-        loadBalances();
-        loadCryptoAssetsWithTatum();
-        loadFiatAssets();
-        loadHistory();
-        loadCards();
-        loadSecuritySettings();
-        loadSecurityCenter();
-        loadMilitaryBalances();
-        loadSwapCenter();
-        initStakingChart();
-        initAnalyticsChart();
+    window.initDashboard = function() {
+        console.log('🟣 Inicializando Dashboard...');
+        try {
+            loadBalances();
+            loadCryptoAssetsWithTatum();
+            loadFiatAssets();
+            loadHistory();
+            loadCards();
+            loadSecuritySettings();
+            loadSecurityCenter();
+            loadMilitaryBalances();
+            loadSwapCenter();
+            initStakingChart();
+            initAnalyticsChart();
+            loadTransactionsFromSupabase();
+            console.log('✅ Dashboard inicializado com sucesso!');
+        } catch (e) {
+            console.error('❌ Erro ao inicializar dashboard:', e);
+        }
+    };
+
+    // ============================================
+    //  CARREGAR TRANSAÇÕES DO SUPABASE
+    // ============================================
+    async function loadTransactionsFromSupabase() {
+        try {
+            const transactions = await getTransactionsFromSupabase('admin');
+            if (transactions && transactions.length > 0) {
+                const list = document.getElementById('historyList');
+                if (list) {
+                    list.innerHTML = '';
+                    transactions.forEach(t => {
+                        const item = document.createElement('div');
+                        item.className = 'history-item';
+                        item.innerHTML = `
+                            <div class="history-content">
+                                <div class="history-type">${t.type}</div>
+                                <div class="history-detail">${t.amount} ${t.currency}</div>
+                                <div class="history-time">${new Date(t.created_at).toLocaleString()}</div>
+                            </div>
+                            <span style="color: var(--neon-green); font-size: 0.7rem;">${t.status}</span>
+                        `;
+                        list.appendChild(item);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading transactions from Supabase:', error);
+        }
     }
 
     // ============================================
@@ -1617,6 +1726,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const grid = document.getElementById('cryptoAssetsGrid');
+        if (!grid) return;
         
         fiatAssets.forEach(f => {
             const card = document.createElement('div');
@@ -1628,14 +1738,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="asset-price">${f.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
                 <div class="button-group">
-                    <button class="deposit-btn" onclick="showToast('${(t.depositMessage || 'Deposit {symbol} - Wire transfer details sent to your email').replace('{symbol}', f.symbol)}')">📥 ${t.deposit || 'DEPOSIT'}</button>
-                    <button class="receive-btn" onclick="showToast('${(t.receiveMessage || 'Receive {symbol} - Your IBAN: {iban}').replace('{symbol}', f.symbol).replace('{iban}', 'ZNTX' + Math.random().toString(36).substring(2,10).toUpperCase())}')">📤 ${t.receive || 'RECEIVE'}</button>
+                    <button class="deposit-btn" onclick="handleDeposit('${f.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
+                    <button class="receive-btn" onclick="handleReceive('${f.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
                     <button class="swap-btn" onclick="openSwapModal('${f.symbol}', 'BTC')">🔄 ${t.swap || 'SWAP'}</button>
                 </div>
             `;
             grid.appendChild(card);
         });
     }
+
+    // ============================================
+    //  FUNÇÕES DE DEPÓSITO E RECEBIMENTO
+    // ============================================
+    window.handleDeposit = function(symbol) {
+        const t = translations[currentLang];
+        const message = (t.depositMessage || 'Deposit {symbol} - Wire transfer details sent to your email').replace('{symbol}', symbol);
+        showToast(message);
+        
+        saveTransactionToSupabase({
+            userId: 'admin',
+            type: 'Deposit',
+            amount: 0,
+            currency: symbol,
+            status: 'pending'
+        });
+    };
+
+    window.handleReceive = function(symbol) {
+        const t = translations[currentLang];
+        const iban = 'ZNTX' + Math.random().toString(36).substring(2,10).toUpperCase();
+        const message = (t.receiveMessage || 'Receive {symbol} - Your IBAN: {iban}').replace('{symbol}', symbol).replace('{iban}', iban);
+        showToast(message);
+    };
 
     // ============================================
     //  CARREGAR CRYPTO ASSETS
@@ -1653,6 +1787,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const grid = document.getElementById('cryptoAssetsGrid');
+        if (!grid) return;
         
         assets.forEach(a => {
             const card = document.createElement('div');
@@ -1664,10 +1799,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="asset-price">$${a.price.toLocaleString()}</div>
                 <div class="button-group">
-                    <button class="deposit-btn" onclick="showToast('${(t.depositMessage || 'Deposit {symbol} - Address generated').replace('{symbol}', a.symbol)}')">📥 ${t.deposit || 'DEPOSIT'}</button>
-                    <button class="receive-btn" onclick="showToast('${(t.receiveMessage || 'Receive {symbol} - Your wallet address: {address}').replace('{symbol}', a.symbol).replace('{address}', generateLocalWallet(a.chain).address)}')">📤 ${t.receive || 'RECEIVE'}</button>
+                    <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
+                    <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
                     <button class="swap-btn" onclick="openSwapModal('${a.symbol}', 'USD')">🔄 ${t.swap || 'SWAP'}</button>
-                    <button class="staking-btn" onclick="showToast('${(t.stakingMessage || 'Staking {symbol} - APY 5.2%').replace('{symbol}', a.symbol)}')">📊 ${t.stake || 'STAKE'}</button>
+                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">📊 ${t.stake || 'STAKE'}</button>
                     <button class="generate-wallet-btn" onclick="generateWalletForCoin('${a.symbol}', '${a.chain}')">💳 ${t.wallet || 'WALLET'}</button>
                 </div>
             `;
@@ -1676,10 +1811,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================
+    //  FUNÇÃO DE STAKING
+    // ============================================
+    window.handleStaking = function(symbol) {
+        const t = translations[currentLang];
+        const message = (t.stakingMessage || 'Staking {symbol} - APY 5.2%').replace('{symbol}', symbol);
+        showToast(message);
+        
+        saveTransactionToSupabase({
+            userId: 'admin',
+            type: 'Staking',
+            amount: 0,
+            currency: symbol,
+            status: 'completed'
+        });
+    };
+
+    // ============================================
     //  CARREGAR SWAP CENTER
     // ============================================
     function loadSwapCenter() {
         const container = document.getElementById('swapCenterContent');
+        if (!container) return;
         container.innerHTML = `
             <div style="text-align:center; padding:0.5rem;">
                 <p style="color:var(--text-secondary); margin-bottom:1rem;">⚡ Swap between any currencies and cryptocurrencies instantly</p>
@@ -1720,6 +1873,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const grid = document.getElementById('currencyGrid');
+        if (!grid) return;
         grid.innerHTML = '';
         let total = 0;
 
@@ -1743,7 +1897,10 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (b.currency === 'BRADICOIN') total += b.amount * 9.87;
         });
 
-        document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const totalEl = document.getElementById('totalBalance');
+        if (totalEl) {
+            totalEl.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
     }
 
     // ============================================
@@ -1759,6 +1916,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const list = document.getElementById('historyList');
+        if (!list) return;
         list.innerHTML = '';
         history.forEach(h => {
             const item = document.createElement('div');
@@ -1783,6 +1941,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { type: 'Mastercard Black', number: '**** 7390', limit: '$50,000' },
         ];
         const list = document.getElementById('cardsList');
+        if (!list) return;
         list.innerHTML = '';
         cards.forEach(c => {
             const div = document.createElement('div');
@@ -1806,6 +1965,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: 'Trusted Devices', status: '2 devices' },
         ];
         const list = document.getElementById('securitySettingsList');
+        if (!list) return;
         list.innerHTML = '';
         settings.forEach(s => {
             const div = document.createElement('div');
@@ -1828,6 +1988,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: 'Active Sessions', value: '2 devices' },
         ];
         const list = document.getElementById('securityCenterList');
+        if (!list) return;
         list.innerHTML = '';
         items.forEach(item => {
             const div = document.createElement('div');
@@ -1847,6 +2008,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { label: 'Digital Gold', value: '5.2 oz' },
         ];
         const container = document.getElementById('militaryBalances');
+        if (!container) return;
         container.innerHTML = '';
         balances.forEach(b => {
             const div = document.createElement('div');
@@ -1982,6 +2144,37 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('swapAmountInput').addEventListener('input', updateSwapRate);
 
     // ============================================
+    //  KYC SUBMISSION COM SUPABASE
+    // ============================================
+    document.getElementById('submitKycBtn').addEventListener('click', async function() {
+        const fullName = document.getElementById('fullNameDoc').value;
+        const email = document.getElementById('emailDocInput').value;
+        const phone = document.getElementById('phoneDoc').value;
+        const address = document.getElementById('addressDoc').value;
+        const nationality = document.getElementById('nationalityDoc').value;
+        
+        if (!fullName || !email || !phone || !address || !nationality) {
+            showToast('⚠️ Please fill all fields before submitting');
+            return;
+        }
+        
+        const result = await saveKYCToSupabase({
+            fullName,
+            email,
+            phone,
+            address,
+            nationality
+        });
+        
+        if (result) {
+            showToast('✅ KYC submitted successfully!');
+            document.getElementById('submitModal').classList.remove('active');
+        } else {
+            showToast('❌ Error submitting KYC. Please try again.');
+        }
+    });
+
+    // ============================================
     //  INTEGRAÇÃO COM A API RENDER
     // ============================================
     async function testRenderAPI() {
@@ -2006,6 +2199,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🔗 Tatum API Key configured');
     console.log('🌐 Render API: ' + RENDER_API_URL);
     console.log('🌍 Multi-language support: EN, PT, ES, AR');
+    console.log('🗄️ Supabase connected: ' + SUPABASE_URL);
     console.log('✅ Click "ACCESS HUB" to login');
 });
 </script>
