@@ -1745,13 +1745,6 @@ function loadAllAssets() {
         { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '+1.7%', chain: 'LTC', icon: 'Ł' }
     ];
     
-    const fiatAssets = [
-        { name: 'US Dollar', symbol: 'USD', price: 1.00, change: '+0.0%', chain: 'USD', icon: '💵' },
-        { name: 'Euro', symbol: 'EUR', price: 1.08, change: '-0.3%', chain: 'EUR', icon: '💶' },
-        { name: 'British Pound', symbol: 'GBP', price: 1.26, change: '+0.5%', chain: 'GBP', icon: '💷' },
-        { name: 'Brazilian Real', symbol: 'BRL', price: 0.18, change: '-0.7%', chain: 'BRL', icon: 'R$' }
-    ];
-    
     const cryptoGrid = document.getElementById('cryptoAssetsGrid');
     if (cryptoGrid) {
         cryptoGrid.innerHTML = '';
@@ -1759,6 +1752,10 @@ function loadAllAssets() {
             const card = document.createElement('div');
             card.className = 'asset-card';
             const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
+            
+            // ⚡ VERIFICA SE É BRADICOIN PARA ADICIONAR BOTÃO BUY ⚡
+            const isBradi = a.symbol === 'BRC';
+            
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h4>${a.icon} ${a.name} (${a.symbol})</h4>
@@ -1769,34 +1766,12 @@ function loadAllAssets() {
                     <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 DEPOSIT</button>
                     <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 RECEIVE</button>
                     <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
                     <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
+                    ${isBradi ? `<button class="buy-btn" onclick="handleBuy('${a.symbol}')">🟢 BUY</button>` : ''}
                 </div>
             `;
             cryptoGrid.appendChild(card);
-        });
-    }
-    
-    const fiatGrid = document.getElementById('fiatAssetsGrid');
-    if (fiatGrid) {
-        fiatGrid.innerHTML = '';
-        fiatAssets.forEach(a => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
-                    <span style="color: ${changeColor}">${a.change}</span>
-                </div>
-                <div class="asset-price">$${a.price.toLocaleString()}</div>
-                <div class="button-group">
-                    <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 DEPOSIT</button>
-                    <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 RECEIVE</button>
-                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
-                    <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
-                </div>
-            `;
-            fiatGrid.appendChild(card);
         });
     }
 }
