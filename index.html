@@ -745,339 +745,7 @@
 // ============================================
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
-const RENDER_API_URL = 'https://zentronix-api.onrender.com';
-const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
-const TATUM_API_URL = 'https://api.tatum.io/v3';
-
-// ============================================
-//  TRADUÇÕES
-// ============================================
-const translations = {
-    'en': {
-        'bankName': 'ZENTRONIX BANK',
-        'bankSubtitle': 'Offshore Private Banking',
-        'accessHub': 'ACCESS HUB',
-        'kyc': 'KYC',
-        'logout': 'LOGOUT',
-        'login': 'LOGIN',
-        'close': 'CLOSE',
-        'copy': 'COPY',
-        'deposit': 'DEPOSIT',
-        'receive': 'RECEIVE',
-        'swap': 'SWAP',
-        'stake': 'STAKE',
-        'wallet': 'WALLET',
-        'buy': 'BUY',
-        'sell': 'SELL',
-        'invest': 'Invest',
-        'subscribe': 'Subscribe',
-        'confirm': 'Confirm',
-        'cancel': 'Cancel',
-        'yes': 'YES',
-        'no': 'NO',
-        'save': 'SAVE CHANGES',
-        'editProfile': 'Edit Profile',
-        'accountNumber': 'ACCOUNT NUMBER',
-        'yourBalances': 'YOUR BALANCES',
-        'militaryHub': 'MILITARY HUB',
-        'stealthMode': 'STEALTH MODE',
-        'stakingPerformance': 'Staking Performance',
-        'loginTitle': 'ACCESS INVESTMENT HUB',
-        'userId': 'User ID',
-        'password': 'Password',
-        'demoCredentials': 'ID: admin | Password: zentronix',
-        'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix',
-        'loginSuccess': '✅ Login successful!',
-        'logoutConfirm': 'Are you sure you want to logout from your account?',
-        'logoutTitle': 'Confirm Logout',
-        'walletGenerated': '💰 Wallet Generated',
-        'address': 'Address',
-        'privateKey': 'Private Key',
-        'walletWarning': '⚠️ Save your private key securely! Never share it with anyone.',
-        'swapTitle': '🔄 SWAP',
-        'amountToSwap': 'Amount to swap',
-        'executeSwap': '🚀 EXECUTE SWAP',
-        'swapRate': 'Rate',
-        'kycModalTitle': 'KYC VERIFICATION',
-        'personalInfo': 'Personal Info',
-        'documents': 'Documents',
-        'review': 'Review',
-        'fullName': 'Full Name',
-        'addressLabel': 'Address',
-        'nationality': 'Nationality',
-        'idDocument': 'ID Document',
-        'proofAddress': 'Proof of Address',
-        'clickToUpload': 'Click to upload document',
-        'clickToUploadProof': 'Click to upload proof of address',
-        'reviewInfo': 'Please review your information before submitting:',
-        'previous': 'Previous',
-        'next': 'Next',
-        'submitKyc': 'SUBMIT KYC',
-        'kycPending': 'KYC PENDING',
-        'swapSuccess': '✅ Swapped {amount} {from} → {result} {to}',
-        'copySuccess': '✅ Account number copied!',
-        'copyManual': '📋 Copy manually: ',
-        'depositMessage': 'Deposit {symbol} - Wire transfer details sent to your email',
-        'receiveMessage': 'Receive {symbol} - Your IBAN: {iban}',
-        'stakingMessage': 'Staking {symbol} - APY 5.2%',
-        'walletGenerating': '⏳ Generating {symbol} wallet...',
-        'walletSuccess': '✅ {symbol} wallet generated successfully!',
-        'walletError': '❌ Error generating wallet. Please try again.',
-        'stealthActivated': '🕵️ Stealth Mode ACTIVATED',
-        'stealthDeactivated': '👀 Stealth Mode DEACTIVATED',
-        'logoutSuccess': '🔒 You have been logged out.',
-        'differentCurrencies': '⚠️ Please select different currencies to swap',
-        'validAmount': '⚠️ Please enter a valid amount',
-        'rateNotAvailable': '❌ Exchange rate not available for this pair'
-    },
-    'pt': {
-        'bankName': 'ZENTRONIX BANK',
-        'bankSubtitle': 'Private Banking Offshore',
-        'accessHub': 'ACESSAR HUB',
-        'kyc': 'KYC',
-        'logout': 'SAIR',
-        'login': 'ENTRAR',
-        'close': 'FECHAR',
-        'copy': 'COPIAR',
-        'deposit': 'DEPOSITAR',
-        'receive': 'RECEBER',
-        'swap': 'TROCAR',
-        'stake': 'STAKING',
-        'wallet': 'CARTEIRA',
-        'buy': 'COMPRAR',
-        'sell': 'VENDER',
-        'invest': 'Investir',
-        'subscribe': 'Subscrever',
-        'confirm': 'Confirmar',
-        'cancel': 'Cancelar',
-        'yes': 'SIM',
-        'no': 'NÃO',
-        'save': 'SALVAR ALTERAÇÕES',
-        'editProfile': 'Editar Perfil',
-        'accountNumber': 'NÚMERO DA CONTA',
-        'yourBalances': 'SEUS SALDOS',
-        'militaryHub': 'HUB MILITAR',
-        'stealthMode': 'MODO STEALTH',
-        'stakingPerformance': 'Performance de Staking',
-        'loginTitle': 'ACESSAR HUB DE INVESTIMENTOS',
-        'userId': 'Usuário',
-        'password': 'Senha',
-        'demoCredentials': 'ID: admin | Senha: zentronix',
-        'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix',
-        'loginSuccess': '✅ Login realizado com sucesso!',
-        'logoutConfirm': 'Tem certeza que deseja sair da sua conta?',
-        'logoutTitle': 'Confirmar Saída',
-        'walletGenerated': '💰 Carteira Gerada',
-        'address': 'Endereço',
-        'privateKey': 'Chave Privada',
-        'walletWarning': '⚠️ Guarde sua chave privada com segurança! Nunca compartilhe com ninguém.',
-        'swapTitle': '🔄 SWAP',
-        'amountToSwap': 'Valor para trocar',
-        'executeSwap': '🚀 EXECUTAR SWAP',
-        'swapRate': 'Taxa',
-        'kycModalTitle': 'VERIFICAÇÃO KYC',
-        'personalInfo': 'Informações Pessoais',
-        'documents': 'Documentos',
-        'review': 'Revisão',
-        'fullName': 'Nome Completo',
-        'addressLabel': 'Endereço',
-        'nationality': 'Nacionalidade',
-        'idDocument': 'Documento de Identidade',
-        'proofAddress': 'Comprovante de Endereço',
-        'clickToUpload': 'Clique para enviar documento',
-        'clickToUploadProof': 'Clique para enviar comprovante de endereço',
-        'reviewInfo': 'Por favor, revise suas informações antes de enviar:',
-        'previous': 'Anterior',
-        'next': 'Próximo',
-        'submitKyc': 'ENVIAR KYC',
-        'kycPending': 'KYC PENDENTE',
-        'swapSuccess': '✅ Trocados {amount} {from} → {result} {to}',
-        'copySuccess': '✅ Número da conta copiado!',
-        'copyManual': '📋 Copie manualmente: ',
-        'depositMessage': 'Depósito {symbol} - Detalhes da transferência enviados para seu e-mail',
-        'receiveMessage': 'Receber {symbol} - Seu IBAN: {iban}',
-        'stakingMessage': 'Staking {symbol} - APY 5.2%',
-        'walletGenerating': '⏳ Gerando carteira {symbol}...',
-        'walletSuccess': '✅ Carteira {symbol} gerada com sucesso!',
-        'walletError': '❌ Erro ao gerar carteira. Tente novamente.',
-        'stealthActivated': '🕵️ Modo Stealth ATIVADO',
-        'stealthDeactivated': '👀 Modo Stealth DESATIVADO',
-        'logoutSuccess': '🔒 Você foi desconectado.',
-        'differentCurrencies': '⚠️ Selecione moedas diferentes para trocar',
-        'validAmount': '⚠️ Digite um valor válido',
-        'rateNotAvailable': '❌ Taxa de câmbio não disponível para este par'
-    },
-    'es': {
-        'bankName': 'ZENTRONIX BANK',
-        'bankSubtitle': 'Banca Privada Offshore',
-        'accessHub': 'ACCESO HUB',
-        'kyc': 'KYC',
-        'logout': 'SALIR',
-        'login': 'INICIAR SESIÓN',
-        'close': 'CERRAR',
-        'copy': 'COPIAR',
-        'deposit': 'DEPOSITAR',
-        'receive': 'RECIBIR',
-        'swap': 'INTERCAMBIAR',
-        'stake': 'STAKING',
-        'wallet': 'BILLETERA',
-        'buy': 'COMPRAR',
-        'sell': 'VENDER',
-        'invest': 'Invertir',
-        'subscribe': 'Suscribirse',
-        'confirm': 'Confirmar',
-        'cancel': 'Cancelar',
-        'yes': 'SÍ',
-        'no': 'NO',
-        'save': 'GUARDAR CAMBIOS',
-        'editProfile': 'Editar Perfil',
-        'accountNumber': 'NÚMERO DE CUENTA',
-        'yourBalances': 'TUS SALDOS',
-        'militaryHub': 'HUB MILITAR',
-        'stealthMode': 'MODO STEALTH',
-        'stakingPerformance': 'Rendimiento de Staking',
-        'loginTitle': 'ACCEDER AL HUB DE INVERSIÓN',
-        'userId': 'Usuario',
-        'password': 'Contraseña',
-        'demoCredentials': 'ID: admin | Contraseña: zentronix',
-        'invalidCredentials': '❌ Credenciales inválidas! Use: admin / zentronix',
-        'loginSuccess': '✅ Inicio de sesión exitoso!',
-        'logoutConfirm': '¿Está seguro que desea cerrar sesión?',
-        'logoutTitle': 'Confirmar Salida',
-        'walletGenerated': '💰 Billetera Generada',
-        'address': 'Dirección',
-        'privateKey': 'Clave Privada',
-        'walletWarning': '⚠️ ¡Guarde su clave privada de forma segura! Nunca la comparta con nadie.',
-        'swapTitle': '🔄 SWAP',
-        'amountToSwap': 'Cantidad a intercambiar',
-        'executeSwap': '🚀 EJECUTAR SWAP',
-        'swapRate': 'Tasa',
-        'kycModalTitle': 'VERIFICACIÓN KYC',
-        'personalInfo': 'Información Personal',
-        'documents': 'Documentos',
-        'review': 'Revisión',
-        'fullName': 'Nombre Completo',
-        'addressLabel': 'Dirección',
-        'nationality': 'Nacionalidad',
-        'idDocument': 'Documento de Identidad',
-        'proofAddress': 'Comprobante de Domicilio',
-        'clickToUpload': 'Haga clic para subir documento',
-        'clickToUploadProof': 'Haga clic para subir comprobante de domicilio',
-        'reviewInfo': 'Por favor, revise su información antes de enviar:',
-        'previous': 'Anterior',
-        'next': 'Siguiente',
-        'submitKyc': 'ENVIAR KYC',
-        'kycPending': 'KYC PENDIENTE',
-        'swapSuccess': '✅ Intercambiados {amount} {from} → {result} {to}',
-        'copySuccess': '✅ Número de cuenta copiado!',
-        'copyManual': '📋 Copie manualmente: ',
-        'depositMessage': 'Depósito {symbol} - Detalles de transferencia enviados a su correo',
-        'receiveMessage': 'Recibir {symbol} - Su IBAN: {iban}',
-        'stakingMessage': 'Staking {symbol} - APY 5.2%',
-        'walletGenerating': '⏳ Generando billetera {symbol}...',
-        'walletSuccess': '✅ Billetera {symbol} generada con éxito!',
-        'walletError': '❌ Error al generar billetera. Intente nuevamente.',
-        'stealthActivated': '🕵️ Modo Stealth ACTIVADO',
-        'stealthDeactivated': '👀 Modo Stealth DESACTIVADO',
-        'logoutSuccess': '🔒 Sesión cerrada.',
-        'differentCurrencies': '⚠️ Seleccione monedas diferentes para intercambiar',
-        'validAmount': '⚠️ Ingrese un monto válido',
-        'rateNotAvailable': '❌ Tasa de cambio no disponible para este par'
-    },
-    'ar': {
-        'bankName': 'ZENTRONIX BANK',
-        'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية',
-        'accessHub': 'الوصول إلى المركز',
-        'kyc': 'KYC',
-        'logout': 'تسجيل الخروج',
-        'login': 'تسجيل الدخول',
-        'close': 'إغلاق',
-        'copy': 'نسخ',
-        'deposit': 'إيداع',
-        'receive': 'استلام',
-        'swap': 'مبادلة',
-        'stake': 'تخزين',
-        'wallet': 'محفظة',
-        'buy': 'شراء',
-        'sell': 'بيع',
-        'invest': 'استثمار',
-        'subscribe': 'اشتراك',
-        'confirm': 'تأكيد',
-        'cancel': 'إلغاء',
-        'yes': 'نعم',
-        'no': 'لا',
-        'save': 'حفظ التغييرات',
-        'editProfile': 'تعديل الملف الشخصي',
-        'accountNumber': 'رقم الحساب',
-        'yourBalances': 'أرصدتك',
-        'militaryHub': 'المركز العسكري',
-        'stealthMode': 'وضع التخفي',
-        'stakingPerformance': 'أداء التخزين',
-        'loginTitle': 'الوصول إلى مركز الاستثمار',
-        'userId': 'اسم المستخدم',
-        'password': 'كلمة المرور',
-        'demoCredentials': 'المعرف: admin | كلمة المرور: zentronix',
-        'invalidCredentials': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix',
-        'loginSuccess': '✅ تم تسجيل الدخول بنجاح!',
-        'logoutConfirm': 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
-        'logoutTitle': 'تأكيد تسجيل الخروج',
-        'walletGenerated': '💰 تم إنشاء المحفظة',
-        'address': 'العنوان',
-        'privateKey': 'المفتاح الخاص',
-        'walletWarning': '⚠️ احتفظ بمفتاحك الخاص بأمان! لا تشاركه مع أي شخص.',
-        'swapTitle': '🔄 المبادلة',
-        'amountToSwap': 'المبلغ للمبادلة',
-        'executeSwap': '🚀 تنفيذ المبادلة',
-        'swapRate': 'سعر الصرف',
-        'kycModalTitle': 'التحقق من الهوية',
-        'personalInfo': 'المعلومات الشخصية',
-        'documents': 'المستندات',
-        'review': 'مراجعة',
-        'fullName': 'الاسم الكامل',
-        'addressLabel': 'العنوان',
-        'nationality': 'الجنسية',
-        'idDocument': 'وثيقة الهوية',
-        'proofAddress': 'إثبات العنوان',
-        'clickToUpload': 'انقر لتحميل المستند',
-        'clickToUploadProof': 'انقر لتحميل إثبات العنوان',
-        'reviewInfo': 'يرجى مراجعة معلوماتك قبل الإرسال:',
-        'previous': 'السابق',
-        'next': 'التالي',
-        'submitKyc': 'إرسال KYC',
-        'kycPending': 'في انتظار KYC',
-        'swapSuccess': '✅ تم مبادلة {amount} {from} → {result} {to}',
-        'copySuccess': '✅ تم نسخ رقم الحساب!',
-        'copyManual': '📋 انسخ يدوياً: ',
-        'depositMessage': 'إيداع {symbol} - تم إرسال تفاصيل التحويل إلى بريدك الإلكتروني',
-        'receiveMessage': 'استلام {symbol} - IBAN الخاص بك: {iban}',
-        'stakingMessage': 'تخزين {symbol} - معدل العائد السنوي 5.2%',
-        'walletGenerating': '⏳ جاري إنشاء محفظة {symbol}...',
-        'walletSuccess': '✅ تم إنشاء محفظة {symbol} بنجاح!',
-        'walletError': '❌ خطأ في إنشاء المحفظة. حاول مرة أخرى.',
-        'stealthActivated': '🕵️ تم تفعيل وضع التخفي',
-        'stealthDeactivated': '👀 تم إلغاء تنشيط وضع التخفي',
-        'logoutSuccess': '🔒 تم تسجيل الخروج.',
-        'differentCurrencies': '⚠️ يرجى تحديد عملات مختلفة للمبادلة',
-        'validAmount': '⚠️ يرجى إدخال مبلغ صحيح',
-        'rateNotAvailable': '❌ سعر الصرف غير متاح لهذا الزوج'
-    }
-};
-
-// ============================================
-//  TAXAS DE CÂMBIO
-// ============================================
-const EXCHANGE_RATES = {
-    'USD': { 'BTC': 0.0000149, 'ETH': 0.00029, 'SOL': 0.0102, 'USDT': 1.00, 'BNB': 0.0032, 'LTC': 0.0121, 'BRC': 0.1013, 'EUR': 0.92, 'GBP': 0.79, 'USD': 1 },
-    'EUR': { 'BTC': 0.0000137, 'ETH': 0.00027, 'SOL': 0.0094, 'USDT': 0.92, 'BNB': 0.0029, 'LTC': 0.0111, 'BRC': 0.0932, 'USD': 1.09, 'GBP': 0.86, 'EUR': 1 },
-    'GBP': { 'BTC': 0.0000118, 'ETH': 0.00023, 'SOL': 0.0081, 'USDT': 0.79, 'BNB': 0.0025, 'LTC': 0.0096, 'BRC': 0.0800, 'USD': 1.27, 'EUR': 1.16, 'GBP': 1 },
-    'BTC': { 'USD': 67200, 'EUR': 61824, 'GBP': 53088, 'ETH': 19.5, 'SOL': 685.7, 'USDT': 67200, 'BNB': 215.0, 'LTC': 814.5, 'BRC': 6808, 'BTC': 1 },
-    'ETH': { 'USD': 3443, 'EUR': 3167.56, 'GBP': 2719.97, 'BTC': 0.0513, 'SOL': 35.1, 'USDT': 3443, 'BNB': 11.0, 'LTC': 41.7, 'BRC': 348.8, 'ETH': 1 },
-    'SOL': { 'USD': 98.07, 'EUR': 90.22, 'GBP': 77.47, 'BTC': 0.00146, 'ETH': 0.0285, 'USDT': 98.07, 'BNB': 0.314, 'LTC': 1.19, 'BRC': 9.94, 'SOL': 1 },
-    'USDT': { 'USD': 1.00, 'EUR': 0.92, 'GBP': 0.79, 'BTC': 0.0000149, 'ETH': 0.00029, 'SOL': 0.0102, 'BNB': 0.0032, 'LTC': 0.0121, 'BRC': 0.1013, 'USDT': 1 },
-    'BNB': { 'USD': 312.50, 'EUR': 287.50, 'GBP': 246.88, 'BTC': 0.00465, 'ETH': 0.0908, 'SOL': 3.19, 'USDT': 312.50, 'LTC': 3.79, 'BRC': 31.66, 'BNB': 1 },
-    'LTC': { 'USD': 82.50, 'EUR': 75.90, 'GBP': 65.17, 'BTC': 0.00123, 'ETH': 0.0240, 'SOL': 0.84, 'USDT': 82.50, 'BNB': 0.264, 'BRC': 8.36, 'LTC': 1 },
-    'BRC': { 'USD': 9.87, 'EUR': 9.08, 'GBP': 7.80, 'BTC': 0.000147, 'ETH': 0.00287, 'SOL': 0.1006, 'USDT': 9.87, 'BNB': 0.0316, 'LTC': 0.1196, 'BRC': 1 }
-};
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ============================================
 //  VARIÁVEIS GLOBAIS
@@ -1089,180 +757,40 @@ let idDocumentFile = null;
 let addressDocumentFile = null;
 let selfieDataURL = null;
 let cameraStream = null;
-let stakingChart = null;
 
 // ============================================
-//  FUNÇÕES DE TRADUÇÃO
+//  TRADUÇÕES (APENAS O NECESSÁRIO)
+// ============================================
+const translations = {
+    'en': {
+        'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix',
+        'loginSuccess': '✅ Login successful!',
+        'logoutSuccess': '🔒 You have been logged out.',
+        'stealthActivated': '🕵️ Stealth Mode ACTIVATED',
+        'stealthDeactivated': '👀 Stealth Mode DEACTIVATED'
+    },
+    'pt': {
+        'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix',
+        'loginSuccess': '✅ Login realizado com sucesso!',
+        'logoutSuccess': '🔒 Você foi desconectado.',
+        'stealthActivated': '🕵️ Modo Stealth ATIVADO',
+        'stealthDeactivated': '👀 Modo Stealth DESATIVADO'
+    }
+};
+
+// ============================================
+//  FUNÇÕES
 // ============================================
 function setLanguage(lang) {
     currentLang = lang;
-    const t = translations[lang];
-    if (!t) return;
-    
-    document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.getAttribute('data-translate');
-        if (t[key]) {
-            el.textContent = t[key];
-        }
-    });
-    
-    document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-translate-placeholder');
-        if (t[key]) {
-            el.placeholder = t[key];
-        }
-    });
-    
-    document.title = t.bankName + ' | Offshore Premium Banking';
     document.getElementById('currentLangText').textContent = lang.toUpperCase();
-    
-    if (lang === 'ar') {
-        document.body.classList.add('rtl');
-        document.querySelector('.lang-container').style.right = 'auto';
-        document.querySelector('.lang-container').style.left = '20px';
-    } else {
-        document.body.classList.remove('rtl');
-        document.querySelector('.lang-container').style.right = '20px';
-        document.querySelector('.lang-container').style.left = 'auto';
-    }
-    
     localStorage.setItem('preferredLanguage', lang);
 }
 
-// ============================================
-//  FUNÇÕES SUPABASE
-// ============================================
-async function saveKYCToSupabase(kycData) {
-    try {
-        const { data, error } = await supabase
-            .from('kyc_submissions')
-            .insert([{
-                full_name: kycData.fullName,
-                email: kycData.email,
-                phone: kycData.phone,
-                address: kycData.address,
-                nationality: kycData.nationality,
-                status: 'pending',
-                submitted_at: new Date().toISOString()
-            }]);
-        if (error) {
-            console.error('Supabase KYC insert error:', error);
-            return null;
-        }
-        return data;
-    } catch (error) {
-        console.error('Error saving KYC to Supabase:', error);
-        return null;
-    }
+function getTranslation(key) {
+    return translations[currentLang]?.[key] || key;
 }
 
-// ============================================
-//  FUNÇÕES DE WALLET
-// ============================================
-function generateLocalWallet(chain) {
-    const mockWallets = {
-        'bitcoin': { address: 'bc1q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 10), privateKey: 'L' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) },
-        'ethereum': { address: '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 25) },
-        'solana': { address: 'Sol' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20), privateKey: 'SolPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) },
-        'litecoin': { address: 'ltc1q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 10), privateKey: 'LtcPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) },
-        'bnb': { address: 'bnb1' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20), privateKey: 'BnbPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) }
-    };
-    const chainMap = { 'BTC': 'bitcoin', 'ETH': 'ethereum', 'SOL': 'solana', 'LTC': 'litecoin', 'BNB': 'bnb' };
-    const key = chainMap[chain] || 'bitcoin';
-    return mockWallets[key] || mockWallets['bitcoin'];
-}
-
-window.generateWalletForCoin = async function(symbol, chain) {
-    const t = translations[currentLang];
-    showToast((t.walletGenerating || '⏳ Generating {symbol} wallet...').replace('{symbol}', symbol));
-    
-    try {
-        const modal = document.getElementById('walletModal');
-        const title = document.getElementById('walletModalTitle');
-        const addressDisplay = document.getElementById('walletAddressDisplay');
-        const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
-        
-        title.textContent = '⏳ Generating ' + symbol + ' Wallet...';
-        addressDisplay.textContent = 'Generating address...';
-        privateKeyDisplay.textContent = 'Please wait...';
-        modal.classList.add('active');
-        
-        const walletData = generateLocalWallet(chain);
-        
-        title.textContent = t.walletGenerated || '💰 Wallet Generated';
-        addressDisplay.innerHTML = `<strong>${t.address || 'Address'}:</strong><br>${walletData.address}`;
-        privateKeyDisplay.innerHTML = `<strong>${t.privateKey || 'Private Key'} (⚠️ KEEP SECRET):</strong><br>${walletData.privateKey}`;
-        
-        showToast((t.walletSuccess || '✅ {symbol} wallet generated successfully!').replace('{symbol}', symbol));
-    } catch (error) {
-        console.error('Error:', error);
-        showToast(t.walletError || '❌ Error generating wallet. Please try again.');
-    }
-};
-
-window.closeWalletModal = function() {
-    document.getElementById('walletModal').classList.remove('active');
-};
-
-// ============================================
-//  FUNÇÕES DE SWAP
-// ============================================
-function openSwapModal(fromCurrency, toCurrency) {
-    const modal = document.getElementById('swapModal');
-    const fromSelect = document.getElementById('swapFromSelect');
-    const toSelect = document.getElementById('swapToSelect');
-    
-    if (fromCurrency) {
-        for (let i = 0; i < fromSelect.options.length; i++) {
-            if (fromSelect.options[i].value === fromCurrency) { fromSelect.selectedIndex = i; break; }
-        }
-    }
-    if (toCurrency) {
-        for (let i = 0; i < toSelect.options.length; i++) {
-            if (toSelect.options[i].value === toCurrency) { toSelect.selectedIndex = i; break; }
-        }
-    }
-    updateSwapRate();
-    modal.classList.add('active');
-}
-
-function closeSwapModal() {
-    document.getElementById('swapModal').classList.remove('active');
-}
-
-function updateSwapRate() {
-    const from = document.getElementById('swapFromSelect').value;
-    const to = document.getElementById('swapToSelect').value;
-    const rateDisplay = document.getElementById('swapRateDisplay');
-    
-    if (from === to) {
-        rateDisplay.textContent = '⚠️ Please select different currencies';
-        return;
-    }
-    const rate = EXCHANGE_RATES[from]?.[to];
-    rateDisplay.textContent = rate ? `1 ${from} = ${rate.toFixed(8)} ${to}` : `Rate: ${from} → ${to} (calculating...)`;
-}
-
-function executeSwap() {
-    const from = document.getElementById('swapFromSelect').value;
-    const to = document.getElementById('swapToSelect').value;
-    const amount = parseFloat(document.getElementById('swapAmountInput').value);
-    const t = translations[currentLang];
-    
-    if (from === to) { showToast(t.differentCurrencies || '⚠️ Please select different currencies to swap'); return; }
-    if (!amount || amount <= 0) { showToast(t.validAmount || '⚠️ Please enter a valid amount'); return; }
-    
-    const rate = EXCHANGE_RATES[from]?.[to];
-    if (!rate) { showToast(t.rateNotAvailable || '❌ Exchange rate not available for this pair'); return; }
-    
-    const result = amount * rate;
-    showToast((t.swapSuccess || '✅ Swapped {amount} {from} → {result} {to}').replace('{amount}', amount.toFixed(6)).replace('{from}', from).replace('{result}', result.toFixed(6)).replace('{to}', to));
-    closeSwapModal();
-}
-
-// ============================================
-//  FUNÇÕES GERAIS
-// ============================================
 function showToast(message) {
     const existing = document.querySelector('.toast-notification');
     if (existing) existing.remove();
@@ -1273,260 +801,8 @@ function showToast(message) {
     setTimeout(() => toast.remove(), 3000);
 }
 
-window.copyAccountNumber = function() {
-    const number = document.getElementById('accountNumberValue').textContent;
-    navigator.clipboard.writeText(number).then(() => {
-        showToast('✅ Account number copied!');
-    }).catch(() => {
-        showToast('📋 Copy manually: ' + number);
-    });
-};
-
-window.closeCurrentSection = function() {
-    document.querySelectorAll('.investment-section').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-};
-
 // ============================================
-//  KYC FUNCTIONS
-// ============================================
-const kycModal = document.getElementById('submitModal');
-const kycStep1 = document.getElementById('kycStep1');
-const kycStep2 = document.getElementById('kycStep2');
-const kycStep3 = document.getElementById('kycStep3');
-const kycPrevBtn = document.getElementById('kycPrevBtn');
-const kycNextBtn = document.getElementById('kycNextBtn');
-const submitKycBtn = document.getElementById('submitKycBtn');
-const progressFill = document.getElementById('progressFill');
-
-const uploadArea = document.getElementById('uploadArea');
-const fileInput = document.getElementById('fileInput');
-const fileNameDisplay = document.getElementById('fileNameDisplay');
-const addressUploadArea = document.getElementById('addressUploadArea');
-const addressFileInput = document.getElementById('addressFileInput');
-const addressFileNameDisplay = document.getElementById('addressFileNameDisplay');
-
-const startCameraBtn = document.getElementById('startCameraBtn');
-const captureSelfieBtn = document.getElementById('captureSelfieBtn');
-const uploadSelfieBtn = document.getElementById('uploadSelfieBtn');
-const selfieVideo = document.getElementById('selfieVideo');
-const selfieCanvas = document.getElementById('selfieCanvas');
-const selfiePreview = document.getElementById('selfiePreview');
-const selfieFileInput = document.getElementById('selfieFileInput');
-const selfieStatus = document.getElementById('selfieStatus');
-
-// Abrir KYC
-document.getElementById('kycBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    kycModal.classList.add('active');
-    currentKycStep = 1;
-    updateKycSteps();
-});
-
-// Fechar KYC
-document.getElementById('closeSubmitModalBtn').addEventListener('click', function() {
-    kycModal.classList.remove('active');
-    if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
-        cameraStream = null;
-    }
-});
-
-// Upload documentos
-uploadArea.addEventListener('click', function() { fileInput.click(); });
-fileInput.addEventListener('change', function(e) {
-    if (this.files && this.files[0]) {
-        idDocumentFile = this.files[0];
-        fileNameDisplay.textContent = '✅ ' + idDocumentFile.name;
-        uploadArea.classList.add('has-file');
-    }
-});
-
-addressUploadArea.addEventListener('click', function() { addressFileInput.click(); });
-addressFileInput.addEventListener('change', function(e) {
-    if (this.files && this.files[0]) {
-        addressDocumentFile = this.files[0];
-        addressFileNameDisplay.textContent = '✅ ' + addressDocumentFile.name;
-        addressUploadArea.classList.add('has-file');
-    }
-});
-
-// Selfie - Câmera
-startCameraBtn.addEventListener('click', async function() {
-    try {
-        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 300, height: 300 }, audio: false });
-        selfieVideo.srcObject = cameraStream;
-        selfieVideo.style.display = 'block';
-        selfieVideo.play();
-        const icon = selfiePreview.querySelector('i');
-        if (icon) icon.style.display = 'none';
-        this.style.display = 'none';
-        captureSelfieBtn.style.display = 'inline-block';
-        uploadSelfieBtn.style.display = 'inline-block';
-        selfieStatus.textContent = '📸 Camera active - Click "Capture" to take selfie';
-        selfieStatus.className = 'selfie-status';
-    } catch (err) {
-        selfieStatus.textContent = '❌ Camera access denied. Please upload a photo instead.';
-        selfieStatus.className = 'selfie-status error';
-        uploadSelfieBtn.style.display = 'inline-block';
-        console.error('Camera error:', err);
-    }
-});
-
-captureSelfieBtn.addEventListener('click', function() {
-    const canvas = selfieCanvas;
-    const video = selfieVideo;
-    canvas.width = video.videoWidth || 300;
-    canvas.height = video.videoHeight || 300;
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    selfieDataURL = canvas.toDataURL('image/jpeg');
-    
-    const img = document.createElement('img');
-    img.src = selfieDataURL;
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.objectFit = 'cover';
-    selfiePreview.innerHTML = '';
-    selfiePreview.appendChild(img);
-    
-    selfieStatus.textContent = '✅ Selfie captured successfully!';
-    selfieStatus.className = 'selfie-status success';
-    captureSelfieBtn.style.display = 'none';
-    
-    if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
-        cameraStream = null;
-        selfieVideo.style.display = 'none';
-    }
-});
-
-uploadSelfieBtn.addEventListener('click', function() { selfieFileInput.click(); });
-selfieFileInput.addEventListener('change', function(e) {
-    if (this.files && this.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            selfieDataURL = event.target.result;
-            selfiePreview.innerHTML = '';
-            const img = document.createElement('img');
-            img.src = selfieDataURL;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            selfiePreview.appendChild(img);
-            selfieStatus.textContent = '✅ Photo uploaded successfully!';
-            selfieStatus.className = 'selfie-status success';
-            uploadSelfieBtn.style.display = 'none';
-        };
-        reader.readAsDataURL(this.files[0]);
-    }
-});
-
-function updateKycSteps() {
-    kycStep1.style.display = currentKycStep === 1 ? 'block' : 'none';
-    kycStep2.style.display = currentKycStep === 2 ? 'block' : 'none';
-    kycStep3.style.display = currentKycStep === 3 ? 'block' : 'none';
-    
-    kycPrevBtn.style.display = currentKycStep > 1 ? 'block' : 'none';
-    kycNextBtn.style.display = currentKycStep < 3 ? 'block' : 'none';
-    submitKycBtn.style.display = currentKycStep === 3 ? 'block' : 'none';
-    
-    document.querySelectorAll('.kyc-step').forEach((el, index) => {
-        const stepNum = index + 1;
-        el.classList.toggle('active', stepNum === currentKycStep);
-        el.classList.toggle('completed', stepNum < currentKycStep);
-    });
-    
-    const progress = ((currentKycStep - 1) / 2) * 100;
-    progressFill.style.width = progress + '%';
-    
-    if (currentKycStep === 3) updateKycReview();
-}
-
-function updateKycReview() {
-    const reviewInfo = document.getElementById('kycReviewInfo');
-    reviewInfo.innerHTML = `
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 1rem;">
-            <span style="color:var(--text-secondary);">Full Name:</span> <span style="color:var(--neon-blue);">${document.getElementById('fullNameDoc').value || 'Not provided'}</span>
-            <span style="color:var(--text-secondary);">Email:</span> <span style="color:var(--neon-blue);">${document.getElementById('emailDocInput').value || 'Not provided'}</span>
-            <span style="color:var(--text-secondary);">Phone:</span> <span style="color:var(--neon-blue);">${document.getElementById('phoneDoc').value || 'Not provided'}</span>
-            <span style="color:var(--text-secondary);">Address:</span> <span style="color:var(--neon-blue);">${document.getElementById('addressDoc').value || 'Not provided'}</span>
-            <span style="color:var(--text-secondary);">Nationality:</span> <span style="color:var(--neon-blue);">${document.getElementById('nationalityDoc').value || 'Not provided'}</span>
-            <span style="color:var(--text-secondary);">ID Document:</span> <span style="color:${idDocumentFile ? 'var(--neon-green)' : 'var(--neon-red)'};">${idDocumentFile ? '✅ Uploaded' : '❌ Missing'}</span>
-            <span style="color:var(--text-secondary);">Proof Address:</span> <span style="color:${addressDocumentFile ? 'var(--neon-green)' : 'var(--neon-red)'};">${addressDocumentFile ? '✅ Uploaded' : '❌ Missing'}</span>
-            <span style="color:var(--text-secondary);">Selfie:</span> <span style="color:${selfieDataURL ? 'var(--neon-green)' : 'var(--neon-red)'};">${selfieDataURL ? '✅ Captured' : '❌ Missing'}</span>
-        </div>
-    `;
-}
-
-kycNextBtn.addEventListener('click', function() {
-    if (currentKycStep === 1) {
-        const fullName = document.getElementById('fullNameDoc').value.trim();
-        const email = document.getElementById('emailDocInput').value.trim();
-        const phone = document.getElementById('phoneDoc').value.trim();
-        const address = document.getElementById('addressDoc').value.trim();
-        const nationality = document.getElementById('nationalityDoc').value;
-        if (!fullName || !email || !phone || !address || !nationality) { showToast('⚠️ Please fill all fields in Step 1'); return; }
-        if (!email.includes('@')) { showToast('⚠️ Please enter a valid email address'); return; }
-    }
-    if (currentKycStep === 2) {
-        if (!idDocumentFile || !addressDocumentFile) { showToast('⚠️ Please upload both ID document and Proof of Address'); return; }
-    }
-    if (currentKycStep < 3) { currentKycStep++; updateKycSteps(); }
-});
-
-kycPrevBtn.addEventListener('click', function() {
-    if (currentKycStep > 1) { currentKycStep--; updateKycSteps(); }
-});
-
-submitKycBtn.addEventListener('click', async function() {
-    if (!idDocumentFile || !addressDocumentFile || !selfieDataURL) {
-        showToast('⚠️ Please complete all steps (upload documents and selfie)');
-        return;
-    }
-    
-    const kycData = {
-        fullName: document.getElementById('fullNameDoc').value.trim(),
-        email: document.getElementById('emailDocInput').value.trim(),
-        phone: document.getElementById('phoneDoc').value.trim(),
-        address: document.getElementById('addressDoc').value.trim(),
-        nationality: document.getElementById('nationalityDoc').value,
-        idDocument: idDocumentFile.name,
-        addressDocument: addressDocumentFile.name,
-        selfie: 'captured',
-        status: 'pending',
-        submittedAt: new Date().toISOString()
-    };
-    
-    try {
-        const result = await saveKYCToSupabase(kycData);
-        if (result) {
-            showToast('✅ KYC submitted successfully! You will receive confirmation via email.');
-            kycModal.classList.remove('active');
-            // Reset
-            currentKycStep = 1;
-            updateKycSteps();
-            idDocumentFile = null; addressDocumentFile = null; selfieDataURL = null;
-            fileNameDisplay.textContent = ''; addressFileNameDisplay.textContent = '';
-            uploadArea.classList.remove('has-file'); addressUploadArea.classList.remove('has-file');
-            selfiePreview.innerHTML = '<i class="fas fa-camera" style="font-size: 3rem; color: var(--text-secondary);"></i>';
-            selfieStatus.textContent = ''; selfieStatus.className = 'selfie-status';
-            startCameraBtn.style.display = 'inline-block';
-            captureSelfieBtn.style.display = 'none';
-            uploadSelfieBtn.style.display = 'none';
-            document.getElementById('kycStatusBadge').style.display = 'block';
-            document.getElementById('kycPendingText').textContent = 'KYC SUBMITTED - PENDING REVIEW';
-            document.getElementById('kycStatusBadge').style.borderColor = 'var(--neon-yellow)';
-        } else {
-            showToast('❌ Error submitting KYC. Please try again.');
-        }
-    } catch (error) {
-        console.error('KYC submission error:', error);
-        showToast('❌ Error submitting KYC. Please try again.');
-    }
-});
-
-// ============================================
-//  LOGIN FUNCTIONS
+//  LOGIN
 // ============================================
 function openLoginModal() {
     document.getElementById('loginModal').classList.add('active');
@@ -1538,11 +814,10 @@ function closeLoginModal() {
     document.getElementById('loginModal').classList.remove('active');
 }
 
-async function handleLogin() {
+function handleLogin() {
     const username = document.getElementById('loginId').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
     const loginError = document.getElementById('loginError');
-    const t = translations[currentLang];
     
     loginError.classList.remove('visible');
     
@@ -1554,9 +829,8 @@ async function handleLogin() {
         document.getElementById('welcomeUser').textContent = 'Welcome, ' + username;
         document.getElementById('openLoginBtn').style.display = 'none';
         document.getElementById('logoutMainBtn').style.display = 'flex';
-        document.getElementById('logoutBtnText').textContent = t.logout || 'LOGOUT';
+        showToast(getTranslation('loginSuccess'));
         try { initDashboard(); } catch(e) { console.error('Dashboard error:', e); }
-        showToast(t.loginSuccess || '✅ Login successful!');
     } else {
         loginError.classList.add('visible');
         document.getElementById('loginPassword').value = '';
@@ -1575,7 +849,7 @@ function confirmLogout() {
     document.getElementById('institutionalContent').style.display = 'block';
     document.getElementById('openLoginBtn').style.display = 'flex';
     document.getElementById('logoutMainBtn').style.display = 'none';
-    showToast(translations[currentLang].logoutSuccess || '🔒 You have been logged out.');
+    showToast(getTranslation('logoutSuccess'));
 }
 
 function cancelLogout() {
@@ -1583,35 +857,41 @@ function cancelLogout() {
 }
 
 // ============================================
-//  DASHBOARD FUNCTIONS
+//  KYC
+// ============================================
+function updateKycSteps() {
+    document.getElementById('kycStep1').style.display = currentKycStep === 1 ? 'block' : 'none';
+    document.getElementById('kycStep2').style.display = currentKycStep === 2 ? 'block' : 'none';
+    document.getElementById('kycStep3').style.display = currentKycStep === 3 ? 'block' : 'none';
+    
+    document.getElementById('kycPrevBtn').style.display = currentKycStep > 1 ? 'block' : 'none';
+    document.getElementById('kycNextBtn').style.display = currentKycStep < 3 ? 'block' : 'none';
+    document.getElementById('submitKycBtn').style.display = currentKycStep === 3 ? 'block' : 'none';
+    
+    document.querySelectorAll('.kyc-step').forEach((el, index) => {
+        const stepNum = index + 1;
+        el.classList.toggle('active', stepNum === currentKycStep);
+        el.classList.toggle('completed', stepNum < currentKycStep);
+    });
+    
+    const progress = ((currentKycStep - 1) / 2) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+}
+
+// ============================================
+//  DASHBOARD (BÁSICO)
 // ============================================
 function initDashboard() {
-    console.log('🟣 Inicializando Dashboard...');
-    try {
-        loadBalances();
-        loadCryptoAssets();
-        loadFiatAssets();
-        loadHistory();
-        loadCards();
-        loadSecuritySettings();
-        loadSecurityCenter();
-        loadMilitaryBalances();
-        loadSwapCenter();
-        initStakingChart();
-        initAnalyticsChart();
-        console.log('✅ Dashboard inicializado com sucesso!');
-    } catch (e) {
-        console.error('❌ Erro ao inicializar dashboard:', e);
-    }
+    console.log('🟣 Dashboard inicializado');
+    loadBalances();
+    loadCryptoAssets();
 }
 
 function loadBalances() {
     const balances = [
-        { currency: 'USD', amount: 12450.75 }, { currency: 'EUR', amount: 8200.50 },
-        { currency: 'GBP', amount: 3500.00 }, { currency: 'BTC', amount: 0.45 },
-        { currency: 'ETH', amount: 3.2 }, { currency: 'SOL', amount: 28.5 },
-        { currency: 'USDT', amount: 5000 }, { currency: 'BNB', amount: 12.5 },
-        { currency: 'LTC', amount: 45.0 }, { currency: 'BRADICOIN', amount: 1500 }
+        { currency: 'USD', amount: 12450.75 },
+        { currency: 'EUR', amount: 8200.50 },
+        { currency: 'BTC', amount: 0.45 },
     ];
     const grid = document.getElementById('currencyGrid');
     if (!grid) return;
@@ -1622,34 +902,18 @@ function loadBalances() {
         div.className = 'currency-item';
         div.innerHTML = `<span><strong>${b.currency}</strong></span><span class="currency-balance">${b.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
         grid.appendChild(div);
-        if (b.currency === 'USD') total += b.amount;
-        else if (b.currency === 'EUR') total += b.amount * 1.08;
-        else if (b.currency === 'GBP') total += b.amount * 1.27;
-        else if (b.currency === 'BTC') total += b.amount * 67200;
-        else if (b.currency === 'ETH') total += b.amount * 3443;
-        else if (b.currency === 'SOL') total += b.amount * 98;
-        else if (b.currency === 'USDT') total += b.amount * 1;
-        else if (b.currency === 'BNB') total += b.amount * 312.50;
-        else if (b.currency === 'LTC') total += b.amount * 82.50;
-        else if (b.currency === 'BRADICOIN') total += b.amount * 9.87;
     });
-    const totalEl = document.getElementById('totalBalance');
-    if (totalEl) totalEl.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('totalBalance').textContent = '$12,450.75';
 }
 
 function loadCryptoAssets() {
-    const t = translations[currentLang];
     const assets = [
         { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
         { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
-        { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+5.1%', chain: 'SOL', icon: '◎' },
-        { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.01%', chain: 'TRX', icon: '₮' },
-        { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+3.2%', chain: 'BNB', icon: 'BNB' },
-        { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '-0.5%', chain: 'LTC', icon: 'Ł' },
-        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+0.8%', chain: 'TRX', icon: '🪙' }
     ];
     const grid = document.getElementById('cryptoAssetsGrid');
     if (!grid) return;
+    grid.innerHTML = '';
     assets.forEach(a => {
         const card = document.createElement('div');
         card.className = 'asset-card';
@@ -1660,232 +924,64 @@ function loadCryptoAssets() {
             </div>
             <div class="asset-price">$${a.price.toLocaleString()}</div>
             <div class="button-group">
-                <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
-                <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
-                <button class="swap-btn" onclick="openSwapModal('${a.symbol}', 'USD')">🔄 ${t.swap || 'SWAP'}</button>
-                <button class="staking-btn" onclick="handleStaking('${a.symbol}')">📊 ${t.stake || 'STAKE'}</button>
-                <button class="generate-wallet-btn" onclick="generateWalletForCoin('${a.symbol}', '${a.chain}')">💳 ${t.wallet || 'WALLET'}</button>
+                <button class="deposit-btn" onclick="showToast('📥 Deposit ${a.symbol}')">📥 DEPOSIT</button>
+                <button class="receive-btn" onclick="showToast('📤 Receive ${a.symbol}')">📤 RECEIVE</button>
+                <button class="swap-btn" onclick="showToast('🔄 Swap ${a.symbol}')">🔄 SWAP</button>
+                <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
             </div>
         `;
         grid.appendChild(card);
-    });
-}
-
-function loadFiatAssets() {
-    const t = translations[currentLang];
-    const fiatAssets = [
-        { name: 'US Dollar', symbol: 'USD', balance: 12450.75, icon: '💵' },
-        { name: 'Euro', symbol: 'EUR', balance: 8200.50, icon: '💶' },
-        { name: 'British Pound', symbol: 'GBP', balance: 3500.00, icon: '💷' }
-    ];
-    const grid = document.getElementById('cryptoAssetsGrid');
-    if (!grid) return;
-    fiatAssets.forEach(f => {
-        const card = document.createElement('div');
-        card.className = 'asset-card';
-        card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h4>${f.icon} ${f.name} (${f.symbol})</h4>
-                <span style="color: var(--neon-blue);">💰</span>
-            </div>
-            <div class="asset-price">${f.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-            <div class="button-group">
-                <button class="deposit-btn" onclick="handleDeposit('${f.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
-                <button class="receive-btn" onclick="handleReceive('${f.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
-                <button class="swap-btn" onclick="openSwapModal('${f.symbol}', 'BTC')">🔄 ${t.swap || 'SWAP'}</button>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-window.handleDeposit = function(symbol) {
-    showToast(translations[currentLang].depositMessage.replace('{symbol}', symbol));
-};
-
-window.handleReceive = function(symbol) {
-    const iban = 'ZNTX' + Math.random().toString(36).substring(2,10).toUpperCase();
-    showToast(translations[currentLang].receiveMessage.replace('{symbol}', symbol).replace('{iban}', iban));
-};
-
-window.handleStaking = function(symbol) {
-    showToast(translations[currentLang].stakingMessage.replace('{symbol}', symbol));
-};
-
-function loadHistory() {
-    const history = [
-        { type: 'Deposit', detail: 'USD 5,000.00 via Wire', time: 'Today, 14:32' },
-        { type: 'Swap', detail: 'BTC 0.25 → ETH 3.8', time: 'Today, 11:15' },
-        { type: 'Sell', detail: 'ETH 1.5 @ $3,400', time: 'Yesterday, 16:40' },
-        { type: 'Staking', detail: 'SOL Reward +2.3', time: 'Yesterday, 08:00' },
-        { type: 'Transfer', detail: 'USD 1,200.00 to external account', time: '06/02/2024' }
-    ];
-    const list = document.getElementById('historyList');
-    if (!list) return;
-    list.innerHTML = '';
-    history.forEach(h => {
-        const item = document.createElement('div');
-        item.className = 'history-item';
-        item.innerHTML = `<div class="history-content"><div class="history-type">${h.type}</div><div class="history-detail">${h.detail}</div><div class="history-time">${h.time}</div></div>`;
-        list.appendChild(item);
-    });
-}
-
-function loadCards() {
-    const cards = [
-        { type: 'Visa Platinum', number: '**** 4821', limit: '$25,000' },
-        { type: 'Mastercard Black', number: '**** 7390', limit: '$50,000' }
-    ];
-    const list = document.getElementById('cardsList');
-    if (!list) return;
-    list.innerHTML = '';
-    cards.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'currency-item';
-        div.innerHTML = `<span><i class="fas fa-credit-card"></i> ${c.type}</span><span>${c.number} | Limit: ${c.limit}</span>`;
-        list.appendChild(div);
-    });
-}
-
-function loadSecuritySettings() {
-    const settings = [
-        { label: '2FA Authentication', status: 'Enabled' },
-        { label: 'Email Notifications', status: 'Enabled' },
-        { label: 'Biometric Recognition', status: 'Disabled' },
-        { label: 'Trusted Devices', status: '2 devices' }
-    ];
-    const list = document.getElementById('securitySettingsList');
-    if (!list) return;
-    list.innerHTML = '';
-    settings.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'security-item';
-        div.innerHTML = `<span>${s.label}</span><span style="color: ${s.status === 'Enabled' ? 'var(--neon-green)' : 'var(--neon-red)'}">${s.status}</span>`;
-        list.appendChild(div);
-    });
-}
-
-function loadSecurityCenter() {
-    const items = [
-        { label: 'Last Login', value: 'Today, 14:30 - IP 192.168.1.100' },
-        { label: 'Change Password', value: 'Last changed: 30 days ago' },
-        { label: 'Active Sessions', value: '2 devices' }
-    ];
-    const list = document.getElementById('securityCenterList');
-    if (!list) return;
-    list.innerHTML = '';
-    items.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'security-item';
-        div.innerHTML = `<span>${item.label}</span><span style="color:var(--neon-blue);font-size:0.7rem;">${item.value}</span>`;
-        list.appendChild(div);
-    });
-}
-
-function loadMilitaryBalances() {
-    const balances = [
-        { label: 'BTC (Reserve)', value: '0.45' },
-        { label: 'USD (Cash)', value: '$12,450' },
-        { label: 'Digital Gold', value: '5.2 oz' }
-    ];
-    const container = document.getElementById('militaryBalances');
-    if (!container) return;
-    container.innerHTML = '';
-    balances.forEach(b => {
-        const div = document.createElement('div');
-        div.className = 'balance-item';
-        div.innerHTML = `<span>${b.label}</span><span style="color:var(--neon-green)">${b.value}</span>`;
-        container.appendChild(div);
-    });
-}
-
-function loadSwapCenter() {
-    const container = document.getElementById('swapCenterContent');
-    if (!container) return;
-    container.innerHTML = `
-        <div style="text-align:center; padding:0.5rem;">
-            <p style="color:var(--text-secondary); margin-bottom:1rem;">⚡ Swap between any currencies and cryptocurrencies instantly</p>
-            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center;">
-                <button class="swap-btn" onclick="openSwapModal('USD', 'BTC')">USD → BTC</button>
-                <button class="swap-btn" onclick="openSwapModal('EUR', 'ETH')">EUR → ETH</button>
-                <button class="swap-btn" onclick="openSwapModal('GBP', 'SOL')">GBP → SOL</button>
-                <button class="swap-btn" onclick="openSwapModal('BTC', 'USDT')">BTC → USDT</button>
-                <button class="swap-btn" onclick="openSwapModal('ETH', 'BNB')">ETH → BNB</button>
-                <button class="swap-btn" onclick="openSwapModal('SOL', 'LTC')">SOL → LTC</button>
-                <button class="swap-btn" onclick="openSwapModal('BNB', 'BRC')">BNB → BRC</button>
-                <button class="swap-btn" onclick="openSwapModal('USDT', 'USD')">USDT → USD</button>
-            </div>
-        </div>
-    `;
-}
-
-function initStakingChart() {
-    const ctx = document.getElementById('stakingChart');
-    if (!ctx) return;
-    if (stakingChart) stakingChart.destroy();
-    stakingChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Staking Yield (%)',
-                data: [4.2, 4.8, 5.1, 5.6, 6.2, 6.8],
-                borderColor: '#00f2ff',
-                backgroundColor: 'rgba(0, 242, 255, 0.1)',
-                fill: true,
-                tension: 0.3,
-                pointBackgroundColor: '#bc13fe'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } } },
-            scales: {
-                x: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: 'rgba(188,19,254,0.1)' } },
-                y: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: 'rgba(188,19,254,0.1)' } }
-            }
-        }
-    });
-}
-
-function initAnalyticsChart() {
-    const ctx = document.getElementById('analyticsChart');
-    if (!ctx) return;
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Crypto', 'Fiat', 'REITs', 'Bonds'],
-            datasets: [{
-                data: [40, 30, 20, 10],
-                backgroundColor: ['#00f2ff', '#bc13fe', '#00ff88', '#ffd700'],
-                borderColor: '#0a0b1e',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 9 } } } }
-        }
     });
 }
 
 // ============================================
-//  INICIALIZAÇÃO - VERSÃO SIMPLIFICADA
+//  WALLET
+// ============================================
+function generateLocalWallet(chain) {
+    const wallets = {
+        'BTC': { address: 'bc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'L' + Math.random().toString(36).substring(2, 20) },
+        'ETH': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
+    };
+    return wallets[chain] || wallets['BTC'];
+}
+
+function generateWallet(symbol, chain) {
+    showToast('⏳ Generating ' + symbol + ' wallet...');
+    
+    const modal = document.getElementById('walletModal');
+    const title = document.getElementById('walletModalTitle');
+    const addressDisplay = document.getElementById('walletAddressDisplay');
+    const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
+    
+    title.textContent = '⏳ Generating ' + symbol + ' Wallet...';
+    addressDisplay.textContent = 'Generating address...';
+    privateKeyDisplay.textContent = 'Please wait...';
+    modal.classList.add('active');
+    
+    setTimeout(() => {
+        const wallet = generateLocalWallet(chain);
+        title.textContent = '💰 Wallet Generated';
+        addressDisplay.innerHTML = `<strong>Address:</strong><br>${wallet.address}`;
+        privateKeyDisplay.innerHTML = `<strong>Private Key (⚠️ KEEP SECRET):</strong><br>${wallet.privateKey}`;
+        showToast('✅ ' + symbol + ' wallet generated!');
+    }, 1000);
+}
+
+function closeWalletModal() {
+    document.getElementById('walletModal').classList.remove('active');
+}
+
+// ============================================
+//  INICIALIZAÇÃO
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🟣 Inicializando Zentronix Bank...');
     
-    // ============================================
-    //  CARREGAR IDIOMA
-    // ============================================
+    // Idioma
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
     
-    // ============================================
-    //  TRADUTOR
-    // ============================================
+    // Tradutor
     document.getElementById('langTrigger').addEventListener('click', function(e) {
         e.stopPropagation();
         document.getElementById('langContainer').classList.toggle('active');
@@ -1904,34 +1000,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  BOTÃO ACCESS HUB - CORRIGIDO
+    //  BOTÃO ACCESS HUB
     // ============================================
     const openLoginBtn = document.getElementById('openLoginBtn');
     if (openLoginBtn) {
-        // Remove listeners antigos
         const newBtn = openLoginBtn.cloneNode(true);
         openLoginBtn.parentNode.replaceChild(newBtn, openLoginBtn);
-        
-        // Adiciona evento
         newBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('🔵 ACCESS HUB clicado!');
-            document.getElementById('loginModal').classList.add('active');
-            document.getElementById('loginError').classList.remove('visible');
-            document.getElementById('loginId').focus();
+            openLoginModal();
         });
         console.log('✅ ACCESS HUB configurado');
     }
     
     // ============================================
-    //  BOTÃO KYC - CORRIGIDO
+    //  BOTÃO KYC
     // ============================================
     const kycBtn = document.getElementById('kycBtn');
     if (kycBtn) {
         const newKycBtn = kycBtn.cloneNode(true);
         kycBtn.parentNode.replaceChild(newKycBtn, kycBtn);
-        
         newKycBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1944,19 +1034,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ============================================
-    //  FECHAR LOGIN
+    //  LOGIN - EVENTOS
     // ============================================
-    document.getElementById('closeModalBtn').addEventListener('click', function() {
-        document.getElementById('loginModal').classList.remove('active');
-    });
-    
+    document.getElementById('closeModalBtn').addEventListener('click', closeLoginModal);
     document.getElementById('loginModal').addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
+        if (e.target === this) closeLoginModal();
     });
-    
-    // ============================================
-    //  LOGIN
-    // ============================================
     document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
     document.getElementById('loginId').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') handleLogin();
@@ -1964,8 +1047,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('loginPassword').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') handleLogin();
     });
-    
-    // Toggle senha
     document.getElementById('togglePasswordBtn').addEventListener('click', function() {
         const input = document.getElementById('loginPassword');
         if (input.type === 'password') {
@@ -1982,29 +1063,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     document.getElementById('logoutMainBtn').addEventListener('click', function(e) {
         e.preventDefault();
-        document.getElementById('confirmLogoutModal').classList.add('active');
+        logout();
     });
-    
-    document.getElementById('confirmLogoutYes').addEventListener('click', function() {
-        document.getElementById('confirmLogoutModal').classList.remove('active');
-        isLoggedIn = false;
-        document.getElementById('dashboardContainer').style.display = 'none';
-        document.getElementById('institutionalContent').style.display = 'block';
-        document.getElementById('openLoginBtn').style.display = 'flex';
-        document.getElementById('logoutMainBtn').style.display = 'none';
-        showToast('🔒 Logout realizado');
-    });
-    
-    document.getElementById('confirmLogoutNo').addEventListener('click', function() {
-        document.getElementById('confirmLogoutModal').classList.remove('active');
-    });
-    
+    document.getElementById('confirmLogoutYes').addEventListener('click', confirmLogout);
+    document.getElementById('confirmLogoutNo').addEventListener('click', cancelLogout);
     document.getElementById('confirmLogoutModal').addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
+        if (e.target === this) cancelLogout();
     });
     
     // ============================================
-    //  FECHAR KYC
+    //  KYC - FECHAR
     // ============================================
     document.getElementById('closeSubmitModalBtn').addEventListener('click', function() {
         document.getElementById('submitModal').classList.remove('active');
@@ -2015,28 +1083,38 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  UPLOAD DOCUMENTOS KYC
+    //  KYC - UPLOAD
     // ============================================
     document.getElementById('uploadArea').addEventListener('click', function() {
         document.getElementById('fileInput').click();
+    });
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            idDocumentFile = this.files[0];
+            document.getElementById('fileNameDisplay').textContent = '✅ ' + idDocumentFile.name;
+            document.getElementById('uploadArea').classList.add('has-file');
+        }
     });
     
     document.getElementById('addressUploadArea').addEventListener('click', function() {
         document.getElementById('addressFileInput').click();
     });
+    document.getElementById('addressFileInput').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            addressDocumentFile = this.files[0];
+            document.getElementById('addressFileNameDisplay').textContent = '✅ ' + addressDocumentFile.name;
+            document.getElementById('addressUploadArea').classList.add('has-file');
+        }
+    });
     
     // ============================================
-    //  NAVEGAÇÃO KYC
+    //  KYC - NAVEGAÇÃO
     // ============================================
     document.getElementById('kycNextBtn').addEventListener('click', function() {
         if (currentKycStep === 1) {
             const fullName = document.getElementById('fullNameDoc').value.trim();
             const email = document.getElementById('emailDocInput').value.trim();
-            const phone = document.getElementById('phoneDoc').value.trim();
-            const address = document.getElementById('addressDoc').value.trim();
-            const nationality = document.getElementById('nationalityDoc').value;
-            
-            if (!fullName || !email || !phone || !address || !nationality) {
+            if (!fullName || !email) {
                 showToast('⚠️ Preencha todos os campos');
                 return;
             }
@@ -2045,14 +1123,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
         }
-        
         if (currentKycStep === 2) {
             if (!idDocumentFile || !addressDocumentFile) {
                 showToast('⚠️ Envie os documentos');
                 return;
             }
         }
-        
         if (currentKycStep < 3) {
             currentKycStep++;
             updateKycSteps();
@@ -2067,56 +1143,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  SUBMIT KYC
+    //  KYC - SUBMIT
     // ============================================
-    document.getElementById('submitKycBtn').addEventListener('click', async function() {
-        if (!idDocumentFile || !addressDocumentFile || !selfieDataURL) {
+    document.getElementById('submitKycBtn').addEventListener('click', function() {
+        if (!idDocumentFile || !addressDocumentFile) {
             showToast('⚠️ Complete todos os steps');
             return;
         }
-        
-        const kycData = {
-            fullName: document.getElementById('fullNameDoc').value.trim(),
-            email: document.getElementById('emailDocInput').value.trim(),
-            phone: document.getElementById('phoneDoc').value.trim(),
-            address: document.getElementById('addressDoc').value.trim(),
-            nationality: document.getElementById('nationalityDoc').value,
-            idDocument: idDocumentFile.name,
-            addressDocument: addressDocumentFile.name,
-            selfie: 'captured',
-            status: 'pending',
-            submittedAt: new Date().toISOString()
-        };
-        
-        try {
-            const result = await saveKYCToSupabase(kycData);
-            if (result) {
-                showToast('✅ KYC enviado com sucesso!');
-                document.getElementById('submitModal').classList.remove('active');
-                currentKycStep = 1;
-                updateKycSteps();
-                idDocumentFile = null;
-                addressDocumentFile = null;
-                selfieDataURL = null;
-                document.getElementById('fileNameDisplay').textContent = '';
-                document.getElementById('addressFileNameDisplay').textContent = '';
-                document.getElementById('uploadArea').classList.remove('has-file');
-                document.getElementById('addressUploadArea').classList.remove('has-file');
-                document.getElementById('selfiePreview').innerHTML = '<i class="fas fa-camera" style="font-size: 3rem; color: var(--text-secondary);"></i>';
-                document.getElementById('selfieStatus').textContent = '';
-                document.getElementById('selfieStatus').className = 'selfie-status';
-                document.getElementById('startCameraBtn').style.display = 'inline-block';
-                document.getElementById('captureSelfieBtn').style.display = 'none';
-                document.getElementById('uploadSelfieBtn').style.display = 'none';
-                document.getElementById('kycStatusBadge').style.display = 'block';
-                document.getElementById('kycPendingText').textContent = 'KYC ENVIADO - AGUARDANDO REVISÃO';
-            } else {
-                showToast('❌ Erro ao enviar KYC');
-            }
-        } catch (error) {
-            console.error('Erro:', error);
-            showToast('❌ Erro ao enviar KYC');
-        }
+        showToast('✅ KYC enviado com sucesso!');
+        document.getElementById('submitModal').classList.remove('active');
+        document.getElementById('kycStatusBadge').style.display = 'block';
+        document.getElementById('kycPendingText').textContent = 'KYC ENVIADO - AGUARDANDO REVISÃO';
     });
     
     // ============================================
@@ -2124,11 +1161,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     document.getElementById('stealthSwitch').addEventListener('click', function() {
         this.classList.toggle('active');
-        showToast(this.classList.contains('active') ? '🕵️ Stealth ATIVADO' : '👀 Stealth DESATIVADO');
+        showToast(this.classList.contains('active') ? getTranslation('stealthActivated') : getTranslation('stealthDeactivated'));
     });
     
     // ============================================
-    //  MENU ITEMS
+    //  MENU
     // ============================================
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
         item.addEventListener('click', function() {
@@ -2142,48 +1179,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  SWAP
-    // ============================================
-    document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
-    document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
-    document.getElementById('swapAmountInput').addEventListener('input', updateSwapRate);
-    
-    // ============================================
-    //  FECHAR MODAIS COM ESC
+    //  ESC - FECHAR MODAIS
     // ============================================
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            const loginModal = document.getElementById('loginModal');
-            if (loginModal.classList.contains('active')) loginModal.classList.remove('active');
-            
-            const kycModal = document.getElementById('submitModal');
-            if (kycModal.classList.contains('active')) {
-                kycModal.classList.remove('active');
-                if (cameraStream) {
-                    cameraStream.getTracks().forEach(track => track.stop());
-                    cameraStream = null;
-                }
-            }
-            
-            const confirmModal = document.getElementById('confirmLogoutModal');
-            if (confirmModal.classList.contains('active')) confirmModal.classList.remove('active');
-            
-            const walletModal = document.getElementById('walletModal');
-            if (walletModal.classList.contains('active')) walletModal.classList.remove('active');
-            
-            const swapModal = document.getElementById('swapModal');
-            if (swapModal.classList.contains('active')) swapModal.classList.remove('active');
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('submitModal').classList.remove('active');
+            document.getElementById('confirmLogoutModal').classList.remove('active');
+            document.getElementById('walletModal').classList.remove('active');
+            document.getElementById('swapModal').classList.remove('active');
         }
     });
     
     // ============================================
-    //  MENSAGENS FINAIS
+    //  WALLET - FECHAR
     // ============================================
+    window.closeWalletModal = closeWalletModal;
+    window.closeSwapModal = function() {
+        document.getElementById('swapModal').classList.remove('active');
+    };
+    
     console.log('🟣 Zentronix Bank - Sistema Ativo');
     console.log('🔑 Credentials: admin / zentronix');
     console.log('✅ Clique em "ACCESS HUB" para login');
-    console.log('📋 KYC: 3 steps');
 });
+
 </script>
 </body>
 </html>
