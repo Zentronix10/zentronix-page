@@ -16,13 +16,61 @@
         .cyber-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(ellipse at 20% 30%, #0a0b1e 0%, #050617 100%); }
         .cyber-bg::before { content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background: repeating-linear-gradient(transparent 0px, transparent 2px, rgba(188, 19, 254, 0.04) 2px, rgba(188, 19, 254, 0.04) 4px); animation: scan 20s linear infinite; }
         .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; }
-        .lang-container { position: fixed; top: 20px; right: 20px; z-index: 1000; }
-        .lang-trigger { background: rgba(26, 27, 58, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--neon-purple); border-radius: 2rem; padding: 0.5rem 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', monospace; font-size: 0.75rem; color: var(--neon-blue); transition: all 0.3s; }
+        
+        /* LANGUAGE SELECTOR - CORRIGIDO */
+        .lang-container { position: fixed; top: 20px; right: 20px; z-index: 10000; }
+        .lang-trigger { background: rgba(26, 27, 58, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--neon-purple); border-radius: 2rem; padding: 0.5rem 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', monospace; font-size: 0.75rem; color: var(--neon-blue); transition: all 0.3s; pointer-events: auto; z-index: 10001; position: relative; }
         .lang-trigger:hover { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
-        .lang-dropdown { position: absolute; top: 55px; right: 0; background: rgba(26, 27, 58, 0.98); backdrop-filter: blur(20px); border: 1px solid var(--neon-purple); border-radius: 1rem; padding: 0.5rem; min-width: 150px; display: none; flex-direction: column; gap: 0.3rem; z-index: 1001; }
+        .lang-dropdown { position: absolute; top: 55px; right: 0; background: rgba(26, 27, 58, 0.98); backdrop-filter: blur(20px); border: 1px solid var(--neon-purple); border-radius: 1rem; padding: 0.5rem; min-width: 180px; display: none; flex-direction: column; gap: 0.3rem; z-index: 10002; }
         .lang-container.active .lang-dropdown { display: flex; }
-        .lang-option { background: transparent; border: none; padding: 0.6rem 1rem; border-radius: 0.6rem; color: var(--text-primary); font-family: 'Orbitron', monospace; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .lang-option { background: transparent; border: none; padding: 0.6rem 1rem; border-radius: 0.6rem; color: var(--text-primary); font-family: 'Orbitron', monospace; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s; pointer-events: auto; }
         .lang-option:hover { background: rgba(188, 19, 254, 0.2); }
+        
+        /* BOTÕES PRINCIPAIS - CORRIGIDOS */
+        .dashboard-nav { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .dashboard-trigger, .submit-docs-trigger { 
+            background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); 
+            border: none; 
+            padding: 0.8rem 2rem; 
+            border-radius: 2rem; 
+            color: #0a0b1e; 
+            font-family: 'Orbitron', monospace; 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all 0.3s; 
+            pointer-events: auto !important;
+            z-index: 10;
+            position: relative;
+        }
+        .dashboard-trigger:hover, .submit-docs-trigger:hover { 
+            transform: scale(1.02); 
+            box-shadow: 0 0 20px rgba(0,242,255,0.3); 
+        }
+        .dashboard-trigger * { pointer-events: none; }
+        .submit-docs-trigger * { pointer-events: none; }
+        .logout-trigger { 
+            background: rgba(188, 19, 254, 0.15); 
+            border: 1px solid var(--neon-purple); 
+            padding: 0.8rem 2rem; 
+            border-radius: 2rem; 
+            color: var(--neon-purple); 
+            font-family: 'Orbitron', monospace; 
+            font-weight: bold; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all 0.3s; 
+            pointer-events: auto !important;
+        }
+        .logout-trigger:hover { background: rgba(188, 19, 254, 0.3); }
+        .logout-trigger * { pointer-events: none; }
+
+        /* RESTO DOS ESTILOS - MANTIDOS */
         .main-container { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
         .top-logo-area { text-align: center; margin-bottom: 1.5rem; padding: 1.5rem; background: rgba(26, 27, 58, 0.5); backdrop-filter: blur(10px); border-radius: 2rem; border: 1px solid var(--border-glow); }
         .bank-logo { display: inline-block; margin-bottom: 0.8rem; animation: floatLogo 3s ease-in-out infinite; }
@@ -30,11 +78,7 @@
         .bank-logo i { font-size: 4rem; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .bank-title { font-size: 2.5rem; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 4px; font-family: 'Orbitron', monospace; }
         .bank-subtitle { font-size: 0.75rem; opacity: 0.7; margin-top: 0.5rem; letter-spacing: 2px; font-family: 'Orbitron', monospace; color: var(--neon-blue); }
-        .dashboard-nav { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .dashboard-trigger, .submit-docs-trigger { background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; padding: 0.8rem 2rem; border-radius: 2rem; color: #0a0b1e; font-family: 'Orbitron', monospace; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s; }
-        .dashboard-trigger:hover, .submit-docs-trigger:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0,242,255,0.3); }
-        .logout-trigger { background: rgba(188, 19, 254, 0.15); border: 1px solid var(--neon-purple); padding: 0.8rem 2rem; border-radius: 2rem; color: var(--neon-purple); font-family: 'Orbitron', monospace; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s; }
-        .logout-trigger:hover { background: rgba(188, 19, 254, 0.3); }
+        
         .institutional-section { background: rgba(26, 27, 58, 0.4); border-radius: 2rem; padding: 2rem; margin-bottom: 2rem; border: 1px solid var(--border-glow); }
         .hero-institutional { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-glow); }
         .hero-institutional h1 { font-size: 2rem; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: 'Orbitron', monospace; margin-bottom: 0.5rem; }
@@ -77,6 +121,7 @@
         .step-label { font-size: 0.65rem; color: var(--text-secondary); }
         .kyc-step.active .step-label { color: var(--neon-blue); }
         .step-progress-line { position: absolute; top: 20px; left: 0; right: 0; height: 2px; background: rgba(188,19,254,0.3); z-index: 1; }
+        .step-progress-line .progress-fill { height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); transition: width 0.5s ease; width: 0%; }
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.3rem; }
         .form-input, .form-select { width: 100%; padding: 0.7rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
@@ -161,6 +206,10 @@
         .login-btn { flex: 1; padding: 0.9rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; }
         .close-login-btn { flex: 1; padding: 0.9rem; background: rgba(255, 68, 102, 0.15); border: 1px solid #ff4466; border-radius: 1rem; color: #ff4466; cursor: pointer; }
         .demo-credentials { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-glow); font-size: 0.65rem; }
+        .login-error { color: var(--neon-red); font-size: 0.8rem; margin-top: 0.5rem; padding: 0.5rem; background: rgba(255, 68, 102, 0.15); border-radius: 0.5rem; border: 1px solid var(--neon-red); display: none; }
+        .login-error.visible { display: block; animation: shake 0.5s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-10px); } 80% { transform: translateX(10px); } }
+        
         .footer-dashboard { margin-top: 2rem; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(135deg, rgba(26, 27, 58, 0.95), rgba(42, 27, 74, 0.95)); border-radius: 1.5rem; border-top: 1px solid var(--border-glow); }
         .payment-icons, .security-icons-footer { display: flex; justify-content: center; align-items: center; gap: 1.2rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .payment-icons i, .security-icons-footer i { font-size: 1.5rem; color: var(--neon-blue); opacity: 0.7; transition: all 0.3s; }
@@ -171,12 +220,73 @@
         .notification-badge { position: fixed; top: 80px; right: 20px; background: rgba(188, 19, 254, 0.9); border-radius: 2rem; padding: 0.5rem 1rem; font-size: 0.7rem; z-index: 1000; cursor: pointer; animation: pulse 2s infinite; display: none; gap: 5px; align-items: center; }
         .notification-badge.visible { display: flex; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        .wallet-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 5000; justify-content: center; align-items: center; }
+        .wallet-modal.active { display: flex; }
+        .wallet-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-green); border-radius: 2rem; padding: 2rem; max-width: 550px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; position: relative; }
+        .wallet-modal-content h3 { color: var(--neon-green); font-family: 'Orbitron', monospace; margin-bottom: 1rem; }
+        .wallet-modal-content .address-box { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; font-family: 'Space Mono', monospace; font-size: 0.7rem; border: 1px solid var(--neon-blue); margin: 1rem 0; }
+        .wallet-modal-content .private-key-box { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; font-family: 'Space Mono', monospace; font-size: 0.7rem; border: 1px solid var(--neon-red); margin: 1rem 0; color: var(--neon-yellow); }
+        .wallet-modal-content .warning { color: var(--neon-yellow); font-size: 0.7rem; margin: 0.5rem 0; }
+        .close-wallet-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 2rem; padding: 0.5rem 1.5rem; color: var(--neon-red); cursor: pointer; font-family: 'Orbitron', monospace; font-weight: bold; margin-top: 1rem; }
+        .close-wallet-btn:hover { background: rgba(255,68,102,0.4); }
+        .close-wallet-modal-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: var(--neon-red); }
+        .close-wallet-modal-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.1); }
+
+        .swap-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 5001; justify-content: center; align-items: center; }
+        .swap-modal.active { display: flex; }
+        .swap-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-yellow); border-radius: 2rem; padding: 2rem; max-width: 500px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; position: relative; }
+        .swap-modal-content h3 { color: var(--neon-yellow); font-family: 'Orbitron', monospace; margin-bottom: 1rem; }
+        .swap-modal-content select, .swap-modal-content input { width: 100%; padding: 0.7rem; margin: 0.5rem 0; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); font-family: 'Inter', sans-serif; }
+        .swap-modal-content .swap-rate { color: var(--neon-blue); font-size: 0.8rem; margin: 0.5rem 0; }
+        .swap-execute-btn { background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; padding: 0.8rem; border-radius: 1rem; color: #0a0b1e; font-family: 'Orbitron', monospace; font-weight: bold; cursor: pointer; width: 100%; margin-top: 0.5rem; }
+        .swap-execute-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0,242,255,0.3); }
+        .close-swap-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 2rem; padding: 0.5rem 1.5rem; color: var(--neon-red); cursor: pointer; font-family: 'Orbitron', monospace; font-weight: bold; margin-top: 1rem; }
+        .close-swap-btn:hover { background: rgba(255,68,102,0.4); }
+        .swap-arrow { font-size: 1.5rem; color: var(--neon-yellow); margin: 0.2rem 0; }
+
+        .document-upload-area { border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(188, 19, 254, 0.05); }
+        .document-upload-area:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); }
+        .document-upload-area.has-file { border-color: var(--neon-green); background: rgba(0, 255, 136, 0.1); }
+        .document-upload-area i { font-size: 2rem; color: var(--neon-purple); display: block; margin-bottom: 0.5rem; }
+        .document-upload-area .file-name { color: var(--neon-green); font-size: 0.8rem; margin-top: 0.3rem; }
+        .kyc-step-content { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #selfiePreview { width: 200px; height: 200px; margin: 0 auto; background: rgba(26,27,58,0.5); border-radius: 1rem; border: 2px dashed var(--neon-purple); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        #selfiePreview img { width: 100%; height: 100%; object-fit: cover; }
+        #selfiePreview video { width: 100%; height: 100%; object-fit: cover; }
+        .selfie-status { margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-secondary); }
+        .selfie-status.success { color: var(--neon-green); }
+        .selfie-status.error { color: var(--neon-red); }
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 8000; display: none; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; max-width: 550px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; position: relative; }
         .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; margin: 0.5rem 0; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
-        .close-wallet-modal-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: var(--neon-red); }
-        .close-wallet-modal-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.1); }
+        
+        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 4000; justify-content: center; align-items: center; }
+        .profile-modal.active { display: flex; }
+        .profile-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; width: 450px; max-width: 90%; text-align: center; position: relative; }
+        .profile-avatar-large { width: 100px; height: 100px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; cursor: pointer; position: relative; overflow: hidden; }
+        .profile-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-avatar-large i { font-size: 3rem; color: #0a0b1e; }
+        .upload-photo-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); border-radius: 2rem; padding: 0.3rem 0.8rem; font-size: 0.6rem; cursor: pointer; margin-top: 0.5rem; display: inline-block; }
+        .profile-field { margin-bottom: 1rem; text-align: left; }
+        .profile-field label { display: block; font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.3rem; }
+        .profile-field input { width: 100%; padding: 0.7rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
+        .save-profile-btn { width: 100%; padding: 0.8rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; margin-top: 1rem; }
+        
+        .confirm-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 9000; display: none; justify-content: center; align-items: center; }
+        .confirm-modal.active { display: flex; }
+        .confirm-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; text-align: center; max-width: 400px; width: 90%; }
+        .confirm-modal-content h3 { color: var(--neon-yellow); margin-bottom: 1rem; }
+        .confirm-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .confirm-yes-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); color: var(--neon-red); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
+        .confirm-yes-btn:hover { background: rgba(255,68,102,0.4); }
+        .confirm-no-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
+        .confirm-no-btn:hover { background: rgba(0,242,255,0.4); }
+
         .payment-methods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
         .payment-method-card { background: rgba(26, 27, 58, 0.8); border: 1px solid var(--border-glow); border-radius: 1rem; padding: 1rem; cursor: pointer; transition: all 0.3s; }
         .payment-method-card:hover { border-color: var(--neon-green); transform: translateY(-3px); }
@@ -189,61 +299,17 @@
         .history-type { font-size: 0.7rem; font-weight: bold; color: var(--neon-yellow); }
         .history-detail { font-size: 0.7rem; margin-top: 0.3rem; }
         .history-time { font-size: 0.6rem; opacity: 0.5; margin-top: 0.3rem; }
-        .delete-notification-btn { background: rgba(255,68,102,0.2); border: none; border-radius: 0.3rem; padding: 0.2rem 0.5rem; font-size: 0.6rem; color: var(--neon-red); cursor: pointer; transition: all 0.3s; margin-left: 0.5rem; }
-        .delete-notification-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.05); }
         .security-item { background: rgba(26,27,58,0.6); border-radius: 0.8rem; padding: 0.8rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
         .service-card { background: rgba(26,27,58,0.6); border-radius: 1rem; padding: 1rem; margin-bottom: 0.8rem; transition: all 0.3s; cursor: pointer; }
         .service-card:hover { transform: translateX(5px); border-left: 3px solid var(--neon-blue); }
-        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 4000; justify-content: center; align-items: center; }
-        .profile-modal.active { display: flex; }
-        .profile-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; width: 450px; max-width: 90%; text-align: center; position: relative; }
-        .profile-avatar-large { width: 100px; height: 100px; background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; cursor: pointer; position: relative; overflow: hidden; }
-        .profile-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-avatar-large i { font-size: 3rem; color: #0a0b1e; }
-        .upload-photo-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); border-radius: 2rem; padding: 0.3rem 0.8rem; font-size: 0.6rem; cursor: pointer; margin-top: 0.5rem; display: inline-block; }
-        .profile-field { margin-bottom: 1rem; text-align: left; }
-        .profile-field label { display: block; font-size: 0.7rem; color: var(--neon-purple); margin-bottom: 0.3rem; }
-        .profile-field input { width: 100%; padding: 0.7rem; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); }
-        .save-profile-btn { width: 100%; padding: 0.8rem; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; margin-top: 1rem; }
-        .confirm-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 9000; display: none; justify-content: center; align-items: center; }
-        .confirm-modal.active { display: flex; }
-        .confirm-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-blue); border-radius: 2rem; padding: 2rem; text-align: center; max-width: 400px; width: 90%; }
-        .confirm-modal-content h3 { color: var(--neon-yellow); margin-bottom: 1rem; }
-        .confirm-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .confirm-yes-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); color: var(--neon-red); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
-        .confirm-yes-btn:hover { background: rgba(255,68,102,0.4); }
-        .confirm-no-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 0.5rem 1.5rem; border-radius: 2rem; cursor: pointer; font-weight: bold; }
-        .confirm-no-btn:hover { background: rgba(0,242,255,0.4); }
         .wallet-address-display { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; margin: 1rem 0; font-family: 'Space Mono', monospace; font-size: 0.8rem; border: 1px solid var(--neon-blue); }
         .copy-address-btn { background: rgba(0,242,255,0.2); border: 1px solid var(--neon-blue); border-radius: 0.5rem; padding: 0.3rem 0.8rem; cursor: pointer; margin-top: 0.5rem; }
         .create-wallet-btn { background: linear-gradient(95deg, var(--neon-green), var(--neon-blue)); border: none; padding: 0.6rem 1.5rem; border-radius: 2rem; color: #0a0b1e; font-weight: bold; cursor: pointer; margin-top: 1rem; width: 100%; }
         .create-wallet-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+        .delete-notification-btn { background: rgba(255,68,102,0.2); border: none; border-radius: 0.3rem; padding: 0.2rem 0.5rem; font-size: 0.6rem; color: var(--neon-red); cursor: pointer; transition: all 0.3s; margin-left: 0.5rem; }
+        .delete-notification-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.05); }
+        
         @media (max-width: 1100px) { .dashboard-three-columns { grid-template-columns: 1fr; } .tactical-menu { position: relative; } }
-        
-        /* Wallet Modal */
-        .wallet-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 5000; justify-content: center; align-items: center; }
-        .wallet-modal.active { display: flex; }
-        .wallet-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-green); border-radius: 2rem; padding: 2rem; max-width: 550px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; position: relative; }
-        .wallet-modal-content h3 { color: var(--neon-green); font-family: 'Orbitron', monospace; margin-bottom: 1rem; }
-        .wallet-modal-content .address-box { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; font-family: 'Space Mono', monospace; font-size: 0.7rem; border: 1px solid var(--neon-blue); margin: 1rem 0; }
-        .wallet-modal-content .private-key-box { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.8rem; word-break: break-all; font-family: 'Space Mono', monospace; font-size: 0.7rem; border: 1px solid var(--neon-red); margin: 1rem 0; color: var(--neon-yellow); }
-        .wallet-modal-content .warning { color: var(--neon-yellow); font-size: 0.7rem; margin: 0.5rem 0; }
-        .close-wallet-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 2rem; padding: 0.5rem 1.5rem; color: var(--neon-red); cursor: pointer; font-family: 'Orbitron', monospace; font-weight: bold; margin-top: 1rem; }
-        .close-wallet-btn:hover { background: rgba(255,68,102,0.4); }
-
-        /* Swap Modal */
-        .swap-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 11, 30, 0.98); backdrop-filter: blur(25px); z-index: 5001; justify-content: center; align-items: center; }
-        .swap-modal.active { display: flex; }
-        .swap-modal-content { background: linear-gradient(135deg, #1a1b3a, #0a0b1e); border: 2px solid var(--neon-yellow); border-radius: 2rem; padding: 2rem; max-width: 500px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; position: relative; }
-        .swap-modal-content h3 { color: var(--neon-yellow); font-family: 'Orbitron', monospace; margin-bottom: 1rem; }
-        .swap-modal-content select, .swap-modal-content input { width: 100%; padding: 0.7rem; margin: 0.5rem 0; background: rgba(26,27,58,0.9); border: 1px solid var(--border-glow); border-radius: 0.8rem; color: var(--text-primary); font-family: 'Inter', sans-serif; }
-        .swap-modal-content .swap-rate { color: var(--neon-blue); font-size: 0.8rem; margin: 0.5rem 0; }
-        .swap-execute-btn { background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; padding: 0.8rem; border-radius: 1rem; color: #0a0b1e; font-family: 'Orbitron', monospace; font-weight: bold; cursor: pointer; width: 100%; margin-top: 0.5rem; }
-        .swap-execute-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0,242,255,0.3); }
-        .close-swap-btn { background: rgba(255,68,102,0.2); border: 1px solid var(--neon-red); border-radius: 2rem; padding: 0.5rem 1.5rem; color: var(--neon-red); cursor: pointer; font-family: 'Orbitron', monospace; font-weight: bold; margin-top: 1rem; }
-        .close-swap-btn:hover { background: rgba(255,68,102,0.4); }
-        
-        .swap-arrow { font-size: 1.5rem; color: var(--neon-yellow); margin: 0.2rem 0; }
     </style>
 </head>
 <body>
@@ -271,9 +337,18 @@
     <div class="login-container">
         <div class="login-icon"><i class="fas fa-microchip"></i></div>
         <h2 id="modalTitle">ACCESS INVESTMENT HUB</h2>
-        <div class="input-group"><input type="text" id="loginId" class="login-input" placeholder="User ID" value="admin"></div>
-        <div class="input-group"><input type="password" id="loginPassword" class="login-input" placeholder="Password" value="zentronix"><button type="button" class="password-toggle" id="togglePasswordBtn"><i class="fas fa-eye"></i></button></div>
-        <div class="login-actions"><button id="loginSubmitBtn" class="login-btn">LOGIN</button><button id="closeModalBtn" class="close-login-btn">CLOSE</button></div>
+        <div class="input-group">
+            <input type="text" id="loginId" class="login-input" placeholder="User ID" value="admin">
+        </div>
+        <div class="input-group">
+            <input type="password" id="loginPassword" class="login-input" placeholder="Password" value="zentronix">
+            <button type="button" class="password-toggle" id="togglePasswordBtn"><i class="fas fa-eye"></i></button>
+        </div>
+        <div id="loginError" class="login-error">❌ Invalid username or password</div>
+        <div class="login-actions">
+            <button id="loginSubmitBtn" class="login-btn">LOGIN</button>
+            <button id="closeModalBtn" class="close-login-btn">CLOSE</button>
+        </div>
         <div class="demo-credentials">ID: admin | Password: zentronix</div>
     </div>
 </div>
@@ -281,7 +356,7 @@
 <!-- Swap Modal -->
 <div id="swapModal" class="swap-modal">
     <div class="swap-modal-content">
-        <button class="close-wallet-modal-btn" onclick="closeSwapModal()" style="position:absolute;top:15px;right:15px;background:rgba(255,68,102,0.2);border:1px solid var(--neon-red);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neon-red);font-size:1rem;">✕</button>
+        <button class="close-wallet-modal-btn" onclick="closeSwapModal()">✕</button>
         <h3 id="swapModalTitle">🔄 SWAP</h3>
         <div id="swapModalContent">
             <select id="swapFromSelect">
@@ -320,7 +395,7 @@
 <!-- Wallet Modal -->
 <div id="walletModal" class="wallet-modal">
     <div class="wallet-modal-content">
-        <button class="close-wallet-modal-btn" onclick="closeWalletModal()" style="position:absolute;top:15px;right:15px;background:rgba(255,68,102,0.2);border:1px solid var(--neon-red);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neon-red);font-size:1rem;">✕</button>
+        <button class="close-wallet-modal-btn" onclick="closeWalletModal()">✕</button>
         <h3 id="walletModalTitle">💰 Wallet Generated</h3>
         <div id="walletModalContent">
             <div class="address-box" id="walletAddressDisplay">Address: Generating...</div>
@@ -363,53 +438,126 @@
     </div>
 </div>
 
+<!-- KYC Modal -->
 <div id="submitModal" class="submit-modal">
     <div class="submit-modal-content">
         <div class="submit-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h2 id="kycModalTitle" style="color: var(--neon-blue);">KYC VERIFICATION</h2>
             <button class="close-submit-modal" id="closeSubmitModalBtn" style="background: transparent; border: none; color: var(--neon-red); font-size: 1.5rem; cursor: pointer;">✕</button>
         </div>
+        
         <div class="kyc-steps">
-            <div class="step-progress-line"></div>
-            <div class="kyc-step" id="step1"><div class="step-circle">1</div><div class="step-label" id="step1Label">Personal Info</div></div>
-            <div class="kyc-step" id="step2"><div class="step-circle">2</div><div class="step-label" id="step2Label">Documents</div></div>
-            <div class="kyc-step" id="step3"><div class="step-circle">3</div><div class="step-label" id="step3Label">Review</div></div>
+            <div class="step-progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="kyc-step active" id="step1">
+                <div class="step-circle">1</div>
+                <div class="step-label" id="step1Label">Personal Info</div>
+            </div>
+            <div class="kyc-step" id="step2">
+                <div class="step-circle">2</div>
+                <div class="step-label" id="step2Label">Documents</div>
+            </div>
+            <div class="kyc-step" id="step3">
+                <div class="step-circle">3</div>
+                <div class="step-label" id="step3Label">Selfie</div>
+            </div>
         </div>
+
         <div id="kycStep1" class="kyc-step-content">
-            <div class="form-group"><label id="fullNameLabel">Full Name</label><input type="text" id="fullNameDoc" class="form-input" placeholder="Enter your full name"></div>
-            <div class="form-group"><label id="emailLabel">Email</label><input type="email" id="emailDocInput" class="form-input" placeholder="your@email.com"></div>
-            <div class="form-group"><label id="phoneLabel">Phone</label><input type="tel" id="phoneDoc" class="form-input" placeholder="+1 234 567 8900"></div>
-            <div class="form-group"><label id="addressLabel">Address</label><input type="text" id="addressDoc" class="form-input" placeholder="Street, City, State, Zip"></div>
-            <div class="form-group"><label id="nationalityLabel">Nationality</label><select id="nationalityDoc" class="form-select">
-                <option value="">Select Nationality</option>
-                <option>United States</option><option>Brazil</option><option>United Kingdom</option><option>Portugal</option><option>Germany</option>
-                <option>France</option><option>Switzerland</option><option>Canada</option><option>Australia</option><option>Japan</option>
-                <option>Spain</option><option>Italy</option><option>Netherlands</option><option>Sweden</option><option>Norway</option>
-                <option>Denmark</option><option>Ireland</option><option>New Zealand</option><option>Singapore</option><option>South Africa</option>
-                <option>Mexico</option><option>Argentina</option><option>Chile</option><option>Colombia</option><option>India</option>
-                <option>China</option><option>South Korea</option><option>Russia</option><option>Turkey</option><option>Israel</option>
-            </select></div>
+            <div class="form-group">
+                <label id="fullNameLabel">Full Name</label>
+                <input type="text" id="fullNameDoc" class="form-input" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label id="emailLabel">Email</label>
+                <input type="email" id="emailDocInput" class="form-input" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label id="phoneLabel">Phone</label>
+                <input type="tel" id="phoneDoc" class="form-input" placeholder="+1 234 567 8900" required>
+            </div>
+            <div class="form-group">
+                <label id="addressLabel">Street Address</label>
+                <input type="text" id="addressDoc" class="form-input" placeholder="Street, City, State, Zip" required>
+            </div>
+            <div class="form-group">
+                <label id="nationalityLabel">Nationality</label>
+                <select id="nationalityDoc" class="form-select" required>
+                    <option value="">Select Nationality</option>
+                    <option>United States</option><option>Brazil</option><option>United Kingdom</option>
+                    <option>Portugal</option><option>Germany</option><option>France</option>
+                    <option>Switzerland</option><option>Canada</option><option>Australia</option>
+                    <option>Japan</option><option>Spain</option><option>Italy</option>
+                    <option>Netherlands</option><option>Sweden</option><option>Norway</option>
+                    <option>Denmark</option><option>Ireland</option><option>New Zealand</option>
+                    <option>Singapore</option><option>South Africa</option><option>Mexico</option>
+                    <option>Argentina</option><option>Chile</option><option>Colombia</option>
+                    <option>India</option><option>China</option><option>South Korea</option>
+                    <option>Russia</option><option>Turkey</option><option>Israel</option>
+                </select>
+            </div>
         </div>
+
         <div id="kycStep2" class="kyc-step-content" style="display:none;">
-            <div class="form-group"><label id="idDocumentLabel">ID Document</label>
-                <div class="document-upload-area" id="uploadArea" style="border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1rem; text-align: center; cursor: pointer;"><i class="fas fa-cloud-upload-alt"></i><p id="uploadClickText">Click to upload document</p></div>
-                <input type="file" id="fileInput" style="display:none" accept="image/*,application/pdf">
+            <div class="form-group">
+                <label id="idDocumentLabel">ID Document (Passport / ID Card / Driver License)</label>
+                <div class="document-upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p id="uploadClickText">Click to upload document</p>
+                    <div class="file-name" id="fileNameDisplay"></div>
+                </div>
+                <input type="file" id="fileInput" style="display:none" accept="image/*,.pdf,.jpg,.jpeg,.png">
             </div>
-            <div class="form-group"><label id="proofAddressLabel">Proof of Address</label>
-                <div class="document-upload-area" id="addressUploadArea" style="border: 2px dashed var(--neon-purple); border-radius: 1rem; padding: 1rem; text-align: center; cursor: pointer;"><i class="fas fa-cloud-upload-alt"></i><p id="proofClickText">Click to upload proof of address</p></div>
-                <input type="file" id="addressFileInput" style="display:none" accept="image/*,application/pdf">
+            <div class="form-group">
+                <label id="proofAddressLabel">Proof of Address (Utility bill, Bank statement, etc.)</label>
+                <div class="document-upload-area" id="addressUploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p id="proofClickText">Click to upload proof of address</p>
+                    <div class="file-name" id="addressFileNameDisplay"></div>
+                </div>
+                <input type="file" id="addressFileInput" style="display:none" accept="image/*,.pdf,.jpg,.jpeg,.png">
+            </div>
+            <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(255, 215, 0, 0.1); border-radius: 0.5rem; border: 1px solid var(--neon-yellow);">
+                <p style="font-size: 0.7rem; color: var(--neon-yellow);">
+                    <i class="fas fa-info-circle"></i> Accepted formats: JPG, PNG, PDF (Max 10MB)
+                </p>
             </div>
         </div>
+
         <div id="kycStep3" class="kyc-step-content" style="display:none;">
-            <div style="background: rgba(0,242,255,0.1); border-radius: 1rem; padding: 1rem; margin-bottom: 1rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Take a selfie holding your ID document</p>
+                <div id="selfiePreview">
+                    <i class="fas fa-camera" style="font-size: 3rem; color: var(--text-secondary);"></i>
+                    <video id="selfieVideo" style="display:none; width: 100%; height: 100%; object-fit: cover;"></video>
+                    <canvas id="selfieCanvas" style="display:none;"></canvas>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button id="startCameraBtn" class="buy-btn" style="flex: none; padding: 0.5rem 1.5rem;">
+                        <i class="fas fa-camera"></i> Start Camera
+                    </button>
+                    <button id="captureSelfieBtn" class="buy-btn" style="flex: none; padding: 0.5rem 1.5rem; display: none;">
+                        <i class="fas fa-camera-retro"></i> Capture
+                    </button>
+                    <button id="uploadSelfieBtn" class="buy-btn" style="flex: none; padding: 0.5rem 1.5rem; display: none;">
+                        <i class="fas fa-upload"></i> Upload Photo
+                    </button>
+                </div>
+                <input type="file" id="selfieFileInput" style="display:none" accept="image/*">
+                <div id="selfieStatus" class="selfie-status"></div>
+            </div>
+            
+            <div style="background: rgba(0,242,255,0.1); border-radius: 1rem; padding: 1rem; margin-top: 1rem;">
                 <p><i class="fas fa-info-circle"></i> <strong id="reviewTitle">Please review your information before submitting:</strong></p>
-                <div id="kycReviewInfo" style="margin-top: 0.8rem; font-size: 0.7rem;"></div>
+                <div id="kycReviewInfo" style="margin-top: 0.8rem; font-size: 0.7rem; line-height: 1.8;"></div>
             </div>
         </div>
-        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
             <button type="button" id="kycPrevBtn" class="sell-btn" style="flex:1; display:none;">Previous</button>
-            <button type="button" id="kycNextBtn" class="buy-btn" style="flex:2;">Next</button>
-            <button type="button" id="submitKycBtn" class="submit-docs-btn" style="flex:2; display:none; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer;">SUBMIT KYC</button>
+            <button type="button" id="kycNextBtn" class="buy-btn" style="flex:2;">Next →</button>
+            <button type="button" id="submitKycBtn" class="submit-docs-trigger" style="flex:2; display:none; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; padding: 0.8rem;">SUBMIT KYC</button>
         </div>
     </div>
 </div>
@@ -593,21 +741,17 @@
 
 <script>
 // ============================================
-//  CONFIGURAÇÃO DO SUPABASE
+//  CONFIGURAÇÃO
 // ============================================
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// ============================================
-//  CONFIGURAÇÃO DA API
-// ============================================
 const RENDER_API_URL = 'https://zentronix-api.onrender.com';
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
 // ============================================
-//  SISTEMA DE TRADUÇÃO - 4 IDIOMAS
+//  TRADUÇÕES
 // ============================================
 const translations = {
     'en': {
@@ -647,43 +791,6 @@ const translations = {
         'loginSuccess': '✅ Login successful!',
         'logoutConfirm': 'Are you sure you want to logout from your account?',
         'logoutTitle': 'Confirm Logout',
-        'securitySettings': '⚙️ SECURITY SETTINGS',
-        'securityCenter': 'Security Center',
-        'cryptoDefi': '⛓️ CRYPTO & DEFI',
-        'stakingCenter': 'Staking Center',
-        'cryptoTransactions': 'Crypto Transactions',
-        'history': 'History / Extrato',
-        'trading': '📊 TRADING',
-        'tradingHub': 'Trading Hub',
-        'conversion': 'Conversion',
-        'fixedIncome': '🏛️ FIXED INCOME',
-        'treasuries': 'Treasuries & Bonds',
-        'cds': 'CDs / Time Deposits',
-        'debentures': 'Debentures',
-        'reits': 'REITs',
-        'privateCredit': 'Private Credit',
-        'structuredNotes': 'Structured Notes',
-        'municipalBonds': 'Municipal Bonds',
-        'cardsPayments': '💳 CARDS & PAYMENTS',
-        'myCards': 'My Cards',
-        'payments': 'Payments',
-        'swapCenter': 'Swap Center',
-        'analytics': '📊 ANALYTICS',
-        'analyticsTitle': 'Analytics',
-        'reports': 'Reports',
-        'securityKyc': '🔒 SECURITY & KYC',
-        'securitySettingsTitle': 'Security Settings',
-        'activeSessions': 'Active Sessions',
-        'kycCompliance': 'KYC & Compliance',
-        'antiHack': 'Anti-Hack',
-        'systemControls': '⚙️ SYSTEM CONTROLS',
-        'ghostMode': 'Ghost Mode',
-        'scenarioSimulator': 'Scenario Simulator',
-        'themeWeaver': 'Theme Weaver',
-        'auditLogs': 'Audit Logs',
-        'bankingServices': '✨ BANKING SERVICES',
-        'completeServices': 'Complete Services',
-        'digitalPayment': 'Payment Digital',
         'walletGenerated': '💰 Wallet Generated',
         'address': 'Address',
         'privateKey': 'Private Key',
@@ -692,11 +799,6 @@ const translations = {
         'amountToSwap': 'Amount to swap',
         'executeSwap': '🚀 EXECUTE SWAP',
         'swapRate': 'Rate',
-        'profileModalTitle': 'Edit Profile',
-        'firstName': 'First Name',
-        'lastName': 'Last Name',
-        'email': 'Email',
-        'phone': 'Phone',
         'kycModalTitle': 'KYC VERIFICATION',
         'personalInfo': 'Personal Info',
         'documents': 'Documents',
@@ -713,8 +815,6 @@ const translations = {
         'next': 'Next',
         'submitKyc': 'SUBMIT KYC',
         'kycPending': 'KYC PENDING',
-        'regulatoryText': 'Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.',
-        'copyright': '© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024',
         'swapSuccess': '✅ Swapped {amount} {from} → {result} {to}',
         'copySuccess': '✅ Account number copied!',
         'copyManual': '📋 Copy manually: ',
@@ -768,43 +868,6 @@ const translations = {
         'loginSuccess': '✅ Login realizado com sucesso!',
         'logoutConfirm': 'Tem certeza que deseja sair da sua conta?',
         'logoutTitle': 'Confirmar Saída',
-        'securitySettings': '⚙️ CONFIGURAÇÕES DE SEGURANÇA',
-        'securityCenter': 'Central de Segurança',
-        'cryptoDefi': '⛓️ CRYPTO & DEFI',
-        'stakingCenter': 'Central de Staking',
-        'cryptoTransactions': 'Transações Crypto',
-        'history': 'Histórico / Extrato',
-        'trading': '📊 TRADING',
-        'tradingHub': 'Hub de Trading',
-        'conversion': 'Conversão',
-        'fixedIncome': '🏛️ RENDA FIXA',
-        'treasuries': 'Tesouros & Bonds',
-        'cds': 'CDs / Depósitos',
-        'debentures': 'Debêntures',
-        'reits': 'REITs',
-        'privateCredit': 'Crédito Privado',
-        'structuredNotes': 'Notas Estruturadas',
-        'municipalBonds': 'Títulos Municipais',
-        'cardsPayments': '💳 CARTÕES & PAGAMENTOS',
-        'myCards': 'Meus Cartões',
-        'payments': 'Pagamentos',
-        'swapCenter': 'Central de Swap',
-        'analytics': '📊 ANÁLISES',
-        'analyticsTitle': 'Análises',
-        'reports': 'Relatórios',
-        'securityKyc': '🔒 SEGURANÇA & KYC',
-        'securitySettingsTitle': 'Config. Segurança',
-        'activeSessions': 'Sessões Ativas',
-        'kycCompliance': 'KYC & Compliance',
-        'antiHack': 'Anti-Hack',
-        'systemControls': '⚙️ CONTROLES DO SISTEMA',
-        'ghostMode': 'Modo Fantasma',
-        'scenarioSimulator': 'Simulador de Cenários',
-        'themeWeaver': 'Personalizar Tema',
-        'auditLogs': 'Logs de Auditoria',
-        'bankingServices': '✨ SERVIÇOS BANCÁRIOS',
-        'completeServices': 'Serviços Completos',
-        'digitalPayment': 'Pagamento Digital',
         'walletGenerated': '💰 Carteira Gerada',
         'address': 'Endereço',
         'privateKey': 'Chave Privada',
@@ -813,11 +876,6 @@ const translations = {
         'amountToSwap': 'Valor para trocar',
         'executeSwap': '🚀 EXECUTAR SWAP',
         'swapRate': 'Taxa',
-        'profileModalTitle': 'Editar Perfil',
-        'firstName': 'Nome',
-        'lastName': 'Sobrenome',
-        'email': 'E-mail',
-        'phone': 'Telefone',
         'kycModalTitle': 'VERIFICAÇÃO KYC',
         'personalInfo': 'Informações Pessoais',
         'documents': 'Documentos',
@@ -834,8 +892,6 @@ const translations = {
         'next': 'Próximo',
         'submitKyc': 'ENVIAR KYC',
         'kycPending': 'KYC PENDENTE',
-        'regulatoryText': 'O Zentronix Bank está em processo de licenciamento regulatório como Provedor de Serviços de Ativos Virtuais.',
-        'copyright': '© 2024 Zentronix Bank - Edição Azul & Roxa | Licença Offshore No. ZNTX-2024',
         'swapSuccess': '✅ Trocados {amount} {from} → {result} {to}',
         'copySuccess': '✅ Número da conta copiado!',
         'copyManual': '📋 Copie manualmente: ',
@@ -889,43 +945,6 @@ const translations = {
         'loginSuccess': '✅ Inicio de sesión exitoso!',
         'logoutConfirm': '¿Está seguro que desea cerrar sesión?',
         'logoutTitle': 'Confirmar Salida',
-        'securitySettings': '⚙️ CONFIGURACIONES DE SEGURIDAD',
-        'securityCenter': 'Centro de Seguridad',
-        'cryptoDefi': '⛓️ CRYPTO & DEFI',
-        'stakingCenter': 'Centro de Staking',
-        'cryptoTransactions': 'Transacciones Crypto',
-        'history': 'Historial / Extrato',
-        'trading': '📊 TRADING',
-        'tradingHub': 'Hub de Trading',
-        'conversion': 'Conversión',
-        'fixedIncome': '🏛️ RENTA FIJA',
-        'treasuries': 'Tesoros & Bonos',
-        'cds': 'CDs / Depósitos',
-        'debentures': 'Debentures',
-        'reits': 'REITs',
-        'privateCredit': 'Crédito Privado',
-        'structuredNotes': 'Notas Estructuradas',
-        'municipalBonds': 'Bonos Municipales',
-        'cardsPayments': '💳 TARJETAS & PAGOS',
-        'myCards': 'Mis Tarjetas',
-        'payments': 'Pagos',
-        'swapCenter': 'Centro de Swap',
-        'analytics': '📊 ANÁLISIS',
-        'analyticsTitle': 'Análisis',
-        'reports': 'Informes',
-        'securityKyc': '🔒 SEGURIDAD & KYC',
-        'securitySettingsTitle': 'Config. Seguridad',
-        'activeSessions': 'Sesiones Activas',
-        'kycCompliance': 'KYC & Cumplimiento',
-        'antiHack': 'Anti-Hack',
-        'systemControls': '⚙️ CONTROLES DEL SISTEMA',
-        'ghostMode': 'Modo Fantasma',
-        'scenarioSimulator': 'Simulador de Escenarios',
-        'themeWeaver': 'Personalizar Tema',
-        'auditLogs': 'Registros de Auditoría',
-        'bankingServices': '✨ SERVICIOS BANCARIOS',
-        'completeServices': 'Servicios Completos',
-        'digitalPayment': 'Pago Digital',
         'walletGenerated': '💰 Billetera Generada',
         'address': 'Dirección',
         'privateKey': 'Clave Privada',
@@ -934,11 +953,6 @@ const translations = {
         'amountToSwap': 'Cantidad a intercambiar',
         'executeSwap': '🚀 EJECUTAR SWAP',
         'swapRate': 'Tasa',
-        'profileModalTitle': 'Editar Perfil',
-        'firstName': 'Nombre',
-        'lastName': 'Apellido',
-        'email': 'Correo Electrónico',
-        'phone': 'Teléfono',
         'kycModalTitle': 'VERIFICACIÓN KYC',
         'personalInfo': 'Información Personal',
         'documents': 'Documentos',
@@ -955,8 +969,6 @@ const translations = {
         'next': 'Siguiente',
         'submitKyc': 'ENVIAR KYC',
         'kycPending': 'KYC PENDIENTE',
-        'regulatoryText': 'Zentronix Bank está en proceso de licenciamiento regulatorio como Proveedor de Servicios de Activos Virtuales.',
-        'copyright': '© 2024 Zentronix Bank - Edición Azul & Púrpura | Licencia Offshore No. ZNTX-2024',
         'swapSuccess': '✅ Intercambiados {amount} {from} → {result} {to}',
         'copySuccess': '✅ Número de cuenta copiado!',
         'copyManual': '📋 Copie manualmente: ',
@@ -1010,43 +1022,6 @@ const translations = {
         'loginSuccess': '✅ تم تسجيل الدخول بنجاح!',
         'logoutConfirm': 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
         'logoutTitle': 'تأكيد تسجيل الخروج',
-        'securitySettings': '⚙️ إعدادات الأمان',
-        'securityCenter': 'مركز الأمان',
-        'cryptoDefi': '⛓️ العملات المشفرة والتمويل اللامركزي',
-        'stakingCenter': 'مركز التخزين',
-        'cryptoTransactions': 'معاملات العملات المشفرة',
-        'history': 'السجل / كشف الحساب',
-        'trading': '📊 التداول',
-        'tradingHub': 'مركز التداول',
-        'conversion': 'تحويل',
-        'fixedIncome': '🏛️ الدخل الثابت',
-        'treasuries': 'الخزانة والسندات',
-        'cds': 'شهادات الإيداع / الودائع',
-        'debentures': 'سندات الدين',
-        'reits': 'صناديق الاستثمار العقاري',
-        'privateCredit': 'الائتمان الخاص',
-        'structuredNotes': 'السندات المهيكلة',
-        'municipalBonds': 'السندات البلدية',
-        'cardsPayments': '💳 البطاقات والمدفوعات',
-        'myCards': 'بطاقاتي',
-        'payments': 'المدفوعات',
-        'swapCenter': 'مركز المبادلة',
-        'analytics': '📊 التحليلات',
-        'analyticsTitle': 'التحليلات',
-        'reports': 'التقارير',
-        'securityKyc': '🔒 الأمان و KYC',
-        'securitySettingsTitle': 'إعدادات الأمان',
-        'activeSessions': 'الجلسات النشطة',
-        'kycCompliance': 'الامتثال و KYC',
-        'antiHack': 'مكافحة الاختراق',
-        'systemControls': '⚙️ أدوات التحكم في النظام',
-        'ghostMode': 'وضع الشبح',
-        'scenarioSimulator': 'محاكاة السيناريو',
-        'themeWeaver': 'تخصيص المظهر',
-        'auditLogs': 'سجلات التدقيق',
-        'bankingServices': '✨ الخدمات المصرفية',
-        'completeServices': 'الخدمات المتكاملة',
-        'digitalPayment': 'الدفع الرقمي',
         'walletGenerated': '💰 تم إنشاء المحفظة',
         'address': 'العنوان',
         'privateKey': 'المفتاح الخاص',
@@ -1055,11 +1030,6 @@ const translations = {
         'amountToSwap': 'المبلغ للمبادلة',
         'executeSwap': '🚀 تنفيذ المبادلة',
         'swapRate': 'سعر الصرف',
-        'profileModalTitle': 'تعديل الملف الشخصي',
-        'firstName': 'الاسم الأول',
-        'lastName': 'اسم العائلة',
-        'email': 'البريد الإلكتروني',
-        'phone': 'الهاتف',
         'kycModalTitle': 'التحقق من الهوية',
         'personalInfo': 'المعلومات الشخصية',
         'documents': 'المستندات',
@@ -1076,8 +1046,6 @@ const translations = {
         'next': 'التالي',
         'submitKyc': 'إرسال KYC',
         'kycPending': 'في انتظار KYC',
-        'regulatoryText': 'يخضع بنك Zentronix حالياً للترخيص التنظيمي كمزود خدمات الأصول الافتراضية.',
-        'copyright': '© 2024 Zentronix Bank - الإصدار الأزرق والأرجواني | ترخيص الخدمات المصرفية الخارجية رقم ZNTX-2024',
         'swapSuccess': '✅ تم مبادلة {amount} {from} → {result} {to}',
         'copySuccess': '✅ تم نسخ رقم الحساب!',
         'copyManual': '📋 انسخ يدوياً: ',
@@ -1097,7 +1065,7 @@ const translations = {
 };
 
 // ============================================
-//  TAXAS DE CÂMBIO (SIMULADAS)
+//  TAXAS DE CÂMBIO
 // ============================================
 const EXCHANGE_RATES = {
     'USD': { 'BTC': 0.0000149, 'ETH': 0.00029, 'SOL': 0.0102, 'USDT': 1.00, 'BNB': 0.0032, 'LTC': 0.0121, 'BRC': 0.1013, 'EUR': 0.92, 'GBP': 0.79, 'USD': 1 },
@@ -1113,16 +1081,25 @@ const EXCHANGE_RATES = {
 };
 
 // ============================================
-//  SISTEMA DE TRADUÇÃO
+//  VARIÁVEIS GLOBAIS
 // ============================================
 let currentLang = 'en';
+let isLoggedIn = false;
+let currentKycStep = 1;
+let idDocumentFile = null;
+let addressDocumentFile = null;
+let selfieDataURL = null;
+let cameraStream = null;
+let stakingChart = null;
 
+// ============================================
+//  FUNÇÕES DE TRADUÇÃO
+// ============================================
 function setLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
     if (!t) return;
     
-    // Atualizar textos da página
     document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.getAttribute('data-translate');
         if (t[key]) {
@@ -1130,7 +1107,6 @@ function setLanguage(lang) {
         }
     });
     
-    // Atualizar placeholder
     document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
         const key = el.getAttribute('data-translate-placeholder');
         if (t[key]) {
@@ -1138,13 +1114,9 @@ function setLanguage(lang) {
         }
     });
     
-    // Atualizar título da página
     document.title = t.bankName + ' | Offshore Premium Banking';
-    
-    // Atualizar botão de idioma
     document.getElementById('currentLangText').textContent = lang.toUpperCase();
     
-    // Atualizar direção para árabe
     if (lang === 'ar') {
         document.body.classList.add('rtl');
         document.querySelector('.lang-container').style.right = 'auto';
@@ -1155,54 +1127,12 @@ function setLanguage(lang) {
         document.querySelector('.lang-container').style.left = 'auto';
     }
     
-    // Salvar preferência
     localStorage.setItem('preferredLanguage', lang);
 }
 
 // ============================================
-//  FUNÇÕES DA API SUPABASE
+//  FUNÇÕES SUPABASE
 // ============================================
-async function saveUserToSupabase(userData) {
-    try {
-        const { data, error } = await supabase
-            .from('users')
-            .insert([{
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                account_number: userData.accountNumber,
-                created_at: new Date().toISOString()
-            }]);
-        
-        if (error) {
-            console.error('Supabase insert error:', error);
-            return null;
-        }
-        return data;
-    } catch (error) {
-        console.error('Error saving to Supabase:', error);
-        return null;
-    }
-}
-
-async function getUserFromSupabase(email) {
-    try {
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('email', email);
-        
-        if (error) {
-            console.error('Supabase select error:', error);
-            return null;
-        }
-        return data;
-    } catch (error) {
-        console.error('Error fetching from Supabase:', error);
-        return null;
-    }
-}
-
 async function saveKYCToSupabase(kycData) {
     try {
         const { data, error } = await supabase
@@ -1216,7 +1146,6 @@ async function saveKYCToSupabase(kycData) {
                 status: 'pending',
                 submitted_at: new Date().toISOString()
             }]);
-        
         if (error) {
             console.error('Supabase KYC insert error:', error);
             return null;
@@ -1228,114 +1157,53 @@ async function saveKYCToSupabase(kycData) {
     }
 }
 
-async function saveTransactionToSupabase(transactionData) {
-    try {
-        const { data, error } = await supabase
-            .from('transactions')
-            .insert([{
-                user_id: transactionData.userId || 'admin',
-                type: transactionData.type,
-                amount: transactionData.amount,
-                currency: transactionData.currency,
-                status: 'completed',
-                created_at: new Date().toISOString()
-            }]);
-        
-        if (error) {
-            console.error('Supabase transaction insert error:', error);
-            return null;
-        }
-        return data;
-    } catch (error) {
-        console.error('Error saving transaction to Supabase:', error);
-        return null;
-    }
-}
-
-async function getTransactionsFromSupabase(userId) {
-    try {
-        const { data, error } = await supabase
-            .from('transactions')
-            .select('*')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false });
-        
-        if (error) {
-            console.error('Supabase transactions select error:', error);
-            return [];
-        }
-        return data;
-    } catch (error) {
-        console.error('Error fetching transactions from Supabase:', error);
-        return [];
-    }
-}
-
 // ============================================
-//  FUNÇÕES DA API TATUM
+//  FUNÇÕES DE WALLET
 // ============================================
-async function generateWallet(chain) {
-    try {
-        const response = await fetch(`${TATUM_API_URL}/${chain}/wallet`, {
-            method: 'GET',
-            headers: {
-                'x-api-key': TATUM_API_KEY,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error generating wallet:', error);
-        return generateLocalWallet(chain);
-    }
-}
-
 function generateLocalWallet(chain) {
     const mockWallets = {
-        'bitcoin': {
-            address: 'bc1q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 10),
-            privateKey: 'L' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15)
-        },
-        'ethereum': {
-            address: '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 25),
-            privateKey: '0x' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 25)
-        },
-        'solana': {
-            address: 'Sol' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20),
-            privateKey: 'SolPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15)
-        },
-        'litecoin': {
-            address: 'ltc1q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 10),
-            privateKey: 'LtcPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15)
-        },
-        'bnb': {
-            address: 'bnb1' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20),
-            privateKey: 'BnbPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15)
-        },
-        'tron': {
-            address: 'T' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20),
-            privateKey: 'TronPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15)
-        }
+        'bitcoin': { address: 'bc1q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 10), privateKey: 'L' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) },
+        'ethereum': { address: '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 25) },
+        'solana': { address: 'Sol' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20), privateKey: 'SolPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) },
+        'litecoin': { address: 'ltc1q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 10), privateKey: 'LtcPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) },
+        'bnb': { address: 'bnb1' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 20), privateKey: 'BnbPriv' + Math.random().toString(36).substring(2, 20) + Math.random().toString(36).substring(2, 15) }
     };
-    
-    const chainMap = {
-        'BTC': 'bitcoin',
-        'ETH': 'ethereum',
-        'SOL': 'solana',
-        'LTC': 'litecoin',
-        'BNB': 'bnb',
-        'TRX': 'tron'
-    };
-    
+    const chainMap = { 'BTC': 'bitcoin', 'ETH': 'ethereum', 'SOL': 'solana', 'LTC': 'litecoin', 'BNB': 'bnb' };
     const key = chainMap[chain] || 'bitcoin';
     return mockWallets[key] || mockWallets['bitcoin'];
 }
+
+window.generateWalletForCoin = async function(symbol, chain) {
+    const t = translations[currentLang];
+    showToast((t.walletGenerating || '⏳ Generating {symbol} wallet...').replace('{symbol}', symbol));
+    
+    try {
+        const modal = document.getElementById('walletModal');
+        const title = document.getElementById('walletModalTitle');
+        const addressDisplay = document.getElementById('walletAddressDisplay');
+        const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
+        
+        title.textContent = '⏳ Generating ' + symbol + ' Wallet...';
+        addressDisplay.textContent = 'Generating address...';
+        privateKeyDisplay.textContent = 'Please wait...';
+        modal.classList.add('active');
+        
+        const walletData = generateLocalWallet(chain);
+        
+        title.textContent = t.walletGenerated || '💰 Wallet Generated';
+        addressDisplay.innerHTML = `<strong>${t.address || 'Address'}:</strong><br>${walletData.address}`;
+        privateKeyDisplay.innerHTML = `<strong>${t.privateKey || 'Private Key'} (⚠️ KEEP SECRET):</strong><br>${walletData.privateKey}`;
+        
+        showToast((t.walletSuccess || '✅ {symbol} wallet generated successfully!').replace('{symbol}', symbol));
+    } catch (error) {
+        console.error('Error:', error);
+        showToast(t.walletError || '❌ Error generating wallet. Please try again.');
+    }
+};
+
+window.closeWalletModal = function() {
+    document.getElementById('walletModal').classList.remove('active');
+};
 
 // ============================================
 //  FUNÇÕES DE SWAP
@@ -1346,25 +1214,15 @@ function openSwapModal(fromCurrency, toCurrency) {
     const toSelect = document.getElementById('swapToSelect');
     
     if (fromCurrency) {
-        const fromOptions = fromSelect.options;
-        for (let i = 0; i < fromOptions.length; i++) {
-            if (fromOptions[i].value === fromCurrency) {
-                fromSelect.selectedIndex = i;
-                break;
-            }
+        for (let i = 0; i < fromSelect.options.length; i++) {
+            if (fromSelect.options[i].value === fromCurrency) { fromSelect.selectedIndex = i; break; }
         }
     }
-    
     if (toCurrency) {
-        const toOptions = toSelect.options;
-        for (let i = 0; i < toOptions.length; i++) {
-            if (toOptions[i].value === toCurrency) {
-                toSelect.selectedIndex = i;
-                break;
-            }
+        for (let i = 0; i < toSelect.options.length; i++) {
+            if (toSelect.options[i].value === toCurrency) { toSelect.selectedIndex = i; break; }
         }
     }
-    
     updateSwapRate();
     modal.classList.add('active');
 }
@@ -1374,112 +1232,34 @@ function closeSwapModal() {
 }
 
 function updateSwapRate() {
-    const fromSelect = document.getElementById('swapFromSelect');
-    const toSelect = document.getElementById('swapToSelect');
+    const from = document.getElementById('swapFromSelect').value;
+    const to = document.getElementById('swapToSelect').value;
     const rateDisplay = document.getElementById('swapRateDisplay');
     
-    const from = fromSelect.value;
-    const to = toSelect.value;
-    
     if (from === to) {
-        const t = translations[currentLang];
-        rateDisplay.textContent = t.differentCurrencies || '⚠️ Please select different currencies';
+        rateDisplay.textContent = '⚠️ Please select different currencies';
         return;
     }
-    
     const rate = EXCHANGE_RATES[from]?.[to];
-    if (rate) {
-        rateDisplay.textContent = `1 ${from} = ${rate.toFixed(8)} ${to}`;
-    } else {
-        rateDisplay.textContent = `Rate: ${from} → ${to} (calculating...)`;
-    }
+    rateDisplay.textContent = rate ? `1 ${from} = ${rate.toFixed(8)} ${to}` : `Rate: ${from} → ${to} (calculating...)`;
 }
 
 function executeSwap() {
-    const fromSelect = document.getElementById('swapFromSelect');
-    const toSelect = document.getElementById('swapToSelect');
-    const amountInput = document.getElementById('swapAmountInput');
-    
-    const from = fromSelect.value;
-    const to = toSelect.value;
-    const amount = parseFloat(amountInput.value);
+    const from = document.getElementById('swapFromSelect').value;
+    const to = document.getElementById('swapToSelect').value;
+    const amount = parseFloat(document.getElementById('swapAmountInput').value);
     const t = translations[currentLang];
     
-    if (from === to) {
-        showToast(t.differentCurrencies || '⚠️ Please select different currencies to swap');
-        return;
-    }
-    
-    if (!amount || amount <= 0) {
-        showToast(t.validAmount || '⚠️ Please enter a valid amount');
-        return;
-    }
+    if (from === to) { showToast(t.differentCurrencies || '⚠️ Please select different currencies to swap'); return; }
+    if (!amount || amount <= 0) { showToast(t.validAmount || '⚠️ Please enter a valid amount'); return; }
     
     const rate = EXCHANGE_RATES[from]?.[to];
-    if (!rate) {
-        showToast(t.rateNotAvailable || '❌ Exchange rate not available for this pair');
-        return;
-    }
+    if (!rate) { showToast(t.rateNotAvailable || '❌ Exchange rate not available for this pair'); return; }
     
     const result = amount * rate;
-    const message = t.swapSuccess || '✅ Swapped {amount} {from} → {result} {to}';
-    showToast(message.replace('{amount}', amount.toFixed(6)).replace('{from}', from).replace('{result}', result.toFixed(6)).replace('{to}', to));
+    showToast((t.swapSuccess || '✅ Swapped {amount} {from} → {result} {to}').replace('{amount}', amount.toFixed(6)).replace('{from}', from).replace('{result}', result.toFixed(6)).replace('{to}', to));
     closeSwapModal();
 }
-
-// ============================================
-//  FUNÇÕES DE WALLET
-// ============================================
-window.generateWalletForCoin = async function(symbol, chain) {
-    const t = translations[currentLang];
-    const message = t.walletGenerating || '⏳ Generating {symbol} wallet...';
-    showToast(message.replace('{symbol}', symbol));
-    
-    try {
-        const modal = document.getElementById('walletModal');
-        const title = document.getElementById('walletModalTitle');
-        const addressDisplay = document.getElementById('walletAddressDisplay');
-        const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
-        
-        title.textContent = t.walletGenerating?.replace('{symbol}', symbol) || '⏳ Generating ' + symbol + ' Wallet...';
-        addressDisplay.textContent = 'Generating address...';
-        privateKeyDisplay.textContent = 'Please wait...';
-        modal.classList.add('active');
-        
-        let walletData;
-        try {
-            walletData = await generateWallet(chain.toLowerCase());
-        } catch (e) {
-            walletData = generateLocalWallet(chain);
-        }
-        
-        title.textContent = t.walletGenerated || '💰 Wallet Generated';
-        addressDisplay.innerHTML = `<strong>${t.address || 'Address'}:</strong><br>${walletData.address}`;
-        privateKeyDisplay.innerHTML = `<strong>${t.privateKey || 'Private Key'} (⚠️ KEEP SECRET):</strong><br>${walletData.privateKey}`;
-        
-        const existingCopy = document.querySelector('.copy-address-btn');
-        if (existingCopy) existingCopy.remove();
-        
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'copy-address-btn';
-        copyBtn.innerHTML = '<i class="fas fa-copy"></i> ' + (t.copy || 'Copy');
-        copyBtn.onclick = function() {
-            navigator.clipboard.writeText(walletData.address).then(() => {
-                showToast(t.copySuccess || '✅ Address copied!');
-            });
-        };
-        
-        const contentDiv = document.getElementById('walletModalContent');
-        contentDiv.appendChild(copyBtn);
-        
-        const successMsg = t.walletSuccess || '✅ {symbol} wallet generated successfully!';
-        showToast(successMsg.replace('{symbol}', symbol));
-        
-    } catch (error) {
-        console.error('Error:', error);
-        showToast(t.walletError || '❌ Error generating wallet. Please try again.');
-    }
-};
 
 // ============================================
 //  FUNÇÕES GERAIS
@@ -1494,48 +1274,613 @@ function showToast(message) {
     setTimeout(() => toast.remove(), 3000);
 }
 
-window.closeWalletModal = function() {
-    document.getElementById('walletModal').classList.remove('active');
-};
-
-window.closeSwapModal = function() {
-    document.getElementById('swapModal').classList.remove('active');
-};
-
 window.copyAccountNumber = function() {
     const number = document.getElementById('accountNumberValue').textContent;
-    const t = translations[currentLang];
     navigator.clipboard.writeText(number).then(() => {
-        showToast(t.copySuccess || '✅ Account number copied!');
+        showToast('✅ Account number copied!');
     }).catch(() => {
-        showToast((t.copyManual || '📋 Copy manually: ') + number);
+        showToast('📋 Copy manually: ' + number);
     });
 };
 
 window.closeCurrentSection = function() {
     document.querySelectorAll('.investment-section').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-    const firstItem = document.querySelector('.menu-item[data-section]');
-    if (firstItem) {
-        firstItem.classList.add('active');
-        const target = document.getElementById(firstItem.dataset.section + 'Sec');
-        if (target) target.classList.add('active');
-    }
 };
 
 // ============================================
-//  INICIALIZAÇÃO
+//  KYC FUNCTIONS
+// ============================================
+const kycModal = document.getElementById('submitModal');
+const kycStep1 = document.getElementById('kycStep1');
+const kycStep2 = document.getElementById('kycStep2');
+const kycStep3 = document.getElementById('kycStep3');
+const kycPrevBtn = document.getElementById('kycPrevBtn');
+const kycNextBtn = document.getElementById('kycNextBtn');
+const submitKycBtn = document.getElementById('submitKycBtn');
+const progressFill = document.getElementById('progressFill');
+
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+const fileNameDisplay = document.getElementById('fileNameDisplay');
+const addressUploadArea = document.getElementById('addressUploadArea');
+const addressFileInput = document.getElementById('addressFileInput');
+const addressFileNameDisplay = document.getElementById('addressFileNameDisplay');
+
+const startCameraBtn = document.getElementById('startCameraBtn');
+const captureSelfieBtn = document.getElementById('captureSelfieBtn');
+const uploadSelfieBtn = document.getElementById('uploadSelfieBtn');
+const selfieVideo = document.getElementById('selfieVideo');
+const selfieCanvas = document.getElementById('selfieCanvas');
+const selfiePreview = document.getElementById('selfiePreview');
+const selfieFileInput = document.getElementById('selfieFileInput');
+const selfieStatus = document.getElementById('selfieStatus');
+
+// Abrir KYC
+document.getElementById('kycBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    kycModal.classList.add('active');
+    currentKycStep = 1;
+    updateKycSteps();
+});
+
+// Fechar KYC
+document.getElementById('closeSubmitModalBtn').addEventListener('click', function() {
+    kycModal.classList.remove('active');
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+});
+
+// Upload documentos
+uploadArea.addEventListener('click', function() { fileInput.click(); });
+fileInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        idDocumentFile = this.files[0];
+        fileNameDisplay.textContent = '✅ ' + idDocumentFile.name;
+        uploadArea.classList.add('has-file');
+    }
+});
+
+addressUploadArea.addEventListener('click', function() { addressFileInput.click(); });
+addressFileInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        addressDocumentFile = this.files[0];
+        addressFileNameDisplay.textContent = '✅ ' + addressDocumentFile.name;
+        addressUploadArea.classList.add('has-file');
+    }
+});
+
+// Selfie - Câmera
+startCameraBtn.addEventListener('click', async function() {
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 300, height: 300 }, audio: false });
+        selfieVideo.srcObject = cameraStream;
+        selfieVideo.style.display = 'block';
+        selfieVideo.play();
+        const icon = selfiePreview.querySelector('i');
+        if (icon) icon.style.display = 'none';
+        this.style.display = 'none';
+        captureSelfieBtn.style.display = 'inline-block';
+        uploadSelfieBtn.style.display = 'inline-block';
+        selfieStatus.textContent = '📸 Camera active - Click "Capture" to take selfie';
+        selfieStatus.className = 'selfie-status';
+    } catch (err) {
+        selfieStatus.textContent = '❌ Camera access denied. Please upload a photo instead.';
+        selfieStatus.className = 'selfie-status error';
+        uploadSelfieBtn.style.display = 'inline-block';
+        console.error('Camera error:', err);
+    }
+});
+
+captureSelfieBtn.addEventListener('click', function() {
+    const canvas = selfieCanvas;
+    const video = selfieVideo;
+    canvas.width = video.videoWidth || 300;
+    canvas.height = video.videoHeight || 300;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    selfieDataURL = canvas.toDataURL('image/jpeg');
+    
+    const img = document.createElement('img');
+    img.src = selfieDataURL;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    selfiePreview.innerHTML = '';
+    selfiePreview.appendChild(img);
+    
+    selfieStatus.textContent = '✅ Selfie captured successfully!';
+    selfieStatus.className = 'selfie-status success';
+    captureSelfieBtn.style.display = 'none';
+    
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+        selfieVideo.style.display = 'none';
+    }
+});
+
+uploadSelfieBtn.addEventListener('click', function() { selfieFileInput.click(); });
+selfieFileInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            selfieDataURL = event.target.result;
+            selfiePreview.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = selfieDataURL;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            selfiePreview.appendChild(img);
+            selfieStatus.textContent = '✅ Photo uploaded successfully!';
+            selfieStatus.className = 'selfie-status success';
+            uploadSelfieBtn.style.display = 'none';
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+function updateKycSteps() {
+    kycStep1.style.display = currentKycStep === 1 ? 'block' : 'none';
+    kycStep2.style.display = currentKycStep === 2 ? 'block' : 'none';
+    kycStep3.style.display = currentKycStep === 3 ? 'block' : 'none';
+    
+    kycPrevBtn.style.display = currentKycStep > 1 ? 'block' : 'none';
+    kycNextBtn.style.display = currentKycStep < 3 ? 'block' : 'none';
+    submitKycBtn.style.display = currentKycStep === 3 ? 'block' : 'none';
+    
+    document.querySelectorAll('.kyc-step').forEach((el, index) => {
+        const stepNum = index + 1;
+        el.classList.toggle('active', stepNum === currentKycStep);
+        el.classList.toggle('completed', stepNum < currentKycStep);
+    });
+    
+    const progress = ((currentKycStep - 1) / 2) * 100;
+    progressFill.style.width = progress + '%';
+    
+    if (currentKycStep === 3) updateKycReview();
+}
+
+function updateKycReview() {
+    const reviewInfo = document.getElementById('kycReviewInfo');
+    reviewInfo.innerHTML = `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 1rem;">
+            <span style="color:var(--text-secondary);">Full Name:</span> <span style="color:var(--neon-blue);">${document.getElementById('fullNameDoc').value || 'Not provided'}</span>
+            <span style="color:var(--text-secondary);">Email:</span> <span style="color:var(--neon-blue);">${document.getElementById('emailDocInput').value || 'Not provided'}</span>
+            <span style="color:var(--text-secondary);">Phone:</span> <span style="color:var(--neon-blue);">${document.getElementById('phoneDoc').value || 'Not provided'}</span>
+            <span style="color:var(--text-secondary);">Address:</span> <span style="color:var(--neon-blue);">${document.getElementById('addressDoc').value || 'Not provided'}</span>
+            <span style="color:var(--text-secondary);">Nationality:</span> <span style="color:var(--neon-blue);">${document.getElementById('nationalityDoc').value || 'Not provided'}</span>
+            <span style="color:var(--text-secondary);">ID Document:</span> <span style="color:${idDocumentFile ? 'var(--neon-green)' : 'var(--neon-red)'};">${idDocumentFile ? '✅ Uploaded' : '❌ Missing'}</span>
+            <span style="color:var(--text-secondary);">Proof Address:</span> <span style="color:${addressDocumentFile ? 'var(--neon-green)' : 'var(--neon-red)'};">${addressDocumentFile ? '✅ Uploaded' : '❌ Missing'}</span>
+            <span style="color:var(--text-secondary);">Selfie:</span> <span style="color:${selfieDataURL ? 'var(--neon-green)' : 'var(--neon-red)'};">${selfieDataURL ? '✅ Captured' : '❌ Missing'}</span>
+        </div>
+    `;
+}
+
+kycNextBtn.addEventListener('click', function() {
+    if (currentKycStep === 1) {
+        const fullName = document.getElementById('fullNameDoc').value.trim();
+        const email = document.getElementById('emailDocInput').value.trim();
+        const phone = document.getElementById('phoneDoc').value.trim();
+        const address = document.getElementById('addressDoc').value.trim();
+        const nationality = document.getElementById('nationalityDoc').value;
+        if (!fullName || !email || !phone || !address || !nationality) { showToast('⚠️ Please fill all fields in Step 1'); return; }
+        if (!email.includes('@')) { showToast('⚠️ Please enter a valid email address'); return; }
+    }
+    if (currentKycStep === 2) {
+        if (!idDocumentFile || !addressDocumentFile) { showToast('⚠️ Please upload both ID document and Proof of Address'); return; }
+    }
+    if (currentKycStep < 3) { currentKycStep++; updateKycSteps(); }
+});
+
+kycPrevBtn.addEventListener('click', function() {
+    if (currentKycStep > 1) { currentKycStep--; updateKycSteps(); }
+});
+
+submitKycBtn.addEventListener('click', async function() {
+    if (!idDocumentFile || !addressDocumentFile || !selfieDataURL) {
+        showToast('⚠️ Please complete all steps (upload documents and selfie)');
+        return;
+    }
+    
+    const kycData = {
+        fullName: document.getElementById('fullNameDoc').value.trim(),
+        email: document.getElementById('emailDocInput').value.trim(),
+        phone: document.getElementById('phoneDoc').value.trim(),
+        address: document.getElementById('addressDoc').value.trim(),
+        nationality: document.getElementById('nationalityDoc').value,
+        idDocument: idDocumentFile.name,
+        addressDocument: addressDocumentFile.name,
+        selfie: 'captured',
+        status: 'pending',
+        submittedAt: new Date().toISOString()
+    };
+    
+    try {
+        const result = await saveKYCToSupabase(kycData);
+        if (result) {
+            showToast('✅ KYC submitted successfully! You will receive confirmation via email.');
+            kycModal.classList.remove('active');
+            // Reset
+            currentKycStep = 1;
+            updateKycSteps();
+            idDocumentFile = null; addressDocumentFile = null; selfieDataURL = null;
+            fileNameDisplay.textContent = ''; addressFileNameDisplay.textContent = '';
+            uploadArea.classList.remove('has-file'); addressUploadArea.classList.remove('has-file');
+            selfiePreview.innerHTML = '<i class="fas fa-camera" style="font-size: 3rem; color: var(--text-secondary);"></i>';
+            selfieStatus.textContent = ''; selfieStatus.className = 'selfie-status';
+            startCameraBtn.style.display = 'inline-block';
+            captureSelfieBtn.style.display = 'none';
+            uploadSelfieBtn.style.display = 'none';
+            document.getElementById('kycStatusBadge').style.display = 'block';
+            document.getElementById('kycPendingText').textContent = 'KYC SUBMITTED - PENDING REVIEW';
+            document.getElementById('kycStatusBadge').style.borderColor = 'var(--neon-yellow)';
+        } else {
+            showToast('❌ Error submitting KYC. Please try again.');
+        }
+    } catch (error) {
+        console.error('KYC submission error:', error);
+        showToast('❌ Error submitting KYC. Please try again.');
+    }
+});
+
+// ============================================
+//  LOGIN FUNCTIONS
+// ============================================
+function openLoginModal() {
+    document.getElementById('loginModal').classList.add('active');
+    document.getElementById('loginError').classList.remove('visible');
+    document.getElementById('loginId').focus();
+}
+
+function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('active');
+}
+
+async function handleLogin() {
+    const username = document.getElementById('loginId').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const loginError = document.getElementById('loginError');
+    const t = translations[currentLang];
+    
+    loginError.classList.remove('visible');
+    
+    if (username === 'admin' && password === 'zentronix') {
+        isLoggedIn = true;
+        closeLoginModal();
+        document.getElementById('institutionalContent').style.display = 'none';
+        document.getElementById('dashboardContainer').style.display = 'block';
+        document.getElementById('welcomeUser').textContent = 'Welcome, ' + username;
+        document.getElementById('openLoginBtn').style.display = 'none';
+        document.getElementById('logoutMainBtn').style.display = 'flex';
+        document.getElementById('logoutBtnText').textContent = t.logout || 'LOGOUT';
+        try { initDashboard(); } catch(e) { console.error('Dashboard error:', e); }
+        showToast(t.loginSuccess || '✅ Login successful!');
+    } else {
+        loginError.classList.add('visible');
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+    }
+}
+
+function logout() {
+    document.getElementById('confirmLogoutModal').classList.add('active');
+}
+
+function confirmLogout() {
+    document.getElementById('confirmLogoutModal').classList.remove('active');
+    isLoggedIn = false;
+    document.getElementById('dashboardContainer').style.display = 'none';
+    document.getElementById('institutionalContent').style.display = 'block';
+    document.getElementById('openLoginBtn').style.display = 'flex';
+    document.getElementById('logoutMainBtn').style.display = 'none';
+    showToast(translations[currentLang].logoutSuccess || '🔒 You have been logged out.');
+}
+
+function cancelLogout() {
+    document.getElementById('confirmLogoutModal').classList.remove('active');
+}
+
+// ============================================
+//  DASHBOARD FUNCTIONS
+// ============================================
+function initDashboard() {
+    console.log('🟣 Inicializando Dashboard...');
+    try {
+        loadBalances();
+        loadCryptoAssets();
+        loadFiatAssets();
+        loadHistory();
+        loadCards();
+        loadSecuritySettings();
+        loadSecurityCenter();
+        loadMilitaryBalances();
+        loadSwapCenter();
+        initStakingChart();
+        initAnalyticsChart();
+        console.log('✅ Dashboard inicializado com sucesso!');
+    } catch (e) {
+        console.error('❌ Erro ao inicializar dashboard:', e);
+    }
+}
+
+function loadBalances() {
+    const balances = [
+        { currency: 'USD', amount: 12450.75 }, { currency: 'EUR', amount: 8200.50 },
+        { currency: 'GBP', amount: 3500.00 }, { currency: 'BTC', amount: 0.45 },
+        { currency: 'ETH', amount: 3.2 }, { currency: 'SOL', amount: 28.5 },
+        { currency: 'USDT', amount: 5000 }, { currency: 'BNB', amount: 12.5 },
+        { currency: 'LTC', amount: 45.0 }, { currency: 'BRADICOIN', amount: 1500 }
+    ];
+    const grid = document.getElementById('currencyGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    let total = 0;
+    balances.forEach(b => {
+        const div = document.createElement('div');
+        div.className = 'currency-item';
+        div.innerHTML = `<span><strong>${b.currency}</strong></span><span class="currency-balance">${b.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
+        grid.appendChild(div);
+        if (b.currency === 'USD') total += b.amount;
+        else if (b.currency === 'EUR') total += b.amount * 1.08;
+        else if (b.currency === 'GBP') total += b.amount * 1.27;
+        else if (b.currency === 'BTC') total += b.amount * 67200;
+        else if (b.currency === 'ETH') total += b.amount * 3443;
+        else if (b.currency === 'SOL') total += b.amount * 98;
+        else if (b.currency === 'USDT') total += b.amount * 1;
+        else if (b.currency === 'BNB') total += b.amount * 312.50;
+        else if (b.currency === 'LTC') total += b.amount * 82.50;
+        else if (b.currency === 'BRADICOIN') total += b.amount * 9.87;
+    });
+    const totalEl = document.getElementById('totalBalance');
+    if (totalEl) totalEl.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function loadCryptoAssets() {
+    const t = translations[currentLang];
+    const assets = [
+        { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
+        { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
+        { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+5.1%', chain: 'SOL', icon: '◎' },
+        { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.01%', chain: 'TRX', icon: '₮' },
+        { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+3.2%', chain: 'BNB', icon: 'BNB' },
+        { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '-0.5%', chain: 'LTC', icon: 'Ł' },
+        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+0.8%', chain: 'TRX', icon: '🪙' }
+    ];
+    const grid = document.getElementById('cryptoAssetsGrid');
+    if (!grid) return;
+    assets.forEach(a => {
+        const card = document.createElement('div');
+        card.className = 'asset-card';
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4>${a.icon} ${a.name} (${a.symbol})</h4>
+                <span style="color: ${a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)'}">${a.change}</span>
+            </div>
+            <div class="asset-price">$${a.price.toLocaleString()}</div>
+            <div class="button-group">
+                <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
+                <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
+                <button class="swap-btn" onclick="openSwapModal('${a.symbol}', 'USD')">🔄 ${t.swap || 'SWAP'}</button>
+                <button class="staking-btn" onclick="handleStaking('${a.symbol}')">📊 ${t.stake || 'STAKE'}</button>
+                <button class="generate-wallet-btn" onclick="generateWalletForCoin('${a.symbol}', '${a.chain}')">💳 ${t.wallet || 'WALLET'}</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function loadFiatAssets() {
+    const t = translations[currentLang];
+    const fiatAssets = [
+        { name: 'US Dollar', symbol: 'USD', balance: 12450.75, icon: '💵' },
+        { name: 'Euro', symbol: 'EUR', balance: 8200.50, icon: '💶' },
+        { name: 'British Pound', symbol: 'GBP', balance: 3500.00, icon: '💷' }
+    ];
+    const grid = document.getElementById('cryptoAssetsGrid');
+    if (!grid) return;
+    fiatAssets.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'asset-card';
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4>${f.icon} ${f.name} (${f.symbol})</h4>
+                <span style="color: var(--neon-blue);">💰</span>
+            </div>
+            <div class="asset-price">${f.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+            <div class="button-group">
+                <button class="deposit-btn" onclick="handleDeposit('${f.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
+                <button class="receive-btn" onclick="handleReceive('${f.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
+                <button class="swap-btn" onclick="openSwapModal('${f.symbol}', 'BTC')">🔄 ${t.swap || 'SWAP'}</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+window.handleDeposit = function(symbol) {
+    showToast(translations[currentLang].depositMessage.replace('{symbol}', symbol));
+};
+
+window.handleReceive = function(symbol) {
+    const iban = 'ZNTX' + Math.random().toString(36).substring(2,10).toUpperCase();
+    showToast(translations[currentLang].receiveMessage.replace('{symbol}', symbol).replace('{iban}', iban));
+};
+
+window.handleStaking = function(symbol) {
+    showToast(translations[currentLang].stakingMessage.replace('{symbol}', symbol));
+};
+
+function loadHistory() {
+    const history = [
+        { type: 'Deposit', detail: 'USD 5,000.00 via Wire', time: 'Today, 14:32' },
+        { type: 'Swap', detail: 'BTC 0.25 → ETH 3.8', time: 'Today, 11:15' },
+        { type: 'Sell', detail: 'ETH 1.5 @ $3,400', time: 'Yesterday, 16:40' },
+        { type: 'Staking', detail: 'SOL Reward +2.3', time: 'Yesterday, 08:00' },
+        { type: 'Transfer', detail: 'USD 1,200.00 to external account', time: '06/02/2024' }
+    ];
+    const list = document.getElementById('historyList');
+    if (!list) return;
+    list.innerHTML = '';
+    history.forEach(h => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `<div class="history-content"><div class="history-type">${h.type}</div><div class="history-detail">${h.detail}</div><div class="history-time">${h.time}</div></div>`;
+        list.appendChild(item);
+    });
+}
+
+function loadCards() {
+    const cards = [
+        { type: 'Visa Platinum', number: '**** 4821', limit: '$25,000' },
+        { type: 'Mastercard Black', number: '**** 7390', limit: '$50,000' }
+    ];
+    const list = document.getElementById('cardsList');
+    if (!list) return;
+    list.innerHTML = '';
+    cards.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'currency-item';
+        div.innerHTML = `<span><i class="fas fa-credit-card"></i> ${c.type}</span><span>${c.number} | Limit: ${c.limit}</span>`;
+        list.appendChild(div);
+    });
+}
+
+function loadSecuritySettings() {
+    const settings = [
+        { label: '2FA Authentication', status: 'Enabled' },
+        { label: 'Email Notifications', status: 'Enabled' },
+        { label: 'Biometric Recognition', status: 'Disabled' },
+        { label: 'Trusted Devices', status: '2 devices' }
+    ];
+    const list = document.getElementById('securitySettingsList');
+    if (!list) return;
+    list.innerHTML = '';
+    settings.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'security-item';
+        div.innerHTML = `<span>${s.label}</span><span style="color: ${s.status === 'Enabled' ? 'var(--neon-green)' : 'var(--neon-red)'}">${s.status}</span>`;
+        list.appendChild(div);
+    });
+}
+
+function loadSecurityCenter() {
+    const items = [
+        { label: 'Last Login', value: 'Today, 14:30 - IP 192.168.1.100' },
+        { label: 'Change Password', value: 'Last changed: 30 days ago' },
+        { label: 'Active Sessions', value: '2 devices' }
+    ];
+    const list = document.getElementById('securityCenterList');
+    if (!list) return;
+    list.innerHTML = '';
+    items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'security-item';
+        div.innerHTML = `<span>${item.label}</span><span style="color:var(--neon-blue);font-size:0.7rem;">${item.value}</span>`;
+        list.appendChild(div);
+    });
+}
+
+function loadMilitaryBalances() {
+    const balances = [
+        { label: 'BTC (Reserve)', value: '0.45' },
+        { label: 'USD (Cash)', value: '$12,450' },
+        { label: 'Digital Gold', value: '5.2 oz' }
+    ];
+    const container = document.getElementById('militaryBalances');
+    if (!container) return;
+    container.innerHTML = '';
+    balances.forEach(b => {
+        const div = document.createElement('div');
+        div.className = 'balance-item';
+        div.innerHTML = `<span>${b.label}</span><span style="color:var(--neon-green)">${b.value}</span>`;
+        container.appendChild(div);
+    });
+}
+
+function loadSwapCenter() {
+    const container = document.getElementById('swapCenterContent');
+    if (!container) return;
+    container.innerHTML = `
+        <div style="text-align:center; padding:0.5rem;">
+            <p style="color:var(--text-secondary); margin-bottom:1rem;">⚡ Swap between any currencies and cryptocurrencies instantly</p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center;">
+                <button class="swap-btn" onclick="openSwapModal('USD', 'BTC')">USD → BTC</button>
+                <button class="swap-btn" onclick="openSwapModal('EUR', 'ETH')">EUR → ETH</button>
+                <button class="swap-btn" onclick="openSwapModal('GBP', 'SOL')">GBP → SOL</button>
+                <button class="swap-btn" onclick="openSwapModal('BTC', 'USDT')">BTC → USDT</button>
+                <button class="swap-btn" onclick="openSwapModal('ETH', 'BNB')">ETH → BNB</button>
+                <button class="swap-btn" onclick="openSwapModal('SOL', 'LTC')">SOL → LTC</button>
+                <button class="swap-btn" onclick="openSwapModal('BNB', 'BRC')">BNB → BRC</button>
+                <button class="swap-btn" onclick="openSwapModal('USDT', 'USD')">USDT → USD</button>
+            </div>
+        </div>
+    `;
+}
+
+function initStakingChart() {
+    const ctx = document.getElementById('stakingChart');
+    if (!ctx) return;
+    if (stakingChart) stakingChart.destroy();
+    stakingChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Staking Yield (%)',
+                data: [4.2, 4.8, 5.1, 5.6, 6.2, 6.8],
+                borderColor: '#00f2ff',
+                backgroundColor: 'rgba(0, 242, 255, 0.1)',
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: '#bc13fe'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } } },
+            scales: {
+                x: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: 'rgba(188,19,254,0.1)' } },
+                y: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: 'rgba(188,19,254,0.1)' } }
+            }
+        }
+    });
+}
+
+function initAnalyticsChart() {
+    const ctx = document.getElementById('analyticsChart');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Crypto', 'Fiat', 'REITs', 'Bonds'],
+            datasets: [{
+                data: [40, 30, 20, 10],
+                backgroundColor: ['#00f2ff', '#bc13fe', '#00ff88', '#ffd700'],
+                borderColor: '#0a0b1e',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 9 } } } }
+        }
+    });
+}
+
+// ============================================
+//  EVENT LISTENERS - INICIALIZAÇÃO
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    // ============================================
-    //  CARREGAR IDIOMA PREFERIDO
-    // ============================================
+    // Idioma
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
     
-    // ============================================
-    //  EVENTOS DO TRADUTOR
-    // ============================================
+    // Language Toggle
     document.getElementById('langTrigger').addEventListener('click', function(e) {
         e.stopPropagation();
         document.getElementById('langContainer').classList.toggle('active');
@@ -1544,8 +1889,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
-            const lang = this.dataset.lang;
-            setLanguage(lang);
+            setLanguage(this.dataset.lang);
             document.getElementById('langContainer').classList.remove('active');
         });
     });
@@ -1554,578 +1898,46 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('langContainer').classList.remove('active');
     });
     
-    // ============================================
-    //  ELEMENTOS DO LOGIN - VERSÃO CORRIGIDA
-    // ============================================
-    const openLoginBtn = document.getElementById('openLoginBtn');
-    const loginModal = document.getElementById('loginModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-    const loginId = document.getElementById('loginId');
-    const loginPassword = document.getElementById('loginPassword');
-    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-    const dashboardContainer = document.getElementById('dashboardContainer');
-    const institutionalContent = document.getElementById('institutionalContent');
-    const logoutMainBtn = document.getElementById('logoutMainBtn');
-    const logoutBtnText = document.getElementById('logoutBtnText');
-    const welcomeUser = document.getElementById('welcomeUser');
-
-    const confirmLogoutModal = document.getElementById('confirmLogoutModal');
-    const confirmLogoutYes = document.getElementById('confirmLogoutYes');
-    const confirmLogoutNo = document.getElementById('confirmLogoutNo');
-
-    let isLoggedIn = false;
-
-    function openLoginModal() {
-        loginModal.classList.add('active');
-        loginId.focus();
-    }
-
-    function closeLoginModal() {
-        loginModal.classList.remove('active');
-    }
-
-    // ============================================
-    //  FUNÇÃO DE LOGIN CORRIGIDA
-    // ============================================
-    async function handleLogin() {
-        const username = loginId.value.trim();
-        const password = loginPassword.value.trim();
-        const t = translations[currentLang];
-
-        if (username === 'admin' && password === 'zentronix') {
-            isLoggedIn = true;
-            closeLoginModal();
-            
-            // Esconder conteúdo institucional e mostrar dashboard
-            institutionalContent.style.display = 'none';
-            dashboardContainer.style.display = 'block';
-            
-            // Atualizar nome do usuário
-            welcomeUser.textContent = 'Welcome, ' + username;
-            
-            // Mostrar/Esconder botões
-            openLoginBtn.style.display = 'none';
-            logoutMainBtn.style.display = 'flex';
-            logoutBtnText.textContent = t.logout || 'LOGOUT';
-            
-            // INICIALIZAR DASHBOARD (chamada correta)
-            try {
-                initDashboard();
-            } catch (e) {
-                console.error('Erro ao inicializar dashboard:', e);
-            }
-            
-            // Tentar salvar usuário no Supabase
-            try {
-                await saveUserToSupabase({
-                    name: username,
-                    email: 'admin@zentronix.com',
-                    phone: '+41 78 123 4567',
-                    accountNumber: 'ZNTX-4821-7390-1256'
-                });
-            } catch (e) {
-                console.log('Supabase não disponível:', e);
-            }
-            
-            showToast(t.loginSuccess || '✅ Login successful!');
-        } else {
-            showToast(t.invalidCredentials || '❌ Invalid credentials! Use: admin / zentronix');
-            loginPassword.value = '';
-            loginPassword.focus();
-        }
-    }
-
-    function logout() {
-        confirmLogoutModal.classList.add('active');
-    }
-
-    function confirmLogout() {
-        confirmLogoutModal.classList.remove('active');
-        isLoggedIn = false;
-        
-        // Mostrar conteúdo institucional e esconder dashboard
-        dashboardContainer.style.display = 'none';
-        institutionalContent.style.display = 'block';
-        
-        // Mostrar/Esconder botões
-        openLoginBtn.style.display = 'flex';
-        logoutMainBtn.style.display = 'none';
-        
-        const t = translations[currentLang];
-        showToast(t.logoutSuccess || '🔒 You have been logged out.');
-    }
-
-    function cancelLogout() {
-        confirmLogoutModal.classList.remove('active');
-    }
-
-    // ============================================
-    //  INICIALIZAR DASHBOARD - FUNÇÃO GLOBAL
-    // ============================================
-    window.initDashboard = function() {
-        console.log('🟣 Inicializando Dashboard...');
-        try {
-            loadBalances();
-            loadCryptoAssetsWithTatum();
-            loadFiatAssets();
-            loadHistory();
-            loadCards();
-            loadSecuritySettings();
-            loadSecurityCenter();
-            loadMilitaryBalances();
-            loadSwapCenter();
-            initStakingChart();
-            initAnalyticsChart();
-            loadTransactionsFromSupabase();
-            console.log('✅ Dashboard inicializado com sucesso!');
-        } catch (e) {
-            console.error('❌ Erro ao inicializar dashboard:', e);
-        }
-    };
-
-    // ============================================
-    //  CARREGAR TRANSAÇÕES DO SUPABASE
-    // ============================================
-    async function loadTransactionsFromSupabase() {
-        try {
-            const transactions = await getTransactionsFromSupabase('admin');
-            if (transactions && transactions.length > 0) {
-                const list = document.getElementById('historyList');
-                if (list) {
-                    list.innerHTML = '';
-                    transactions.forEach(t => {
-                        const item = document.createElement('div');
-                        item.className = 'history-item';
-                        item.innerHTML = `
-                            <div class="history-content">
-                                <div class="history-type">${t.type}</div>
-                                <div class="history-detail">${t.amount} ${t.currency}</div>
-                                <div class="history-time">${new Date(t.created_at).toLocaleString()}</div>
-                            </div>
-                            <span style="color: var(--neon-green); font-size: 0.7rem;">${t.status}</span>
-                        `;
-                        list.appendChild(item);
-                    });
-                }
-            }
-        } catch (error) {
-            console.error('Error loading transactions from Supabase:', error);
-        }
-    }
-
-    // ============================================
-    //  CARREGAR FIAT ASSETS
-    // ============================================
-    function loadFiatAssets() {
-        const t = translations[currentLang];
-        const fiatAssets = [
-            { name: 'US Dollar', symbol: 'USD', balance: 12450.75, icon: '💵' },
-            { name: 'Euro', symbol: 'EUR', balance: 8200.50, icon: '💶' },
-            { name: 'British Pound', symbol: 'GBP', balance: 3500.00, icon: '💷' },
-        ];
-
-        const grid = document.getElementById('cryptoAssetsGrid');
-        if (!grid) return;
-        
-        fiatAssets.forEach(f => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4>${f.icon} ${f.name} (${f.symbol})</h4>
-                    <span style="color: var(--neon-blue);">💰</span>
-                </div>
-                <div class="asset-price">${f.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-                <div class="button-group">
-                    <button class="deposit-btn" onclick="handleDeposit('${f.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
-                    <button class="receive-btn" onclick="handleReceive('${f.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
-                    <button class="swap-btn" onclick="openSwapModal('${f.symbol}', 'BTC')">🔄 ${t.swap || 'SWAP'}</button>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    // ============================================
-    //  FUNÇÕES DE DEPÓSITO E RECEBIMENTO
-    // ============================================
-    window.handleDeposit = function(symbol) {
-        const t = translations[currentLang];
-        const message = (t.depositMessage || 'Deposit {symbol} - Wire transfer details sent to your email').replace('{symbol}', symbol);
-        showToast(message);
-        
-        saveTransactionToSupabase({
-            userId: 'admin',
-            type: 'Deposit',
-            amount: 0,
-            currency: symbol,
-            status: 'pending'
-        });
-    };
-
-    window.handleReceive = function(symbol) {
-        const t = translations[currentLang];
-        const iban = 'ZNTX' + Math.random().toString(36).substring(2,10).toUpperCase();
-        const message = (t.receiveMessage || 'Receive {symbol} - Your IBAN: {iban}').replace('{symbol}', symbol).replace('{iban}', iban);
-        showToast(message);
-    };
-
-    // ============================================
-    //  CARREGAR CRYPTO ASSETS
-    // ============================================
-    function loadCryptoAssetsWithTatum() {
-        const t = translations[currentLang];
-        const assets = [
-            { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
-            { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
-            { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+5.1%', chain: 'SOL', icon: '◎' },
-            { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.01%', chain: 'TRX', icon: '₮' },
-            { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+3.2%', chain: 'BNB', icon: 'BNB' },
-            { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '-0.5%', chain: 'LTC', icon: 'Ł' },
-            { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+0.8%', chain: 'TRX', icon: '🪙' },
-        ];
-
-        const grid = document.getElementById('cryptoAssetsGrid');
-        if (!grid) return;
-        
-        assets.forEach(a => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
-                    <span style="color: ${a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)'}">${a.change}</span>
-                </div>
-                <div class="asset-price">$${a.price.toLocaleString()}</div>
-                <div class="button-group">
-                    <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 ${t.deposit || 'DEPOSIT'}</button>
-                    <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 ${t.receive || 'RECEIVE'}</button>
-                    <button class="swap-btn" onclick="openSwapModal('${a.symbol}', 'USD')">🔄 ${t.swap || 'SWAP'}</button>
-                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">📊 ${t.stake || 'STAKE'}</button>
-                    <button class="generate-wallet-btn" onclick="generateWalletForCoin('${a.symbol}', '${a.chain}')">💳 ${t.wallet || 'WALLET'}</button>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    // ============================================
-    //  FUNÇÃO DE STAKING
-    // ============================================
-    window.handleStaking = function(symbol) {
-        const t = translations[currentLang];
-        const message = (t.stakingMessage || 'Staking {symbol} - APY 5.2%').replace('{symbol}', symbol);
-        showToast(message);
-        
-        saveTransactionToSupabase({
-            userId: 'admin',
-            type: 'Staking',
-            amount: 0,
-            currency: symbol,
-            status: 'completed'
-        });
-    };
-
-    // ============================================
-    //  CARREGAR SWAP CENTER
-    // ============================================
-    function loadSwapCenter() {
-        const container = document.getElementById('swapCenterContent');
-        if (!container) return;
-        container.innerHTML = `
-            <div style="text-align:center; padding:0.5rem;">
-                <p style="color:var(--text-secondary); margin-bottom:1rem;">⚡ Swap between any currencies and cryptocurrencies instantly</p>
-                <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center;">
-                    <button class="swap-btn" onclick="openSwapModal('USD', 'BTC')">USD → BTC</button>
-                    <button class="swap-btn" onclick="openSwapModal('EUR', 'ETH')">EUR → ETH</button>
-                    <button class="swap-btn" onclick="openSwapModal('GBP', 'SOL')">GBP → SOL</button>
-                    <button class="swap-btn" onclick="openSwapModal('BTC', 'USDT')">BTC → USDT</button>
-                    <button class="swap-btn" onclick="openSwapModal('ETH', 'BNB')">ETH → BNB</button>
-                    <button class="swap-btn" onclick="openSwapModal('SOL', 'LTC')">SOL → LTC</button>
-                    <button class="swap-btn" onclick="openSwapModal('BNB', 'BRC')">BNB → BRC</button>
-                    <button class="swap-btn" onclick="openSwapModal('USDT', 'USD')">USDT → USD</button>
-                </div>
-                <div style="margin-top:1rem; padding:0.8rem; background:rgba(0,0,0,0.3); border-radius:0.8rem;">
-                    <p style="font-size:0.7rem; color:var(--text-secondary);">
-                        💡 Click on any swap pair above or use the "SWAP" button on any asset card
-                    </p>
-                </div>
-            </div>
-        `;
-    }
-
-    // ============================================
-    //  CARREGAR BALANÇOS
-    // ============================================
-    function loadBalances() {
-        const balances = [
-            { currency: 'USD', amount: 12450.75 },
-            { currency: 'EUR', amount: 8200.50 },
-            { currency: 'GBP', amount: 3500.00 },
-            { currency: 'BTC', amount: 0.45 },
-            { currency: 'ETH', amount: 3.2 },
-            { currency: 'SOL', amount: 28.5 },
-            { currency: 'USDT', amount: 5000 },
-            { currency: 'BNB', amount: 12.5 },
-            { currency: 'LTC', amount: 45.0 },
-            { currency: 'BRADICOIN', amount: 1500 },
-        ];
-
-        const grid = document.getElementById('currencyGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        let total = 0;
-
-        balances.forEach(b => {
-            const div = document.createElement('div');
-            div.className = 'currency-item';
-            div.innerHTML = `
-                <span><strong>${b.currency}</strong></span>
-                <span class="currency-balance">${b.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-            `;
-            grid.appendChild(div);
-            if (b.currency === 'USD') total += b.amount;
-            else if (b.currency === 'EUR') total += b.amount * 1.08;
-            else if (b.currency === 'GBP') total += b.amount * 1.27;
-            else if (b.currency === 'BTC') total += b.amount * 67200;
-            else if (b.currency === 'ETH') total += b.amount * 3443;
-            else if (b.currency === 'SOL') total += b.amount * 98;
-            else if (b.currency === 'USDT') total += b.amount * 1;
-            else if (b.currency === 'BNB') total += b.amount * 312.50;
-            else if (b.currency === 'LTC') total += b.amount * 82.50;
-            else if (b.currency === 'BRADICOIN') total += b.amount * 9.87;
-        });
-
-        const totalEl = document.getElementById('totalBalance');
-        if (totalEl) {
-            totalEl.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-    }
-
-    // ============================================
-    //  CARREGAR HISTÓRICO
-    // ============================================
-    function loadHistory() {
-        const history = [
-            { type: 'Deposit', detail: 'USD 5,000.00 via Wire', time: 'Today, 14:32' },
-            { type: 'Swap', detail: 'BTC 0.25 → ETH 3.8', time: 'Today, 11:15' },
-            { type: 'Sell', detail: 'ETH 1.5 @ $3,400', time: 'Yesterday, 16:40' },
-            { type: 'Staking', detail: 'SOL Reward +2.3', time: 'Yesterday, 08:00' },
-            { type: 'Transfer', detail: 'USD 1,200.00 to external account', time: '06/02/2024' },
-        ];
-
-        const list = document.getElementById('historyList');
-        if (!list) return;
-        list.innerHTML = '';
-        history.forEach(h => {
-            const item = document.createElement('div');
-            item.className = 'history-item';
-            item.innerHTML = `
-                <div class="history-content">
-                    <div class="history-type">${h.type}</div>
-                    <div class="history-detail">${h.detail}</div>
-                    <div class="history-time">${h.time}</div>
-                </div>
-            `;
-            list.appendChild(item);
-        });
-    }
-
-    // ============================================
-    //  CARREGAR CARTÕES
-    // ============================================
-    function loadCards() {
-        const cards = [
-            { type: 'Visa Platinum', number: '**** 4821', limit: '$25,000' },
-            { type: 'Mastercard Black', number: '**** 7390', limit: '$50,000' },
-        ];
-        const list = document.getElementById('cardsList');
-        if (!list) return;
-        list.innerHTML = '';
-        cards.forEach(c => {
-            const div = document.createElement('div');
-            div.className = 'currency-item';
-            div.innerHTML = `
-                <span><i class="fas fa-credit-card"></i> ${c.type}</span>
-                <span>${c.number} | Limit: ${c.limit}</span>
-            `;
-            list.appendChild(div);
-        });
-    }
-
-    // ============================================
-    //  CARREGAR CONFIGURAÇÕES DE SEGURANÇA
-    // ============================================
-    function loadSecuritySettings() {
-        const settings = [
-            { label: '2FA Authentication', status: 'Enabled' },
-            { label: 'Email Notifications', status: 'Enabled' },
-            { label: 'Biometric Recognition', status: 'Disabled' },
-            { label: 'Trusted Devices', status: '2 devices' },
-        ];
-        const list = document.getElementById('securitySettingsList');
-        if (!list) return;
-        list.innerHTML = '';
-        settings.forEach(s => {
-            const div = document.createElement('div');
-            div.className = 'security-item';
-            div.innerHTML = `
-                <span>${s.label}</span>
-                <span style="color: ${s.status === 'Enabled' ? 'var(--neon-green)' : 'var(--neon-red)'}">${s.status}</span>
-            `;
-            list.appendChild(div);
-        });
-    }
-
-    // ============================================
-    //  CARREGAR CENTRAL DE SEGURANÇA
-    // ============================================
-    function loadSecurityCenter() {
-        const items = [
-            { label: 'Last Login', value: 'Today, 14:30 - IP 192.168.1.100' },
-            { label: 'Change Password', value: 'Last changed: 30 days ago' },
-            { label: 'Active Sessions', value: '2 devices' },
-        ];
-        const list = document.getElementById('securityCenterList');
-        if (!list) return;
-        list.innerHTML = '';
-        items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'security-item';
-            div.innerHTML = `<span>${item.label}</span><span style="color:var(--neon-blue);font-size:0.7rem;">${item.value}</span>`;
-            list.appendChild(div);
-        });
-    }
-
-    // ============================================
-    //  CARREGAR BALANÇOS MILITARES
-    // ============================================
-    function loadMilitaryBalances() {
-        const balances = [
-            { label: 'BTC (Reserve)', value: '0.45' },
-            { label: 'USD (Cash)', value: '$12,450' },
-            { label: 'Digital Gold', value: '5.2 oz' },
-        ];
-        const container = document.getElementById('militaryBalances');
-        if (!container) return;
-        container.innerHTML = '';
-        balances.forEach(b => {
-            const div = document.createElement('div');
-            div.className = 'balance-item';
-            div.innerHTML = `<span>${b.label}</span><span style="color:var(--neon-green)">${b.value}</span>`;
-            container.appendChild(div);
-        });
-    }
-
-    // ============================================
-    //  GRÁFICOS
-    // ============================================
-    let stakingChart = null;
-
-    function initStakingChart() {
-        const ctx = document.getElementById('stakingChart');
-        if (!ctx) return;
-        if (stakingChart) stakingChart.destroy();
-        stakingChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Staking Yield (%)',
-                    data: [4.2, 4.8, 5.1, 5.6, 6.2, 6.8],
-                    borderColor: '#00f2ff',
-                    backgroundColor: 'rgba(0, 242, 255, 0.1)',
-                    fill: true,
-                    tension: 0.3,
-                    pointBackgroundColor: '#bc13fe'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } }
-                },
-                scales: {
-                    x: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: 'rgba(188,19,254,0.1)' } },
-                    y: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: 'rgba(188,19,254,0.1)' } }
-                }
-            }
-        });
-    }
-
-    function initAnalyticsChart() {
-        const ctx = document.getElementById('analyticsChart');
-        if (!ctx) return;
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Crypto', 'Fiat', 'REITs', 'Bonds'],
-                datasets: [{
-                    data: [40, 30, 20, 10],
-                    backgroundColor: ['#00f2ff', '#bc13fe', '#00ff88', '#ffd700'],
-                    borderColor: '#0a0b1e',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 9 } } }
-                }
-            }
-        });
-    }
-
-    // ============================================
-    //  EVENT LISTENERS
-    // ============================================
-    openLoginBtn.addEventListener('click', openLoginModal);
-    closeModalBtn.addEventListener('click', closeLoginModal);
-    loginModal.addEventListener('click', function(e) {
-        if (e.target === this) closeLoginModal();
+    // LOGIN - Eventos
+    document.getElementById('openLoginBtn').addEventListener('click', openLoginModal);
+    document.getElementById('closeModalBtn').addEventListener('click', closeLoginModal);
+    document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
+    
+    document.getElementById('loginId').addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+    document.getElementById('loginPassword').addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+    
+    document.getElementById('togglePasswordBtn').addEventListener('click', function() {
+        const input = document.getElementById('loginPassword');
+        if (input.type === 'password') { input.type = 'text'; this.innerHTML = '<i class="fas fa-eye-slash"></i>'; }
+        else { input.type = 'password'; this.innerHTML = '<i class="fas fa-eye"></i>'; }
     });
-
-    loginId.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
-    loginPassword.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
-    loginSubmitBtn.addEventListener('click', handleLogin);
-
-    togglePasswordBtn.addEventListener('click', function() {
-        const input = loginPassword;
-        if (input.type === 'password') {
-            input.type = 'text';
-            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-        } else {
-            input.type = 'password';
-            this.innerHTML = '<i class="fas fa-eye"></i>';
-        }
-    });
-
-    logoutMainBtn.addEventListener('click', logout);
-    confirmLogoutYes.addEventListener('click', confirmLogout);
-    confirmLogoutNo.addEventListener('click', cancelLogout);
-    confirmLogoutModal.addEventListener('click', function(e) {
-        if (e.target === this) cancelLogout();
-    });
-
+    
+    // Logout
+    document.getElementById('logoutMainBtn').addEventListener('click', logout);
+    document.getElementById('confirmLogoutYes').addEventListener('click', confirmLogout);
+    document.getElementById('confirmLogoutNo').addEventListener('click', cancelLogout);
+    
+    // Fechar modais com ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            if (loginModal.classList.contains('active')) closeLoginModal();
-            if (confirmLogoutModal.classList.contains('active')) cancelLogout();
+            if (document.getElementById('loginModal').classList.contains('active')) closeLoginModal();
+            if (document.getElementById('confirmLogoutModal').classList.contains('active')) cancelLogout();
             if (document.getElementById('walletModal').classList.contains('active')) closeWalletModal();
             if (document.getElementById('swapModal').classList.contains('active')) closeSwapModal();
+            if (document.getElementById('submitModal').classList.contains('active')) {
+                document.getElementById('submitModal').classList.remove('active');
+                if (cameraStream) { cameraStream.getTracks().forEach(track => track.stop()); cameraStream = null; }
+            }
         }
     });
-
+    
     // Stealth Mode
     document.getElementById('stealthSwitch').addEventListener('click', function() {
         this.classList.toggle('active');
         const t = translations[currentLang];
         showToast(this.classList.contains('active') ? (t.stealthActivated || '🕵️ Stealth Mode ACTIVATED') : (t.stealthDeactivated || '👀 Stealth Mode DEACTIVATED'));
     });
-
+    
     // Menu items
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
         item.addEventListener('click', function() {
@@ -2137,70 +1949,16 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
-
+    
     // Swap rate update
     document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
     document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
     document.getElementById('swapAmountInput').addEventListener('input', updateSwapRate);
-
-    // ============================================
-    //  KYC SUBMISSION COM SUPABASE
-    // ============================================
-    document.getElementById('submitKycBtn').addEventListener('click', async function() {
-        const fullName = document.getElementById('fullNameDoc').value;
-        const email = document.getElementById('emailDocInput').value;
-        const phone = document.getElementById('phoneDoc').value;
-        const address = document.getElementById('addressDoc').value;
-        const nationality = document.getElementById('nationalityDoc').value;
-        
-        if (!fullName || !email || !phone || !address || !nationality) {
-            showToast('⚠️ Please fill all fields before submitting');
-            return;
-        }
-        
-        const result = await saveKYCToSupabase({
-            fullName,
-            email,
-            phone,
-            address,
-            nationality
-        });
-        
-        if (result) {
-            showToast('✅ KYC submitted successfully!');
-            document.getElementById('submitModal').classList.remove('active');
-        } else {
-            showToast('❌ Error submitting KYC. Please try again.');
-        }
-    });
-
-    // ============================================
-    //  INTEGRAÇÃO COM A API RENDER
-    // ============================================
-    async function testRenderAPI() {
-        try {
-            const response = await fetch(RENDER_API_URL);
-            if (response.ok) {
-                const data = await response.json();
-                console.log('✅ Render API connected:', data);
-                return data;
-            }
-        } catch (error) {
-            console.log('⚠️ Render API not available, using local data');
-        }
-        return null;
-    }
-
-    // Testar conexão com a API Render
-    testRenderAPI();
-
-    console.log('🟣 Zentronix Bank - Login System Active');
+    
+    console.log('🟣 Zentronix Bank - Sistema Ativo');
     console.log('🔑 Credentials: admin / zentronix');
-    console.log('🔗 Tatum API Key configured');
-    console.log('🌐 Render API: ' + RENDER_API_URL);
-    console.log('🌍 Multi-language support: EN, PT, ES, AR');
-    console.log('🗄️ Supabase connected: ' + SUPABASE_URL);
-    console.log('✅ Click "ACCESS HUB" to login');
+    console.log('✅ Click "ACCESS HUB" para login');
+    console.log('📋 KYC: 3-step verification pronto');
 });
 </script>
 </body>
