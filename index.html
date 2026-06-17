@@ -45,10 +45,14 @@
             pointer-events: auto !important;
             z-index: 10;
             position: relative;
+            user-select: none;
         }
         .dashboard-trigger:hover, .submit-docs-trigger:hover { 
             transform: scale(1.02); 
             box-shadow: 0 0 20px rgba(0,242,255,0.3); 
+        }
+        .dashboard-trigger:active, .submit-docs-trigger:active {
+            transform: scale(0.98);
         }
         .dashboard-trigger * { pointer-events: none; }
         .submit-docs-trigger * { pointer-events: none; }
@@ -999,12 +1003,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  BOTÃO ACCESS HUB
+    //  BOTÃO ACCESS HUB - CORRIGIDO
     // ============================================
     const openLoginBtn = document.getElementById('openLoginBtn');
     if (openLoginBtn) {
+        // Remove todos os event listeners antigos clonando
         const newBtn = openLoginBtn.cloneNode(true);
         openLoginBtn.parentNode.replaceChild(newBtn, openLoginBtn);
+        
+        // Adiciona o event listener diretamente
         newBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1015,12 +1022,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ============================================
-    //  BOTÃO KYC
+    //  BOTÃO KYC - CORRIGIDO
     // ============================================
     const kycBtn = document.getElementById('kycBtn');
     if (kycBtn) {
+        // Remove todos os event listeners antigos clonando
         const newKycBtn = kycBtn.cloneNode(true);
         kycBtn.parentNode.replaceChild(newKycBtn, kycBtn);
+        
+        // Adiciona o event listener diretamente
         newKycBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
