@@ -311,6 +311,29 @@
         .delete-notification-btn:hover { background: rgba(255,68,102,0.5); transform: scale(1.05); }
         
         @media (max-width: 1100px) { .dashboard-three-columns { grid-template-columns: 1fr; } .tactical-menu { position: relative; } }
+
+        /* RTL Support */
+        body.rtl .lang-container { right: auto; left: 20px; }
+        body.rtl .lang-dropdown { right: auto; left: 0; }
+        body.rtl .dashboard-nav { direction: rtl; }
+        body.rtl .button-group { direction: ltr; }
+        body.rtl .menu-item { direction: ltr; }
+        body.rtl .profile-card { direction: ltr; }
+        body.rtl .balance-section { direction: ltr; }
+        body.rtl .asset-card { direction: ltr; }
+        body.rtl .chart-card { direction: ltr; }
+        body.rtl .military-hub { direction: ltr; }
+        body.rtl .footer-dashboard { direction: ltr; }
+        body.rtl .kyc-steps { direction: ltr; }
+        body.rtl .submit-modal-content { direction: ltr; }
+        body.rtl .login-container { direction: ltr; }
+        body.rtl .profile-modal-content { direction: ltr; }
+        body.rtl .confirm-modal-content { direction: ltr; }
+        body.rtl .wallet-modal-content { direction: ltr; }
+        body.rtl .swap-modal-content { direction: ltr; }
+        body.rtl .kyc-status { right: auto; left: 20px; }
+        body.rtl .notification-badge { right: auto; left: 20px; }
+        body.rtl .toast-notification { direction: ltr; }
     </style>
 </head>
 <body>
@@ -433,13 +456,13 @@
             <img id="profileAvatarImg" src="" style="display:none; width:100%; height:100%; object-fit:cover;">
             <i class="fas fa-user-astronaut" id="profileAvatarIcon"></i>
         </div>
-        <button class="upload-photo-btn" id="uploadPhotoBtn"><i class="fas fa-camera"></i> Upload Photo</button>
+        <button class="upload-photo-btn" id="uploadPhotoBtn"><i class="fas fa-camera"></i> <span id="uploadPhotoText">Upload Photo</span></button>
         <input type="file" id="profilePhotoInput" accept="image/*" style="display:none">
         <div class="profile-field"><label id="profileFirstNameLabel">First Name</label><input type="text" id="profileFirstName" value="Alexander"></div>
         <div class="profile-field"><label id="profileLastNameLabel">Last Name</label><input type="text" id="profileLastName" value="Vance"></div>
         <div class="profile-field"><label id="profileEmailLabel">Email</label><input type="email" id="profileEmail" value="alexander.vance@zentronix.com"></div>
         <div class="profile-field"><label id="profilePhoneLabel">Phone</label><input type="tel" id="profilePhone" value="+41 78 123 4567"></div>
-        <button id="saveProfileBtn" class="save-profile-btn">SAVE CHANGES</button>
+        <button id="saveProfileBtn" class="save-profile-btn"><span id="saveProfileText">SAVE CHANGES</span></button>
     </div>
 </div>
 
@@ -525,14 +548,14 @@
             </div>
             <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(255, 215, 0, 0.1); border-radius: 0.5rem; border: 1px solid var(--neon-yellow);">
                 <p style="font-size: 0.7rem; color: var(--neon-yellow);">
-                    <i class="fas fa-info-circle"></i> Accepted formats: JPG, PNG, PDF (Max 10MB)
+                    <i class="fas fa-info-circle"></i> <span id="acceptedFormatsText">Accepted formats: JPG, PNG, PDF (Max 10MB)</span>
                 </p>
             </div>
         </div>
 
         <div id="kycStep3" class="kyc-step-content" style="display:none;">
             <div style="text-align: center; margin-bottom: 1.5rem;">
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Take a selfie holding your ID document</p>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;" id="selfieInstruction">Take a selfie holding your ID document</p>
                 <div id="selfiePreview">
                     <i class="fas fa-camera" style="font-size: 3rem; color: var(--text-secondary);"></i>
                     <video id="selfieVideo" style="display:none; width: 100%; height: 100%; object-fit: cover;"></video>
@@ -540,13 +563,13 @@
                 </div>
                 <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                     <button id="startCameraBtn" class="buy-btn" style="flex: none; padding: 0.5rem 1.5rem;">
-                        <i class="fas fa-camera"></i> Start Camera
+                        <i class="fas fa-camera"></i> <span id="startCameraText">Start Camera</span>
                     </button>
                     <button id="captureSelfieBtn" class="buy-btn" style="flex: none; padding: 0.5rem 1.5rem; display: none;">
-                        <i class="fas fa-camera-retro"></i> Capture
+                        <i class="fas fa-camera-retro"></i> <span id="captureText">Capture</span>
                     </button>
                     <button id="uploadSelfieBtn" class="buy-btn" style="flex: none; padding: 0.5rem 1.5rem; display: none;">
-                        <i class="fas fa-upload"></i> Upload Photo
+                        <i class="fas fa-upload"></i> <span id="uploadText">Upload Photo</span>
                     </button>
                 </div>
                 <input type="file" id="selfieFileInput" style="display:none" accept="image/*">
@@ -560,9 +583,9 @@
         </div>
 
         <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-            <button type="button" id="kycPrevBtn" class="sell-btn" style="flex:1; display:none;">Previous</button>
-            <button type="button" id="kycNextBtn" class="buy-btn" style="flex:2;">Next →</button>
-            <button type="button" id="submitKycBtn" class="submit-docs-trigger" style="flex:2; display:none; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; padding: 0.8rem;">SUBMIT KYC</button>
+            <button type="button" id="kycPrevBtn" class="sell-btn" style="flex:1; display:none;"><span id="prevBtnText">Previous</span></button>
+            <button type="button" id="kycNextBtn" class="buy-btn" style="flex:2;"><span id="nextBtnText">Next →</span></button>
+            <button type="button" id="submitKycBtn" class="submit-docs-trigger" style="flex:2; display:none; background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border: none; border-radius: 1rem; color: #0a0b1e; font-weight: bold; cursor: pointer; padding: 0.8rem;"><span id="submitKycText">SUBMIT KYC</span></button>
         </div>
     </div>
 </div>
@@ -779,22 +802,592 @@ let userProfile = {
 };
 
 // ============================================
-//  TRADUÇÕES
+//  TRADUÇÕES COMPLETAS
 // ============================================
 const translations = {
     'en': {
-        'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix',
+        'bankSubtitle': 'Offshore Private Banking',
+        'heroTitle': 'Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite',
+        'heroBadge': '🏆 Leading the Offshore Revolution since 2017',
+        'heroDesc': 'Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.',
+        'card1Title': '🌍 Total Convergence: Fiat and Crypto',
+        'card1Desc': 'Unlike traditional banks, Zentronix was designed for the digital age.',
+        'card2Title': '📈 Next-Generation Investment Portfolio',
+        'card2Desc': 'Our financial product shelf is the most complete in the offshore sector.',
+        'card3Title': '🔐 Technology, Privacy and Succession',
+        'card3Desc': 'Zentronix Bank goes beyond simple transactions; we take care of your legacy.',
+        'impactPhrase': '✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨',
+        'impactSmall': 'Founded in 2017. Connected to the Future.',
+        'aboutTitle': '🌟 ABOUT ZENTRONIX BANK',
+        'aboutHistoryTitle': 'Our History',
+        'aboutHistoryDesc': 'Founded in 2018, serving 156+ countries',
+        'aboutSecurityTitle': 'Security First',
+        'aboutSecurityDesc': 'Quantum-resistant protocols',
+        'aboutReachTitle': 'Global Reach',
+        'aboutReachDesc': 'Offices in Switzerland, Singapore, Dubai',
+        'aboutReturnsTitle': 'Premium Returns',
+        'aboutReturnsDesc': 'Up to 12% annual yield',
+        'currenciesTitle': '💱 CURRENCIES WE ACCEPT',
+        'cryptoTitles': '💎 SUPPORTED CRYPTOCURRENCIES',
+        'statAum': 'AUM',
+        'statClients': 'Clients',
+        'statCountries': 'Countries',
+        'statEncryption': 'Encryption',
+        'regulatoryText': 'Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.',
+        'copyrightText': '© 2024 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024',
+        'accessHubBtn': 'ACCESS HUB',
+        'kycBtnText': 'KYC',
+        'logoutBtnText': 'LOGOUT',
+        'kycPendingText': 'KYC PENDING',
+        'modalTitle': 'ACCESS INVESTMENT HUB',
+        'loginError': '❌ Invalid username or password',
         'loginSuccess': '✅ Login successful!',
         'logoutSuccess': '🔒 You have been logged out.',
         'stealthActivated': '🕵️ Stealth Mode ACTIVATED',
-        'stealthDeactivated': '👀 Stealth Mode DEACTIVATED'
+        'stealthDeactivated': '👀 Stealth Mode DEACTIVATED',
+        'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix',
+        'kycModalTitle': 'KYC VERIFICATION',
+        'step1Label': 'Personal Info',
+        'step2Label': 'Documents',
+        'step3Label': 'Selfie',
+        'fullNameLabel': 'Full Name',
+        'emailLabel': 'Email',
+        'phoneLabel': 'Phone',
+        'addressLabel': 'Street Address',
+        'nationalityLabel': 'Nationality',
+        'idDocumentLabel': 'ID Document (Passport / ID Card / Driver License)',
+        'uploadClickText': 'Click to upload document',
+        'proofAddressLabel': 'Proof of Address (Utility bill, Bank statement, etc.)',
+        'proofClickText': 'Click to upload proof of address',
+        'acceptedFormatsText': 'Accepted formats: JPG, PNG, PDF (Max 10MB)',
+        'selfieInstruction': 'Take a selfie holding your ID document',
+        'startCameraText': 'Start Camera',
+        'captureText': 'Capture',
+        'uploadText': 'Upload Photo',
+        'reviewTitle': 'Please review your information before submitting:',
+        'prevBtnText': 'Previous',
+        'nextBtnText': 'Next →',
+        'submitKycText': 'SUBMIT KYC',
+        'profileModalTitle': 'Edit Profile',
+        'uploadPhotoText': 'Upload Photo',
+        'profileFirstNameLabel': 'First Name',
+        'profileLastNameLabel': 'Last Name',
+        'profileEmailLabel': 'Email',
+        'profilePhoneLabel': 'Phone',
+        'saveProfileText': 'SAVE CHANGES',
+        'accountLabel': 'ACCOUNT NUMBER',
+        'copyBtnText': 'COPY',
+        'menuSecurityTitle': '⚙️ SECURITY SETTINGS',
+        'menuSecurityCenter': 'Security Center',
+        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
+        'menuStaking': 'Staking Center',
+        'menuCryptoTransactions': 'Crypto Transactions',
+        'menuHistory': 'History / Extrato',
+        'menuTradingTitle': '📊 TRADING',
+        'menuTradingHub': 'Trading Hub',
+        'menuConversion': 'Conversion',
+        'menuFixedIncomeTitle': '🏛️ FIXED INCOME',
+        'menuTreasuries': 'Treasuries & Bonds',
+        'menuCDs': 'CDs / Time Deposits',
+        'menuDebentures': 'Debentures',
+        'menuREITs': 'REITs',
+        'menuPrivateCredit': 'Private Credit',
+        'menuStructuredNotes': 'Structured Notes',
+        'menuMunicipalBonds': 'Municipal Bonds',
+        'menuCardsTitle': '💳 CARDS & PAYMENTS',
+        'menuMyCards': 'My Cards',
+        'menuPayments': 'Payments',
+        'menuSwapTitle': '🔄 SWAP',
+        'menuSwapCenter': 'Swap Center',
+        'menuAnalyticsTitle': '📊 ANALYTICS',
+        'menuAnalytics': 'Analytics',
+        'menuReports': 'Reports',
+        'menuSecurityKYCTitle': '🔒 SECURITY & KYC',
+        'menuSecuritySettings': 'Security Settings',
+        'menuSessions': 'Active Sessions',
+        'menuCompliance': 'KYC & Compliance',
+        'menuAntiHack': 'Anti-Hack',
+        'menuSystemTitle': '⚙️ SYSTEM CONTROLS',
+        'menuGhostMode': 'Ghost Mode',
+        'menuSimulator': 'Scenario Simulator',
+        'menuThemes': 'Theme Weaver',
+        'menuAudit': 'Audit Logs',
+        'menuServicesTitle': '✨ BANKING SERVICES',
+        'menuCompleteServices': 'Complete Services',
+        'menuDigitalPayment': 'Payment Digital',
+        'stakingChartTitle': 'Staking Performance',
+        'cryptoTxTitle': 'Crypto Transactions',
+        'historyTitle': 'Transaction History / Extrato',
+        'tradingTitle': 'Trading Hub',
+        'conversionTitle': 'Currency Conversion',
+        'treasuriesTitle': 'Treasuries & Bonds',
+        'cdsTitle': 'CDs / Time Deposits',
+        'debenturesTitle': 'Debentures',
+        'reitsTitle': 'REITs',
+        'privateCreditTitle': 'Private Credit',
+        'structuredNotesTitle': 'Structured Notes',
+        'municipalBondsTitle': 'Municipal Bonds',
+        'cardsTitle': 'My Cards',
+        'paymentsTitle': 'Payments',
+        'swapCenterTitle': 'Swap Center',
+        'analyticsTitle': 'Analytics',
+        'reportsTitle': 'Reports',
+        'securitySettingsTitle': 'Security Settings',
+        'securityCenterTitle': 'Security Center',
+        'sessionsTitle': 'Active Sessions',
+        'complianceTitle': 'KYC & Compliance',
+        'antihackTitle': 'Anti-Hack',
+        'servicesTitle': 'Complete Banking Services',
+        'digitalPaymentTitle': 'Digital Payment',
+        'yourBalancesTitle': 'YOUR BALANCES',
+        'militaryTitle': 'MILITARY HUB',
+        'stealthModeText': 'STEALTH MODE',
+        'blacklistLabel': 'Blacklist Addresses',
+        'swapModalTitle': '🔄 SWAP',
+        'walletModalTitle': '💰 Wallet Generated',
+        'walletWarning': '⚠️ Save your private key securely! Never share it with anyone.',
+        'confirmLogoutTitle': 'Confirm Logout',
+        'confirmLogoutMessage': 'Are you sure you want to logout from your account?',
+        'welcomeUser': 'Welcome, {name}',
+        'profileRole': 'Private Banking Elite'
     },
     'pt': {
-        'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix',
+        'bankSubtitle': 'Offshore Private Banking',
+        'heroTitle': 'Zentronix Offshore Bank: Soberania, Tecnologia e Elite Financeira',
+        'heroBadge': '🏆 Liderando a Revolução Offshore desde 2017',
+        'heroDesc': 'Fundado em 2017, o Zentronix Bank não é apenas uma instituição financeira; é uma fortaleza para o capital global.',
+        'card1Title': '🌍 Convergência Total: Fiat e Crypto',
+        'card1Desc': 'Ao contrário dos bancos tradicionais, a Zentronix foi projetada para a era digital.',
+        'card2Title': '📈 Portfólio de Investimentos de Próxima Geração',
+        'card2Desc': 'Nossa prateleira de produtos financeiros é a mais completa do setor offshore.',
+        'card3Title': '🔐 Tecnologia, Privacidade e Sucessão',
+        'card3Desc': 'O Zentronix Bank vai além de simples transações; cuidamos do seu legado.',
+        'impactPhrase': '✨ Zentronix Offshore Bank: A evolução do seu poder financeiro começa aqui. ✨',
+        'impactSmall': 'Fundado em 2017. Conectado ao Futuro.',
+        'aboutTitle': '🌟 SOBRE O ZENTRONIX BANK',
+        'aboutHistoryTitle': 'Nossa História',
+        'aboutHistoryDesc': 'Fundado em 2018, atendendo 156+ países',
+        'aboutSecurityTitle': 'Segurança em Primeiro Lugar',
+        'aboutSecurityDesc': 'Protocolos resistentes a quantum',
+        'aboutReachTitle': 'Alcance Global',
+        'aboutReachDesc': 'Escritórios na Suíça, Singapura, Dubai',
+        'aboutReturnsTitle': 'Retornos Premium',
+        'aboutReturnsDesc': 'Até 12% de rendimento anual',
+        'currenciesTitle': '💱 MOEDAS QUE ACEITAMOS',
+        'cryptoTitles': '💎 CRIPTOMOEDAS SUPORTADAS',
+        'statAum': 'AUM',
+        'statClients': 'Clientes',
+        'statCountries': 'Países',
+        'statEncryption': 'Criptografia',
+        'regulatoryText': 'O Zentronix Bank está atualmente em processo de licenciamento regulatório como Provedor de Serviços de Ativos Virtuais.',
+        'copyrightText': '© 2024 Zentronix Bank - Edição Azul & Roxo | Licença Bancária Offshore Nº ZNTX-2024',
+        'accessHubBtn': 'ACESSAR HUB',
+        'kycBtnText': 'KYC',
+        'logoutBtnText': 'SAIR',
+        'kycPendingText': 'KYC PENDENTE',
+        'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS',
+        'loginError': '❌ Credenciais inválidas! Use: admin / zentronix',
         'loginSuccess': '✅ Login realizado com sucesso!',
         'logoutSuccess': '🔒 Você foi desconectado.',
         'stealthActivated': '🕵️ Modo Stealth ATIVADO',
-        'stealthDeactivated': '👀 Modo Stealth DESATIVADO'
+        'stealthDeactivated': '👀 Modo Stealth DESATIVADO',
+        'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix',
+        'kycModalTitle': 'VERIFICAÇÃO KYC',
+        'step1Label': 'Informações Pessoais',
+        'step2Label': 'Documentos',
+        'step3Label': 'Selfie',
+        'fullNameLabel': 'Nome Completo',
+        'emailLabel': 'Email',
+        'phoneLabel': 'Telefone',
+        'addressLabel': 'Endereço',
+        'nationalityLabel': 'Nacionalidade',
+        'idDocumentLabel': 'Documento de Identidade (Passaporte / RG / CNH)',
+        'uploadClickText': 'Clique para enviar documento',
+        'proofAddressLabel': 'Comprovante de Endereço (Conta de luz, Extrato bancário, etc.)',
+        'proofClickText': 'Clique para enviar comprovante de endereço',
+        'acceptedFormatsText': 'Formatos aceitos: JPG, PNG, PDF (Máx 10MB)',
+        'selfieInstruction': 'Tire uma selfie segurando seu documento de identidade',
+        'startCameraText': 'Iniciar Câmera',
+        'captureText': 'Capturar',
+        'uploadText': 'Enviar Foto',
+        'reviewTitle': 'Por favor, revise suas informações antes de enviar:',
+        'prevBtnText': 'Anterior',
+        'nextBtnText': 'Próximo →',
+        'submitKycText': 'ENVIAR KYC',
+        'profileModalTitle': 'Editar Perfil',
+        'uploadPhotoText': 'Enviar Foto',
+        'profileFirstNameLabel': 'Nome',
+        'profileLastNameLabel': 'Sobrenome',
+        'profileEmailLabel': 'Email',
+        'profilePhoneLabel': 'Telefone',
+        'saveProfileText': 'SALVAR ALTERAÇÕES',
+        'accountLabel': 'NÚMERO DA CONTA',
+        'copyBtnText': 'COPIAR',
+        'menuSecurityTitle': '⚙️ CONFIGURAÇÕES DE SEGURANÇA',
+        'menuSecurityCenter': 'Central de Segurança',
+        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
+        'menuStaking': 'Central de Staking',
+        'menuCryptoTransactions': 'Transações Crypto',
+        'menuHistory': 'Histórico / Extrato',
+        'menuTradingTitle': '📊 TRADING',
+        'menuTradingHub': 'Hub de Trading',
+        'menuConversion': 'Conversão',
+        'menuFixedIncomeTitle': '🏛️ RENDA FIXA',
+        'menuTreasuries': 'Tesouros & Títulos',
+        'menuCDs': 'CDs / Depósitos a Prazo',
+        'menuDebentures': 'Debêntures',
+        'menuREITs': 'REITs',
+        'menuPrivateCredit': 'Crédito Privado',
+        'menuStructuredNotes': 'Notas Estruturadas',
+        'menuMunicipalBonds': 'Títulos Municipais',
+        'menuCardsTitle': '💳 CARTÕES & PAGAMENTOS',
+        'menuMyCards': 'Meus Cartões',
+        'menuPayments': 'Pagamentos',
+        'menuSwapTitle': '🔄 SWAP',
+        'menuSwapCenter': 'Central de Swap',
+        'menuAnalyticsTitle': '📊 ANÁLISES',
+        'menuAnalytics': 'Análises',
+        'menuReports': 'Relatórios',
+        'menuSecurityKYCTitle': '🔒 SEGURANÇA & KYC',
+        'menuSecuritySettings': 'Configurações de Segurança',
+        'menuSessions': 'Sessões Ativas',
+        'menuCompliance': 'KYC & Compliance',
+        'menuAntiHack': 'Anti-Hack',
+        'menuSystemTitle': '⚙️ CONTROLES DO SISTEMA',
+        'menuGhostMode': 'Modo Fantasma',
+        'menuSimulator': 'Simulador de Cenários',
+        'menuThemes': 'Personalizar Temas',
+        'menuAudit': 'Logs de Auditoria',
+        'menuServicesTitle': '✨ SERVIÇOS BANCÁRIOS',
+        'menuCompleteServices': 'Serviços Completos',
+        'menuDigitalPayment': 'Pagamento Digital',
+        'stakingChartTitle': 'Desempenho de Staking',
+        'cryptoTxTitle': 'Transações Crypto',
+        'historyTitle': 'Histórico de Transações / Extrato',
+        'tradingTitle': 'Hub de Trading',
+        'conversionTitle': 'Conversão de Moedas',
+        'treasuriesTitle': 'Tesouros & Títulos',
+        'cdsTitle': 'CDs / Depósitos a Prazo',
+        'debenturesTitle': 'Debêntures',
+        'reitsTitle': 'REITs',
+        'privateCreditTitle': 'Crédito Privado',
+        'structuredNotesTitle': 'Notas Estruturadas',
+        'municipalBondsTitle': 'Títulos Municipais',
+        'cardsTitle': 'Meus Cartões',
+        'paymentsTitle': 'Pagamentos',
+        'swapCenterTitle': 'Central de Swap',
+        'analyticsTitle': 'Análises',
+        'reportsTitle': 'Relatórios',
+        'securitySettingsTitle': 'Configurações de Segurança',
+        'securityCenterTitle': 'Central de Segurança',
+        'sessionsTitle': 'Sessões Ativas',
+        'complianceTitle': 'KYC & Compliance',
+        'antihackTitle': 'Anti-Hack',
+        'servicesTitle': 'Serviços Bancários Completos',
+        'digitalPaymentTitle': 'Pagamento Digital',
+        'yourBalancesTitle': 'SEUS SALDOS',
+        'militaryTitle': 'HUB MILITAR',
+        'stealthModeText': 'MODO STEALTH',
+        'blacklistLabel': 'Endereços na Lista Negra',
+        'swapModalTitle': '🔄 SWAP',
+        'walletModalTitle': '💰 Carteira Gerada',
+        'walletWarning': '⚠️ Guarde sua chave privada com segurança! Nunca compartilhe com ninguém.',
+        'confirmLogoutTitle': 'Confirmar Saída',
+        'confirmLogoutMessage': 'Tem certeza que deseja sair da sua conta?',
+        'welcomeUser': 'Bem-vindo, {name}',
+        'profileRole': 'Elite do Private Banking'
+    },
+    'es': {
+        'bankSubtitle': 'Banca Offshore Privada',
+        'heroTitle': 'Zentronix Offshore Bank: Soberanía, Tecnología y Élite Financiera',
+        'heroBadge': '🏆 Liderando la Revolución Offshore desde 2017',
+        'heroDesc': 'Fundado en 2017, Zentronix Bank no es solo una institución financiera; es una fortaleza para el capital global.',
+        'card1Title': '🌍 Convergencia Total: Fiat y Crypto',
+        'card1Desc': 'A diferencia de los bancos tradicionales, Zentronix fue diseñado para la era digital.',
+        'card2Title': '📈 Cartera de Inversiones de Próxima Generación',
+        'card2Desc': 'Nuestro estante de productos financieros es el más completo del sector offshore.',
+        'card3Title': '🔐 Tecnología, Privacidad y Sucesión',
+        'card3Desc': 'Zentronix Bank va más allá de simples transacciones; cuidamos su legado.',
+        'impactPhrase': '✨ Zentronix Offshore Bank: La evolución de su poder financiero comienza aquí. ✨',
+        'impactSmall': 'Fundado en 2017. Conectado al Futuro.',
+        'aboutTitle': '🌟 SOBRE ZENTRONIX BANK',
+        'aboutHistoryTitle': 'Nuestra Historia',
+        'aboutHistoryDesc': 'Fundado en 2018, sirviendo a 156+ países',
+        'aboutSecurityTitle': 'Seguridad Primero',
+        'aboutSecurityDesc': 'Protocolos resistentes a quantum',
+        'aboutReachTitle': 'Alcance Global',
+        'aboutReachDesc': 'Oficinas en Suiza, Singapur, Dubái',
+        'aboutReturnsTitle': 'Rendimientos Premium',
+        'aboutReturnsDesc': 'Hasta 12% de rendimiento anual',
+        'currenciesTitle': '💱 MONEDAS QUE ACEPTAMOS',
+        'cryptoTitles': '💎 CRIPTOMONEDAS SOPORTADAS',
+        'statAum': 'AUM',
+        'statClients': 'Clientes',
+        'statCountries': 'Países',
+        'statEncryption': 'Cifrado',
+        'regulatoryText': 'Zentronix Bank se encuentra actualmente en proceso de licenciamiento regulatorio como Proveedor de Servicios de Activos Virtuales.',
+        'copyrightText': '© 2024 Zentronix Bank - Edición Azul & Púrpura | Licencia Bancaria Offshore Nº ZNTX-2024',
+        'accessHubBtn': 'ACCEDER HUB',
+        'kycBtnText': 'KYC',
+        'logoutBtnText': 'SALIR',
+        'kycPendingText': 'KYC PENDIENTE',
+        'modalTitle': 'ACCEDER HUB DE INVERSIONES',
+        'loginError': '❌ Credenciales inválidas! Use: admin / zentronix',
+        'loginSuccess': '✅ Inicio de sesión exitoso!',
+        'logoutSuccess': '🔒 Has cerrado sesión.',
+        'stealthActivated': '🕵️ Modo Stealth ACTIVADO',
+        'stealthDeactivated': '👀 Modo Stealth DESACTIVADO',
+        'invalidCredentials': '❌ Credenciales inválidas! Use: admin / zentronix',
+        'kycModalTitle': 'VERIFICACIÓN KYC',
+        'step1Label': 'Información Personal',
+        'step2Label': 'Documentos',
+        'step3Label': 'Selfie',
+        'fullNameLabel': 'Nombre Completo',
+        'emailLabel': 'Correo Electrónico',
+        'phoneLabel': 'Teléfono',
+        'addressLabel': 'Dirección',
+        'nationalityLabel': 'Nacionalidad',
+        'idDocumentLabel': 'Documento de Identidad (Pasaporte / Cédula / Licencia)',
+        'uploadClickText': 'Haga clic para subir documento',
+        'proofAddressLabel': 'Comprobante de Domicilio (Factura, Extracto bancario, etc.)',
+        'proofClickText': 'Haga clic para subir comprobante de domicilio',
+        'acceptedFormatsText': 'Formatos aceptados: JPG, PNG, PDF (Máx 10MB)',
+        'selfieInstruction': 'Tome una selfie sosteniendo su documento de identidad',
+        'startCameraText': 'Iniciar Cámara',
+        'captureText': 'Capturar',
+        'uploadText': 'Subir Foto',
+        'reviewTitle': 'Revise su información antes de enviar:',
+        'prevBtnText': 'Anterior',
+        'nextBtnText': 'Siguiente →',
+        'submitKycText': 'ENVIAR KYC',
+        'profileModalTitle': 'Editar Perfil',
+        'uploadPhotoText': 'Subir Foto',
+        'profileFirstNameLabel': 'Nombre',
+        'profileLastNameLabel': 'Apellido',
+        'profileEmailLabel': 'Correo Electrónico',
+        'profilePhoneLabel': 'Teléfono',
+        'saveProfileText': 'GUARDAR CAMBIOS',
+        'accountLabel': 'NÚMERO DE CUENTA',
+        'copyBtnText': 'COPIAR',
+        'menuSecurityTitle': '⚙️ CONFIGURACIONES DE SEGURIDAD',
+        'menuSecurityCenter': 'Centro de Seguridad',
+        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
+        'menuStaking': 'Centro de Staking',
+        'menuCryptoTransactions': 'Transacciones Crypto',
+        'menuHistory': 'Historial / Extrato',
+        'menuTradingTitle': '📊 TRADING',
+        'menuTradingHub': 'Hub de Trading',
+        'menuConversion': 'Conversión',
+        'menuFixedIncomeTitle': '🏛️ RENTA FIJA',
+        'menuTreasuries': 'Tesoros & Bonos',
+        'menuCDs': 'CDs / Depósitos a Plazo',
+        'menuDebentures': 'Debentures',
+        'menuREITs': 'REITs',
+        'menuPrivateCredit': 'Crédito Privado',
+        'menuStructuredNotes': 'Notas Estructuradas',
+        'menuMunicipalBonds': 'Bonos Municipales',
+        'menuCardsTitle': '💳 TARJETAS & PAGOS',
+        'menuMyCards': 'Mis Tarjetas',
+        'menuPayments': 'Pagos',
+        'menuSwapTitle': '🔄 SWAP',
+        'menuSwapCenter': 'Centro de Swap',
+        'menuAnalyticsTitle': '📊 ANALÍTICAS',
+        'menuAnalytics': 'Analíticas',
+        'menuReports': 'Informes',
+        'menuSecurityKYCTitle': '🔒 SEGURIDAD & KYC',
+        'menuSecuritySettings': 'Configuraciones de Seguridad',
+        'menuSessions': 'Sesiones Activas',
+        'menuCompliance': 'KYC & Compliance',
+        'menuAntiHack': 'Anti-Hack',
+        'menuSystemTitle': '⚙️ CONTROLES DEL SISTEMA',
+        'menuGhostMode': 'Modo Fantasma',
+        'menuSimulator': 'Simulador de Escenarios',
+        'menuThemes': 'Personalizar Temas',
+        'menuAudit': 'Registros de Auditoría',
+        'menuServicesTitle': '✨ SERVICIOS BANCARIOS',
+        'menuCompleteServices': 'Servicios Completos',
+        'menuDigitalPayment': 'Pago Digital',
+        'stakingChartTitle': 'Rendimiento de Staking',
+        'cryptoTxTitle': 'Transacciones Crypto',
+        'historyTitle': 'Historial de Transacciones / Extrato',
+        'tradingTitle': 'Hub de Trading',
+        'conversionTitle': 'Conversión de Monedas',
+        'treasuriesTitle': 'Tesoros & Bonos',
+        'cdsTitle': 'CDs / Depósitos a Plazo',
+        'debenturesTitle': 'Debentures',
+        'reitsTitle': 'REITs',
+        'privateCreditTitle': 'Crédito Privado',
+        'structuredNotesTitle': 'Notas Estructuradas',
+        'municipalBondsTitle': 'Bonos Municipales',
+        'cardsTitle': 'Mis Tarjetas',
+        'paymentsTitle': 'Pagos',
+        'swapCenterTitle': 'Centro de Swap',
+        'analyticsTitle': 'Analíticas',
+        'reportsTitle': 'Informes',
+        'securitySettingsTitle': 'Configuraciones de Seguridad',
+        'securityCenterTitle': 'Centro de Seguridad',
+        'sessionsTitle': 'Sesiones Activas',
+        'complianceTitle': 'KYC & Compliance',
+        'antihackTitle': 'Anti-Hack',
+        'servicesTitle': 'Servicios Bancarios Completos',
+        'digitalPaymentTitle': 'Pago Digital',
+        'yourBalancesTitle': 'SUS SALDOS',
+        'militaryTitle': 'HUB MILITAR',
+        'stealthModeText': 'MODO STEALTH',
+        'blacklistLabel': 'Direcciones en Lista Negra',
+        'swapModalTitle': '🔄 SWAP',
+        'walletModalTitle': '💰 Cartera Generada',
+        'walletWarning': '⚠️ Guarde su clave privada de forma segura! Nunca la comparta con nadie.',
+        'confirmLogoutTitle': 'Confirmar Salida',
+        'confirmLogoutMessage': '¿Está seguro que desea salir de su cuenta?',
+        'welcomeUser': 'Bienvenido, {name}',
+        'profileRole': 'Élite de Banca Privada'
+    },
+    'ar': {
+        'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية',
+        'heroTitle': 'بنك زينترونيكس الخارجي: السيادة والتكنولوجيا والنخبة المالية',
+        'heroBadge': '🏆 ريادة الثورة الخارجية منذ 2017',
+        'heroDesc': 'تأسس بنك زينترونيكس في عام 2017، وهو ليس مجرد مؤسسة مالية؛ بل هو حصن للرأسمال العالمي.',
+        'card1Title': '🌍 التقارب الكامل: العملات الورقية والعملات المشفرة',
+        'card1Desc': 'على عكس البنوك التقليدية، تم تصميم زينترونيكس للعصر الرقمي.',
+        'card2Title': '📈 محفظة استثمارية من الجيل التالي',
+        'card2Desc': 'تعتبر مجموعة منتجاتنا المالية الأكثر اكتمالاً في القطاع الخارجي.',
+        'card3Title': '🔐 التكنولوجيا والخصوصية والخلافة',
+        'card3Desc': 'يتجاوز بنك زينترونيكس المعاملات البسيطة؛ نحن نعتني بإرثك.',
+        'impactPhrase': '✨ بنك زينترونيكس الخارجي: تطور قوتك المالية يبدأ هنا. ✨',
+        'impactSmall': 'تأسس في 2017. متصل بالمستقبل.',
+        'aboutTitle': '🌟 حول بنك زينترونيكس',
+        'aboutHistoryTitle': 'تاريخنا',
+        'aboutHistoryDesc': 'تأسس في 2018، يخدم 156+ دولة',
+        'aboutSecurityTitle': 'الأمان أولاً',
+        'aboutSecurityDesc': 'بروتوكولات مقاومة للكم',
+        'aboutReachTitle': 'الوصول العالمي',
+        'aboutReachDesc': 'مكاتب في سويسرا وسنغافورة ودبي',
+        'aboutReturnsTitle': 'عوائد متميزة',
+        'aboutReturnsDesc': 'حتى 12% عائد سنوي',
+        'currenciesTitle': '💱 العملات التي نقبلها',
+        'cryptoTitles': '💎 العملات المشفرة المدعومة',
+        'statAum': 'الأصول المُدارة',
+        'statClients': 'العملاء',
+        'statCountries': 'الدول',
+        'statEncryption': 'التشفير',
+        'regulatoryText': 'يخضع بنك زينترونيكس حالياً للترخيص التنظيمي كمزود لخدمات الأصول الافتراضية.',
+        'copyrightText': '© 2024 بنك زينترونيكس - النسخة الزرقاء والبنفسجية | رخصة مصرفية خارجية رقم ZNTX-2024',
+        'accessHubBtn': 'الوصول إلى المركز',
+        'kycBtnText': 'التحقق من الهوية',
+        'logoutBtnText': 'تسجيل الخروج',
+        'kycPendingText': 'التحقق من الهوية قيد الانتظار',
+        'modalTitle': 'الوصول إلى مركز الاستثمار',
+        'loginError': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix',
+        'loginSuccess': '✅ تم تسجيل الدخول بنجاح!',
+        'logoutSuccess': '🔒 تم تسجيل الخروج.',
+        'stealthActivated': '🕵️ تم تفعيل وضع التخفي',
+        'stealthDeactivated': '👀 تم إلغاء تنشيط وضع التخفي',
+        'invalidCredentials': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix',
+        'kycModalTitle': 'التحقق من الهوية',
+        'step1Label': 'المعلومات الشخصية',
+        'step2Label': 'المستندات',
+        'step3Label': 'صورة شخصية',
+        'fullNameLabel': 'الاسم الكامل',
+        'emailLabel': 'البريد الإلكتروني',
+        'phoneLabel': 'الهاتف',
+        'addressLabel': 'العنوان',
+        'nationalityLabel': 'الجنسية',
+        'idDocumentLabel': 'وثيقة الهوية (جواز السفر / بطاقة الهوية / رخصة القيادة)',
+        'uploadClickText': 'انقر لتحميل المستند',
+        'proofAddressLabel': 'إثبات العنوان (فاتورة الخدمات، كشف حساب بنكي، إلخ)',
+        'proofClickText': 'انقر لتحميل إثبات العنوان',
+        'acceptedFormatsText': 'الصيغ المقبولة: JPG، PNG، PDF (الحد الأقصى 10 ميجابايت)',
+        'selfieInstruction': 'التقط صورة شخصية وأنت تحمل وثيقة هويتك',
+        'startCameraText': 'بدء الكاميرا',
+        'captureText': 'التقاط',
+        'uploadText': 'تحميل صورة',
+        'reviewTitle': 'يرجى مراجعة معلوماتك قبل الإرسال:',
+        'prevBtnText': 'السابق',
+        'nextBtnText': 'التالي ←',
+        'submitKycText': 'إرسال التحقق من الهوية',
+        'profileModalTitle': 'تعديل الملف الشخصي',
+        'uploadPhotoText': 'تحميل صورة',
+        'profileFirstNameLabel': 'الاسم الأول',
+        'profileLastNameLabel': 'اسم العائلة',
+        'profileEmailLabel': 'البريد الإلكتروني',
+        'profilePhoneLabel': 'الهاتف',
+        'saveProfileText': 'حفظ التغييرات',
+        'accountLabel': 'رقم الحساب',
+        'copyBtnText': 'نسخ',
+        'menuSecurityTitle': '⚙️ إعدادات الأمان',
+        'menuSecurityCenter': 'مركز الأمان',
+        'menuCryptoTitle': '⛓️ العملات المشفرة والتمويل اللامركزي',
+        'menuStaking': 'مركز التخزين',
+        'menuCryptoTransactions': 'معاملات العملات المشفرة',
+        'menuHistory': 'السجل / كشف الحساب',
+        'menuTradingTitle': '📊 التداول',
+        'menuTradingHub': 'مركز التداول',
+        'menuConversion': 'التحويل',
+        'menuFixedIncomeTitle': '🏛️ الدخل الثابت',
+        'menuTreasuries': 'الخزانة والسندات',
+        'menuCDs': 'شهادات الإيداع / الودائع لأجل',
+        'menuDebentures': 'السندات',
+        'menuREITs': 'صناديق الاستثمار العقاري',
+        'menuPrivateCredit': 'الائتمان الخاص',
+        'menuStructuredNotes': 'السندات المهيكلة',
+        'menuMunicipalBonds': 'السندات البلدية',
+        'menuCardsTitle': '💳 البطاقات والمدفوعات',
+        'menuMyCards': 'بطاقاتي',
+        'menuPayments': 'المدفوعات',
+        'menuSwapTitle': '🔄 المقايضة',
+        'menuSwapCenter': 'مركز المقايضة',
+        'menuAnalyticsTitle': '📊 التحليلات',
+        'menuAnalytics': 'التحليلات',
+        'menuReports': 'التقارير',
+        'menuSecurityKYCTitle': '🔒 الأمان والتحقق من الهوية',
+        'menuSecuritySettings': 'إعدادات الأمان',
+        'menuSessions': 'الجلسات النشطة',
+        'menuCompliance': 'الامتثال والتحقق من الهوية',
+        'menuAntiHack': 'مكافحة الاختراق',
+        'menuSystemTitle': '⚙️ ضوابط النظام',
+        'menuGhostMode': 'الوضع الخفي',
+        'menuSimulator': 'محاكي السيناريوهات',
+        'menuThemes': 'تخصيص السمات',
+        'menuAudit': 'سجلات التدقيق',
+        'menuServicesTitle': '✨ الخدمات المصرفية',
+        'menuCompleteServices': 'الخدمات الكاملة',
+        'menuDigitalPayment': 'الدفع الرقمي',
+        'stakingChartTitle': 'أداء التخزين',
+        'cryptoTxTitle': 'معاملات العملات المشفرة',
+        'historyTitle': 'سجل المعاملات / كشف الحساب',
+        'tradingTitle': 'مركز التداول',
+        'conversionTitle': 'تحويل العملات',
+        'treasuriesTitle': 'الخزانة والسندات',
+        'cdsTitle': 'شهادات الإيداع / الودائع لأجل',
+        'debenturesTitle': 'السندات',
+        'reitsTitle': 'صناديق الاستثمار العقاري',
+        'privateCreditTitle': 'الائتمان الخاص',
+        'structuredNotesTitle': 'السندات المهيكلة',
+        'municipalBondsTitle': 'السندات البلدية',
+        'cardsTitle': 'بطاقاتي',
+        'paymentsTitle': 'المدفوعات',
+        'swapCenterTitle': 'مركز المقايضة',
+        'analyticsTitle': 'التحليلات',
+        'reportsTitle': 'التقارير',
+        'securitySettingsTitle': 'إعدادات الأمان',
+        'securityCenterTitle': 'مركز الأمان',
+        'sessionsTitle': 'الجلسات النشطة',
+        'complianceTitle': 'الامتثال والتحقق من الهوية',
+        'antihackTitle': 'مكافحة الاختراق',
+        'servicesTitle': 'الخدمات المصرفية الكاملة',
+        'digitalPaymentTitle': 'الدفع الرقمي',
+        'yourBalancesTitle': 'أرصدتك',
+        'militaryTitle': 'المركز العسكري',
+        'stealthModeText': 'وضع التخفي',
+        'blacklistLabel': 'عناوين القائمة السوداء',
+        'swapModalTitle': '🔄 المقايضة',
+        'walletModalTitle': '💰 تم إنشاء المحفظة',
+        'walletWarning': '⚠️ احتفظ بمفتاحك الخاص بأمان! لا تشاركه مع أي شخص.',
+        'confirmLogoutTitle': 'تأكيد تسجيل الخروج',
+        'confirmLogoutMessage': 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
+        'welcomeUser': 'مرحباً، {name}',
+        'profileRole': 'نخبة الخدمات المصرفية الخاصة'
     }
 };
 
@@ -805,10 +1398,180 @@ function setLanguage(lang) {
     currentLang = lang;
     document.getElementById('currentLangText').textContent = lang.toUpperCase();
     localStorage.setItem('preferredLanguage', lang);
+    applyTranslations();
+    // Aplicar RTL se for árabe
+    if (lang === 'ar') {
+        document.body.classList.add('rtl');
+        document.documentElement.dir = 'rtl';
+    } else {
+        document.body.classList.remove('rtl');
+        document.documentElement.dir = 'ltr';
+    }
 }
 
-function getTranslation(key) {
-    return translations[currentLang]?.[key] || key;
+function getTranslation(key, params = {}) {
+    let text = translations[currentLang]?.[key] || translations['en'][key] || key;
+    // Substituir placeholders
+    Object.keys(params).forEach(k => {
+        text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), params[k]);
+    });
+    return text;
+}
+
+function applyTranslations() {
+    const elements = {
+        'bankSubtitle': 'bankSubtitle',
+        'heroTitle': 'heroTitle',
+        'heroBadge': 'heroBadge',
+        'heroDesc': 'heroDesc',
+        'card1Title': 'card1Title',
+        'card1Desc': 'card1Desc',
+        'card2Title': 'card2Title',
+        'card2Desc': 'card2Desc',
+        'card3Title': 'card3Title',
+        'card3Desc': 'card3Desc',
+        'impactPhrase': 'impactPhrase',
+        'impactSmall': 'impactSmall',
+        'aboutTitle': 'aboutTitle',
+        'aboutHistoryTitle': 'aboutHistoryTitle',
+        'aboutHistoryDesc': 'aboutHistoryDesc',
+        'aboutSecurityTitle': 'aboutSecurityTitle',
+        'aboutSecurityDesc': 'aboutSecurityDesc',
+        'aboutReachTitle': 'aboutReachTitle',
+        'aboutReachDesc': 'aboutReachDesc',
+        'aboutReturnsTitle': 'aboutReturnsTitle',
+        'aboutReturnsDesc': 'aboutReturnsDesc',
+        'currenciesTitle': 'currenciesTitle',
+        'cryptoTitles': 'cryptoTitles',
+        'statAum': 'statAum',
+        'statClients': 'statClients',
+        'statCountries': 'statCountries',
+        'statEncryption': 'statEncryption',
+        'regulatoryTextFooter': 'regulatoryText',
+        'copyrightTextFooter': 'copyrightText',
+        'accessHubBtn': 'accessHubBtn',
+        'kycBtnText': 'kycBtnText',
+        'logoutBtnText': 'logoutBtnText',
+        'kycPendingText': 'kycPendingText',
+        'modalTitle': 'modalTitle',
+        'kycModalTitle': 'kycModalTitle',
+        'step1Label': 'step1Label',
+        'step2Label': 'step2Label',
+        'step3Label': 'step3Label',
+        'fullNameLabel': 'fullNameLabel',
+        'emailLabel': 'emailLabel',
+        'phoneLabel': 'phoneLabel',
+        'addressLabel': 'addressLabel',
+        'nationalityLabel': 'nationalityLabel',
+        'idDocumentLabel': 'idDocumentLabel',
+        'uploadClickText': 'uploadClickText',
+        'proofAddressLabel': 'proofAddressLabel',
+        'proofClickText': 'proofClickText',
+        'acceptedFormatsText': 'acceptedFormatsText',
+        'selfieInstruction': 'selfieInstruction',
+        'startCameraText': 'startCameraText',
+        'captureText': 'captureText',
+        'uploadText': 'uploadText',
+        'reviewTitle': 'reviewTitle',
+        'prevBtnText': 'prevBtnText',
+        'nextBtnText': 'nextBtnText',
+        'submitKycText': 'submitKycText',
+        'profileModalTitle': 'profileModalTitle',
+        'uploadPhotoText': 'uploadPhotoText',
+        'profileFirstNameLabel': 'profileFirstNameLabel',
+        'profileLastNameLabel': 'profileLastNameLabel',
+        'profileEmailLabel': 'profileEmailLabel',
+        'profilePhoneLabel': 'profilePhoneLabel',
+        'saveProfileText': 'saveProfileText',
+        'accountLabel': 'accountLabel',
+        'copyBtnText': 'copyBtnText',
+        'menuSecurityTitle': 'menuSecurityTitle',
+        'menuSecurityCenter': 'menuSecurityCenter',
+        'menuCryptoTitle': 'menuCryptoTitle',
+        'menuStaking': 'menuStaking',
+        'menuCryptoTransactions': 'menuCryptoTransactions',
+        'menuHistory': 'menuHistory',
+        'menuTradingTitle': 'menuTradingTitle',
+        'menuTradingHub': 'menuTradingHub',
+        'menuConversion': 'menuConversion',
+        'menuFixedIncomeTitle': 'menuFixedIncomeTitle',
+        'menuTreasuries': 'menuTreasuries',
+        'menuCDs': 'menuCDs',
+        'menuDebentures': 'menuDebentures',
+        'menuREITs': 'menuREITs',
+        'menuPrivateCredit': 'menuPrivateCredit',
+        'menuStructuredNotes': 'menuStructuredNotes',
+        'menuMunicipalBonds': 'menuMunicipalBonds',
+        'menuCardsTitle': 'menuCardsTitle',
+        'menuMyCards': 'menuMyCards',
+        'menuPayments': 'menuPayments',
+        'menuSwapTitle': 'menuSwapTitle',
+        'menuSwapCenter': 'menuSwapCenter',
+        'menuAnalyticsTitle': 'menuAnalyticsTitle',
+        'menuAnalytics': 'menuAnalytics',
+        'menuReports': 'menuReports',
+        'menuSecurityKYCTitle': 'menuSecurityKYCTitle',
+        'menuSecuritySettings': 'menuSecuritySettings',
+        'menuSessions': 'menuSessions',
+        'menuCompliance': 'menuCompliance',
+        'menuAntiHack': 'menuAntiHack',
+        'menuSystemTitle': 'menuSystemTitle',
+        'menuGhostMode': 'menuGhostMode',
+        'menuSimulator': 'menuSimulator',
+        'menuThemes': 'menuThemes',
+        'menuAudit': 'menuAudit',
+        'menuServicesTitle': 'menuServicesTitle',
+        'menuCompleteServices': 'menuCompleteServices',
+        'menuDigitalPayment': 'menuDigitalPayment',
+        'stakingChartTitle': 'stakingChartTitle',
+        'cryptoTxTitle': 'cryptoTxTitle',
+        'historyTitle': 'historyTitle',
+        'tradingTitle': 'tradingTitle',
+        'conversionTitle': 'conversionTitle',
+        'treasuriesTitle': 'treasuriesTitle',
+        'cdsTitle': 'cdsTitle',
+        'debenturesTitle': 'debenturesTitle',
+        'reitsTitle': 'reitsTitle',
+        'privateCreditTitle': 'privateCreditTitle',
+        'structuredNotesTitle': 'structuredNotesTitle',
+        'municipalBondsTitle': 'municipalBondsTitle',
+        'cardsTitle': 'cardsTitle',
+        'paymentsTitle': 'paymentsTitle',
+        'swapCenterTitle': 'swapCenterTitle',
+        'analyticsTitle': 'analyticsTitle',
+        'reportsTitle': 'reportsTitle',
+        'securitySettingsTitle': 'securitySettingsTitle',
+        'securityCenterTitle': 'securityCenterTitle',
+        'sessionsTitle': 'sessionsTitle',
+        'complianceTitle': 'complianceTitle',
+        'antihackTitle': 'antihackTitle',
+        'servicesTitle': 'servicesTitle',
+        'digitalPaymentTitle': 'digitalPaymentTitle',
+        'yourBalancesTitle': 'yourBalancesTitle',
+        'militaryTitle': 'militaryTitle',
+        'stealthModeText': 'stealthModeText',
+        'blacklistLabel': 'blacklistLabel',
+        'swapModalTitle': 'swapModalTitle',
+        'walletModalTitle': 'walletModalTitle',
+        'walletWarning': 'walletWarning',
+        'confirmLogoutTitle': 'confirmLogoutTitle',
+        'confirmLogoutMessage': 'confirmLogoutMessage',
+        'profileRole': 'profileRole'
+    };
+    
+    Object.keys(elements).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = getTranslation(elements[id]);
+        }
+    });
+    
+    // Atualizar nome do usuário
+    const welcomeUser = document.getElementById('welcomeUser');
+    if (welcomeUser) {
+        const name = userProfile.firstName || 'Admin';
+        welcomeUser.textContent = getTranslation('welcomeUser', { name: name });
+    }
 }
 
 function showToast(message) {
@@ -826,7 +1589,6 @@ function copyAccountNumber() {
     navigator.clipboard.writeText(accountNumber).then(() => {
         showToast('✅ Account number copied!');
     }).catch(() => {
-        // Fallback
         const textArea = document.createElement('textarea');
         textArea.value = accountNumber;
         document.body.appendChild(textArea);
@@ -866,7 +1628,8 @@ function handleLogin() {
         closeLoginModal();
         document.getElementById('institutionalContent').style.display = 'none';
         document.getElementById('dashboardContainer').style.display = 'block';
-        document.getElementById('welcomeUser').textContent = 'Welcome, ' + userProfile.firstName + ' ' + userProfile.lastName;
+        const name = userProfile.firstName || 'Admin';
+        document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: name });
         document.getElementById('openLoginBtn').style.display = 'none';
         document.getElementById('logoutMainBtn').style.display = 'flex';
         showToast(getTranslation('loginSuccess'));
@@ -1051,7 +1814,6 @@ function handleReceive(symbol) {
 
 function handleSwap(symbol) {
     document.getElementById('swapModal').classList.add('active');
-    // Pre-select the from currency
     const fromSelect = document.getElementById('swapFromSelect');
     for(let i = 0; i < fromSelect.options.length; i++) {
         if(fromSelect.options[i].value === symbol) {
@@ -1161,7 +1923,7 @@ function generateWallet(symbol, chain) {
     
     setTimeout(() => {
         const wallet = generateLocalWallet(chain);
-        title.textContent = '💰 Wallet Generated';
+        title.textContent = getTranslation('walletModalTitle');
         addressDisplay.innerHTML = `<strong>Address:</strong><br>${wallet.address}`;
         privateKeyDisplay.innerHTML = `<strong>Private Key (⚠️ KEEP SECRET):</strong><br>${wallet.privateKey}`;
         showToast('✅ ' + symbol + ' wallet generated!');
@@ -1226,7 +1988,8 @@ function updateProfileUI() {
     document.getElementById('profileLastName').value = userProfile.lastName || 'Vance';
     document.getElementById('profileEmail').value = userProfile.email || 'alexander.vance@zentronix.com';
     document.getElementById('profilePhone').value = userProfile.phone || '+41 78 123 4567';
-    document.getElementById('welcomeUser').textContent = 'Welcome, ' + (userProfile.firstName || 'Admin') + ' ' + (userProfile.lastName || '');
+    const name = userProfile.firstName || 'Admin';
+    document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: name });
     
     if (userProfile.photo) {
         document.getElementById('profileAvatarImg').src = userProfile.photo;
@@ -1256,7 +2019,6 @@ function saveProfile() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🟣 Inicializando Zentronix Bank...');
     
-    // Idioma
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
     
@@ -1351,7 +2113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
-    //  SWAP - UPDATE RATE
+    //  SWAP
     // ============================================
     document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
     document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
@@ -1439,7 +2201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showToast('✅ KYC enviado com sucesso!');
         document.getElementById('submitModal').classList.remove('active');
         document.getElementById('kycStatusBadge').style.display = 'block';
-        document.getElementById('kycPendingText').textContent = 'KYC ENVIADO - AGUARDANDO REVISÃO';
+        document.getElementById('kycPendingText').textContent = getTranslation('kycPendingText');
     });
     
     // ============================================
@@ -1484,7 +2246,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
     
-    // Upload de foto
     document.getElementById('uploadPhotoBtn').addEventListener('click', function() {
         document.getElementById('profilePhotoInput').click();
     });
@@ -1523,10 +2284,15 @@ document.addEventListener('DOMContentLoaded', function() {
     window.closeSwapModal = closeSwapModal;
     window.executeSwap = executeSwap;
     window.updateSwapRate = updateSwapRate;
+    window.handleDeposit = handleDeposit;
+    window.handleReceive = handleReceive;
+    window.handleSwap = handleSwap;
+    window.generateWallet = generateWallet;
     
     console.log('🟣 Zentronix Bank - Sistema Ativo');
     console.log('🔑 Credentials: admin / zentronix');
     console.log('✅ Clique em "ACCESS HUB" para login');
+    console.log('🌐 Idiomas disponíveis: EN, PT, ES, AR');
 });
 
 </script>
