@@ -789,6 +789,11 @@ const TATUM_API_KEY = 'YOUR_TATUM_API_KEY_HERE'; // <-- PUT YOUR KEY HERE
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
 // ============================================
+//  🟣 INITIALIZE SUPABASE CLIENT (FIX #1)
+// ============================================
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ============================================
 //  GLOBAL VARIABLES
 // ============================================
 let currentLang = 'en';
@@ -1259,10 +1264,11 @@ function initDashboard() {
 }
 
 // ============================================
-//  LOAD BALANCES
+//  LOAD BALANCES (FIX #1 - supabaseClient defined)
 // ============================================
 async function loadBalances() {
     try {
+        // Try to load from Supabase
         const { data: user, error: userError } = await supabaseClient
             .from('users')
             .select('id')
@@ -1270,7 +1276,7 @@ async function loadBalances() {
             .single();
         
         if (userError) {
-            console.error('❌ Error fetching user:', userError);
+            console.warn('⚠️ Using local balances (Supabase user not found)');
             loadLocalBalances();
             return;
         }
@@ -1281,7 +1287,7 @@ async function loadBalances() {
             .eq('user_id', user.id);
         
         if (balError) {
-            console.error('❌ Error fetching balances:', balError);
+            console.warn('⚠️ Using local balances (Supabase error)');
             loadLocalBalances();
             return;
         }
@@ -1291,7 +1297,7 @@ async function loadBalances() {
         return balances;
         
     } catch (error) {
-        console.error('❌ Error loading balances:', error);
+        console.warn('⚠️ Using local balances (fallback):', error.message);
         loadLocalBalances();
     }
 }
@@ -1428,11 +1434,35 @@ function loadAllAssets() {
 }
 
 // ============================================
-//  TATUM API - REAL FUNCTIONS
+//  TATUM API - REAL FUNCTIONS (FIX #2 - Better error handling)
 // ============================================
+
+// Check if Tatum API key is valid
+function isTatumConfigured() {
+    if (!TATUM_API_KEY || TATUM_API_KEY === 'YOUR_TATUM_API_KEY_HERE') {
+        console.warn('⚠️ Tatum API key not configured. Using demo mode.');
+        return false;
+    }
+    return true;
+}
 
 // -------- 1. GENERATE REAL WALLET --------
 async function generateRealWallet(currency, chain) {
+    // Check if Tatum is configured
+    if (!isTatumConfigured()) {
+        showToast('⚠️ Tatum API not configured. Using demo wallet.');
+        const wallet = generateLocalWallet(chain);
+        showRealWalletModal({
+            currency: currency,
+            chain: chain,
+            address: wallet.address,
+            privateKey: wallet.privateKey,
+            timestamp: new Date().toISOString()
+        });
+        saveWalletLocal({ currency, chain, address: wallet.address, privateKey: wallet.privateKey });
+        return wallet;
+    }
+    
     try {
         showToast('⏳ Generating ' + currency + ' wallet on blockchain...');
         
@@ -1458,6 +1488,10 @@ async function generateRealWallet(currency, chain) {
         });
         
         if (!response.ok) {
+            // Handle 401 specifically
+            if (response.status === 401) {
+                throw new Error('Invalid Tatum API Key. Please check your configuration.');
+            }
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
         
@@ -1477,9 +1511,18 @@ async function generateRealWallet(currency, chain) {
         return walletData;
         
     } catch (error) {
-        console.error('❌ Tatum Error:', error);
-        showToast('⚠️ Using local wallet (fallback mode)');
-        return generateLocalWallet(chain);
+        console.error('❌ Tatum Error:', error.message);
+        showToast('⚠️ Using local wallet (fallback): ' + error.message);
+        const wallet = generateLocalWallet(chain);
+        showRealWalletModal({
+            currency: currency,
+            chain: chain,
+            address: wallet.address,
+            privateKey: wallet.privateKey,
+            timestamp: new Date().toISOString()
+        });
+        saveWalletLocal({ currency, chain, address: wallet.address, privateKey: wallet.privateKey });
+        return wallet;
     }
 }
 
@@ -1528,13 +1571,21 @@ function showRealWalletModal(walletData) {
         </button>
     `;
     warning.textContent = '⚠️ Save your private key securely! Never share it with anyone.';
+    privateKeyDisplay.style.display = 'block';
     
     modal.classList.add('active');
 }
 
-// -------- 2. DEPOSIT CRYPTO --------
+// -------- 2. DEPOSIT CRYPTO (simplified for demo) --------
 async function depositCryptoReal(currency, amount, destinationAddress) {
     try {
+        if (!isTatumConfigured()) {
+            showToast('⚠️ Tatum API not configured. Demo deposit only.');
+            registerHistory('DEPOSIT_DEMO', currency, amount, 'Demo deposit to ' + destinationAddress, 'demo_tx_' + Date.now());
+            showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
+            return;
+        }
+        
         showToast('⏳ Processing ' + currency + ' deposit...');
         
         const chainMap = {
@@ -1565,7 +1616,10 @@ async function depositCryptoReal(currency, amount, destinationAddress) {
         });
         
         if (!response.ok) {
-            throw new Error('Transaction error');
+            if (response.status === 401) {
+                throw new Error('Invalid Tatum API Key.');
+            }
+            throw new Error('Transaction error: ' + response.status);
         }
         
         const data = await response.json();
@@ -1574,9 +1628,10 @@ async function depositCryptoReal(currency, amount, destinationAddress) {
         return data;
         
     } catch (error) {
-        console.error('❌ Deposit error:', error);
-        showToast('⚠️ Simulated deposit (demo mode)');
-        registerHistory('DEPOSIT_DEMO', currency, amount, destinationAddress, 'demo_tx_' + Date.now());
+        console.error('❌ Deposit error:', error.message);
+        showToast('⚠️ Demo deposit (fallback): ' + error.message);
+        registerHistory('DEPOSIT_DEMO', currency, amount, 'Fallback deposit', 'demo_tx_' + Date.now());
+        showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
     }
 }
 
@@ -1746,7 +1801,7 @@ function updateHistoryUI() {
     }).join('');
 }
 
-// -------- 7. PERSONAL LOAN --------
+// -------- 7. PERSONAL LOAN (UPDATED - Saves to Supabase) --------
 function openPersonalLoan() {
     const modal = document.getElementById('modalOverlay');
     const content = document.getElementById('modalContent');
@@ -1801,7 +1856,7 @@ function openPersonalLoan() {
     modal.classList.add('active');
 }
 
-function submitLoanRequest() {
+async function submitLoanRequest() {
     const amount = document.getElementById('loanAmount').value;
     const currency = document.getElementById('loanCurrency').value;
     const reason = document.getElementById('loanReason').value;
@@ -1816,6 +1871,44 @@ function submitLoanRequest() {
     resultDiv.style.display = 'block';
     resultDiv.style.background = 'rgba(0,255,136,0.1)';
     resultDiv.style.border = '1px solid var(--neon-green)';
+    
+    // Try to save to Supabase
+    try {
+        // Get current user
+        const { data: user, error: userError } = await supabaseClient
+            .from('users')
+            .select('id')
+            .eq('email', 'admin@zentronix.com')
+            .single();
+        
+        if (!userError && user) {
+            // Save loan to Supabase
+            const { error: loanError } = await supabaseClient
+                .from('loans')
+                .insert([{
+                    user_id: user.id,
+                    amount: parseFloat(amount),
+                    currency: currency,
+                    purpose: reason,
+                    term_months: parseInt(term),
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                }]);
+            
+            if (loanError) {
+                console.warn('⚠️ Could not save to Supabase:', loanError);
+                // Still show success to user
+            } else {
+                console.log('✅ Loan saved to Supabase');
+            }
+        }
+    } catch (error) {
+        console.warn('⚠️ Supabase save failed, saving locally:', error);
+    }
+    
+    // Always save locally
+    registerHistory('LOAN_REQUEST', currency, amount, 'Purpose: ' + reason + ' | Term: ' + term + ' months', 'loan_' + Date.now());
+    
     resultDiv.innerHTML = `
         <h4 style="color:var(--neon-green);">✅ REQUEST SUBMITTED!</h4>
         <p style="font-size:0.8rem; margin-top:0.5rem;">
@@ -1832,7 +1925,6 @@ function submitLoanRequest() {
         </div>
     `;
     
-    registerHistory('LOAN_REQUEST', currency, amount, 'Purpose: ' + reason + ' | Term: ' + term + ' months', 'loan_' + Date.now());
     showToast('✅ Loan request submitted successfully!');
     
     setTimeout(() => {
@@ -1873,10 +1965,10 @@ function loadCompleteServices() {
 }
 
 // ============================================
-//  ACTION HANDLERS (OVERRIDES)
+//  ACTION HANDLERS (OVERRIDES) - FIX #3 - Global scope
 // ============================================
 
-// Override handleDeposit
+// Make all functions globally accessible
 window.handleDeposit = function(currency) {
     const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
     const wallet = wallets.find(w => w.currency === currency);
@@ -1891,7 +1983,6 @@ window.handleDeposit = function(currency) {
     }
 };
 
-// Override handleReceive
 window.handleReceive = function(currency) {
     const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
     const wallet = wallets.find(w => w.currency === currency);
@@ -1903,7 +1994,6 @@ window.handleReceive = function(currency) {
     }
 };
 
-// Override handleStaking
 window.handleStaking = function(currency) {
     const amount = prompt('⛓️ Enter ' + currency + ' amount to stake:', '1');
     if (amount && parseFloat(amount) > 0) {
@@ -1911,12 +2001,10 @@ window.handleStaking = function(currency) {
     }
 };
 
-// Override generateWallet
 window.generateWallet = function(currency, chain) {
     generateRealWallet(currency, chain);
 };
 
-// Override executeSwap
 window.executeSwap = async function() {
     const from = document.getElementById('swapFromSelect').value;
     const to = document.getElementById('swapToSelect').value;
@@ -1931,7 +2019,6 @@ window.executeSwap = async function() {
     document.getElementById('swapModal').classList.remove('active');
 };
 
-// Buy function for BradiCoin
 window.handleBuy = function(currency) {
     const amount = prompt('🟢 Enter USD amount to buy ' + currency + ':', '100');
     if (amount && parseFloat(amount) > 0) {
@@ -1943,8 +2030,7 @@ window.handleBuy = function(currency) {
     }
 };
 
-// Swap functions
-function handleSwap(symbol) {
+window.handleSwap = function(symbol) {
     document.getElementById('swapModal').classList.add('active');
     const fromSelect = document.getElementById('swapFromSelect');
     for(let i = 0; i < fromSelect.options.length; i++) {
@@ -1954,9 +2040,9 @@ function handleSwap(symbol) {
         }
     }
     updateSwapRate();
-}
+};
 
-function updateSwapRate() {
+window.updateSwapRate = function() {
     const from = document.getElementById('swapFromSelect').value;
     const to = document.getElementById('swapToSelect').value;
     const rates = {
@@ -1998,15 +2084,21 @@ function updateSwapRate() {
     const key = from + '_' + to;
     const rate = rates[key] || 'N/A';
     document.getElementById('swapRateDisplay').textContent = `Rate: 1 ${from} = ${rate} ${to}`;
-}
+};
 
-function closeSwapModal() {
+window.closeSwapModal = function() {
     document.getElementById('swapModal').classList.remove('active');
-}
+};
 
-function closeWalletModal() {
+window.closeWalletModal = function() {
     document.getElementById('walletModal').classList.remove('active');
-}
+};
+
+window.openPersonalLoan = openPersonalLoan;
+window.submitLoanRequest = submitLoanRequest;
+window.closeModalOverlay = closeModalOverlay;
+window.copyText = copyText;
+window.showToast = showToast;
 
 // ============================================
 //  STAKING CHART
@@ -2092,6 +2184,8 @@ function saveProfile() {
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🟣 Initializing Zentronix Bank...');
+    console.log('🔑 Supabase Client:', supabaseClient ? '✅ Initialized' : '❌ Failed');
+    console.log('🔑 Tatum API:', isTatumConfigured() ? '✅ Configured' : '⚠️ Using Demo Mode');
     
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
@@ -2271,11 +2365,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             this.classList.add('active');
             
-            // Load services when clicked
             if (section === 'services') {
                 setTimeout(loadCompleteServices, 100);
             }
-            // Load history when clicked
             if (section === 'history') {
                 setTimeout(updateHistoryUI, 100);
             }
@@ -2330,28 +2422,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Expose functions globally
-    window.closeWalletModal = closeWalletModal;
-    window.closeSwapModal = closeSwapModal;
-    window.executeSwap = executeSwap;
-    window.updateSwapRate = updateSwapRate;
-    window.handleDeposit = handleDeposit;
-    window.handleReceive = handleReceive;
-    window.handleSwap = handleSwap;
-    window.handleStaking = handleStaking;
-    window.generateWallet = generateWallet;
-    window.handleBuy = handleBuy;
-    window.openPersonalLoan = openPersonalLoan;
-    window.submitLoanRequest = submitLoanRequest;
-    window.closeModalOverlay = closeModalOverlay;
-    window.copyText = copyText;
-    
     console.log('🟣 Zentronix Bank - System Active');
     console.log('🔑 Credentials: admin / zentronix');
     console.log('✅ Click "ACCESS HUB" to login');
     console.log('🌐 Languages available: EN, PT, ES, AR');
-    console.log('🚀 Tatum API Integration Active');
-    console.log('📌 Features: Wallet, Deposit, Receive, Stake, Swap, Personal Loan');
+    console.log('🚀 Features: Wallet, Deposit, Receive, Stake, Swap, Personal Loan');
 });
 
 </script>
