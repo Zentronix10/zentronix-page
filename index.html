@@ -1028,18 +1028,133 @@ function updateKycSteps() {
     document.getElementById('kycStep1').style.display = currentKycStep === 1 ? 'block' : 'none';
     document.getElementById('kycStep2').style.display = currentKycStep === 2 ? 'block' : 'none';
     document.getElementById('kycStep3').style.display = currentKycStep === 3 ? 'block' : 'none';
+    
     document.getElementById('kycPrevBtn').style.display = currentKycStep > 1 ? 'block' : 'none';
     document.getElementById('kycNextBtn').style.display = currentKycStep < 3 ? 'block' : 'none';
     document.getElementById('submitKycBtn').style.display = currentKycStep === 3 ? 'block' : 'none';
+    
     document.querySelectorAll('.kyc-step').forEach((el, index) => {
         const stepNum = index + 1;
         el.classList.toggle('active', stepNum === currentKycStep);
         el.classList.toggle('completed', stepNum < currentKycStep);
     });
+    
     const progress = ((currentKycStep - 1) / 2) * 100;
     document.getElementById('progressFill').style.width = progress + '%';
 }
 
+// ============================================
+//  DASHBOARD - INIT (FUNÇÃO QUE ESTAVA FALTANDO)
+// ============================================
+function initDashboard() {
+    console.log('🟣 Dashboard initialized');
+    
+    // Carregar saldos
+    loadBalances();
+    
+    // Carregar todos os ativos (cripto + fiat)
+    loadAllAssets();
+    
+    // Iniciar gráfico de staking
+    initStakingChart();
+    
+    // Carregar perfil do usuário
+    loadProfileData();
+    
+    // Atualizar histórico
+    updateHistoryUI();
+    
+    console.log('✅ Dashboard carregado completamente');
+}
+
+// ============================================
+//  LOAD ALL ASSETS WITH BUTTONS (CRIPTO + FIAT)
+// ============================================
+function loadAllAssets() {
+    console.log('🟣 Carregando todos os ativos...');
+    
+    // ===== CRIPTOMOEDAS =====
+    const cryptoAssets = [
+        { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
+        { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
+        { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+0.8%', chain: 'BNB', icon: 'BNB' },
+        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+5.6%', chain: 'BRC', icon: '🪙' },
+        { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+3.1%', chain: 'SOL', icon: '◎' },
+        { name: 'Polygon', symbol: 'MATIC', price: 0.52, change: '-0.5%', chain: 'MATIC', icon: '◇' },
+        { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.0%', chain: 'USDT', icon: '₮' },
+        { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '+1.7%', chain: 'LTC', icon: 'Ł' }
+    ];
+    
+    // ===== MOEDAS FIAT =====
+    const fiatAssets = [
+        { name: 'US Dollar', symbol: 'USD', price: 1.00, change: '+0.0%', icon: '💵', type: 'fiat' },
+        { name: 'Euro', symbol: 'EUR', price: 1.08, change: '+0.2%', icon: '💶', type: 'fiat' },
+        { name: 'British Pound', symbol: 'GBP', price: 1.26, change: '-0.1%', icon: '💷', type: 'fiat' },
+        { name: 'Brazilian Real', symbol: 'BRL', price: 0.18, change: '+0.5%', icon: 'R$', type: 'fiat' }
+    ];
+    
+    // ===== RENDERIZAR CRIPTO =====
+    const cryptoGrid = document.getElementById('cryptoAssetsGrid');
+    if (cryptoGrid) {
+        cryptoGrid.innerHTML = '';
+        cryptoAssets.forEach(a => {
+            const card = document.createElement('div');
+            card.className = 'asset-card';
+            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
+            const isBradi = a.symbol === 'BRC';
+            
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
+                    <span style="color: ${changeColor}">${a.change}</span>
+                </div>
+                <div class="asset-price">$${a.price.toLocaleString()}</div>
+                <div class="button-group">
+                    <button class="deposit-btn" onclick="handleCryptoDeposit('${a.symbol}')">📥 DEPOSIT</button>
+                    <button class="receive-btn" onclick="handleCryptoReceive('${a.symbol}')">📤 RECEIVE</button>
+                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
+                    <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
+                    ${isBradi ? `<button class="buy-btn" onclick="handleBuy('${a.symbol}')">🟢 BUY</button>` : ''}
+                </div>
+            `;
+            cryptoGrid.appendChild(card);
+        });
+        console.log('✅ Criptomoedas renderizadas:', cryptoAssets.length);
+    } else {
+        console.warn('⚠️ Elemento cryptoAssetsGrid não encontrado!');
+    }
+    
+    // ===== RENDERIZAR FIAT =====
+    const fiatGrid = document.getElementById('fiatAssetsGrid');
+    if (fiatGrid) {
+        fiatGrid.innerHTML = '';
+        fiatAssets.forEach(a => {
+            const card = document.createElement('div');
+            card.className = 'asset-card';
+            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
+            const priceDisplay = a.symbol === 'BRL' ? 'R$' : '$';
+            
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
+                    <span style="color: ${changeColor}">${a.change}</span>
+                </div>
+                <div class="asset-price">${priceDisplay}${a.price.toFixed(2)}</div>
+                <div class="button-group">
+                    <button class="deposit-btn" onclick="handleFiatDeposit('${a.symbol}')">📥 DEPOSIT</button>
+                    <button class="receive-btn" onclick="handleFiatReceive('${a.symbol}')">📤 RECEIVE</button>
+                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="staking-btn" onclick="handleFiatStaking('${a.symbol}')">⛓️ STAKE</button>
+                </div>
+            `;
+            fiatGrid.appendChild(card);
+        });
+        console.log('✅ Moedas Fiat renderizadas:', fiatAssets.length);
+    } else {
+        console.warn('⚠️ Elemento fiatAssetsGrid não encontrado!');
+    }
+}
 // ============================================
 //  DASHBOARD
 // ============================================
