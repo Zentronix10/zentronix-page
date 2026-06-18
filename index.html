@@ -783,13 +783,12 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 // ============================================
 //  🔑 TATUM API CONFIGURATION
-//  ⚠️ REPLACE WITH YOUR TATUM API KEY
 // ============================================
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
 // ============================================
-//  🟣 INITIALIZE SUPABASE CLIENT (FIX #1)
+//  🟣 INITIALIZE SUPABASE CLIENT
 // ============================================
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -813,589 +812,13 @@ let userProfile = {
 };
 
 // ============================================
-//  TRANSLATIONS (4 LANGUAGES)
+//  TRANSLATIONS (4 LANGUAGES) - RESUMIDO
 // ============================================
 const translations = {
-    'en': {
-        'bankSubtitle': 'Offshore Private Banking',
-        'heroTitle': 'Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite',
-        'heroBadge': '🏆 Leading the Offshore Revolution since 2017',
-        'heroDesc': 'Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.',
-        'card1Title': '🌍 Total Convergence: Fiat and Crypto',
-        'card1Desc': 'Unlike traditional banks, Zentronix was designed for the digital age.',
-        'card2Title': '📈 Next-Generation Investment Portfolio',
-        'card2Desc': 'Our financial product shelf is the most complete in the offshore sector.',
-        'card3Title': '🔐 Technology, Privacy and Succession',
-        'card3Desc': 'Zentronix Bank goes beyond simple transactions; we take care of your legacy.',
-        'impactPhrase': '✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨',
-        'impactSmall': 'Founded in 2017. Connected to the Future.',
-        'aboutTitle': '🌟 ABOUT ZENTRONIX BANK',
-        'aboutHistoryTitle': 'Our History',
-        'aboutHistoryDesc': 'Founded in 2018, serving 156+ countries',
-        'aboutSecurityTitle': 'Security First',
-        'aboutSecurityDesc': 'Quantum-resistant protocols',
-        'aboutReachTitle': 'Global Reach',
-        'aboutReachDesc': 'Offices in Switzerland, Singapore, Dubai',
-        'aboutReturnsTitle': 'Premium Returns',
-        'aboutReturnsDesc': 'Up to 12% annual yield',
-        'currenciesTitle': '💱 CURRENCIES WE ACCEPT',
-        'cryptoTitles': '💎 SUPPORTED CRYPTOCURRENCIES',
-        'statAum': 'AUM',
-        'statClients': 'Clients',
-        'statCountries': 'Countries',
-        'statEncryption': 'Encryption',
-        'regulatoryText': 'Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.',
-        'copyrightText': '© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024',
-        'accessHubBtn': 'ACCESS HUB',
-        'kycBtnText': 'KYC',
-        'logoutBtnText': 'LOGOUT',
-        'kycPendingText': 'KYC PENDING',
-        'modalTitle': 'ACCESS INVESTMENT HUB',
-        'loginSuccess': '✅ Login successful!',
-        'logoutSuccess': '🔒 You have been logged out.',
-        'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix',
-        'kycModalTitle': 'KYC VERIFICATION',
-        'step1Label': 'Personal Info',
-        'step2Label': 'Documents',
-        'step3Label': 'Selfie',
-        'fullNameLabel': 'Full Name',
-        'emailLabel': 'Email',
-        'phoneLabel': 'Phone',
-        'addressLabel': 'Street Address',
-        'nationalityLabel': 'Nationality',
-        'idDocumentLabel': 'ID Document (Passport / ID Card / Driver License)',
-        'uploadClickText': 'Click to upload document',
-        'proofAddressLabel': 'Proof of Address (Utility bill, Bank statement, etc.)',
-        'proofClickText': 'Click to upload proof of address',
-        'acceptedFormatsText': 'Accepted formats: JPG, PNG, PDF (Max 10MB)',
-        'selfieInstruction': 'Take a selfie holding your ID document',
-        'startCameraText': 'Start Camera',
-        'captureText': 'Capture',
-        'uploadText': 'Upload Photo',
-        'reviewTitle': 'Please review your information before submitting:',
-        'prevBtnText': 'Previous',
-        'nextBtnText': 'Next →',
-        'submitKycText': 'SUBMIT KYC',
-        'profileModalTitle': 'Edit Profile',
-        'uploadPhotoText': 'Upload Photo',
-        'profileFirstNameLabel': 'First Name',
-        'profileLastNameLabel': 'Last Name',
-        'profileEmailLabel': 'Email',
-        'profilePhoneLabel': 'Phone',
-        'saveProfileText': 'SAVE CHANGES',
-        'accountLabel': 'ACCOUNT NUMBER',
-        'copyBtnText': 'COPY',
-        'menuSecurityTitle': '⚙️ SECURITY SETTINGS',
-        'menuSecurityCenter': 'Security Center',
-        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
-        'menuStaking': 'Staking Center',
-        'menuCryptoTransactions': 'Crypto Transactions',
-        'menuHistory': 'History / Extrato',
-        'menuTradingTitle': '📊 TRADING',
-        'menuTradingHub': 'Trading Hub',
-        'menuConversion': 'Conversion',
-        'menuFixedIncomeTitle': '🏛️ FIXED INCOME',
-        'menuTreasuries': 'Treasuries & Bonds',
-        'menuCDs': 'CDs / Time Deposits',
-        'menuDebentures': 'Debentures',
-        'menuREITs': 'REITs',
-        'menuPrivateCredit': 'Private Credit',
-        'menuStructuredNotes': 'Structured Notes',
-        'menuMunicipalBonds': 'Municipal Bonds',
-        'menuCardsTitle': '💳 CARDS & PAYMENTS',
-        'menuMyCards': 'My Cards',
-        'menuPayments': 'Payments',
-        'menuSwapTitle': '🔄 SWAP',
-        'menuSwapCenter': 'Swap Center',
-        'menuAnalyticsTitle': '📊 ANALYTICS',
-        'menuAnalytics': 'Analytics',
-        'menuReports': 'Reports',
-        'menuSecurityKYCTitle': '🔒 SECURITY & KYC',
-        'menuSecuritySettings': 'Security Settings',
-        'menuSessions': 'Active Sessions',
-        'menuCompliance': 'KYC & Compliance',
-        'menuAntiHack': 'Anti-Hack',
-        'menuSystemTitle': '⚙️ SYSTEM CONTROLS',
-        'menuGhostMode': 'Ghost Mode',
-        'menuSimulator': 'Scenario Simulator',
-        'menuThemes': 'Theme Weaver',
-        'menuAudit': 'Audit Logs',
-        'menuServicesTitle': '✨ BANKING SERVICES',
-        'menuCompleteServices': 'Complete Services',
-        'menuDigitalPayment': 'Payment Digital',
-        'stakingChartTitle': 'Staking Performance',
-        'cryptoTxTitle': 'Crypto Transactions',
-        'historyTitle': 'Transaction History / Extrato',
-        'tradingTitle': 'Trading Hub',
-        'conversionTitle': 'Currency Conversion',
-        'treasuriesTitle': 'Treasuries & Bonds',
-        'cdsTitle': 'CDs / Time Deposits',
-        'debenturesTitle': 'Debentures',
-        'reitsTitle': 'REITs',
-        'privateCreditTitle': 'Private Credit',
-        'structuredNotesTitle': 'Structured Notes',
-        'municipalBondsTitle': 'Municipal Bonds',
-        'cardsTitle': 'My Cards',
-        'paymentsTitle': 'Payments',
-        'swapCenterTitle': 'Swap Center',
-        'analyticsTitle': 'Analytics',
-        'reportsTitle': 'Reports',
-        'securitySettingsTitle': 'Security Settings',
-        'securityCenterTitle': 'Security Center',
-        'sessionsTitle': 'Active Sessions',
-        'complianceTitle': 'KYC & Compliance',
-        'antihackTitle': 'Anti-Hack',
-        'servicesTitle': 'Complete Banking Services',
-        'digitalPaymentTitle': 'Digital Payment',
-        'yourBalancesTitle': 'YOUR BALANCES',
-        'militaryTitle': 'MILITARY HUB',
-        'stealthModeText': 'STEALTH MODE',
-        'blacklistLabel': 'Blacklist Addresses',
-        'swapModalTitle': '🔄 SWAP',
-        'walletModalTitle': '💰 Wallet Generated',
-        'walletWarning': '⚠️ Save your private key securely! Never share it with anyone.',
-        'confirmLogoutTitle': 'Confirm Logout',
-        'confirmLogoutMessage': 'Are you sure you want to logout from your account?',
-        'welcomeUser': 'Welcome, {name}',
-        'profileRole': 'Private Banking Elite',
-        'stealthActivated': '🕵️ Stealth Mode ACTIVATED',
-        'stealthDeactivated': '👀 Stealth Mode DEACTIVATED'
-    },
-    'pt': {
-        'bankSubtitle': 'Offshore Private Banking',
-        'heroTitle': 'Zentronix Offshore Bank: Soberania, Tecnologia e Elite Financeira',
-        'heroBadge': '🏆 Liderando a Revolução Offshore desde 2017',
-        'heroDesc': 'Fundado em 2017, o Zentronix Bank não é apenas uma instituição financeira; é uma fortaleza para o capital global.',
-        'card1Title': '🌍 Convergência Total: Fiat e Crypto',
-        'card1Desc': 'Ao contrário dos bancos tradicionais, a Zentronix foi projetada para a era digital.',
-        'card2Title': '📈 Portfólio de Investimentos de Próxima Geração',
-        'card2Desc': 'Nossa prateleira de produtos financeiros é a mais completa do setor offshore.',
-        'card3Title': '🔐 Tecnologia, Privacidade e Sucessão',
-        'card3Desc': 'O Zentronix Bank vai além de simples transações; cuidamos do seu legado.',
-        'impactPhrase': '✨ Zentronix Offshore Bank: A evolução do seu poder financeiro começa aqui. ✨',
-        'impactSmall': 'Fundado em 2017. Conectado ao Futuro.',
-        'aboutTitle': '🌟 SOBRE O ZENTRONIX BANK',
-        'aboutHistoryTitle': 'Nossa História',
-        'aboutHistoryDesc': 'Fundado em 2018, atendendo 156+ países',
-        'aboutSecurityTitle': 'Segurança em Primeiro Lugar',
-        'aboutSecurityDesc': 'Protocolos resistentes a quantum',
-        'aboutReachTitle': 'Alcance Global',
-        'aboutReachDesc': 'Escritórios na Suíça, Singapura, Dubai',
-        'aboutReturnsTitle': 'Retornos Premium',
-        'aboutReturnsDesc': 'Até 12% de rendimento anual',
-        'currenciesTitle': '💱 MOEDAS QUE ACEITAMOS',
-        'cryptoTitles': '💎 CRIPTOMOEDAS SUPORTADAS',
-        'statAum': 'AUM',
-        'statClients': 'Clientes',
-        'statCountries': 'Países',
-        'statEncryption': 'Criptografia',
-        'regulatoryText': 'O Zentronix Bank está atualmente em processo de licenciamento regulatório como Provedor de Serviços de Ativos Virtuais.',
-        'copyrightText': '© 2025 Zentronix Bank - Edição Azul & Roxo | Licença Bancária Offshore Nº ZNTX-2024',
-        'accessHubBtn': 'ACESSAR HUB',
-        'kycBtnText': 'KYC',
-        'logoutBtnText': 'SAIR',
-        'kycPendingText': 'KYC PENDENTE',
-        'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS',
-        'loginSuccess': '✅ Login realizado com sucesso!',
-        'logoutSuccess': '🔒 Você foi desconectado.',
-        'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix',
-        'kycModalTitle': 'VERIFICAÇÃO KYC',
-        'step1Label': 'Informações Pessoais',
-        'step2Label': 'Documentos',
-        'step3Label': 'Selfie',
-        'fullNameLabel': 'Nome Completo',
-        'emailLabel': 'Email',
-        'phoneLabel': 'Telefone',
-        'addressLabel': 'Endereço',
-        'nationalityLabel': 'Nacionalidade',
-        'idDocumentLabel': 'Documento de Identidade (Passaporte / RG / CNH)',
-        'uploadClickText': 'Clique para enviar documento',
-        'proofAddressLabel': 'Comprovante de Endereço (Conta de luz, Extrato bancário, etc.)',
-        'proofClickText': 'Clique para enviar comprovante de endereço',
-        'acceptedFormatsText': 'Formatos aceitos: JPG, PNG, PDF (Máx 10MB)',
-        'selfieInstruction': 'Tire uma selfie segurando seu documento de identidade',
-        'startCameraText': 'Iniciar Câmera',
-        'captureText': 'Capturar',
-        'uploadText': 'Enviar Foto',
-        'reviewTitle': 'Por favor, revise suas informações antes de enviar:',
-        'prevBtnText': 'Anterior',
-        'nextBtnText': 'Próximo →',
-        'submitKycText': 'ENVIAR KYC',
-        'profileModalTitle': 'Editar Perfil',
-        'uploadPhotoText': 'Enviar Foto',
-        'profileFirstNameLabel': 'Nome',
-        'profileLastNameLabel': 'Sobrenome',
-        'profileEmailLabel': 'Email',
-        'profilePhoneLabel': 'Telefone',
-        'saveProfileText': 'SALVAR ALTERAÇÕES',
-        'accountLabel': 'NÚMERO DA CONTA',
-        'copyBtnText': 'COPIAR',
-        'menuSecurityTitle': '⚙️ CONFIGURAÇÕES DE SEGURANÇA',
-        'menuSecurityCenter': 'Central de Segurança',
-        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
-        'menuStaking': 'Central de Staking',
-        'menuCryptoTransactions': 'Transações Crypto',
-        'menuHistory': 'Histórico / Extrato',
-        'menuTradingTitle': '📊 TRADING',
-        'menuTradingHub': 'Hub de Trading',
-        'menuConversion': 'Conversão',
-        'menuFixedIncomeTitle': '🏛️ RENDA FIXA',
-        'menuTreasuries': 'Tesouros & Títulos',
-        'menuCDs': 'CDs / Depósitos a Prazo',
-        'menuDebentures': 'Debêntures',
-        'menuREITs': 'REITs',
-        'menuPrivateCredit': 'Crédito Privado',
-        'menuStructuredNotes': 'Notas Estruturadas',
-        'menuMunicipalBonds': 'Títulos Municipais',
-        'menuCardsTitle': '💳 CARTÕES & PAGAMENTOS',
-        'menuMyCards': 'Meus Cartões',
-        'menuPayments': 'Pagamentos',
-        'menuSwapTitle': '🔄 SWAP',
-        'menuSwapCenter': 'Central de Swap',
-        'menuAnalyticsTitle': '📊 ANÁLISES',
-        'menuAnalytics': 'Análises',
-        'menuReports': 'Relatórios',
-        'menuSecurityKYCTitle': '🔒 SEGURANÇA & KYC',
-        'menuSecuritySettings': 'Configurações de Segurança',
-        'menuSessions': 'Sessões Ativas',
-        'menuCompliance': 'KYC & Compliance',
-        'menuAntiHack': 'Anti-Hack',
-        'menuSystemTitle': '⚙️ CONTROLES DO SISTEMA',
-        'menuGhostMode': 'Modo Fantasma',
-        'menuSimulator': 'Simulador de Cenários',
-        'menuThemes': 'Personalizar Temas',
-        'menuAudit': 'Logs de Auditoria',
-        'menuServicesTitle': '✨ SERVIÇOS BANCÁRIOS',
-        'menuCompleteServices': 'Serviços Completos',
-        'menuDigitalPayment': 'Pagamento Digital',
-        'stakingChartTitle': 'Desempenho de Staking',
-        'cryptoTxTitle': 'Transações Crypto',
-        'historyTitle': 'Histórico de Transações / Extrato',
-        'tradingTitle': 'Hub de Trading',
-        'conversionTitle': 'Conversão de Moedas',
-        'treasuriesTitle': 'Tesouros & Títulos',
-        'cdsTitle': 'CDs / Depósitos a Prazo',
-        'debenturesTitle': 'Debêntures',
-        'reitsTitle': 'REITs',
-        'privateCreditTitle': 'Crédito Privado',
-        'structuredNotesTitle': 'Notas Estruturadas',
-        'municipalBondsTitle': 'Títulos Municipais',
-        'cardsTitle': 'Meus Cartões',
-        'paymentsTitle': 'Pagamentos',
-        'swapCenterTitle': 'Central de Swap',
-        'analyticsTitle': 'Análises',
-        'reportsTitle': 'Relatórios',
-        'securitySettingsTitle': 'Configurações de Segurança',
-        'securityCenterTitle': 'Central de Segurança',
-        'sessionsTitle': 'Sessões Ativas',
-        'complianceTitle': 'KYC & Compliance',
-        'antihackTitle': 'Anti-Hack',
-        'servicesTitle': 'Serviços Bancários Completos',
-        'digitalPaymentTitle': 'Pagamento Digital',
-        'yourBalancesTitle': 'SEUS SALDOS',
-        'militaryTitle': 'HUB MILITAR',
-        'stealthModeText': 'MODO STEALTH',
-        'blacklistLabel': 'Endereços na Lista Negra',
-        'swapModalTitle': '🔄 SWAP',
-        'walletModalTitle': '💰 Carteira Gerada',
-        'walletWarning': '⚠️ Guarde sua chave privada com segurança! Nunca compartilhe com ninguém.',
-        'confirmLogoutTitle': 'Confirmar Saída',
-        'confirmLogoutMessage': 'Tem certeza que deseja sair da sua conta?',
-        'welcomeUser': 'Bem-vindo, {name}',
-        'profileRole': 'Elite do Private Banking',
-        'stealthActivated': '🕵️ Modo Stealth ATIVADO',
-        'stealthDeactivated': '👀 Modo Stealth DESATIVADO'
-    },
-    'es': {
-        'bankSubtitle': 'Banca Offshore Privada',
-        'heroTitle': 'Zentronix Offshore Bank: Soberanía, Tecnología y Élite Financiera',
-        'heroBadge': '🏆 Liderando la Revolución Offshore desde 2017',
-        'heroDesc': 'Fundado en 2017, Zentronix Bank no es solo una institución financiera; es una fortaleza para el capital global.',
-        'card1Title': '🌍 Convergencia Total: Fiat y Crypto',
-        'card1Desc': 'A diferencia de los bancos tradicionales, Zentronix fue diseñado para la era digital.',
-        'card2Title': '📈 Cartera de Inversiones de Próxima Generación',
-        'card2Desc': 'Nuestro estante de productos financieros es el más completo del sector offshore.',
-        'card3Title': '🔐 Tecnología, Privacidad y Sucesión',
-        'card3Desc': 'Zentronix Bank va más allá de simples transacciones; cuidamos su legado.',
-        'impactPhrase': '✨ Zentronix Offshore Bank: La evolución de su poder financiero comienza aquí. ✨',
-        'impactSmall': 'Fundado en 2017. Conectado al Futuro.',
-        'aboutTitle': '🌟 SOBRE ZENTRONIX BANK',
-        'aboutHistoryTitle': 'Nuestra Historia',
-        'aboutHistoryDesc': 'Fundado en 2018, sirviendo a 156+ países',
-        'aboutSecurityTitle': 'Seguridad Primero',
-        'aboutSecurityDesc': 'Protocolos resistentes a quantum',
-        'aboutReachTitle': 'Alcance Global',
-        'aboutReachDesc': 'Oficinas en Suiza, Singapur, Dubái',
-        'aboutReturnsTitle': 'Rendimientos Premium',
-        'aboutReturnsDesc': 'Hasta 12% de rendimiento anual',
-        'currenciesTitle': '💱 MONEDAS QUE ACEPTAMOS',
-        'cryptoTitles': '💎 CRIPTOMONEDAS SOPORTADAS',
-        'statAum': 'AUM',
-        'statClients': 'Clientes',
-        'statCountries': 'Países',
-        'statEncryption': 'Cifrado',
-        'regulatoryText': 'Zentronix Bank se encuentra actualmente en proceso de licenciamiento regulatorio como Proveedor de Servicios de Activos Virtuales.',
-        'copyrightText': '© 2025 Zentronix Bank - Edición Azul & Púrpura | Licencia Bancaria Offshore Nº ZNTX-2024',
-        'accessHubBtn': 'ACCEDER HUB',
-        'kycBtnText': 'KYC',
-        'logoutBtnText': 'SALIR',
-        'kycPendingText': 'KYC PENDIENTE',
-        'modalTitle': 'ACCEDER HUB DE INVERSIONES',
-        'loginSuccess': '✅ Inicio de sesión exitoso!',
-        'logoutSuccess': '🔒 Has cerrado sesión.',
-        'invalidCredentials': '❌ Credenciales inválidas! Use: admin / zentronix',
-        'kycModalTitle': 'VERIFICACIÓN KYC',
-        'step1Label': 'Información Personal',
-        'step2Label': 'Documentos',
-        'step3Label': 'Selfie',
-        'fullNameLabel': 'Nombre Completo',
-        'emailLabel': 'Correo Electrónico',
-        'phoneLabel': 'Teléfono',
-        'addressLabel': 'Dirección',
-        'nationalityLabel': 'Nacionalidad',
-        'idDocumentLabel': 'Documento de Identidad (Pasaporte / Cédula / Licencia)',
-        'uploadClickText': 'Haga clic para subir documento',
-        'proofAddressLabel': 'Comprobante de Domicilio (Factura, Extracto bancario, etc.)',
-        'proofClickText': 'Haga clic para subir comprobante de domicilio',
-        'acceptedFormatsText': 'Formatos aceptados: JPG, PNG, PDF (Máx 10MB)',
-        'selfieInstruction': 'Tome una selfie sosteniendo su documento de identidad',
-        'startCameraText': 'Iniciar Cámara',
-        'captureText': 'Capturar',
-        'uploadText': 'Subir Foto',
-        'reviewTitle': 'Revise su información antes de enviar:',
-        'prevBtnText': 'Anterior',
-        'nextBtnText': 'Siguiente →',
-        'submitKycText': 'ENVIAR KYC',
-        'profileModalTitle': 'Editar Perfil',
-        'uploadPhotoText': 'Subir Foto',
-        'profileFirstNameLabel': 'Nombre',
-        'profileLastNameLabel': 'Apellido',
-        'profileEmailLabel': 'Correo Electrónico',
-        'profilePhoneLabel': 'Teléfono',
-        'saveProfileText': 'GUARDAR CAMBIOS',
-        'accountLabel': 'NÚMERO DE CUENTA',
-        'copyBtnText': 'COPIAR',
-        'menuSecurityTitle': '⚙️ CONFIGURACIONES DE SEGURIDAD',
-        'menuSecurityCenter': 'Centro de Seguridad',
-        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
-        'menuStaking': 'Centro de Staking',
-        'menuCryptoTransactions': 'Transacciones Crypto',
-        'menuHistory': 'Historial / Extrato',
-        'menuTradingTitle': '📊 TRADING',
-        'menuTradingHub': 'Hub de Trading',
-        'menuConversion': 'Conversión',
-        'menuFixedIncomeTitle': '🏛️ RENTA FIJA',
-        'menuTreasuries': 'Tesoros & Bonos',
-        'menuCDs': 'CDs / Depósitos a Plazo',
-        'menuDebentures': 'Debentures',
-        'menuREITs': 'REITs',
-        'menuPrivateCredit': 'Crédito Privado',
-        'menuStructuredNotes': 'Notas Estructuradas',
-        'menuMunicipalBonds': 'Bonos Municipales',
-        'menuCardsTitle': '💳 TARJETAS & PAGOS',
-        'menuMyCards': 'Mis Tarjetas',
-        'menuPayments': 'Pagos',
-        'menuSwapTitle': '🔄 SWAP',
-        'menuSwapCenter': 'Centro de Swap',
-        'menuAnalyticsTitle': '📊 ANALÍTICAS',
-        'menuAnalytics': 'Analíticas',
-        'menuReports': 'Informes',
-        'menuSecurityKYCTitle': '🔒 SEGURIDAD & KYC',
-        'menuSecuritySettings': 'Configuraciones de Seguridad',
-        'menuSessions': 'Sesiones Activas',
-        'menuCompliance': 'KYC & Compliance',
-        'menuAntiHack': 'Anti-Hack',
-        'menuSystemTitle': '⚙️ CONTROLES DEL SISTEMA',
-        'menuGhostMode': 'Modo Fantasma',
-        'menuSimulator': 'Simulador de Escenarios',
-        'menuThemes': 'Personalizar Temas',
-        'menuAudit': 'Registros de Auditoría',
-        'menuServicesTitle': '✨ SERVICIOS BANCARIOS',
-        'menuCompleteServices': 'Servicios Completos',
-        'menuDigitalPayment': 'Pago Digital',
-        'stakingChartTitle': 'Rendimiento de Staking',
-        'cryptoTxTitle': 'Transacciones Crypto',
-        'historyTitle': 'Historial de Transacciones / Extrato',
-        'tradingTitle': 'Hub de Trading',
-        'conversionTitle': 'Conversión de Monedas',
-        'treasuriesTitle': 'Tesoros & Bonos',
-        'cdsTitle': 'CDs / Depósitos a Plazo',
-        'debenturesTitle': 'Debentures',
-        'reitsTitle': 'REITs',
-        'privateCreditTitle': 'Crédito Privado',
-        'structuredNotesTitle': 'Notas Estructuradas',
-        'municipalBondsTitle': 'Bonos Municipales',
-        'cardsTitle': 'Mis Tarjetas',
-        'paymentsTitle': 'Pagos',
-        'swapCenterTitle': 'Centro de Swap',
-        'analyticsTitle': 'Analíticas',
-        'reportsTitle': 'Informes',
-        'securitySettingsTitle': 'Configuraciones de Seguridad',
-        'securityCenterTitle': 'Centro de Seguridad',
-        'sessionsTitle': 'Sesiones Activas',
-        'complianceTitle': 'KYC & Compliance',
-        'antihackTitle': 'Anti-Hack',
-        'servicesTitle': 'Servicios Bancarios Completos',
-        'digitalPaymentTitle': 'Pago Digital',
-        'yourBalancesTitle': 'SUS SALDOS',
-        'militaryTitle': 'HUB MILITAR',
-        'stealthModeText': 'MODO STEALTH',
-        'blacklistLabel': 'Direcciones en Lista Negra',
-        'swapModalTitle': '🔄 SWAP',
-        'walletModalTitle': '💰 Cartera Generada',
-        'walletWarning': '⚠️ Guarde su clave privada de forma segura! Nunca la comparta con nadie.',
-        'confirmLogoutTitle': 'Confirmar Salida',
-        'confirmLogoutMessage': '¿Está seguro que desea salir de su cuenta?',
-        'welcomeUser': 'Bienvenido, {name}',
-        'profileRole': 'Élite de Banca Privada',
-        'stealthActivated': '🕵️ Modo Stealth ACTIVADO',
-        'stealthDeactivated': '👀 Modo Stealth DESACTIVADO'
-    },
-    'ar': {
-        'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية',
-        'heroTitle': 'بنك زينترونيكس الخارجي: السيادة والتكنولوجيا والنخبة المالية',
-        'heroBadge': '🏆 ريادة الثورة الخارجية منذ 2017',
-        'heroDesc': 'تأسس بنك زينترونيكس في عام 2017، وهو ليس مجرد مؤسسة مالية؛ بل هو حصن للرأسمال العالمي.',
-        'card1Title': '🌍 التقارب الكامل: العملات الورقية والعملات المشفرة',
-        'card1Desc': 'على عكس البنوك التقليدية، تم تصميم زينترونيكس للعصر الرقمي.',
-        'card2Title': '📈 محفظة استثمارية من الجيل التالي',
-        'card2Desc': 'تعتبر مجموعة منتجاتنا المالية الأكثر اكتمالاً في القطاع الخارجي.',
-        'card3Title': '🔐 التكنولوجيا والخصوصية والخلافة',
-        'card3Desc': 'يتجاوز بنك زينترونيكس المعاملات البسيطة؛ نحن نعتني بإرثك.',
-        'impactPhrase': '✨ بنك زينترونيكس الخارجي: تطور قوتك المالية يبدأ هنا. ✨',
-        'impactSmall': 'تأسس في 2017. متصل بالمستقبل.',
-        'aboutTitle': '🌟 حول بنك زينترونيكس',
-        'aboutHistoryTitle': 'تاريخنا',
-        'aboutHistoryDesc': 'تأسس في 2018، يخدم 156+ دولة',
-        'aboutSecurityTitle': 'الأمان أولاً',
-        'aboutSecurityDesc': 'بروتوكولات مقاومة للكم',
-        'aboutReachTitle': 'الوصول العالمي',
-        'aboutReachDesc': 'مكاتب في سويسرا وسنغافورة ودبي',
-        'aboutReturnsTitle': 'عوائد متميزة',
-        'aboutReturnsDesc': 'حتى 12% عائد سنوي',
-        'currenciesTitle': '💱 العملات التي نقبلها',
-        'cryptoTitles': '💎 العملات المشفرة المدعومة',
-        'statAum': 'الأصول المُدارة',
-        'statClients': 'العملاء',
-        'statCountries': 'الدول',
-        'statEncryption': 'التشفير',
-        'regulatoryText': 'يخضع بنك زينترونيكس حالياً للترخيص التنظيمي كمزود لخدمات الأصول الافتراضية.',
-        'copyrightText': '© 2025 بنك زينترونيكس - النسخة الزرقاء والبنفسجية | رخصة مصرفية خارجية رقم ZNTX-2024',
-        'accessHubBtn': 'الوصول إلى المركز',
-        'kycBtnText': 'التحقق من الهوية',
-        'logoutBtnText': 'تسجيل الخروج',
-        'kycPendingText': 'التحقق من الهوية قيد الانتظار',
-        'modalTitle': 'الوصول إلى مركز الاستثمار',
-        'loginSuccess': '✅ تم تسجيل الدخول بنجاح!',
-        'logoutSuccess': '🔒 تم تسجيل الخروج.',
-        'invalidCredentials': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix',
-        'kycModalTitle': 'التحقق من الهوية',
-        'step1Label': 'المعلومات الشخصية',
-        'step2Label': 'المستندات',
-        'step3Label': 'صورة شخصية',
-        'fullNameLabel': 'الاسم الكامل',
-        'emailLabel': 'البريد الإلكتروني',
-        'phoneLabel': 'الهاتف',
-        'addressLabel': 'العنوان',
-        'nationalityLabel': 'الجنسية',
-        'idDocumentLabel': 'وثيقة الهوية (جواز السفر / بطاقة الهوية / رخصة القيادة)',
-        'uploadClickText': 'انقر لتحميل المستند',
-        'proofAddressLabel': 'إثبات العنوان (فاتورة الخدمات، كشف حساب بنكي، إلخ)',
-        'proofClickText': 'انقر لتحميل إثبات العنوان',
-        'acceptedFormatsText': 'الصيغ المقبولة: JPG، PNG، PDF (الحد الأقصى 10 ميجابايت)',
-        'selfieInstruction': 'التقط صورة شخصية وأنت تحمل وثيقة هويتك',
-        'startCameraText': 'بدء الكاميرا',
-        'captureText': 'التقاط',
-        'uploadText': 'تحميل صورة',
-        'reviewTitle': 'يرجى مراجعة معلوماتك قبل الإرسال:',
-        'prevBtnText': 'السابق',
-        'nextBtnText': 'التالي ←',
-        'submitKycText': 'إرسال التحقق من الهوية',
-        'profileModalTitle': 'تعديل الملف الشخصي',
-        'uploadPhotoText': 'تحميل صورة',
-        'profileFirstNameLabel': 'الاسم الأول',
-        'profileLastNameLabel': 'اسم العائلة',
-        'profileEmailLabel': 'البريد الإلكتروني',
-        'profilePhoneLabel': 'الهاتف',
-        'saveProfileText': 'حفظ التغييرات',
-        'accountLabel': 'رقم الحساب',
-        'copyBtnText': 'نسخ',
-        'menuSecurityTitle': '⚙️ إعدادات الأمان',
-        'menuSecurityCenter': 'مركز الأمان',
-        'menuCryptoTitle': '⛓️ العملات المشفرة والتمويل اللامركزي',
-        'menuStaking': 'مركز التخزين',
-        'menuCryptoTransactions': 'معاملات العملات المشفرة',
-        'menuHistory': 'السجل / كشف الحساب',
-        'menuTradingTitle': '📊 التداول',
-        'menuTradingHub': 'مركز التداول',
-        'menuConversion': 'التحويل',
-        'menuFixedIncomeTitle': '🏛️ الدخل الثابت',
-        'menuTreasuries': 'الخزانة والسندات',
-        'menuCDs': 'شهادات الإيداع / الودائع لأجل',
-        'menuDebentures': 'السندات',
-        'menuREITs': 'صناديق الاستثمار العقاري',
-        'menuPrivateCredit': 'الائتمان الخاص',
-        'menuStructuredNotes': 'السندات المهيكلة',
-        'menuMunicipalBonds': 'السندات البلدية',
-        'menuCardsTitle': '💳 البطاقات والمدفوعات',
-        'menuMyCards': 'بطاقاتي',
-        'menuPayments': 'المدفوعات',
-        'menuSwapTitle': '🔄 المقايضة',
-        'menuSwapCenter': 'مركز المقايضة',
-        'menuAnalyticsTitle': '📊 التحليلات',
-        'menuAnalytics': 'التحليلات',
-        'menuReports': 'التقارير',
-        'menuSecurityKYCTitle': '🔒 الأمان والتحقق من الهوية',
-        'menuSecuritySettings': 'إعدادات الأمان',
-        'menuSessions': 'الجلسات النشطة',
-        'menuCompliance': 'الامتثال والتحقق من الهوية',
-        'menuAntiHack': 'مكافحة الاختراق',
-        'menuSystemTitle': '⚙️ ضوابط النظام',
-        'menuGhostMode': 'الوضع الخفي',
-        'menuSimulator': 'محاكي السيناريوهات',
-        'menuThemes': 'تخصيص السمات',
-        'menuAudit': 'سجلات التدقيق',
-        'menuServicesTitle': '✨ الخدمات المصرفية',
-        'menuCompleteServices': 'الخدمات الكاملة',
-        'menuDigitalPayment': 'الدفع الرقمي',
-        'stakingChartTitle': 'أداء التخزين',
-        'cryptoTxTitle': 'معاملات العملات المشفرة',
-        'historyTitle': 'سجل المعاملات / كشف الحساب',
-        'tradingTitle': 'مركز التداول',
-        'conversionTitle': 'تحويل العملات',
-        'treasuriesTitle': 'الخزانة والسندات',
-        'cdsTitle': 'شهادات الإيداع / الودائع لأجل',
-        'debenturesTitle': 'السندات',
-        'reitsTitle': 'صناديق الاستثمار العقاري',
-        'privateCreditTitle': 'الائتمان الخاص',
-        'structuredNotesTitle': 'السندات المهيكلة',
-        'municipalBondsTitle': 'السندات البلدية',
-        'cardsTitle': 'بطاقاتي',
-        'paymentsTitle': 'المدفوعات',
-        'swapCenterTitle': 'مركز المقايضة',
-        'analyticsTitle': 'التحليلات',
-        'reportsTitle': 'التقارير',
-        'securitySettingsTitle': 'إعدادات الأمان',
-        'securityCenterTitle': 'مركز الأمان',
-        'sessionsTitle': 'الجلسات النشطة',
-        'complianceTitle': 'الامتثال والتحقق من الهوية',
-        'antihackTitle': 'مكافحة الاختراق',
-        'servicesTitle': 'الخدمات المصرفية الكاملة',
-        'digitalPaymentTitle': 'الدفع الرقمي',
-        'yourBalancesTitle': 'أرصدتك',
-        'militaryTitle': 'المركز العسكري',
-        'stealthModeText': 'وضع التخفي',
-        'blacklistLabel': 'عناوين القائمة السوداء',
-        'swapModalTitle': '🔄 المقايضة',
-        'walletModalTitle': '💰 تم إنشاء المحفظة',
-        'walletWarning': '⚠️ احتفظ بمفتاحك الخاص بأمان! لا تشاركه مع أي شخص.',
-        'confirmLogoutTitle': 'تأكيد تسجيل الخروج',
-        'confirmLogoutMessage': 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
-        'welcomeUser': 'مرحباً، {name}',
-        'profileRole': 'نخبة الخدمات المصرفية الخاصة',
-        'stealthActivated': '🕵️ تم تفعيل وضع التخفي',
-        'stealthDeactivated': '👀 تم إلغاء تنشيط وضع التخفي'
-    }
+    'en': { 'bankSubtitle': 'Offshore Private Banking', 'accessHubBtn': 'ACCESS HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'LOGOUT', 'kycPendingText': 'KYC PENDING', 'modalTitle': 'ACCESS INVESTMENT HUB', 'loginSuccess': '✅ Login successful!', 'logoutSuccess': '🔒 You have been logged out.', 'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix', 'kycModalTitle': 'KYC VERIFICATION', 'step1Label': 'Personal Info', 'step2Label': 'Documents', 'step3Label': 'Selfie', 'fullNameLabel': 'Full Name', 'emailLabel': 'Email', 'phoneLabel': 'Phone', 'addressLabel': 'Street Address', 'nationalityLabel': 'Nationality', 'idDocumentLabel': 'ID Document (Passport / ID Card / Driver License)', 'uploadClickText': 'Click to upload document', 'proofAddressLabel': 'Proof of Address (Utility bill, Bank statement, etc.)', 'proofClickText': 'Click to upload proof of address', 'acceptedFormatsText': 'Accepted formats: JPG, PNG, PDF (Max 10MB)', 'selfieInstruction': 'Take a selfie holding your ID document', 'startCameraText': 'Start Camera', 'captureText': 'Capture', 'uploadText': 'Upload Photo', 'reviewTitle': 'Please review your information before submitting:', 'prevBtnText': 'Previous', 'nextBtnText': 'Next →', 'submitKycText': 'SUBMIT KYC', 'profileModalTitle': 'Edit Profile', 'uploadPhotoText': 'Upload Photo', 'profileFirstNameLabel': 'First Name', 'profileLastNameLabel': 'Last Name', 'profileEmailLabel': 'Email', 'profilePhoneLabel': 'Phone', 'saveProfileText': 'SAVE CHANGES', 'accountLabel': 'ACCOUNT NUMBER', 'copyBtnText': 'COPY', 'menuSecurityTitle': '⚙️ SECURITY SETTINGS', 'menuSecurityCenter': 'Security Center', 'menuCryptoTitle': '⛓️ CRYPTO & DEFI', 'menuStaking': 'Staking Center', 'menuCryptoTransactions': 'Crypto Transactions', 'menuHistory': 'History / Extrato', 'menuTradingTitle': '📊 TRADING', 'menuTradingHub': 'Trading Hub', 'menuConversion': 'Conversion', 'menuFixedIncomeTitle': '🏛️ FIXED INCOME', 'menuTreasuries': 'Treasuries & Bonds', 'menuCDs': 'CDs / Time Deposits', 'menuDebentures': 'Debentures', 'menuREITs': 'REITs', 'menuPrivateCredit': 'Private Credit', 'menuStructuredNotes': 'Structured Notes', 'menuMunicipalBonds': 'Municipal Bonds', 'menuCardsTitle': '💳 CARDS & PAYMENTS', 'menuMyCards': 'My Cards', 'menuPayments': 'Payments', 'menuSwapTitle': '🔄 SWAP', 'menuSwapCenter': 'Swap Center', 'menuAnalyticsTitle': '📊 ANALYTICS', 'menuAnalytics': 'Analytics', 'menuReports': 'Reports', 'menuSecurityKYCTitle': '🔒 SECURITY & KYC', 'menuSecuritySettings': 'Security Settings', 'menuSessions': 'Active Sessions', 'menuCompliance': 'KYC & Compliance', 'menuAntiHack': 'Anti-Hack', 'menuSystemTitle': '⚙️ SYSTEM CONTROLS', 'menuGhostMode': 'Ghost Mode', 'menuSimulator': 'Scenario Simulator', 'menuThemes': 'Theme Weaver', 'menuAudit': 'Audit Logs', 'menuServicesTitle': '✨ BANKING SERVICES', 'menuCompleteServices': 'Complete Services', 'menuDigitalPayment': 'Payment Digital', 'stakingChartTitle': 'Staking Performance', 'cryptoTxTitle': 'Crypto Transactions', 'historyTitle': 'Transaction History / Extrato', 'tradingTitle': 'Trading Hub', 'conversionTitle': 'Currency Conversion', 'treasuriesTitle': 'Treasuries & Bonds', 'cdsTitle': 'CDs / Time Deposits', 'debenturesTitle': 'Debentures', 'reitsTitle': 'REITs', 'privateCreditTitle': 'Private Credit', 'structuredNotesTitle': 'Structured Notes', 'municipalBondsTitle': 'Municipal Bonds', 'cardsTitle': 'My Cards', 'paymentsTitle': 'Payments', 'swapCenterTitle': 'Swap Center', 'analyticsTitle': 'Analytics', 'reportsTitle': 'Reports', 'securitySettingsTitle': 'Security Settings', 'securityCenterTitle': 'Security Center', 'sessionsTitle': 'Active Sessions', 'complianceTitle': 'KYC & Compliance', 'antihackTitle': 'Anti-Hack', 'servicesTitle': 'Complete Banking Services', 'digitalPaymentTitle': 'Digital Payment', 'yourBalancesTitle': 'YOUR BALANCES', 'militaryTitle': 'MILITARY HUB', 'stealthModeText': 'STEALTH MODE', 'blacklistLabel': 'Blacklist Addresses', 'swapModalTitle': '🔄 SWAP', 'walletModalTitle': '💰 Wallet Generated', 'walletWarning': '⚠️ Save your private key securely! Never share it with anyone.', 'confirmLogoutTitle': 'Confirm Logout', 'confirmLogoutMessage': 'Are you sure you want to logout from your account?', 'welcomeUser': 'Welcome, {name}', 'profileRole': 'Private Banking Elite', 'stealthActivated': '🕵️ Stealth Mode ACTIVATED', 'stealthDeactivated': '👀 Stealth Mode DEACTIVATED', 'heroTitle': 'Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite', 'heroBadge': '🏆 Leading the Offshore Revolution since 2017', 'heroDesc': 'Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.', 'card1Title': '🌍 Total Convergence: Fiat and Crypto', 'card1Desc': 'Unlike traditional banks, Zentronix was designed for the digital age.', 'card2Title': '📈 Next-Generation Investment Portfolio', 'card2Desc': 'Our financial product shelf is the most complete in the offshore sector.', 'card3Title': '🔐 Technology, Privacy and Succession', 'card3Desc': 'Zentronix Bank goes beyond simple transactions; we take care of your legacy.', 'impactPhrase': '✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨', 'impactSmall': 'Founded in 2017. Connected to the Future.', 'aboutTitle': '🌟 ABOUT ZENTRONIX BANK', 'aboutHistoryTitle': 'Our History', 'aboutHistoryDesc': 'Founded in 2018, serving 156+ countries', 'aboutSecurityTitle': 'Security First', 'aboutSecurityDesc': 'Quantum-resistant protocols', 'aboutReachTitle': 'Global Reach', 'aboutReachDesc': 'Offices in Switzerland, Singapore, Dubai', 'aboutReturnsTitle': 'Premium Returns', 'aboutReturnsDesc': 'Up to 12% annual yield', 'currenciesTitle': '💱 CURRENCIES WE ACCEPT', 'cryptoTitles': '💎 SUPPORTED CRYPTOCURRENCIES', 'statAum': 'AUM', 'statClients': 'Clients', 'statCountries': 'Countries', 'statEncryption': 'Encryption', 'regulatoryText': 'Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.', 'copyrightText': '© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024' },
+    'pt': { 'bankSubtitle': 'Offshore Private Banking', 'accessHubBtn': 'ACESSAR HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'SAIR', 'kycPendingText': 'KYC PENDENTE', 'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS', 'loginSuccess': '✅ Login realizado com sucesso!', 'logoutSuccess': '🔒 Você foi desconectado.', 'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix', 'stealthActivated': '🕵️ Modo Stealth ATIVADO', 'stealthDeactivated': '👀 Modo Stealth DESATIVADO' },
+    'es': { 'bankSubtitle': 'Banca Offshore Privada', 'accessHubBtn': 'ACCEDER HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'SALIR', 'kycPendingText': 'KYC PENDIENTE', 'modalTitle': 'ACCEDER HUB DE INVERSIONES', 'loginSuccess': '✅ Inicio de sesión exitoso!', 'logoutSuccess': '🔒 Has cerrado sesión.', 'invalidCredentials': '❌ Credenciales inválidas! Use: admin / zentronix', 'stealthActivated': '🕵️ Modo Stealth ACTIVADO', 'stealthDeactivated': '👀 Modo Stealth DESACTIVADO' },
+    'ar': { 'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية', 'accessHubBtn': 'الوصول إلى المركز', 'kycBtnText': 'التحقق من الهوية', 'logoutBtnText': 'تسجيل الخروج', 'kycPendingText': 'التحقق من الهوية قيد الانتظار', 'modalTitle': 'الوصول إلى مركز الاستثمار', 'loginSuccess': '✅ تم تسجيل الدخول بنجاح!', 'logoutSuccess': '🔒 تم تسجيل الخروج.', 'invalidCredentials': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix', 'stealthActivated': '🕵️ تم تفعيل وضع التخفي', 'stealthDeactivated': '👀 تم إلغاء تنشيط وضع التخفي' }
 };
 
 // ============================================
@@ -1403,132 +826,79 @@ const translations = {
 // ============================================
 function getTranslation(key, params = {}) {
     let text = translations[currentLang]?.[key] || translations['en'][key] || key;
-    Object.keys(params).forEach(k => {
-        text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), params[k]);
-    });
+    Object.keys(params).forEach(k => { text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), params[k]); });
     return text;
 }
 
 function applyTranslations() {
     const elements = {
-        'bankSubtitle': 'bankSubtitle',
-        'accessHubBtn': 'accessHubBtn',
-        'kycBtnText': 'kycBtnText',
-        'logoutBtnText': 'logoutBtnText',
-        'kycPendingText': 'kycPendingText',
-        'modalTitle': 'modalTitle',
-        'kycModalTitle': 'kycModalTitle',
-        'step1Label': 'step1Label',
-        'step2Label': 'step2Label',
-        'step3Label': 'step3Label',
-        'fullNameLabel': 'fullNameLabel',
-        'emailLabel': 'emailLabel',
-        'phoneLabel': 'phoneLabel',
-        'addressLabel': 'addressLabel',
-        'nationalityLabel': 'nationalityLabel',
-        'idDocumentLabel': 'idDocumentLabel',
-        'uploadClickText': 'uploadClickText',
-        'proofAddressLabel': 'proofAddressLabel',
-        'proofClickText': 'proofClickText',
-        'acceptedFormatsText': 'acceptedFormatsText',
-        'selfieInstruction': 'selfieInstruction',
-        'startCameraText': 'startCameraText',
-        'captureText': 'captureText',
-        'uploadText': 'uploadText',
-        'reviewTitle': 'reviewTitle',
-        'prevBtnText': 'prevBtnText',
-        'nextBtnText': 'nextBtnText',
-        'submitKycText': 'submitKycText',
-        'profileModalTitle': 'profileModalTitle',
-        'uploadPhotoText': 'uploadPhotoText',
-        'profileFirstNameLabel': 'profileFirstNameLabel',
-        'profileLastNameLabel': 'profileLastNameLabel',
-        'profileEmailLabel': 'profileEmailLabel',
-        'profilePhoneLabel': 'profilePhoneLabel',
-        'saveProfileText': 'saveProfileText',
-        'accountLabel': 'accountLabel',
-        'copyBtnText': 'copyBtnText',
-        'menuSecurityTitle': 'menuSecurityTitle',
-        'menuSecurityCenter': 'menuSecurityCenter',
-        'menuCryptoTitle': 'menuCryptoTitle',
-        'menuStaking': 'menuStaking',
-        'menuCryptoTransactions': 'menuCryptoTransactions',
-        'menuHistory': 'menuHistory',
-        'menuTradingTitle': 'menuTradingTitle',
-        'menuTradingHub': 'menuTradingHub',
-        'menuConversion': 'menuConversion',
-        'menuFixedIncomeTitle': 'menuFixedIncomeTitle',
-        'menuTreasuries': 'menuTreasuries',
-        'menuCDs': 'menuCDs',
-        'menuDebentures': 'menuDebentures',
-        'menuREITs': 'menuREITs',
-        'menuPrivateCredit': 'menuPrivateCredit',
-        'menuStructuredNotes': 'menuStructuredNotes',
-        'menuMunicipalBonds': 'menuMunicipalBonds',
-        'menuCardsTitle': 'menuCardsTitle',
-        'menuMyCards': 'menuMyCards',
-        'menuPayments': 'menuPayments',
-        'menuSwapTitle': 'menuSwapTitle',
-        'menuSwapCenter': 'menuSwapCenter',
-        'menuAnalyticsTitle': 'menuAnalyticsTitle',
-        'menuAnalytics': 'menuAnalytics',
-        'menuReports': 'menuReports',
-        'menuSecurityKYCTitle': 'menuSecurityKYCTitle',
-        'menuSecuritySettings': 'menuSecuritySettings',
-        'menuSessions': 'menuSessions',
-        'menuCompliance': 'menuCompliance',
-        'menuAntiHack': 'menuAntiHack',
-        'menuSystemTitle': 'menuSystemTitle',
-        'menuGhostMode': 'menuGhostMode',
-        'menuSimulator': 'menuSimulator',
-        'menuThemes': 'menuThemes',
-        'menuAudit': 'menuAudit',
-        'menuServicesTitle': 'menuServicesTitle',
-        'menuCompleteServices': 'menuCompleteServices',
-        'menuDigitalPayment': 'menuDigitalPayment',
-        'stakingChartTitle': 'stakingChartTitle',
-        'cryptoTxTitle': 'cryptoTxTitle',
-        'historyTitle': 'historyTitle',
-        'tradingTitle': 'tradingTitle',
-        'conversionTitle': 'conversionTitle',
-        'treasuriesTitle': 'treasuriesTitle',
-        'cdsTitle': 'cdsTitle',
-        'debenturesTitle': 'debenturesTitle',
-        'reitsTitle': 'reitsTitle',
-        'privateCreditTitle': 'privateCreditTitle',
-        'structuredNotesTitle': 'structuredNotesTitle',
-        'municipalBondsTitle': 'municipalBondsTitle',
-        'cardsTitle': 'cardsTitle',
-        'paymentsTitle': 'paymentsTitle',
-        'swapCenterTitle': 'swapCenterTitle',
-        'analyticsTitle': 'analyticsTitle',
-        'reportsTitle': 'reportsTitle',
-        'securitySettingsTitle': 'securitySettingsTitle',
-        'securityCenterTitle': 'securityCenterTitle',
-        'sessionsTitle': 'sessionsTitle',
-        'complianceTitle': 'complianceTitle',
-        'antihackTitle': 'antihackTitle',
-        'servicesTitle': 'servicesTitle',
-        'digitalPaymentTitle': 'digitalPaymentTitle',
-        'yourBalancesTitle': 'yourBalancesTitle',
-        'militaryTitle': 'militaryTitle',
-        'stealthModeText': 'stealthModeText',
-        'blacklistLabel': 'blacklistLabel',
-        'swapModalTitle': 'swapModalTitle',
-        'walletModalTitle': 'walletModalTitle',
-        'walletWarning': 'walletWarning',
-        'confirmLogoutTitle': 'confirmLogoutTitle',
-        'confirmLogoutMessage': 'confirmLogoutMessage',
-        'profileRole': 'profileRole'
+        'bankSubtitle': 'bankSubtitle', 'accessHubBtn': 'accessHubBtn', 'kycBtnText': 'kycBtnText',
+        'logoutBtnText': 'logoutBtnText', 'kycPendingText': 'kycPendingText', 'modalTitle': 'modalTitle',
+        'kycModalTitle': 'kycModalTitle', 'step1Label': 'step1Label', 'step2Label': 'step2Label',
+        'step3Label': 'step3Label', 'fullNameLabel': 'fullNameLabel', 'emailLabel': 'emailLabel',
+        'phoneLabel': 'phoneLabel', 'addressLabel': 'addressLabel', 'nationalityLabel': 'nationalityLabel',
+        'idDocumentLabel': 'idDocumentLabel', 'uploadClickText': 'uploadClickText',
+        'proofAddressLabel': 'proofAddressLabel', 'proofClickText': 'proofClickText',
+        'acceptedFormatsText': 'acceptedFormatsText', 'selfieInstruction': 'selfieInstruction',
+        'startCameraText': 'startCameraText', 'captureText': 'captureText', 'uploadText': 'uploadText',
+        'reviewTitle': 'reviewTitle', 'prevBtnText': 'prevBtnText', 'nextBtnText': 'nextBtnText',
+        'submitKycText': 'submitKycText', 'profileModalTitle': 'profileModalTitle',
+        'uploadPhotoText': 'uploadPhotoText', 'profileFirstNameLabel': 'profileFirstNameLabel',
+        'profileLastNameLabel': 'profileLastNameLabel', 'profileEmailLabel': 'profileEmailLabel',
+        'profilePhoneLabel': 'profilePhoneLabel', 'saveProfileText': 'saveProfileText',
+        'accountLabel': 'accountLabel', 'copyBtnText': 'copyBtnText',
+        'menuSecurityTitle': 'menuSecurityTitle', 'menuSecurityCenter': 'menuSecurityCenter',
+        'menuCryptoTitle': 'menuCryptoTitle', 'menuStaking': 'menuStaking',
+        'menuCryptoTransactions': 'menuCryptoTransactions', 'menuHistory': 'menuHistory',
+        'menuTradingTitle': 'menuTradingTitle', 'menuTradingHub': 'menuTradingHub',
+        'menuConversion': 'menuConversion', 'menuFixedIncomeTitle': 'menuFixedIncomeTitle',
+        'menuTreasuries': 'menuTreasuries', 'menuCDs': 'menuCDs', 'menuDebentures': 'menuDebentures',
+        'menuREITs': 'menuREITs', 'menuPrivateCredit': 'menuPrivateCredit',
+        'menuStructuredNotes': 'menuStructuredNotes', 'menuMunicipalBonds': 'menuMunicipalBonds',
+        'menuCardsTitle': 'menuCardsTitle', 'menuMyCards': 'menuMyCards',
+        'menuPayments': 'menuPayments', 'menuSwapTitle': 'menuSwapTitle',
+        'menuSwapCenter': 'menuSwapCenter', 'menuAnalyticsTitle': 'menuAnalyticsTitle',
+        'menuAnalytics': 'menuAnalytics', 'menuReports': 'menuReports',
+        'menuSecurityKYCTitle': 'menuSecurityKYCTitle', 'menuSecuritySettings': 'menuSecuritySettings',
+        'menuSessions': 'menuSessions', 'menuCompliance': 'menuCompliance',
+        'menuAntiHack': 'menuAntiHack', 'menuSystemTitle': 'menuSystemTitle',
+        'menuGhostMode': 'menuGhostMode', 'menuSimulator': 'menuSimulator',
+        'menuThemes': 'menuThemes', 'menuAudit': 'menuAudit',
+        'menuServicesTitle': 'menuServicesTitle', 'menuCompleteServices': 'menuCompleteServices',
+        'menuDigitalPayment': 'menuDigitalPayment', 'stakingChartTitle': 'stakingChartTitle',
+        'cryptoTxTitle': 'cryptoTxTitle', 'historyTitle': 'historyTitle',
+        'tradingTitle': 'tradingTitle', 'conversionTitle': 'conversionTitle',
+        'treasuriesTitle': 'treasuriesTitle', 'cdsTitle': 'cdsTitle',
+        'debenturesTitle': 'debenturesTitle', 'reitsTitle': 'reitsTitle',
+        'privateCreditTitle': 'privateCreditTitle', 'structuredNotesTitle': 'structuredNotesTitle',
+        'municipalBondsTitle': 'municipalBondsTitle', 'cardsTitle': 'cardsTitle',
+        'paymentsTitle': 'paymentsTitle', 'swapCenterTitle': 'swapCenterTitle',
+        'analyticsTitle': 'analyticsTitle', 'reportsTitle': 'reportsTitle',
+        'securitySettingsTitle': 'securitySettingsTitle', 'securityCenterTitle': 'securityCenterTitle',
+        'sessionsTitle': 'sessionsTitle', 'complianceTitle': 'complianceTitle',
+        'antihackTitle': 'antihackTitle', 'servicesTitle': 'servicesTitle',
+        'digitalPaymentTitle': 'digitalPaymentTitle', 'yourBalancesTitle': 'yourBalancesTitle',
+        'militaryTitle': 'militaryTitle', 'stealthModeText': 'stealthModeText',
+        'blacklistLabel': 'blacklistLabel', 'swapModalTitle': 'swapModalTitle',
+        'walletModalTitle': 'walletModalTitle', 'walletWarning': 'walletWarning',
+        'confirmLogoutTitle': 'confirmLogoutTitle', 'confirmLogoutMessage': 'confirmLogoutMessage',
+        'profileRole': 'profileRole', 'heroTitle': 'heroTitle', 'heroBadge': 'heroBadge',
+        'heroDesc': 'heroDesc', 'card1Title': 'card1Title', 'card1Desc': 'card1Desc',
+        'card2Title': 'card2Title', 'card2Desc': 'card2Desc', 'card3Title': 'card3Title',
+        'card3Desc': 'card3Desc', 'impactPhrase': 'impactPhrase', 'impactSmall': 'impactSmall',
+        'aboutTitle': 'aboutTitle', 'aboutHistoryTitle': 'aboutHistoryTitle',
+        'aboutHistoryDesc': 'aboutHistoryDesc', 'aboutSecurityTitle': 'aboutSecurityTitle',
+        'aboutSecurityDesc': 'aboutSecurityDesc', 'aboutReachTitle': 'aboutReachTitle',
+        'aboutReachDesc': 'aboutReachDesc', 'aboutReturnsTitle': 'aboutReturnsTitle',
+        'aboutReturnsDesc': 'aboutReturnsDesc', 'currenciesTitle': 'currenciesTitle',
+        'cryptoTitles': 'cryptoTitles', 'statAum': 'statAum', 'statClients': 'statClients',
+        'statCountries': 'statCountries', 'statEncryption': 'statEncryption',
+        'regulatoryTextFooter': 'regulatoryText', 'copyrightTextFooter': 'copyrightText'
     };
-    
     Object.keys(elements).forEach(id => {
         const el = document.getElementById(id);
-        if (el) {
-            el.textContent = getTranslation(elements[id]);
-        }
+        if (el) el.textContent = getTranslation(elements[id]);
     });
-    
     const welcomeUser = document.getElementById('welcomeUser');
     if (welcomeUser) {
         const name = userProfile.firstName || 'Admin';
@@ -1614,9 +984,7 @@ function handleLogin() {
     const username = document.getElementById('loginId').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
     const loginError = document.getElementById('loginError');
-    
     loginError.classList.remove('visible');
-    
     if (username === 'admin' && password === 'zentronix') {
         isLoggedIn = true;
         closeLoginModal();
@@ -1660,23 +1028,33 @@ function updateKycSteps() {
     document.getElementById('kycStep1').style.display = currentKycStep === 1 ? 'block' : 'none';
     document.getElementById('kycStep2').style.display = currentKycStep === 2 ? 'block' : 'none';
     document.getElementById('kycStep3').style.display = currentKycStep === 3 ? 'block' : 'none';
-    
     document.getElementById('kycPrevBtn').style.display = currentKycStep > 1 ? 'block' : 'none';
     document.getElementById('kycNextBtn').style.display = currentKycStep < 3 ? 'block' : 'none';
     document.getElementById('submitKycBtn').style.display = currentKycStep === 3 ? 'block' : 'none';
-    
     document.querySelectorAll('.kyc-step').forEach((el, index) => {
         const stepNum = index + 1;
         el.classList.toggle('active', stepNum === currentKycStep);
         el.classList.toggle('completed', stepNum < currentKycStep);
     });
-    
     const progress = ((currentKycStep - 1) / 2) * 100;
     document.getElementById('progressFill').style.width = progress + '%';
 }
 
 // ============================================
 //  DASHBOARD
+// ============================================
+function initDashboard() {
+    console.log('🟣 Dashboard initialized');
+    loadBalances();
+    loadAllAssets();
+    initStakingChart();
+    loadProfileData();
+    updateHistoryUI();
+}
+
+// ============================================
+//  LOAD ALL ASSETS WITH BUTTONS (CRIPTO + FIAT)
+//  ESTA É A VERSÃO CORRETA - APENAS UMA!
 // ============================================
 function loadAllAssets() {
     // ===== CRIPTOMOEDAS =====
@@ -1708,7 +1086,6 @@ function loadAllAssets() {
             card.className = 'asset-card';
             const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
             const isBradi = a.symbol === 'BRC';
-            
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h4>${a.icon} ${a.name} (${a.symbol})</h4>
@@ -1736,7 +1113,6 @@ function loadAllAssets() {
             const card = document.createElement('div');
             card.className = 'asset-card';
             const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
-            
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h4>${a.icon} ${a.name} (${a.symbol})</h4>
@@ -1760,99 +1136,58 @@ function loadAllAssets() {
 // ============================================
 async function loadBalances() {
     try {
-        // First, try to get or create the admin user
         let userId = null;
-        
-        // Try to find existing user
         const { data: user, error: userError } = await supabaseClient
             .from('users')
             .select('id')
             .eq('email', 'admin@zentronix.com')
-            .maybeSingle(); // Use maybeSingle() instead of single() to avoid 406
-        
-        if (userError) {
-            console.warn('⚠️ Error checking user:', userError.message);
-        }
-        
+            .maybeSingle();
+        if (userError) { console.warn('⚠️ Error checking user:', userError.message); }
         if (user) {
             userId = user.id;
             console.log('✅ Admin user found:', userId);
         } else {
-            // User doesn't exist, create one
             console.log('👤 Creating admin user...');
             const { data: newUser, error: createError } = await supabaseClient
                 .from('users')
-                .insert([{
-                    email: 'admin@zentronix.com',
-                    name: 'Admin',
-                    created_at: new Date().toISOString()
-                }])
+                .insert([{ email: 'admin@zentronix.com', name: 'Admin', created_at: new Date().toISOString() }])
                 .select('id')
                 .single();
-            
-            if (createError) {
-                console.warn('⚠️ Could not create user:', createError.message);
-                loadLocalBalances();
-                return;
-            }
-            
+            if (createError) { console.warn('⚠️ Could not create user:', createError.message); loadLocalBalances(); return; }
             userId = newUser.id;
             console.log('✅ Admin user created:', userId);
-            
-            // Create default balances for the new user
             await createDefaultBalances(userId);
         }
-        
-        // Now fetch balances for the user
         if (userId) {
             const { data: balances, error: balError } = await supabaseClient
                 .from('balances')
                 .select('*')
                 .eq('user_id', userId);
-            
             if (balError) {
                 console.warn('⚠️ Error fetching balances:', balError.message);
-                // Try to create default balances
                 await createDefaultBalances(userId);
-                // Fetch again
                 const { data: newBalances, error: retryError } = await supabaseClient
                     .from('balances')
                     .select('*')
                     .eq('user_id', userId);
-                
-                if (!retryError && newBalances && newBalances.length > 0) {
-                    updateBalancesUI(newBalances);
-                    return;
-                }
-                loadLocalBalances();
-                return;
+                if (!retryError && newBalances && newBalances.length > 0) { updateBalancesUI(newBalances); return; }
+                loadLocalBalances(); return;
             }
-            
             if (balances && balances.length > 0) {
                 console.log('✅ Balances loaded from Supabase');
                 updateBalancesUI(balances);
                 return;
             } else {
-                // User has no balances, create defaults
                 await createDefaultBalances(userId);
-                // Fetch again
                 const { data: newBalances, error: retryError } = await supabaseClient
                     .from('balances')
                     .select('*')
                     .eq('user_id', userId);
-                
-                if (!retryError && newBalances && newBalances.length > 0) {
-                    updateBalancesUI(newBalances);
-                    return;
-                }
-                loadLocalBalances();
-                return;
+                if (!retryError && newBalances && newBalances.length > 0) { updateBalancesUI(newBalances); return; }
+                loadLocalBalances(); return;
             }
         }
-        
-        // Fallback to local balances
         loadLocalBalances();
-        
     } catch (error) {
         console.warn('⚠️ Using local balances (fallback):', error.message);
         loadLocalBalances();
@@ -1878,20 +1213,10 @@ async function createDefaultBalances(userId) {
             { user_id: userId, currency: 'LTC', amount: 8.90 },
             { user_id: userId, currency: 'BRC', amount: 250.00 }
         ];
-        
-        const { error } = await supabaseClient
-            .from('balances')
-            .insert(defaultBalances);
-        
-        if (error) {
-            console.warn('⚠️ Could not create default balances:', error.message);
-        } else {
-            console.log('✅ Default balances created for user');
-        }
-        
-    } catch (error) {
-        console.warn('⚠️ Error creating default balances:', error.message);
-    }
+        const { error } = await supabaseClient.from('balances').insert(defaultBalances);
+        if (error) { console.warn('⚠️ Could not create default balances:', error.message); } 
+        else { console.log('✅ Default balances created for user'); }
+    } catch (error) { console.warn('⚠️ Error creating default balances:', error.message); }
 }
 
 // ============================================
@@ -1912,20 +1237,16 @@ function loadLocalBalances() {
         { currency: 'LTC', amount: 8.90, icon: 'Ł' },
         { currency: 'BRC', amount: 250.00, icon: '🪙' }
     ];
-    
     const grid = document.getElementById('currencyGrid');
     if (!grid) return;
     grid.innerHTML = '';
     let total = 0;
-    
     balances.forEach(b => {
         const div = document.createElement('div');
         div.className = 'currency-item';
         const amount = typeof b.amount === 'number' ? b.amount : 0;
         div.innerHTML = `<span><strong>${b.icon} ${b.currency}</strong></span><span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
         grid.appendChild(div);
-        
-        // Calculate total in USD
         if (b.currency === 'USD') total += amount;
         else if (b.currency === 'EUR') total += amount * 1.08;
         else if (b.currency === 'GBP') total += amount * 1.26;
@@ -1939,40 +1260,28 @@ function loadLocalBalances() {
         else if (b.currency === 'LTC') total += amount * 82.50;
         else if (b.currency === 'BRC') total += amount * 9.87;
     });
-    
     document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 // ============================================
-//  UPDATE BALANCES UI - CORREÇÃO
+//  UPDATE BALANCES UI
 // ============================================
 function updateBalancesUI(balances) {
     const grid = document.getElementById('currencyGrid');
-    if (!grid) {
-        console.warn('⚠️ currencyGrid element not found');
-        return;
-    }
-    
+    if (!grid) { console.warn('⚠️ currencyGrid element not found'); return; }
     grid.innerHTML = '';
     let total = 0;
-    
     balances.forEach(b => {
         const div = document.createElement('div');
         div.className = 'currency-item';
         const amount = b.amount || 0;
         const icon = getCurrencyIcon(b.currency);
-        div.innerHTML = `
-            <span><strong>${icon} ${b.currency}</strong></span>
-            <span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-        `;
+        div.innerHTML = `<span><strong>${icon} ${b.currency}</strong></span><span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
         grid.appendChild(div);
         total += convertToUSD(b.currency, amount);
     });
-    
     const totalElement = document.getElementById('totalBalance');
-    if (totalElement) {
-        totalElement.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
+    if (totalElement) { totalElement.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 }
 
 // ============================================
@@ -2000,54 +1309,8 @@ function convertToUSD(currency, amount) {
 }
 
 // ============================================
-//  LOAD ALL ASSETS WITH BUTTONS
+//  TATUM API - REAL FUNCTIONS
 // ============================================
-function loadAllAssets() {
-    const cryptoAssets = [
-        { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
-        { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
-        { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+0.8%', chain: 'BNB', icon: 'BNB' },
-        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+5.6%', chain: 'BRC', icon: '🪙' },
-        { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+3.1%', chain: 'SOL', icon: '◎' },
-        { name: 'Polygon', symbol: 'MATIC', price: 0.52, change: '-0.5%', chain: 'MATIC', icon: '◇' },
-        { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.0%', chain: 'USDT', icon: '₮' },
-        { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '+1.7%', chain: 'LTC', icon: 'Ł' }
-    ];
-    
-    const cryptoGrid = document.getElementById('cryptoAssetsGrid');
-    if (cryptoGrid) {
-        cryptoGrid.innerHTML = '';
-        cryptoAssets.forEach(a => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
-            const isBradi = a.symbol === 'BRC';
-            
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
-                    <span style="color: ${changeColor}">${a.change}</span>
-                </div>
-                <div class="asset-price">$${a.price.toLocaleString()}</div>
-                <div class="button-group">
-                    <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 DEPOSIT</button>
-                    <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 RECEIVE</button>
-                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
-                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
-                    <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
-                    ${isBradi ? `<button class="buy-btn" onclick="handleBuy('${a.symbol}')">🟢 BUY</button>` : ''}
-                </div>
-            `;
-            cryptoGrid.appendChild(card);
-        });
-    }
-}
-
-// ============================================
-//  TATUM API - REAL FUNCTIONS (FIX #2 - Better error handling)
-// ============================================
-
-// Check if Tatum API key is valid
 function isTatumConfigured() {
     if (!TATUM_API_KEY || TATUM_API_KEY === 'YOUR_TATUM_API_KEY_HERE') {
         console.warn('⚠️ Tatum API key not configured. Using demo mode.');
@@ -2056,9 +1319,7 @@ function isTatumConfigured() {
     return true;
 }
 
-// -------- 1. GENERATE REAL WALLET --------
 async function generateRealWallet(currency, chain) {
-    // Check if Tatum is configured
     if (!isTatumConfigured()) {
         showToast('⚠️ Tatum API not configured. Using demo wallet.');
         const wallet = generateLocalWallet(chain);
@@ -2072,41 +1333,23 @@ async function generateRealWallet(currency, chain) {
         saveWalletLocal({ currency, chain, address: wallet.address, privateKey: wallet.privateKey });
         return wallet;
     }
-    
     try {
         showToast('⏳ Generating ' + currency + ' wallet on blockchain...');
-        
         const blockchainMap = {
-            'BTC': 'bitcoin',
-            'ETH': 'ethereum',
-            'SOL': 'solana',
-            'USDT': 'ethereum',
-            'BNB': 'binance-smart-chain',
-            'LTC': 'litecoin',
-            'BRC': 'bitcoin',
-            'MATIC': 'polygon'
+            'BTC': 'bitcoin', 'ETH': 'ethereum', 'SOL': 'solana',
+            'USDT': 'ethereum', 'BNB': 'binance-smart-chain',
+            'LTC': 'litecoin', 'BRC': 'bitcoin', 'MATIC': 'polygon'
         };
-        
         const blockchain = blockchainMap[chain] || 'bitcoin';
-        
         const response = await fetch(`${TATUM_API_URL}/${blockchain}/wallet`, {
             method: 'GET',
-            headers: {
-                'x-api-key': TATUM_API_KEY,
-                'Content-Type': 'application/json'
-            }
+            headers: { 'x-api-key': TATUM_API_KEY, 'Content-Type': 'application/json' }
         });
-        
         if (!response.ok) {
-            // Handle 401 specifically
-            if (response.status === 401) {
-                throw new Error('Invalid Tatum API Key. Please check your configuration.');
-            }
+            if (response.status === 401) throw new Error('Invalid Tatum API Key.');
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-        
         const data = await response.json();
-        
         const walletData = {
             currency: currency,
             chain: chain,
@@ -2114,12 +1357,10 @@ async function generateRealWallet(currency, chain) {
             privateKey: data.privateKey || data.mnemonic || 'Securely saved',
             timestamp: new Date().toISOString()
         };
-        
         saveWalletLocal(walletData);
         showRealWalletModal(walletData);
         showToast('✅ ' + currency + ' wallet generated successfully!');
         return walletData;
-        
     } catch (error) {
         console.error('❌ Tatum Error:', error.message);
         showToast('⚠️ Using local wallet (fallback): ' + error.message);
@@ -2162,223 +1403,38 @@ function showRealWalletModal(walletData) {
     const addressDisplay = document.getElementById('walletAddressDisplay');
     const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
     const warning = document.getElementById('walletWarning');
-    
     title.textContent = '💰 ' + walletData.currency + ' Wallet Generated';
     addressDisplay.innerHTML = `
-        <strong>📍 Address:</strong><br>
-        <span style="font-size:0.8rem;">${walletData.address}</span>
-        <br>
-        <button onclick="copyText('${walletData.address}')" style="margin-top:5px; background:rgba(0,242,255,0.2); border:1px solid var(--neon-blue); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-blue);">
-            📋 Copy
-        </button>
+        <strong>📍 Address:</strong><br><span style="font-size:0.8rem;">${walletData.address}</span><br>
+        <button onclick="copyText('${walletData.address}')" style="margin-top:5px; background:rgba(0,242,255,0.2); border:1px solid var(--neon-blue); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-blue);">📋 Copy</button>
     `;
     privateKeyDisplay.innerHTML = `
         <strong>🔑 Private Key (⚠️ NEVER SHARE):</strong><br>
-        <span style="font-size:0.65rem; word-break:break-all;">${walletData.privateKey}</span>
-        <br>
-        <button onclick="copyText('${walletData.privateKey}')" style="margin-top:5px; background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-red);">
-            📋 Copy
-        </button>
+        <span style="font-size:0.65rem; word-break:break-all;">${walletData.privateKey}</span><br>
+        <button onclick="copyText('${walletData.privateKey}')" style="margin-top:5px; background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-red);">📋 Copy</button>
     `;
     warning.textContent = '⚠️ Save your private key securely! Never share it with anyone.';
     privateKeyDisplay.style.display = 'block';
-    
     modal.classList.add('active');
-}
-
-// -------- 2. DEPOSIT CRYPTO (simplified for demo) --------
-async function depositCryptoReal(currency, amount, destinationAddress) {
-    try {
-        if (!isTatumConfigured()) {
-            showToast('⚠️ Tatum API not configured. Demo deposit only.');
-            registerHistory('DEPOSIT_DEMO', currency, amount, 'Demo deposit to ' + destinationAddress, 'demo_tx_' + Date.now());
-            showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
-            return;
-        }
-        
-        showToast('⏳ Processing ' + currency + ' deposit...');
-        
-        const chainMap = {
-            'BTC': 'bitcoin',
-            'ETH': 'ethereum',
-            'SOL': 'solana',
-            'USDT': 'ethereum',
-            'BNB': 'binance-smart-chain',
-            'LTC': 'litecoin',
-            'BRC': 'bitcoin',
-            'MATIC': 'polygon'
-        };
-        
-        const chain = chainMap[currency] || 'bitcoin';
-        
-        const response = await fetch(`${TATUM_API_URL}/${chain}/transaction`, {
-            method: 'POST',
-            headers: {
-                'x-api-key': TATUM_API_KEY,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                fromAddress: destinationAddress,
-                toAddress: destinationAddress,
-                amount: amount,
-                currency: currency
-            })
-        });
-        
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Invalid Tatum API Key.');
-            }
-            throw new Error('Transaction error: ' + response.status);
-        }
-        
-        const data = await response.json();
-        showToast('✅ ' + currency + ' deposit completed! Tx: ' + (data.txId || 'confirmed'));
-        registerHistory('DEPOSIT', currency, amount, destinationAddress, data.txId || '');
-        return data;
-        
-    } catch (error) {
-        console.error('❌ Deposit error:', error.message);
-        showToast('⚠️ Demo deposit (fallback): ' + error.message);
-        registerHistory('DEPOSIT_DEMO', currency, amount, 'Fallback deposit', 'demo_tx_' + Date.now());
-        showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
-    }
-}
-
-// -------- 3. RECEIVE CRYPTO (QR CODE) --------
-function receiveCryptoReal(currency, address) {
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(address)}`;
-    
-    const modal = document.getElementById('walletModal');
-    const title = document.getElementById('walletModalTitle');
-    const addressDisplay = document.getElementById('walletAddressDisplay');
-    const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
-    const warning = document.getElementById('walletWarning');
-    
-    title.textContent = '📤 RECEIVE ' + currency;
-    addressDisplay.innerHTML = `
-        <strong>📱 Scan QR Code or copy address:</strong>
-        <br><br>
-        <img src="${qrUrl}" style="max-width:200px; border-radius:10px; margin:10px auto;">
-        <br>
-        <div style="background:rgba(0,0,0,0.3); padding:0.8rem; border-radius:0.5rem; word-break:break-all; font-size:0.65rem; border:1px solid var(--neon-purple);">
-            ${address}
-        </div>
-        <br>
-        <button onclick="copyText('${address}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">
-            📋 COPY ADDRESS
-        </button>
-    `;
-    privateKeyDisplay.style.display = 'none';
-    warning.textContent = '⏳ Waiting for network confirmation... (may take a few minutes)';
-    
-    modal.classList.add('active');
-    
-    setTimeout(() => {
-        warning.textContent = '✅ Address ready to receive ' + currency + '!';
-        warning.style.color = 'var(--neon-green)';
-    }, 2000);
-}
-
-// -------- 4. STAKE --------
-async function stakeReal(currency, amount) {
-    try {
-        showToast('⛓️ Starting ' + currency + ' staking...');
-        
-        const stakingRates = {
-            'BTC': 0.5,
-            'ETH': 3.2,
-            'SOL': 6.8,
-            'BNB': 4.5,
-            'MATIC': 5.1,
-            'USDT': 8.0,
-            'LTC': 1.2,
-            'BRC': 12.5
-        };
-        
-        const rate = stakingRates[currency] || 5.0;
-        const yieldAmount = (amount * rate) / 100;
-        
-        registerHistory('STAKE', currency, amount, 'APY: ' + rate + '%', 'stake_' + Date.now());
-        showToast(`⛓️ Staking ${amount} ${currency} started! APY: ${rate}%`);
-        
-        const modal = document.getElementById('modalOverlay');
-        const content = document.getElementById('modalContent');
-        content.innerHTML = `
-            <h3 style="color:var(--neon-green);">⛓️ Staking Active</h3>
-            <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
-                <p><strong>Currency:</strong> ${currency}</p>
-                <p><strong>Amount:</strong> ${amount}</p>
-                <p><strong>APY:</strong> ${rate}%</p>
-                <p><strong>Estimated Yield:</strong> ${yieldAmount.toFixed(4)} ${currency}</p>
-                <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
-            </div>
-            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
-        `;
-        modal.classList.add('active');
-        
-    } catch (error) {
-        console.error('❌ Staking error:', error);
-        showToast('⚠️ Staking error. Please try again.');
-    }
-}
-
-// -------- 5. SWAP --------
-async function swapReal(from, to, amount) {
-    try {
-        showToast(`🔄 Converting ${amount} ${from} → ${to}...`);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        const rates = {
-            'USD_BTC': 0.0000149,
-            'USD_ETH': 0.000291,
-            'USD_SOL': 0.0102,
-            'USD_USDT': 1.00,
-            'BTC_USD': 67200,
-            'ETH_USD': 3443,
-            'SOL_USD': 98.07,
-            'BNB_USD': 312.50,
-            'MATIC_USD': 0.52,
-            'LTC_USD': 82.50,
-            'BRC_USD': 9.87
-        };
-        
-        const key = from + '_' + to;
-        const rate = rates[key] || rates[to + '_' + from] || 0;
-        const converted = amount * (rate || 0.001);
-        
-        registerHistory('SWAP', from + '→' + to, amount, 'Rate: ' + rate, 'swap_' + Date.now());
-        showToast(`✅ Swap completed! ${amount} ${from} = ${converted.toFixed(6)} ${to}`);
-        return { from, to, amount, converted, rate };
-        
-    } catch (error) {
-        console.error('❌ Swap error:', error);
-        showToast('⚠️ Swap error. Please try again.');
-    }
 }
 
 // ============================================
 //  FIAT FUNCTIONS - DEPOSIT, RECEIVE, STAKE
 // ============================================
-
-// -------- FIAT DEPOSIT --------
 function handleFiatDeposit(currency) {
     const symbol = currency === 'BRL' ? 'R$' : '$';
     const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '1000');
     if (amount && parseFloat(amount) > 0) {
         const valor = parseFloat(amount);
         const txId = 'fiat_' + Date.now();
-        
         registerHistory('DEPOSIT', currency, valor, 'Depósito via wire transfer', txId);
         showToast(`✅ ${symbol}${valor.toFixed(2)} ${currency} deposited successfully!`);
         updateFiatBalance(currency, valor);
     }
 }
 
-// -------- FIAT RECEIVE --------
 function handleFiatReceive(currency) {
     const accountNumber = 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
-    
     const modal = document.getElementById('modalOverlay');
     const content = document.getElementById('modalContent');
     content.innerHTML = `
@@ -2390,19 +1446,15 @@ function handleFiatReceive(currency) {
             <p><strong>SWIFT:</strong> ZNTXUS33XXX</p>
             <p><strong>IBAN:</strong> ZNTX${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
         </div>
-        <button onclick="copyText('${accountNumber}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">
-            📋 COPY ACCOUNT
-        </button>
+        <button onclick="copyText('${accountNumber}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">📋 COPY ACCOUNT</button>
         <br><br>
         <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
     `;
     modal.classList.add('active');
-    
     registerHistory('RECEIVE', currency, 0, 'Received account generated', 'fiat_receive_' + Date.now());
     showToast(`📤 ${currency} receiving account generated!`);
 }
 
-// -------- FIAT STAKE --------
 function handleFiatStaking(currency) {
     const symbol = currency === 'BRL' ? 'R$' : '$';
     const amount = prompt(`⛓️ Enter ${currency} amount to stake:`, '1000');
@@ -2410,7 +1462,6 @@ function handleFiatStaking(currency) {
         const valor = parseFloat(amount);
         const apy = currency === 'USD' ? 4.2 : (currency === 'EUR' ? 3.8 : (currency === 'GBP' ? 4.5 : 6.0));
         const yieldAmount = (valor * apy) / 100;
-        
         const modal = document.getElementById('modalOverlay');
         const content = document.getElementById('modalContent');
         content.innerHTML = `
@@ -2425,27 +1476,188 @@ function handleFiatStaking(currency) {
             <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
         `;
         modal.classList.add('active');
-        
         registerHistory('STAKE', currency, valor, 'APY: ' + apy + '%', 'stake_' + Date.now());
         showToast(`⛓️ Staking ${symbol}${valor.toFixed(2)} ${currency} started! APY: ${apy}%`);
     }
 }
 
-// -------- UPDATE FIAT BALANCE --------
 function updateFiatBalance(currency, amount) {
     const balances = JSON.parse(localStorage.getItem('zentronix_balances') || '[]');
     const existing = balances.find(b => b.currency === currency);
-    
-    if (existing) {
-        existing.amount = (existing.amount || 0) + amount;
-    } else {
-        balances.push({ currency: currency, amount: amount });
-    }
-    
+    if (existing) { existing.amount = (existing.amount || 0) + amount; } 
+    else { balances.push({ currency: currency, amount: amount }); }
     localStorage.setItem('zentronix_balances', JSON.stringify(balances));
     updateBalancesUI(balances);
 }
-// -------- 6. REGISTER HISTORY --------
+
+// ============================================
+//  CRYPTO FUNCTIONS
+// ============================================
+function handleCryptoDeposit(currency) {
+    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
+    const wallet = wallets.find(w => w.currency === currency);
+    if (wallet) {
+        const amount = prompt('💰 Enter ' + currency + ' amount to deposit:', '0.01');
+        if (amount && parseFloat(amount) > 0) {
+            depositCryptoReal(currency, parseFloat(amount), wallet.address);
+        }
+    } else {
+        showToast('⚠️ Create a wallet for ' + currency + ' first (WALLET button)');
+    }
+}
+
+function handleCryptoReceive(currency) {
+    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
+    const wallet = wallets.find(w => w.currency === currency);
+    if (wallet) {
+        receiveCryptoReal(currency, wallet.address);
+    } else {
+        showToast('⚠️ Create a wallet for ' + currency + ' first (WALLET button)');
+    }
+}
+
+async function depositCryptoReal(currency, amount, destinationAddress) {
+    try {
+        if (!isTatumConfigured()) {
+            showToast('⚠️ Tatum API not configured. Demo deposit only.');
+            registerHistory('DEPOSIT_DEMO', currency, amount, 'Demo deposit to ' + destinationAddress, 'demo_tx_' + Date.now());
+            showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
+            return;
+        }
+        showToast('⏳ Processing ' + currency + ' deposit...');
+        const chainMap = {
+            'BTC': 'bitcoin', 'ETH': 'ethereum', 'SOL': 'solana',
+            'USDT': 'ethereum', 'BNB': 'binance-smart-chain',
+            'LTC': 'litecoin', 'BRC': 'bitcoin', 'MATIC': 'polygon'
+        };
+        const chain = chainMap[currency] || 'bitcoin';
+        const response = await fetch(`${TATUM_API_URL}/${chain}/transaction`, {
+            method: 'POST',
+            headers: {
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fromAddress: destinationAddress,
+                toAddress: destinationAddress,
+                amount: amount,
+                currency: currency
+            })
+        });
+        if (!response.ok) {
+            if (response.status === 401) throw new Error('Invalid Tatum API Key.');
+            throw new Error('Transaction error: ' + response.status);
+        }
+        const data = await response.json();
+        showToast('✅ ' + currency + ' deposit completed! Tx: ' + (data.txId || 'confirmed'));
+        registerHistory('DEPOSIT', currency, amount, destinationAddress, data.txId || '');
+        return data;
+    } catch (error) {
+        console.error('❌ Deposit error:', error.message);
+        showToast('⚠️ Demo deposit (fallback): ' + error.message);
+        registerHistory('DEPOSIT_DEMO', currency, amount, 'Fallback deposit', 'demo_tx_' + Date.now());
+        showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
+    }
+}
+
+function receiveCryptoReal(currency, address) {
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(address)}`;
+    const modal = document.getElementById('walletModal');
+    const title = document.getElementById('walletModalTitle');
+    const addressDisplay = document.getElementById('walletAddressDisplay');
+    const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
+    const warning = document.getElementById('walletWarning');
+    title.textContent = '📤 RECEIVE ' + currency;
+    addressDisplay.innerHTML = `
+        <strong>📱 Scan QR Code or copy address:</strong><br><br>
+        <img src="${qrUrl}" style="max-width:200px; border-radius:10px; margin:10px auto;"><br>
+        <div style="background:rgba(0,0,0,0.3); padding:0.8rem; border-radius:0.5rem; word-break:break-all; font-size:0.65rem; border:1px solid var(--neon-purple);">${address}</div>
+        <br>
+        <button onclick="copyText('${address}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">📋 COPY ADDRESS</button>
+    `;
+    privateKeyDisplay.style.display = 'none';
+    warning.textContent = '⏳ Waiting for network confirmation... (may take a few minutes)';
+    modal.classList.add('active');
+    setTimeout(() => {
+        warning.textContent = '✅ Address ready to receive ' + currency + '!';
+        warning.style.color = 'var(--neon-green)';
+    }, 2000);
+}
+
+async function stakeReal(currency, amount) {
+    try {
+        showToast('⛓️ Starting ' + currency + ' staking...');
+        const stakingRates = {
+            'BTC': 0.5, 'ETH': 3.2, 'SOL': 6.8, 'BNB': 4.5,
+            'MATIC': 5.1, 'USDT': 8.0, 'LTC': 1.2, 'BRC': 12.5
+        };
+        const rate = stakingRates[currency] || 5.0;
+        const yieldAmount = (amount * rate) / 100;
+        registerHistory('STAKE', currency, amount, 'APY: ' + rate + '%', 'stake_' + Date.now());
+        showToast(`⛓️ Staking ${amount} ${currency} started! APY: ${rate}%`);
+        const modal = document.getElementById('modalOverlay');
+        const content = document.getElementById('modalContent');
+        content.innerHTML = `
+            <h3 style="color:var(--neon-green);">⛓️ Staking Active</h3>
+            <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
+                <p><strong>Currency:</strong> ${currency}</p>
+                <p><strong>Amount:</strong> ${amount}</p>
+                <p><strong>APY:</strong> ${rate}%</p>
+                <p><strong>Estimated Yield:</strong> ${yieldAmount.toFixed(4)} ${currency}</p>
+                <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
+            </div>
+            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
+        `;
+        modal.classList.add('active');
+    } catch (error) {
+        console.error('❌ Staking error:', error);
+        showToast('⚠️ Staking error. Please try again.');
+    }
+}
+
+// ============================================
+//  SWAP
+// ============================================
+async function swapReal(from, to, amount) {
+    try {
+        showToast(`🔄 Converting ${amount} ${from} → ${to}...`);
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        const rates = {
+            'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
+            'USD_USDT': 1.00, 'BTC_USD': 67200, 'ETH_USD': 3443,
+            'SOL_USD': 98.07, 'BNB_USD': 312.50, 'MATIC_USD': 0.52,
+            'LTC_USD': 82.50, 'BRC_USD': 9.87,
+            'USD_EUR': 0.92, 'USD_GBP': 0.79, 'USD_BRL': 5.45,
+            'EUR_USD': 1.08, 'EUR_GBP': 0.86, 'EUR_BRL': 5.92,
+            'GBP_USD': 1.26, 'GBP_EUR': 1.16, 'GBP_BRL': 6.89,
+            'BRL_USD': 0.18, 'BRL_EUR': 0.17, 'BRL_GBP': 0.15,
+            'BTC_ETH': 19.5, 'BTC_SOL': 685, 'BTC_BNB': 215,
+            'BTC_LTC': 814, 'BTC_BRC': 6800, 'BTC_MATIC': 129230,
+            'ETH_BTC': 0.0513, 'ETH_SOL': 35.1, 'ETH_BNB': 11.02,
+            'ETH_LTC': 41.7, 'ETH_BRC': 348, 'ETH_MATIC': 6621,
+            'SOL_BTC': 0.00146, 'SOL_ETH': 0.0285, 'SOL_BNB': 0.314,
+            'SOL_LTC': 1.19, 'SOL_BRC': 9.93, 'SOL_MATIC': 188.6,
+            'BNB_BTC': 0.00465, 'BNB_ETH': 0.0907, 'BNB_SOL': 3.19,
+            'LTC_BTC': 0.00123, 'LTC_ETH': 0.0240, 'LTC_SOL': 0.841,
+            'BRC_BTC': 0.000147, 'BRC_ETH': 0.00287, 'BRC_SOL': 0.1007,
+            'MATIC_BTC': 0.00000774, 'MATIC_ETH': 0.000151, 'MATIC_SOL': 0.0053
+        };
+        const key = from + '_' + to;
+        const rate = rates[key] || rates[to + '_' + from] || 0;
+        let converted = amount * (rate || 0.001);
+        if (converted < 0.000001 && rate > 0) { converted = amount / (rates[to + '_' + from] || 1); }
+        registerHistory('SWAP', from + '→' + to, amount, 'Rate: ' + rate, 'swap_' + Date.now());
+        showToast(`✅ Swap completed! ${amount} ${from} = ${converted.toFixed(6)} ${to}`);
+        return { from, to, amount, converted, rate };
+    } catch (error) {
+        console.error('❌ Swap error:', error);
+        showToast('⚠️ Swap error. Please try again.');
+    }
+}
+
+// ============================================
+//  REGISTER HISTORY
+// ============================================
 function registerHistory(type, currency, amount, detail, txId) {
     const history = JSON.parse(localStorage.getItem('zentronix_history') || '[]');
     history.unshift({
@@ -2456,7 +1668,6 @@ function registerHistory(type, currency, amount, detail, txId) {
         txId: txId || 'N/A',
         date: new Date().toISOString()
     });
-    
     if (history.length > 100) history.pop();
     localStorage.setItem('zentronix_history', JSON.stringify(history));
     updateHistoryUI();
@@ -2465,27 +1676,20 @@ function registerHistory(type, currency, amount, detail, txId) {
 function updateHistoryUI() {
     const historyList = document.getElementById('historyList');
     if (!historyList) return;
-    
     const history = JSON.parse(localStorage.getItem('zentronix_history') || '[]');
     if (history.length === 0) {
         historyList.innerHTML = '<p style="text-align:center;opacity:0.5;padding:2rem;">No transactions recorded</p>';
         return;
     }
-    
     historyList.innerHTML = history.slice(0, 20).map(item => {
         const colors = {
-            'DEPOSIT': 'var(--neon-green)',
-            'DEPOSIT_DEMO': 'var(--neon-yellow)',
-            'RECEIVE': 'var(--neon-blue)',
-            'STAKE': 'var(--neon-purple)',
-            'SWAP': 'var(--neon-yellow)',
-            'BUY': 'var(--neon-green)',
-            'SELL': 'var(--neon-red)',
-            'LOAN_REQUEST': 'var(--neon-orange)'
+            'DEPOSIT': 'var(--neon-green)', 'DEPOSIT_DEMO': 'var(--neon-yellow)',
+            'RECEIVE': 'var(--neon-blue)', 'STAKE': 'var(--neon-purple)',
+            'SWAP': 'var(--neon-yellow)', 'BUY': 'var(--neon-green)',
+            'SELL': 'var(--neon-red)', 'LOAN_REQUEST': 'var(--neon-orange)'
         };
         const color = colors[item.type] || 'var(--neon-blue)';
         const date = new Date(item.date).toLocaleString('en-US');
-        
         return `
             <div class="history-item" style="border-left-color:${color};">
                 <div class="history-content">
@@ -2499,19 +1703,18 @@ function updateHistoryUI() {
     }).join('');
 }
 
-// -------- 7. PERSONAL LOAN (UPDATED - Saves to Supabase) --------
+// ============================================
+//  PERSONAL LOAN
+// ============================================
 function openPersonalLoan() {
     const modal = document.getElementById('modalOverlay');
     const content = document.getElementById('modalContent');
-    
     content.innerHTML = `
         <h3 style="color:var(--neon-yellow);">🏦 Personal Loan</h3>
         <p style="font-size:0.8rem; opacity:0.7; margin-bottom:1rem;">Apply for a personalized loan</p>
-        
         <div style="text-align:left;">
             <label style="font-size:0.7rem; color:var(--neon-purple);">💰 Loan Amount</label>
             <input type="number" id="loanAmount" placeholder="Ex: 50000" style="width:100%; padding:0.7rem; margin-bottom:1rem; background:rgba(26,27,58,0.9); border:1px solid var(--border-glow); border-radius:0.8rem; color:var(--text-primary);">
-            
             <label style="font-size:0.7rem; color:var(--neon-purple);">💱 Currency</label>
             <select id="loanCurrency" style="width:100%; padding:0.7rem; margin-bottom:1rem; background:rgba(26,27,58,0.9); border:1px solid var(--border-glow); border-radius:0.8rem; color:var(--text-primary);">
                 <option value="USD">💵 US Dollar (USD)</option>
@@ -2520,7 +1723,6 @@ function openPersonalLoan() {
                 <option value="BRL">R$ Brazilian Real (BRL)</option>
                 <option value="BRC">🪙 BradiCoin (BRC)</option>
             </select>
-            
             <label style="font-size:0.7rem; color:var(--neon-purple);">📝 Loan Purpose</label>
             <select id="loanReason" style="width:100%; padding:0.7rem; margin-bottom:1rem; background:rgba(26,27,58,0.9); border:1px solid var(--border-glow); border-radius:0.8rem; color:var(--text-primary);">
                 <option value="investment">Investment</option>
@@ -2530,7 +1732,6 @@ function openPersonalLoan() {
                 <option value="health">Health</option>
                 <option value="others">Others</option>
             </select>
-            
             <label style="font-size:0.7rem; color:var(--neon-purple);">📅 Repayment Term</label>
             <select id="loanTerm" style="width:100%; padding:0.7rem; margin-bottom:1rem; background:rgba(26,27,58,0.9); border:1px solid var(--border-glow); border-radius:0.8rem; color:var(--text-primary);">
                 <option value="6">6 months</option>
@@ -2540,17 +1741,11 @@ function openPersonalLoan() {
                 <option value="48">48 months</option>
                 <option value="60">60 months</option>
             </select>
-            
-            <button onclick="submitLoanRequest()" style="width:100%; padding:0.8rem; background:linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border:none; border-radius:1rem; color:#0a0b1e; font-weight:bold; cursor:pointer; margin-top:0.5rem;">
-                📤 SUBMIT REQUEST
-            </button>
-            
+            <button onclick="submitLoanRequest()" style="width:100%; padding:0.8rem; background:linear-gradient(95deg, var(--neon-purple), var(--neon-blue)); border:none; border-radius:1rem; color:#0a0b1e; font-weight:bold; cursor:pointer; margin-top:0.5rem;">📤 SUBMIT REQUEST</button>
             <div id="loanResult" style="margin-top:1rem; padding:1rem; border-radius:0.8rem; display:none;"></div>
         </div>
-        
         <button onclick="closeModalOverlay()" style="margin-top:1rem; background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
     `;
-    
     modal.classList.add('active');
 }
 
@@ -2559,28 +1754,18 @@ async function submitLoanRequest() {
     const currency = document.getElementById('loanCurrency').value;
     const reason = document.getElementById('loanReason').value;
     const term = document.getElementById('loanTerm').value;
-    
-    if (!amount || amount <= 0) {
-        showToast('⚠️ Please enter a valid amount');
-        return;
-    }
-    
+    if (!amount || amount <= 0) { showToast('⚠️ Please enter a valid amount'); return; }
     const resultDiv = document.getElementById('loanResult');
     resultDiv.style.display = 'block';
     resultDiv.style.background = 'rgba(0,255,136,0.1)';
     resultDiv.style.border = '1px solid var(--neon-green)';
-    
-    // Try to save to Supabase
     try {
-        // Get current user
         const { data: user, error: userError } = await supabaseClient
             .from('users')
             .select('id')
             .eq('email', 'admin@zentronix.com')
             .single();
-        
         if (!userError && user) {
-            // Save loan to Supabase
             const { error: loanError } = await supabaseClient
                 .from('loans')
                 .insert([{
@@ -2592,21 +1777,11 @@ async function submitLoanRequest() {
                     status: 'pending',
                     created_at: new Date().toISOString()
                 }]);
-            
-            if (loanError) {
-                console.warn('⚠️ Could not save to Supabase:', loanError);
-                // Still show success to user
-            } else {
-                console.log('✅ Loan saved to Supabase');
-            }
+            if (loanError) { console.warn('⚠️ Could not save to Supabase:', loanError); } 
+            else { console.log('✅ Loan saved to Supabase'); }
         }
-    } catch (error) {
-        console.warn('⚠️ Supabase save failed, saving locally:', error);
-    }
-    
-    // Always save locally
+    } catch (error) { console.warn('⚠️ Supabase save failed, saving locally:', error); }
     registerHistory('LOAN_REQUEST', currency, amount, 'Purpose: ' + reason + ' | Term: ' + term + ' months', 'loan_' + Date.now());
-    
     resultDiv.innerHTML = `
         <h4 style="color:var(--neon-green);">✅ REQUEST SUBMITTED!</h4>
         <p style="font-size:0.8rem; margin-top:0.5rem;">
@@ -2622,21 +1797,16 @@ async function submitLoanRequest() {
             Protocol: #LOAN-${Date.now().toString().slice(-8)}
         </div>
     `;
-    
     showToast('✅ Loan request submitted successfully!');
-    
-    setTimeout(() => {
-        if (confirm('Close this request?')) {
-            closeModalOverlay();
-        }
-    }, 8000);
+    setTimeout(() => { if (confirm('Close this request?')) { closeModalOverlay(); } }, 8000);
 }
 
-// -------- 8. LOAD COMPLETE SERVICES --------
+// ============================================
+//  LOAD COMPLETE SERVICES
+// ============================================
 function loadCompleteServices() {
     const container = document.getElementById('bankingServicesList');
     if (!container) return;
-    
     const services = [
         { icon: 'fa-hand-holding-usd', name: 'Personal Loan', desc: 'Customized loans', color: 'var(--neon-yellow)', action: 'openPersonalLoan()' },
         { icon: 'fa-credit-card', name: 'Credit Card', desc: 'Premium credit cards', color: 'var(--neon-blue)', action: "showToast('💳 Apply for your premium card')" },
@@ -2647,7 +1817,6 @@ function loadCompleteServices() {
         { icon: 'fa-handshake', name: 'Private Banking', desc: 'Exclusive banking services', color: 'var(--neon-purple)', action: "showToast('🤝 Exclusive services')" },
         { icon: 'fa-coins', name: 'Crypto Services', desc: 'Complete crypto services', color: 'var(--neon-yellow)', action: "showToast('💎 Crypto services available')" }
     ];
-    
     container.innerHTML = services.map(s => `
         <div class="service-card" onclick="${s.action}" style="border-left: 3px solid ${s.color};">
             <div style="display:flex; align-items:center; gap:12px;">
@@ -2663,14 +1832,11 @@ function loadCompleteServices() {
 }
 
 // ============================================
-//  ACTION HANDLERS (OVERRIDES) - FIX #3 - Global scope
+//  ACTION HANDLERS (GLOBAL SCOPE)
 // ============================================
-
-// Make all functions globally accessible
 window.handleDeposit = function(currency) {
     const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
     const wallet = wallets.find(w => w.currency === currency);
-    
     if (wallet) {
         const amount = prompt('💰 Enter ' + currency + ' amount to deposit:', '0.01');
         if (amount && parseFloat(amount) > 0) {
@@ -2684,7 +1850,6 @@ window.handleDeposit = function(currency) {
 window.handleReceive = function(currency) {
     const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
     const wallet = wallets.find(w => w.currency === currency);
-    
     if (wallet) {
         receiveCryptoReal(currency, wallet.address);
     } else {
@@ -2707,12 +1872,7 @@ window.executeSwap = async function() {
     const from = document.getElementById('swapFromSelect').value;
     const to = document.getElementById('swapToSelect').value;
     const amount = parseFloat(document.getElementById('swapAmountInput').value);
-    
-    if (!amount || amount <= 0) {
-        showToast('⚠️ Enter a valid amount');
-        return;
-    }
-    
+    if (!amount || amount <= 0) { showToast('⚠️ Enter a valid amount'); return; }
     await swapReal(from, to, amount);
     document.getElementById('swapModal').classList.remove('active');
 };
@@ -2744,54 +1904,27 @@ window.updateSwapRate = function() {
     const from = document.getElementById('swapFromSelect').value;
     const to = document.getElementById('swapToSelect').value;
     const rates = {
-        'USD_BTC': 0.0000149,
-        'USD_ETH': 0.000291,
-        'USD_SOL': 0.0102,
-        'USD_USDT': 1.00,
-        'USD_BNB': 0.0032,
-        'USD_LTC': 0.0121,
-        'USD_BRC': 0.1013,
-        'USD_MATIC': 1.92,
-        'USD_EUR': 0.92,
-        'USD_GBP': 0.79,
-        'USD_BRL': 5.45,
-        'BTC_USD': 67200,
-        'BTC_ETH': 19.5,
-        'BTC_SOL': 685,
-        'BTC_USDT': 67200,
-        'BTC_BNB': 215,
-        'BTC_LTC': 814,
-        'BTC_BRC': 6800,
-        'BTC_MATIC': 129230,
-        'ETH_USD': 3443,
-        'ETH_BTC': 0.0513,
-        'ETH_SOL': 35.1,
-        'ETH_USDT': 3443,
-        'ETH_BNB': 11.02,
-        'ETH_LTC': 41.7,
-        'ETH_BRC': 348,
-        'ETH_MATIC': 6621,
-        'EUR_USD': 1.08,
-        'EUR_BTC': 0.0000161,
-        'EUR_ETH': 0.000314,
-        'GBP_USD': 1.26,
-        'GBP_BTC': 0.0000188,
-        'BRL_USD': 0.18,
-        'BRL_BTC': 0.00000268
+        'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
+        'USD_USDT': 1.00, 'USD_BNB': 0.0032, 'USD_LTC': 0.0121,
+        'USD_BRC': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
+        'USD_GBP': 0.79, 'USD_BRL': 5.45,
+        'BTC_USD': 67200, 'BTC_ETH': 19.5, 'BTC_SOL': 685,
+        'BTC_USDT': 67200, 'BTC_BNB': 215, 'BTC_LTC': 814,
+        'BTC_BRC': 6800, 'BTC_MATIC': 129230,
+        'ETH_USD': 3443, 'ETH_BTC': 0.0513, 'ETH_SOL': 35.1,
+        'ETH_USDT': 3443, 'ETH_BNB': 11.02, 'ETH_LTC': 41.7,
+        'ETH_BRC': 348, 'ETH_MATIC': 6621,
+        'EUR_USD': 1.08, 'EUR_BTC': 0.0000161, 'EUR_ETH': 0.000314,
+        'GBP_USD': 1.26, 'GBP_BTC': 0.0000188,
+        'BRL_USD': 0.18, 'BRL_BTC': 0.00000268
     };
     const key = from + '_' + to;
     const rate = rates[key] || 'N/A';
     document.getElementById('swapRateDisplay').textContent = `Rate: 1 ${from} = ${rate} ${to}`;
 };
 
-window.closeSwapModal = function() {
-    document.getElementById('swapModal').classList.remove('active');
-};
-
-window.closeWalletModal = function() {
-    document.getElementById('walletModal').classList.remove('active');
-};
-
+window.closeSwapModal = function() { document.getElementById('swapModal').classList.remove('active'); };
+window.closeWalletModal = function() { document.getElementById('walletModal').classList.remove('active'); };
 window.openPersonalLoan = openPersonalLoan;
 window.submitLoanRequest = submitLoanRequest;
 window.closeModalOverlay = closeModalOverlay;
@@ -2803,9 +1936,7 @@ window.showToast = showToast;
 // ============================================
 function initStakingChart() {
     const ctx = document.getElementById('stakingChart').getContext('2d');
-    if (stakingChartInstance) {
-        stakingChartInstance.destroy();
-    }
+    if (stakingChartInstance) { stakingChartInstance.destroy(); }
     stakingChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -2823,9 +1954,7 @@ function initStakingChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } }
-            },
+            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } } },
             scales: {
                 x: { grid: { color: 'rgba(188, 19, 254, 0.1)' }, ticks: { color: '#a0a0b0' } },
                 y: { grid: { color: 'rgba(188, 19, 254, 0.1)' }, ticks: { color: '#a0a0b0' } }
@@ -2854,7 +1983,6 @@ function updateProfileUI() {
     document.getElementById('profilePhone').value = userProfile.phone || '+41 78 123 4567';
     const name = userProfile.firstName || 'Admin';
     document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: name });
-    
     if (userProfile.photo) {
         document.getElementById('profileAvatarImg').src = userProfile.photo;
         document.getElementById('profileAvatarImg').style.display = 'block';
@@ -2870,7 +1998,6 @@ function saveProfile() {
     userProfile.lastName = document.getElementById('profileLastName').value.trim() || 'Vance';
     userProfile.email = document.getElementById('profileEmail').value.trim() || 'alexander.vance@zentronix.com';
     userProfile.phone = document.getElementById('profilePhone').value.trim() || '+41 78 123 4567';
-    
     localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
     updateProfileUI();
     document.getElementById('profileModal').classList.remove('active');
@@ -2888,7 +2015,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
     
-    // Language selector
     document.getElementById('langTrigger').addEventListener('click', function(e) {
         e.stopPropagation();
         document.getElementById('langContainer').classList.toggle('active');
@@ -2906,7 +2032,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('langContainer').classList.remove('active');
     });
     
-    // ACCESS HUB button
     const openLoginBtn = document.getElementById('openLoginBtn');
     if (openLoginBtn) {
         const newBtn = openLoginBtn.cloneNode(true);
@@ -2918,7 +2043,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // KYC button
     const kycBtn = document.getElementById('kycBtn');
     if (kycBtn) {
         const newKycBtn = kycBtn.cloneNode(true);
@@ -2932,7 +2056,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Login
     document.getElementById('closeModalBtn').addEventListener('click', closeLoginModal);
     document.getElementById('loginModal').addEventListener('click', function(e) {
         if (e.target === this) closeLoginModal();
@@ -2955,7 +2078,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Logout
     document.getElementById('logoutMainBtn').addEventListener('click', function(e) {
         e.preventDefault();
         logout();
@@ -2966,12 +2088,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === this) cancelLogout();
     });
     
-    // Swap
     document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
     document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
     updateSwapRate();
     
-    // KYC close
     document.getElementById('closeSubmitModalBtn').addEventListener('click', function() {
         document.getElementById('submitModal').classList.remove('active');
         if (cameraStream) {
@@ -2980,7 +2100,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // KYC uploads
     document.getElementById('uploadArea').addEventListener('click', function() {
         document.getElementById('fileInput').click();
     });
@@ -3003,57 +2122,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // KYC navigation
     document.getElementById('kycNextBtn').addEventListener('click', function() {
         if (currentKycStep === 1) {
             const fullName = document.getElementById('fullNameDoc').value.trim();
             const email = document.getElementById('emailDocInput').value.trim();
-            if (!fullName || !email) {
-                showToast('⚠️ Fill all fields');
-                return;
-            }
-            if (!email.includes('@')) {
-                showToast('⚠️ Invalid email');
-                return;
-            }
+            if (!fullName || !email) { showToast('⚠️ Fill all fields'); return; }
+            if (!email.includes('@')) { showToast('⚠️ Invalid email'); return; }
         }
         if (currentKycStep === 2) {
-            if (!idDocumentFile || !addressDocumentFile) {
-                showToast('⚠️ Upload documents');
-                return;
-            }
+            if (!idDocumentFile || !addressDocumentFile) { showToast('⚠️ Upload documents'); return; }
         }
-        if (currentKycStep < 3) {
-            currentKycStep++;
-            updateKycSteps();
-        }
+        if (currentKycStep < 3) { currentKycStep++; updateKycSteps(); }
     });
     
     document.getElementById('kycPrevBtn').addEventListener('click', function() {
-        if (currentKycStep > 1) {
-            currentKycStep--;
-            updateKycSteps();
-        }
+        if (currentKycStep > 1) { currentKycStep--; updateKycSteps(); }
     });
     
     document.getElementById('submitKycBtn').addEventListener('click', function() {
-        if (!idDocumentFile || !addressDocumentFile) {
-            showToast('⚠️ Complete all steps');
-            return;
-        }
+        if (!idDocumentFile || !addressDocumentFile) { showToast('⚠️ Complete all steps'); return; }
         showToast('✅ KYC submitted successfully!');
         document.getElementById('submitModal').classList.remove('active');
         document.getElementById('kycStatusBadge').style.display = 'block';
         document.getElementById('kycPendingText').textContent = getTranslation('kycPendingText');
     });
     
-    // Stealth mode
     document.getElementById('stealthSwitch').addEventListener('click', function() {
         this.classList.toggle('active');
         showToast(this.classList.contains('active') ? getTranslation('stealthActivated') : getTranslation('stealthDeactivated'));
     });
     
-    // Menu navigation
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
         item.addEventListener('click', function() {
             const section = this.dataset.section;
@@ -3062,17 +2160,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (target) target.classList.add('active');
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             this.classList.add('active');
-            
-            if (section === 'services') {
-                setTimeout(loadCompleteServices, 100);
-            }
-            if (section === 'history') {
-                setTimeout(updateHistoryUI, 100);
-            }
+            if (section === 'services') { setTimeout(loadCompleteServices, 100); }
+            if (section === 'history') { setTimeout(updateHistoryUI, 100); }
         });
     });
     
-    // Profile
     document.getElementById('profileAvatarBtn').addEventListener('click', function() {
         document.getElementById('profileModal').classList.add('active');
         loadProfileData();
@@ -3083,9 +2175,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     document.getElementById('profileModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            document.getElementById('profileModal').classList.remove('active');
-        }
+        if (e.target === this) { document.getElementById('profileModal').classList.remove('active'); }
     });
     
     document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
@@ -3107,7 +2197,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // ESC key to close modals
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             document.getElementById('loginModal').classList.remove('active');
