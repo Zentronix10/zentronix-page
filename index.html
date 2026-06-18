@@ -1264,37 +1264,102 @@ function initDashboard() {
 }
 
 // ============================================
-//  LOAD BALANCES (FIX #1 - supabaseClient defined)
+//  LOAD BALANCES (FIXED - Creates user if not exists)
 // ============================================
 async function loadBalances() {
     try {
-        // Try to load from Supabase
+        // First, try to get or create the admin user
+        let userId = null;
+        
+        // Try to find existing user
         const { data: user, error: userError } = await supabaseClient
             .from('users')
             .select('id')
             .eq('email', 'admin@zentronix.com')
-            .single();
+            .maybeSingle(); // Use maybeSingle() instead of single() to avoid 406
         
         if (userError) {
-            console.warn('⚠️ Using local balances (Supabase user not found)');
-            loadLocalBalances();
-            return;
+            console.warn('⚠️ Error checking user:', userError.message);
         }
         
-        const { data: balances, error: balError } = await supabaseClient
-            .from('balances')
-            .select('*')
-            .eq('user_id', user.id);
-        
-        if (balError) {
-            console.warn('⚠️ Using local balances (Supabase error)');
-            loadLocalBalances();
-            return;
+        if (user) {
+            userId = user.id;
+            console.log('✅ Admin user found:', userId);
+        } else {
+            // User doesn't exist, create one
+            console.log('👤 Creating admin user...');
+            const { data: newUser, error: createError } = await supabaseClient
+                .from('users')
+                .insert([{
+                    email: 'admin@zentronix.com',
+                    name: 'Admin',
+                    created_at: new Date().toISOString()
+                }])
+                .select('id')
+                .single();
+            
+            if (createError) {
+                console.warn('⚠️ Could not create user:', createError.message);
+                loadLocalBalances();
+                return;
+            }
+            
+            userId = newUser.id;
+            console.log('✅ Admin user created:', userId);
+            
+            // Create default balances for the new user
+            await createDefaultBalances(userId);
         }
         
-        console.log('✅ Balances loaded from Supabase');
-        updateBalancesUI(balances);
-        return balances;
+        // Now fetch balances for the user
+        if (userId) {
+            const { data: balances, error: balError } = await supabaseClient
+                .from('balances')
+                .select('*')
+                .eq('user_id', userId);
+            
+            if (balError) {
+                console.warn('⚠️ Error fetching balances:', balError.message);
+                // Try to create default balances
+                await createDefaultBalances(userId);
+                // Fetch again
+                const { data: newBalances, error: retryError } = await supabaseClient
+                    .from('balances')
+                    .select('*')
+                    .eq('user_id', userId);
+                
+                if (!retryError && newBalances && newBalances.length > 0) {
+                    updateBalancesUI(newBalances);
+                    return;
+                }
+                loadLocalBalances();
+                return;
+            }
+            
+            if (balances && balances.length > 0) {
+                console.log('✅ Balances loaded from Supabase');
+                updateBalancesUI(balances);
+                return;
+            } else {
+                // User has no balances, create defaults
+                await createDefaultBalances(userId);
+                // Fetch again
+                const { data: newBalances, error: retryError } = await supabaseClient
+                    .from('balances')
+                    .select('*')
+                    .eq('user_id', userId);
+                
+                if (!retryError && newBalances && newBalances.length > 0) {
+                    updateBalancesUI(newBalances);
+                    return;
+                }
+                loadLocalBalances();
+                return;
+            }
+        }
+        
+        // Fallback to local balances
+        loadLocalBalances();
         
     } catch (error) {
         console.warn('⚠️ Using local balances (fallback):', error.message);
@@ -1302,6 +1367,44 @@ async function loadBalances() {
     }
 }
 
+// ============================================
+//  CREATE DEFAULT BALANCES FOR NEW USER
+// ============================================
+async function createDefaultBalances(userId) {
+    try {
+        const defaultBalances = [
+            { user_id: userId, currency: 'USD', amount: 12450.75 },
+            { user_id: userId, currency: 'EUR', amount: 8200.50 },
+            { user_id: userId, currency: 'GBP', amount: 3500.00 },
+            { user_id: userId, currency: 'BRL', amount: 45000.00 },
+            { user_id: userId, currency: 'BTC', amount: 0.45 },
+            { user_id: userId, currency: 'ETH', amount: 3.20 },
+            { user_id: userId, currency: 'BNB', amount: 12.50 },
+            { user_id: userId, currency: 'SOL', amount: 45.80 },
+            { user_id: userId, currency: 'MATIC', amount: 1200.00 },
+            { user_id: userId, currency: 'USDT', amount: 5000.00 },
+            { user_id: userId, currency: 'LTC', amount: 8.90 },
+            { user_id: userId, currency: 'BRC', amount: 250.00 }
+        ];
+        
+        const { error } = await supabaseClient
+            .from('balances')
+            .insert(defaultBalances);
+        
+        if (error) {
+            console.warn('⚠️ Could not create default balances:', error.message);
+        } else {
+            console.log('✅ Default balances created for user');
+        }
+        
+    } catch (error) {
+        console.warn('⚠️ Error creating default balances:', error.message);
+    }
+}
+
+// ============================================
+//  LOAD LOCAL BALANCES (FALLBACK)
+// ============================================
 function loadLocalBalances() {
     const balances = [
         { currency: 'USD', amount: 12450.75, icon: '💵' },
@@ -1330,6 +1433,7 @@ function loadLocalBalances() {
         div.innerHTML = `<span><strong>${b.icon} ${b.currency}</strong></span><span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
         grid.appendChild(div);
         
+        // Calculate total in USD
         if (b.currency === 'USD') total += amount;
         else if (b.currency === 'EUR') total += amount * 1.08;
         else if (b.currency === 'GBP') total += amount * 1.26;
@@ -1346,49 +1450,6 @@ function loadLocalBalances() {
     
     document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
-
-function updateBalancesUI(balances) {
-    const grid = document.getElementById('currencyGrid');
-    if (!grid) return;
-    
-    grid.innerHTML = '';
-    let total = 0;
-    
-    balances.forEach(b => {
-        const div = document.createElement('div');
-        div.className = 'currency-item';
-        const amount = b.amount || 0;
-        const icon = getCurrencyIcon(b.currency);
-        div.innerHTML = `
-            <span><strong>${icon} ${b.currency}</strong></span>
-            <span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-        `;
-        grid.appendChild(div);
-        total += convertToUSD(b.currency, amount);
-    });
-    
-    document.getElementById('totalBalance').textContent = 
-        '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function getCurrencyIcon(currency) {
-    const icons = {
-        'USD': '💵', 'EUR': '💶', 'GBP': '💷', 'BRL': 'R$',
-        'BTC': '₿', 'ETH': 'Ξ', 'BNB': 'BNB', 'SOL': '◎',
-        'MATIC': '◇', 'USDT': '₮', 'LTC': 'Ł', 'BRC': '🪙'
-    };
-    return icons[currency] || '💰';
-}
-
-function convertToUSD(currency, amount) {
-    const rates = {
-        'USD': 1, 'EUR': 1.08, 'GBP': 1.26, 'BRL': 0.18,
-        'BTC': 67200, 'ETH': 3443, 'BNB': 312.50, 'SOL': 98.07,
-        'MATIC': 0.52, 'USDT': 1.00, 'LTC': 82.50, 'BRC': 9.87
-    };
-    return amount * (rates[currency] || 1);
-}
-
 // ============================================
 //  LOAD ALL ASSETS WITH BUTTONS
 // ============================================
