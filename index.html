@@ -1678,13 +1678,81 @@ function updateKycSteps() {
 // ============================================
 //  DASHBOARD
 // ============================================
-function initDashboard() {
-    console.log('🟣 Dashboard initialized');
-    loadBalances();
-    loadAllAssets();
-    initStakingChart();
-    loadProfileData();
-    updateHistoryUI();
+function loadAllAssets() {
+    // ===== CRIPTOMOEDAS =====
+    const cryptoAssets = [
+        { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
+        { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
+        { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+0.8%', chain: 'BNB', icon: 'BNB' },
+        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+5.6%', chain: 'BRC', icon: '🪙' },
+        { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+3.1%', chain: 'SOL', icon: '◎' },
+        { name: 'Polygon', symbol: 'MATIC', price: 0.52, change: '-0.5%', chain: 'MATIC', icon: '◇' },
+        { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.0%', chain: 'USDT', icon: '₮' },
+        { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '+1.7%', chain: 'LTC', icon: 'Ł' }
+    ];
+    
+    // ===== MOEDAS FIAT =====
+    const fiatAssets = [
+        { name: 'US Dollar', symbol: 'USD', price: 1.00, change: '+0.0%', icon: '💵', type: 'fiat' },
+        { name: 'Euro', symbol: 'EUR', price: 1.08, change: '+0.2%', icon: '💶', type: 'fiat' },
+        { name: 'British Pound', symbol: 'GBP', price: 1.26, change: '-0.1%', icon: '💷', type: 'fiat' },
+        { name: 'Brazilian Real', symbol: 'BRL', price: 0.18, change: '+0.5%', icon: 'R$', type: 'fiat' }
+    ];
+    
+    // ===== RENDERIZAR CRIPTO =====
+    const cryptoGrid = document.getElementById('cryptoAssetsGrid');
+    if (cryptoGrid) {
+        cryptoGrid.innerHTML = '';
+        cryptoAssets.forEach(a => {
+            const card = document.createElement('div');
+            card.className = 'asset-card';
+            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
+            const isBradi = a.symbol === 'BRC';
+            
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
+                    <span style="color: ${changeColor}">${a.change}</span>
+                </div>
+                <div class="asset-price">$${a.price.toLocaleString()}</div>
+                <div class="button-group">
+                    <button class="deposit-btn" onclick="handleCryptoDeposit('${a.symbol}')">📥 DEPOSIT</button>
+                    <button class="receive-btn" onclick="handleCryptoReceive('${a.symbol}')">📤 RECEIVE</button>
+                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
+                    <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
+                    ${isBradi ? `<button class="buy-btn" onclick="handleBuy('${a.symbol}')">🟢 BUY</button>` : ''}
+                </div>
+            `;
+            cryptoGrid.appendChild(card);
+        });
+    }
+    
+    // ===== RENDERIZAR FIAT =====
+    const fiatGrid = document.getElementById('fiatAssetsGrid');
+    if (fiatGrid) {
+        fiatGrid.innerHTML = '';
+        fiatAssets.forEach(a => {
+            const card = document.createElement('div');
+            card.className = 'asset-card';
+            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
+            
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
+                    <span style="color: ${changeColor}">${a.change}</span>
+                </div>
+                <div class="asset-price">${a.symbol === 'BRL' ? 'R$' : '$'}${a.price.toFixed(2)}</div>
+                <div class="button-group">
+                    <button class="deposit-btn" onclick="handleFiatDeposit('${a.symbol}')">📥 DEPOSIT</button>
+                    <button class="receive-btn" onclick="handleFiatReceive('${a.symbol}')">📤 RECEIVE</button>
+                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="staking-btn" onclick="handleFiatStaking('${a.symbol}')">⛓️ STAKE</button>
+                </div>
+            `;
+            fiatGrid.appendChild(card);
+        });
+    }
 }
 
 // ============================================
@@ -2289,6 +2357,94 @@ async function swapReal(from, to, amount) {
     }
 }
 
+// ============================================
+//  FIAT FUNCTIONS - DEPOSIT, RECEIVE, STAKE
+// ============================================
+
+// -------- FIAT DEPOSIT --------
+function handleFiatDeposit(currency) {
+    const symbol = currency === 'BRL' ? 'R$' : '$';
+    const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '1000');
+    if (amount && parseFloat(amount) > 0) {
+        const valor = parseFloat(amount);
+        const txId = 'fiat_' + Date.now();
+        
+        registerHistory('DEPOSIT', currency, valor, 'Depósito via wire transfer', txId);
+        showToast(`✅ ${symbol}${valor.toFixed(2)} ${currency} deposited successfully!`);
+        updateFiatBalance(currency, valor);
+    }
+}
+
+// -------- FIAT RECEIVE --------
+function handleFiatReceive(currency) {
+    const accountNumber = 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
+    
+    const modal = document.getElementById('modalOverlay');
+    const content = document.getElementById('modalContent');
+    content.innerHTML = `
+        <h3 style="color:var(--neon-blue);">📤 RECEIVE ${currency}</h3>
+        <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
+            <p><strong>Bank:</strong> Zentronix Offshore Bank</p>
+            <p><strong>Account:</strong> ${accountNumber}</p>
+            <p><strong>Currency:</strong> ${currency}</p>
+            <p><strong>SWIFT:</strong> ZNTXUS33XXX</p>
+            <p><strong>IBAN:</strong> ZNTX${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
+        </div>
+        <button onclick="copyText('${accountNumber}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">
+            📋 COPY ACCOUNT
+        </button>
+        <br><br>
+        <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
+    `;
+    modal.classList.add('active');
+    
+    registerHistory('RECEIVE', currency, 0, 'Received account generated', 'fiat_receive_' + Date.now());
+    showToast(`📤 ${currency} receiving account generated!`);
+}
+
+// -------- FIAT STAKE --------
+function handleFiatStaking(currency) {
+    const symbol = currency === 'BRL' ? 'R$' : '$';
+    const amount = prompt(`⛓️ Enter ${currency} amount to stake:`, '1000');
+    if (amount && parseFloat(amount) > 0) {
+        const valor = parseFloat(amount);
+        const apy = currency === 'USD' ? 4.2 : (currency === 'EUR' ? 3.8 : (currency === 'GBP' ? 4.5 : 6.0));
+        const yieldAmount = (valor * apy) / 100;
+        
+        const modal = document.getElementById('modalOverlay');
+        const content = document.getElementById('modalContent');
+        content.innerHTML = `
+            <h3 style="color:var(--neon-green);">⛓️ Staking Active (${currency})</h3>
+            <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
+                <p><strong>Currency:</strong> ${currency}</p>
+                <p><strong>Amount:</strong> ${symbol}${valor.toFixed(2)}</p>
+                <p><strong>APY:</strong> ${apy}%</p>
+                <p><strong>Estimated Yield:</strong> ${symbol}${yieldAmount.toFixed(2)} ${currency}</p>
+                <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
+            </div>
+            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
+        `;
+        modal.classList.add('active');
+        
+        registerHistory('STAKE', currency, valor, 'APY: ' + apy + '%', 'stake_' + Date.now());
+        showToast(`⛓️ Staking ${symbol}${valor.toFixed(2)} ${currency} started! APY: ${apy}%`);
+    }
+}
+
+// -------- UPDATE FIAT BALANCE --------
+function updateFiatBalance(currency, amount) {
+    const balances = JSON.parse(localStorage.getItem('zentronix_balances') || '[]');
+    const existing = balances.find(b => b.currency === currency);
+    
+    if (existing) {
+        existing.amount = (existing.amount || 0) + amount;
+    } else {
+        balances.push({ currency: currency, amount: amount });
+    }
+    
+    localStorage.setItem('zentronix_balances', JSON.stringify(balances));
+    updateBalancesUI(balances);
+}
 // -------- 6. REGISTER HISTORY --------
 function registerHistory(type, currency, amount, detail, txId) {
     const history = JSON.parse(localStorage.getItem('zentronix_history') || '[]');
