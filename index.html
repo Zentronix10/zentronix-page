@@ -1450,6 +1450,63 @@ function loadLocalBalances() {
     
     document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+
+// ============================================
+//  UPDATE BALANCES UI - CORREÇÃO
+// ============================================
+function updateBalancesUI(balances) {
+    const grid = document.getElementById('currencyGrid');
+    if (!grid) {
+        console.warn('⚠️ currencyGrid element not found');
+        return;
+    }
+    
+    grid.innerHTML = '';
+    let total = 0;
+    
+    balances.forEach(b => {
+        const div = document.createElement('div');
+        div.className = 'currency-item';
+        const amount = b.amount || 0;
+        const icon = getCurrencyIcon(b.currency);
+        div.innerHTML = `
+            <span><strong>${icon} ${b.currency}</strong></span>
+            <span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+        `;
+        grid.appendChild(div);
+        total += convertToUSD(b.currency, amount);
+    });
+    
+    const totalElement = document.getElementById('totalBalance');
+    if (totalElement) {
+        totalElement.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+}
+
+// ============================================
+//  GET CURRENCY ICON
+// ============================================
+function getCurrencyIcon(currency) {
+    const icons = {
+        'USD': '💵', 'EUR': '💶', 'GBP': '💷', 'BRL': 'R$',
+        'BTC': '₿', 'ETH': 'Ξ', 'BNB': 'BNB', 'SOL': '◎',
+        'MATIC': '◇', 'USDT': '₮', 'LTC': 'Ł', 'BRC': '🪙'
+    };
+    return icons[currency] || '💰';
+}
+
+// ============================================
+//  CONVERT TO USD
+// ============================================
+function convertToUSD(currency, amount) {
+    const rates = {
+        'USD': 1, 'EUR': 1.08, 'GBP': 1.26, 'BRL': 0.18,
+        'BTC': 67200, 'ETH': 3443, 'BNB': 312.50, 'SOL': 98.07,
+        'MATIC': 0.52, 'USDT': 1.00, 'LTC': 82.50, 'BRC': 9.87
+    };
+    return amount * (rates[currency] || 1);
+}
+
 // ============================================
 //  LOAD ALL ASSETS WITH BUTTONS
 // ============================================
