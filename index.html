@@ -2659,15 +2659,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ============================================
-    //  STEALTH MODE
+    //  ⚠️ STEALTH MODE - REMOVIDO (elemento não existe)
     // ============================================
-    const stealthSwitch = document.getElementById('stealthSwitch');
-    if (stealthSwitch) {
-        stealthSwitch.addEventListener('click', function() {
-            this.classList.toggle('active');
-            showToast(this.classList.contains('active') ? getTranslation('stealthActivated') : getTranslation('stealthDeactivated'));
-        });
-    }
+    // O elemento stealthSwitch não existe no HTML, então removemos esta parte
     
     // ============================================
     //  MENU NAVIGATION
