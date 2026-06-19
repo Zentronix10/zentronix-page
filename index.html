@@ -751,13 +751,17 @@
 // ============================================
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
-const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
-const TATUM_API_URL = 'https://api.tatum.io/v3';
 
 // ============================================
-//  INICIALIZAR SUPABASE
+//  INICIALIZAR SUPABASE (opcional, para compatibilidade)
 // ============================================
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabaseClient = null;
+try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('✅ Supabase inicializado');
+} catch(e) {
+    console.warn('⚠️ Supabase não disponível:', e.message);
+}
 
 // ============================================
 //  VARIÁVEIS GLOBAIS
@@ -780,7 +784,7 @@ let userProfile = {
 };
 
 // ============================================
-//  TRADUÇÕES
+//  TRADUÇÕES (resumido para economizar espaço)
 // ============================================
 const translations = {
     'en': { 
@@ -855,9 +859,8 @@ function applyTranslations() {
         if (el) el.textContent = getTranslation(id);
     });
     const welcomeUser = document.getElementById('welcomeUser');
-    if (welcomeUser) {
-        const name = userProfile.firstName || 'Admin';
-        welcomeUser.textContent = getTranslation('welcomeUser', { name: name });
+    if (welcomeUser && currentUser) {
+        welcomeUser.textContent = getTranslation('welcomeUser', { name: currentUser.name || 'Admin' });
     }
 }
 
@@ -937,7 +940,8 @@ function closeLoginModal() {
 }
 
 // ============================================
-//  ⭐ FUNÇÃO DE LOGIN CORRIGIDA (LOCAL + SUPABASE) ⭐
+//  ⭐ FUNÇÃO DE LOGIN CORRIGIDA ⭐
+//  PRIORIZA O LOCALSTORAGE (CLIENTES DO PAINEL)
 // ============================================
 async function handleLogin() {
     console.log('🔵 handleLogin() chamado');
@@ -958,50 +962,45 @@ async function handleLogin() {
     console.log('🔵 Tentando login com:', username);
     
     // ============================================
-    //  1. TENTA LOGIN ADMIN LOCAL (admin/zentronix)
-    // ============================================
-    if (username === 'admin' && password === 'zentronix') {
-        console.log('✅ Login admin local');
-        isLoggedIn = true;
-        currentUser = { name: 'Admin', email: 'admin@zentronix.com' };
-        closeLoginModal();
-        showDashboard();
-        showToast('✅ Login successful! Welcome, Admin');
-        loadLocalBalances();
-        loadAllAssets();
-        updateHistoryUI();
-        initStakingChart();
-        return;
-    }
-    
-    // ============================================
-    //  2. TENTA LOGIN VIA LOCALSTORAGE (CLIENTES CRIADOS NO PAINEL)
+    //  1. ⭐ LOGIN VIA LOCALSTORAGE (PRIORITÁRIO) ⭐
+    //     Esta é a chave! O painel salva os clientes aqui.
     // ============================================
     try {
-        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+        let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
         console.log('🔍 Clientes no localStorage:', clientes.length);
         
-        // Procurar por email ou username
-        const clienteEncontrado = clientes.find(c => 
-            (c.email === username || c.username === username) && 
-            c.password === password
-        );
+        // DEBUG: Mostrar os clientes salvos
+        clientes.forEach(c => {
+            console.log(`  - ${c.email} / ${c.password} (${c.nome})`);
+        });
+        
+        // Procurar por email OU username
+        const clienteEncontrado = clientes.find(c => {
+            const emailMatch = c.email && c.email.toLowerCase() === username.toLowerCase();
+            const usernameMatch = c.username && c.username.toLowerCase() === username.toLowerCase();
+            const passwordMatch = c.password === password;
+            return (emailMatch || usernameMatch) && passwordMatch;
+        });
 
         if (clienteEncontrado) {
-            console.log('✅ Login local (cliente encontrado):', clienteEncontrado.nome);
-            isLoggedIn = true;
+            console.log('✅ Login LOCAL encontrado:', clienteEncontrado.nome);
+            
+            // Criar usuário logado
             currentUser = {
                 id: clienteEncontrado.id || Date.now(),
                 name: clienteEncontrado.nome || clienteEncontrado.name || 'Cliente',
                 email: clienteEncontrado.email,
+                username: clienteEncontrado.username || clienteEncontrado.email.split('@')[0],
                 accountNumber: clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
                 saldoUSD: clienteEncontrado.saldoUSD || 0,
                 saldoEUR: clienteEncontrado.saldoEUR || 0,
                 saldoBRL: clienteEncontrado.saldoBRL || 0,
                 saldoGBP: clienteEncontrado.saldoGBP || 0,
-                kyc: clienteEncontrado.kyc || 'Pending'
+                kyc: clienteEncontrado.kyc || 'Pending',
+                transactionHistory: clienteEncontrado.transactionHistory || []
             };
             
+            isLoggedIn = true;
             closeLoginModal();
             showDashboard();
             
@@ -1016,113 +1015,127 @@ async function handleLogin() {
             }
             
             showToast(`✅ Bem-vindo(a) ${currentUser.name}!`);
+            
+            // Carregar dados do dashboard
             loadLocalBalances();
             loadAllAssets();
             updateHistoryUI();
             initStakingChart();
+            
+            // Salvar na sessão para persistência
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
             return;
+        } else {
+            console.log('⚠️ Nenhum cliente encontrado no localStorage com essas credenciais');
         }
     } catch(e) {
         console.warn('⚠️ Erro ao ler localStorage:', e);
     }
     
     // ============================================
-    //  3. TENTA LOGIN VIA SUPABASE
+    //  2. TENTA LOGIN ADMIN LOCAL (admin/zentronix)
     // ============================================
-    try {
-        if (typeof supabaseClient === 'undefined') {
-            console.warn('⚠️ supabaseClient não definido');
-            showLoginError('❌ Erro de conexão. Tente novamente.');
-            return;
-        }
-        
-        const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
-            email: username,
-            password: password
-        });
-
-        if (authError) {
-            console.warn('⚠️ Supabase Auth error:', authError.message);
-            showLoginError('❌ Email ou senha inválidos!');
-            const pwdField = document.getElementById('loginPassword');
-            if (pwdField) {
-                pwdField.value = '';
-                pwdField.focus();
-            }
-            return;
-        }
-
-        if (authData?.user) {
-            console.log('✅ Login Supabase:', authData.user.email);
-            
-            const { data: userData } = await supabaseClient
-                .from('users')
-                .select('*')
-                .eq('id', authData.user.id)
-                .maybeSingle();
-
-            const { data: balances } = await supabaseClient
-                .from('balances')
-                .select('currency, amount')
-                .eq('user_id', authData.user.id);
-
-            currentUser = {
-                id: authData.user.id,
-                email: authData.user.email,
-                name: userData?.full_name || authData.user.user_metadata?.full_name || 'Cliente',
-                accountNumber: userData?.account_number || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
-                balances: balances || []
-            };
-
-            userProfile.firstName = currentUser.name.split(' ')[0] || 'Cliente';
-            userProfile.email = currentUser.email;
-            localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
-
-            closeLoginModal();
-            showDashboard();
-            
-            const accountEl = document.getElementById('accountNumberValue');
-            if (accountEl) accountEl.textContent = currentUser.accountNumber;
-
-            const welcomeEl = document.getElementById('welcomeUser');
-            if (welcomeEl) {
-                welcomeEl.textContent = getTranslation('welcomeUser', { name: userProfile.firstName });
-            }
-            
-            showToast(`✅ Bem-vindo(a) ${currentUser.name}!`);
-            
-            if (balances && balances.length > 0) {
-                updateBalancesUI(balances);
-            } else {
-                loadLocalBalances();
-            }
-            loadAllAssets();
-            updateHistoryUI();
-            initStakingChart();
-            return;
-        }
-
-        showLoginError('❌ Email ou senha inválidos!');
-        const pwdField = document.getElementById('loginPassword');
-        if (pwdField) {
-            pwdField.value = '';
-            pwdField.focus();
-        }
-
-    } catch (error) {
-        console.error('❌ Erro no login:', error);
-        showLoginError('❌ Erro ao conectar ao servidor');
+    if (username === 'admin' && password === 'zentronix') {
+        console.log('✅ Login admin local');
+        isLoggedIn = true;
+        currentUser = { 
+            name: 'Admin', 
+            email: 'admin@zentronix.com',
+            accountNumber: 'ZNTX-0000-0000-0000'
+        };
+        closeLoginModal();
+        showDashboard();
+        showToast('✅ Login successful! Welcome, Admin');
+        loadLocalBalances();
+        loadAllAssets();
+        updateHistoryUI();
+        initStakingChart();
+        return;
     }
-}
+    
+    // ============================================
+    //  3. TENTA LOGIN VIA SUPABASE (FALLBACK)
+    // ============================================
+    if (supabaseClient) {
+        try {
+            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+                email: username,
+                password: password
+            });
 
-function showLoginError(message) {
-    const loginError = document.getElementById('loginError');
+            if (authError) {
+                console.warn('⚠️ Supabase Auth error:', authError.message);
+            } else if (authData?.user) {
+                console.log('✅ Login Supabase:', authData.user.email);
+                
+                const { data: userData } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('id', authData.user.id)
+                    .maybeSingle();
+
+                const { data: balances } = await supabaseClient
+                    .from('balances')
+                    .select('currency, amount')
+                    .eq('user_id', authData.user.id);
+
+                currentUser = {
+                    id: authData.user.id,
+                    email: authData.user.email,
+                    name: userData?.full_name || authData.user.user_metadata?.full_name || 'Cliente',
+                    accountNumber: userData?.account_number || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
+                    balances: balances || []
+                };
+
+                closeLoginModal();
+                showDashboard();
+                
+                const accountEl = document.getElementById('accountNumberValue');
+                if (accountEl) accountEl.textContent = currentUser.accountNumber;
+
+                const welcomeEl = document.getElementById('welcomeUser');
+                if (welcomeEl) {
+                    welcomeEl.textContent = getTranslation('welcomeUser', { name: currentUser.name });
+                }
+                
+                showToast(`✅ Bem-vindo(a) ${currentUser.name}!`);
+                
+                if (balances && balances.length > 0) {
+                    updateBalancesUI(balances);
+                } else {
+                    loadLocalBalances();
+                }
+                loadAllAssets();
+                updateHistoryUI();
+                initStakingChart();
+                return;
+            }
+        } catch (error) {
+            console.error('❌ Erro no login Supabase:', error);
+        }
+    }
+    
+    // ============================================
+    //  4. ⚠️ CREDENCIAIS INVÁLIDAS
+    // ============================================
+    console.log('❌ Login falhou para:', username);
     if (loginError) {
-        loginError.textContent = message;
+        loginError.textContent = '❌ Email ou senha inválidos! Verifique suas credenciais.';
         loginError.classList.add('visible');
     }
+    
+    // Limpar campo de senha
+    const pwdField = document.getElementById('loginPassword');
+    if (pwdField) {
+        pwdField.value = '';
+        pwdField.focus();
+    }
 }
 
+// ============================================
+//  FUNÇÃO PARA MOSTRAR O DASHBOARD
+// ============================================
 function showDashboard() {
     isLoggedIn = true;
     const institutional = document.getElementById('institutionalContent');
@@ -1151,6 +1164,7 @@ function confirmLogout() {
     try {
         sessionStorage.removeItem('clienteLogado');
         sessionStorage.removeItem('adminLoggedIn');
+        sessionStorage.removeItem('currentUser');
     } catch(e) {}
     
     const dashboard = document.getElementById('dashboardContainer');
@@ -2190,6 +2204,36 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================
+    //  ⭐ VERIFICAR SE HÁ SESSÃO SALVA ⭐
+    // ============================================
+    try {
+        const savedUser = sessionStorage.getItem('currentUser');
+        if (savedUser) {
+            const parsedUser = JSON.parse(savedUser);
+            console.log('🔄 Restaurando sessão do usuário:', parsedUser.name);
+            currentUser = parsedUser;
+            isLoggedIn = true;
+            showDashboard();
+            loadLocalBalances();
+            loadAllAssets();
+            updateHistoryUI();
+            initStakingChart();
+            
+            const welcomeEl = document.getElementById('welcomeUser');
+            if (welcomeEl) {
+                welcomeEl.textContent = getTranslation('welcomeUser', { name: currentUser.name });
+            }
+            
+            const accountEl = document.getElementById('accountNumberValue');
+            if (accountEl) accountEl.textContent = currentUser.accountNumber;
+            
+            showToast(`👋 Bem-vindo de volta, ${currentUser.name}!`);
+        }
+    } catch(e) {
+        console.warn('⚠️ Nenhuma sessão salva');
+    }
+    
+    // ============================================
     //  CARREGAR DADOS INICIAIS
     // ============================================
     loadAllAssets();
@@ -2203,7 +2247,19 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Click "ACCESS HUB" to login');
     console.log('🌐 Languages: EN, PT, ES, AR');
     console.log('🚀 Features: Wallet, Deposit, Receive, Stake, Swap, Personal Loan');
-    console.log('👤 Clientes no localStorage:', JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]').length);
+    
+    // ============================================
+    //  ⭐ DEBUG: MOSTRAR CLIENTES SALVOS ⭐
+    // ============================================
+    try {
+        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+        console.log(`👤 ${clientes.length} clientes no localStorage:`);
+        clientes.forEach(c => {
+            console.log(`  - ${c.email} / ${c.password} (${c.nome})`);
+        });
+    } catch(e) {
+        console.warn('⚠️ Não foi possível listar clientes:', e);
+    }
 });
 
 </script>
