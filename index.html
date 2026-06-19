@@ -744,27 +744,26 @@
 
             <div class="right-column">
                 <div class="balance-section"><div class="balance-header"><h4 id="yourBalancesTitle">YOUR BALANCES</h4><div class="balance-total" id="totalBalance">$0.00</div></div><div class="currency-grid" id="currencyGrid"></div></div>
-<script>
 
+<!-- ============================================ -->
+<!-- SCRIPTS - CÓDIGO COMPLETO E CORRIGIDO       -->
+<!-- ============================================ -->
+<script>
 // ============================================
-//  CONFIGURATION
+//  CONFIGURAÇÃO
 // ============================================
 const SUPABASE_URL = 'https://lhvltpxzwynaiecvpyhr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxodmx0cHh6d3luYWllY3ZweWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDIxMDgsImV4cCI6MjA5Njk3ODEwOH0.uSvRpSmlFpfa6-gTLiL-asygcRQlbkUL_-ToiJK1RiA';
-
-// ============================================
-//  🔑 TATUM API CONFIGURATION
-// ============================================
 const TATUM_API_KEY = 't-6a2e5f521f107bd72e24985c-d557c80802d0478c87021709';
 const TATUM_API_URL = 'https://api.tatum.io/v3';
 
 // ============================================
-//  🟣 INITIALIZE SUPABASE CLIENT
+//  INICIALIZAR SUPABASE
 // ============================================
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ============================================
-//  GLOBAL VARIABLES
+//  VARIÁVEIS GLOBAIS
 // ============================================
 let currentLang = 'en';
 let isLoggedIn = false;
@@ -783,17 +782,17 @@ let userProfile = {
 };
 
 // ============================================
-//  TRANSLATIONS (4 LANGUAGES) - RESUMIDO
+//  TRADUÇÕES (APENAS ESTRUTURA BÁSICA)
 // ============================================
 const translations = {
-    'en': { 'bankSubtitle': 'Offshore Private Banking', 'accessHubBtn': 'ACCESS HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'LOGOUT', 'kycPendingText': 'KYC PENDING', 'modalTitle': 'ACCESS INVESTMENT HUB', 'loginSuccess': '✅ Login successful!', 'logoutSuccess': '🔒 You have been logged out.', 'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix', 'kycModalTitle': 'KYC VERIFICATION', 'step1Label': 'Personal Info', 'step2Label': 'Documents', 'step3Label': 'Selfie', 'fullNameLabel': 'Full Name', 'emailLabel': 'Email', 'phoneLabel': 'Phone', 'addressLabel': 'Street Address', 'nationalityLabel': 'Nationality', 'idDocumentLabel': 'ID Document (Passport / ID Card / Driver License)', 'uploadClickText': 'Click to upload document', 'proofAddressLabel': 'Proof of Address (Utility bill, Bank statement, etc.)', 'proofClickText': 'Click to upload proof of address', 'acceptedFormatsText': 'Accepted formats: JPG, PNG, PDF (Max 10MB)', 'selfieInstruction': 'Take a selfie holding your ID document', 'startCameraText': 'Start Camera', 'captureText': 'Capture', 'uploadText': 'Upload Photo', 'reviewTitle': 'Please review your information before submitting:', 'prevBtnText': 'Previous', 'nextBtnText': 'Next →', 'submitKycText': 'SUBMIT KYC', 'profileModalTitle': 'Edit Profile', 'uploadPhotoText': 'Upload Photo', 'profileFirstNameLabel': 'First Name', 'profileLastNameLabel': 'Last Name', 'profileEmailLabel': 'Email', 'profilePhoneLabel': 'Phone', 'saveProfileText': 'SAVE CHANGES', 'accountLabel': 'ACCOUNT NUMBER', 'copyBtnText': 'COPY', 'menuSecurityTitle': '⚙️ SECURITY SETTINGS', 'menuSecurityCenter': 'Security Center', 'menuCryptoTitle': '⛓️ CRYPTO & DEFI', 'menuStaking': 'Staking Center', 'menuCryptoTransactions': 'Crypto Transactions', 'menuHistory': 'History / Extrato', 'menuTradingTitle': '📊 TRADING', 'menuTradingHub': 'Trading Hub', 'menuConversion': 'Conversion', 'menuFixedIncomeTitle': '🏛️ FIXED INCOME', 'menuTreasuries': 'Treasuries & Bonds', 'menuCDs': 'CDs / Time Deposits', 'menuDebentures': 'Debentures', 'menuREITs': 'REITs', 'menuPrivateCredit': 'Private Credit', 'menuStructuredNotes': 'Structured Notes', 'menuMunicipalBonds': 'Municipal Bonds', 'menuCardsTitle': '💳 CARDS & PAYMENTS', 'menuMyCards': 'My Cards', 'menuPayments': 'Payments', 'menuSwapTitle': '🔄 SWAP', 'menuSwapCenter': 'Swap Center', 'menuAnalyticsTitle': '📊 ANALYTICS', 'menuAnalytics': 'Analytics', 'menuReports': 'Reports', 'menuSecurityKYCTitle': '🔒 SECURITY & KYC', 'menuSecuritySettings': 'Security Settings', 'menuSessions': 'Active Sessions', 'menuCompliance': 'KYC & Compliance', 'menuAntiHack': 'Anti-Hack', 'menuSystemTitle': '⚙️ SYSTEM CONTROLS', 'menuGhostMode': 'Ghost Mode', 'menuSimulator': 'Scenario Simulator', 'menuThemes': 'Theme Weaver', 'menuAudit': 'Audit Logs', 'menuServicesTitle': '✨ BANKING SERVICES', 'menuCompleteServices': 'Complete Services', 'menuDigitalPayment': 'Payment Digital', 'stakingChartTitle': 'Staking Performance', 'cryptoTxTitle': 'Crypto Transactions', 'historyTitle': 'Transaction History / Extrato', 'tradingTitle': 'Trading Hub', 'conversionTitle': 'Currency Conversion', 'treasuriesTitle': 'Treasuries & Bonds', 'cdsTitle': 'CDs / Time Deposits', 'debenturesTitle': 'Debentures', 'reitsTitle': 'REITs', 'privateCreditTitle': 'Private Credit', 'structuredNotesTitle': 'Structured Notes', 'municipalBondsTitle': 'Municipal Bonds', 'cardsTitle': 'My Cards', 'paymentsTitle': 'Payments', 'swapCenterTitle': 'Swap Center', 'analyticsTitle': 'Analytics', 'reportsTitle': 'Reports', 'securitySettingsTitle': 'Security Settings', 'securityCenterTitle': 'Security Center', 'sessionsTitle': 'Active Sessions', 'complianceTitle': 'KYC & Compliance', 'antihackTitle': 'Anti-Hack', 'servicesTitle': 'Complete Banking Services', 'digitalPaymentTitle': 'Digital Payment', 'yourBalancesTitle': 'YOUR BALANCES', 'swapModalTitle': '🔄 SWAP', 'walletModalTitle': '💰 Wallet Generated', 'walletWarning': '⚠️ Save your private key securely! Never share it with anyone.', 'confirmLogoutTitle': 'Confirm Logout', 'confirmLogoutMessage': 'Are you sure you want to logout from your account?', 'welcomeUser': 'Welcome, {name}', 'profileRole': 'Private Banking Elite', 'stealthActivated': '🕵️ Stealth Mode ACTIVATED', 'stealthDeactivated': '👀 Stealth Mode DEACTIVATED', 'heroTitle': 'Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite', 'heroBadge': '🏆 Leading the Offshore Revolution since 2017', 'heroDesc': 'Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.', 'card1Title': '🌍 Total Convergence: Fiat and Crypto', 'card1Desc': 'Unlike traditional banks, Zentronix was designed for the digital age.', 'card2Title': '📈 Next-Generation Investment Portfolio', 'card2Desc': 'Our financial product shelf is the most complete in the offshore sector.', 'card3Title': '🔐 Technology, Privacy and Succession', 'card3Desc': 'Zentronix Bank goes beyond simple transactions; we take care of your legacy.', 'impactPhrase': '✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨', 'impactSmall': 'Founded in 2017. Connected to the Future.', 'aboutTitle': '🌟 ABOUT ZENTRONIX BANK', 'aboutHistoryTitle': 'Our History', 'aboutHistoryDesc': 'Founded in 2018, serving 156+ countries', 'aboutSecurityTitle': 'Security First', 'aboutSecurityDesc': 'Quantum-resistant protocols', 'aboutReachTitle': 'Global Reach', 'aboutReachDesc': 'Offices in Switzerland, Singapore, Dubai', 'aboutReturnsTitle': 'Premium Returns', 'aboutReturnsDesc': 'Up to 12% annual yield', 'currenciesTitle': '💱 CURRENCIES WE ACCEPT', 'cryptoTitles': '💎 SUPPORTED CRYPTOCURRENCIES', 'statAum': 'AUM', 'statClients': 'Clients', 'statCountries': 'Countries', 'statEncryption': 'Encryption', 'regulatoryText': 'Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.', 'copyrightText': '© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024' },
-    'pt': { 'bankSubtitle': 'Offshore Private Banking', 'accessHubBtn': 'ACESSAR HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'SAIR', 'kycPendingText': 'KYC PENDENTE', 'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS', 'loginSuccess': '✅ Login realizado com sucesso!', 'logoutSuccess': '🔒 Você foi desconectado.', 'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix', 'stealthActivated': '🕵️ Modo Stealth ATIVADO', 'stealthDeactivated': '👀 Modo Stealth DESATIVADO' },
-    'es': { 'bankSubtitle': 'Banca Offshore Privada', 'accessHubBtn': 'ACCEDER HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'SALIR', 'kycPendingText': 'KYC PENDIENTE', 'modalTitle': 'ACCEDER HUB DE INVERSIONES', 'loginSuccess': '✅ Inicio de sesión exitoso!', 'logoutSuccess': '🔒 Has cerrado sesión.', 'invalidCredentials': '❌ Credenciales inválidas! Use: admin / zentronix', 'stealthActivated': '🕵️ Modo Stealth ACTIVADO', 'stealthDeactivated': '👀 Modo Stealth DESACTIVADO' },
-    'ar': { 'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية', 'accessHubBtn': 'الوصول إلى المركز', 'kycBtnText': 'التحقق من الهوية', 'logoutBtnText': 'تسجيل الخروج', 'kycPendingText': 'التحقق من الهوية قيد الانتظار', 'modalTitle': 'الوصول إلى مركز الاستثمار', 'loginSuccess': '✅ تم تسجيل الدخول بنجاح!', 'logoutSuccess': '🔒 تم تسجيل الخروج.', 'invalidCredentials': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix', 'stealthActivated': '🕵️ تم تفعيل وضع التخفي', 'stealthDeactivated': '👀 تم إلغاء تنشيط وضع التخفي' }
+    'en': { 'bankSubtitle': 'Offshore Private Banking', 'accessHubBtn': 'ACCESS HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'LOGOUT', 'kycPendingText': 'KYC PENDING', 'modalTitle': 'ACCESS INVESTMENT HUB', 'loginSuccess': '✅ Login successful!', 'logoutSuccess': '🔒 You have been logged out.', 'invalidCredentials': '❌ Invalid credentials! Use: admin / zentronix', 'welcomeUser': 'Welcome, {name}', 'profileRole': 'Private Banking Elite' },
+    'pt': { 'bankSubtitle': 'Offshore Private Banking', 'accessHubBtn': 'ACESSAR HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'SAIR', 'kycPendingText': 'KYC PENDENTE', 'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS', 'loginSuccess': '✅ Login realizado com sucesso!', 'logoutSuccess': '🔒 Você foi desconectado.', 'invalidCredentials': '❌ Credenciais inválidas! Use: admin / zentronix', 'welcomeUser': 'Bem-vindo, {name}', 'profileRole': 'Elite do Private Banking' },
+    'es': { 'bankSubtitle': 'Banca Offshore Privada', 'accessHubBtn': 'ACCEDER HUB', 'kycBtnText': 'KYC', 'logoutBtnText': 'SALIR', 'kycPendingText': 'KYC PENDIENTE', 'modalTitle': 'ACCEDER HUB DE INVERSIONES', 'loginSuccess': '✅ Inicio de sesión exitoso!', 'logoutSuccess': '🔒 Has cerrado sesión.', 'invalidCredentials': '❌ Credenciales inválidas! Use: admin / zentronix', 'welcomeUser': 'Bienvenido, {name}', 'profileRole': 'Élite de Banca Privada' },
+    'ar': { 'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية', 'accessHubBtn': 'الوصول إلى المركز', 'kycBtnText': 'التحقق من الهوية', 'logoutBtnText': 'تسجيل الخروج', 'kycPendingText': 'التحقق من الهوية قيد الانتظار', 'modalTitle': 'الوصول إلى مركز الاستثمار', 'loginSuccess': '✅ تم تسجيل الدخول بنجاح!', 'logoutSuccess': '🔒 تم تسجيل الخروج.', 'invalidCredentials': '❌ بيانات اعتماد غير صالحة! استخدم: admin / zentronix', 'welcomeUser': 'مرحبًا, {name}', 'profileRole': 'النخبة المصرفية الخاصة' }
 };
 
 // ============================================
-//  GENERAL FUNCTIONS
+//  FUNÇÕES DE TRADUÇÃO
 // ============================================
 function getTranslation(key, params = {}) {
     let text = translations[currentLang]?.[key] || translations['en'][key] || key;
@@ -802,73 +801,10 @@ function getTranslation(key, params = {}) {
 }
 
 function applyTranslations() {
-    const elements = {
-        'bankSubtitle': 'bankSubtitle', 'accessHubBtn': 'accessHubBtn', 'kycBtnText': 'kycBtnText',
-        'logoutBtnText': 'logoutBtnText', 'kycPendingText': 'kycPendingText', 'modalTitle': 'modalTitle',
-        'kycModalTitle': 'kycModalTitle', 'step1Label': 'step1Label', 'step2Label': 'step2Label',
-        'step3Label': 'step3Label', 'fullNameLabel': 'fullNameLabel', 'emailLabel': 'emailLabel',
-        'phoneLabel': 'phoneLabel', 'addressLabel': 'addressLabel', 'nationalityLabel': 'nationalityLabel',
-        'idDocumentLabel': 'idDocumentLabel', 'uploadClickText': 'uploadClickText',
-        'proofAddressLabel': 'proofAddressLabel', 'proofClickText': 'proofClickText',
-        'acceptedFormatsText': 'acceptedFormatsText', 'selfieInstruction': 'selfieInstruction',
-        'startCameraText': 'startCameraText', 'captureText': 'captureText', 'uploadText': 'uploadText',
-        'reviewTitle': 'reviewTitle', 'prevBtnText': 'prevBtnText', 'nextBtnText': 'nextBtnText',
-        'submitKycText': 'submitKycText', 'profileModalTitle': 'profileModalTitle',
-        'uploadPhotoText': 'uploadPhotoText', 'profileFirstNameLabel': 'profileFirstNameLabel',
-        'profileLastNameLabel': 'profileLastNameLabel', 'profileEmailLabel': 'profileEmailLabel',
-        'profilePhoneLabel': 'profilePhoneLabel', 'saveProfileText': 'saveProfileText',
-        'accountLabel': 'accountLabel', 'copyBtnText': 'copyBtnText',
-        'menuSecurityTitle': 'menuSecurityTitle', 'menuSecurityCenter': 'menuSecurityCenter',
-        'menuCryptoTitle': 'menuCryptoTitle', 'menuStaking': 'menuStaking',
-        'menuCryptoTransactions': 'menuCryptoTransactions', 'menuHistory': 'menuHistory',
-        'menuTradingTitle': 'menuTradingTitle', 'menuTradingHub': 'menuTradingHub',
-        'menuConversion': 'menuConversion', 'menuFixedIncomeTitle': 'menuFixedIncomeTitle',
-        'menuTreasuries': 'menuTreasuries', 'menuCDs': 'menuCDs', 'menuDebentures': 'menuDebentures',
-        'menuREITs': 'menuREITs', 'menuPrivateCredit': 'menuPrivateCredit',
-        'menuStructuredNotes': 'menuStructuredNotes', 'menuMunicipalBonds': 'menuMunicipalBonds',
-        'menuCardsTitle': 'menuCardsTitle', 'menuMyCards': 'menuMyCards',
-        'menuPayments': 'menuPayments', 'menuSwapTitle': 'menuSwapTitle',
-        'menuSwapCenter': 'menuSwapCenter', 'menuAnalyticsTitle': 'menuAnalyticsTitle',
-        'menuAnalytics': 'menuAnalytics', 'menuReports': 'menuReports',
-        'menuSecurityKYCTitle': 'menuSecurityKYCTitle', 'menuSecuritySettings': 'menuSecuritySettings',
-        'menuSessions': 'menuSessions', 'menuCompliance': 'menuCompliance',
-        'menuAntiHack': 'menuAntiHack', 'menuSystemTitle': 'menuSystemTitle',
-        'menuGhostMode': 'menuGhostMode', 'menuSimulator': 'menuSimulator',
-        'menuThemes': 'menuThemes', 'menuAudit': 'menuAudit',
-        'menuServicesTitle': 'menuServicesTitle', 'menuCompleteServices': 'menuCompleteServices',
-        'menuDigitalPayment': 'menuDigitalPayment', 'stakingChartTitle': 'stakingChartTitle',
-        'cryptoTxTitle': 'cryptoTxTitle', 'historyTitle': 'historyTitle',
-        'tradingTitle': 'tradingTitle', 'conversionTitle': 'conversionTitle',
-        'treasuriesTitle': 'treasuriesTitle', 'cdsTitle': 'cdsTitle',
-        'debenturesTitle': 'debenturesTitle', 'reitsTitle': 'reitsTitle',
-        'privateCreditTitle': 'privateCreditTitle', 'structuredNotesTitle': 'structuredNotesTitle',
-        'municipalBondsTitle': 'municipalBondsTitle', 'cardsTitle': 'cardsTitle',
-        'paymentsTitle': 'paymentsTitle', 'swapCenterTitle': 'swapCenterTitle',
-        'analyticsTitle': 'analyticsTitle', 'reportsTitle': 'reportsTitle',
-        'securitySettingsTitle': 'securitySettingsTitle', 'securityCenterTitle': 'securityCenterTitle',
-        'sessionsTitle': 'sessionsTitle', 'complianceTitle': 'complianceTitle',
-        'antihackTitle': 'antihackTitle', 'servicesTitle': 'servicesTitle',
-        'digitalPaymentTitle': 'digitalPaymentTitle', 'yourBalancesTitle': 'yourBalancesTitle',
-        'militaryTitle': 'militaryTitle', 'stealthModeText': 'stealthModeText',
-        'blacklistLabel': 'blacklistLabel', 'swapModalTitle': 'swapModalTitle',
-        'walletModalTitle': 'walletModalTitle', 'walletWarning': 'walletWarning',
-        'confirmLogoutTitle': 'confirmLogoutTitle', 'confirmLogoutMessage': 'confirmLogoutMessage',
-        'profileRole': 'profileRole', 'heroTitle': 'heroTitle', 'heroBadge': 'heroBadge',
-        'heroDesc': 'heroDesc', 'card1Title': 'card1Title', 'card1Desc': 'card1Desc',
-        'card2Title': 'card2Title', 'card2Desc': 'card2Desc', 'card3Title': 'card3Title',
-        'card3Desc': 'card3Desc', 'impactPhrase': 'impactPhrase', 'impactSmall': 'impactSmall',
-        'aboutTitle': 'aboutTitle', 'aboutHistoryTitle': 'aboutHistoryTitle',
-        'aboutHistoryDesc': 'aboutHistoryDesc', 'aboutSecurityTitle': 'aboutSecurityTitle',
-        'aboutSecurityDesc': 'aboutSecurityDesc', 'aboutReachTitle': 'aboutReachTitle',
-        'aboutReachDesc': 'aboutReachDesc', 'aboutReturnsTitle': 'aboutReturnsTitle',
-        'aboutReturnsDesc': 'aboutReturnsDesc', 'currenciesTitle': 'currenciesTitle',
-        'cryptoTitles': 'cryptoTitles', 'statAum': 'statAum', 'statClients': 'statClients',
-        'statCountries': 'statCountries', 'statEncryption': 'statEncryption',
-        'regulatoryTextFooter': 'regulatoryText', 'copyrightTextFooter': 'copyrightText'
-    };
-    Object.keys(elements).forEach(id => {
+    const elements = ['bankSubtitle', 'accessHubBtn', 'kycBtnText', 'logoutBtnText', 'kycPendingText', 'modalTitle'];
+    elements.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.textContent = getTranslation(elements[id]);
+        if (el) el.textContent = getTranslation(id);
     });
     const welcomeUser = document.getElementById('welcomeUser');
     if (welcomeUser) {
@@ -938,7 +874,23 @@ function closeModalOverlay() {
     document.getElementById('modalOverlay').classList.remove('active');
 }
 
-// ⭐ FUNÇÃO DE LOGIN CORRIGIDA (COM SUPABASE) ⭐
+function openLoginModal() {
+    document.getElementById('loginModal').classList.add('active');
+    document.getElementById('loginPassword').value = 'zentronix';
+    document.getElementById('loginId').value = 'admin';
+    const errorEl = document.getElementById('loginError');
+    if (errorEl) errorEl.classList.remove('visible');
+}
+
+function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('active');
+    const errorEl = document.getElementById('loginError');
+    if (errorEl) errorEl.classList.remove('visible');
+}
+
+// ============================================
+//  ⭐ FUNÇÃO DE LOGIN CORRIGIDA ⭐
+// ============================================
 async function handleLogin() {
     console.log('🔵 handleLogin() chamado');
     const username = document.getElementById('loginId').value.trim();
@@ -958,7 +910,7 @@ async function handleLogin() {
     console.log('🔵 Tentando login com:', username);
     
     // ============================================
-    //  PRIMEIRO: TENTA LOGIN LOCAL (admin/zentronix)
+    //  LOGIN ADMIN LOCAL (admin/zentronix)
     // ============================================
     if (username === 'admin' && password === 'zentronix') {
         console.log('✅ Login admin local');
@@ -975,87 +927,19 @@ async function handleLogin() {
         if (loginBtn) loginBtn.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'flex';
         
-        try {
-            showToast('✅ Login local (admin)');
-        } catch(e) {
-            alert('✅ Login local (admin)');
-        }
+        showToast('✅ Login successful! Welcome, Admin');
         
-        if (typeof loadLocalBalances === 'function') loadLocalBalances();
-        if (typeof loadAllAssets === 'function') loadAllAssets();
-        if (typeof updateHistoryUI === 'function') updateHistoryUI();
+        loadLocalBalances();
+        loadAllAssets();
+        updateHistoryUI();
+        initStakingChart();
         return;
     }
     
     // ============================================
-    //  SEGUNDO: TENTA LOGIN VIA LOCALSTORAGE
+    //  LOGIN VIA SUPABASE
     // ============================================
     try {
-        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-        const clienteEncontrado = clientes.find(c => c.email === username && c.password === password);
-
-        if (clienteEncontrado) {
-            console.log('✅ Login local (cliente encontrado)');
-            isLoggedIn = true;
-            closeLoginModal();
-            
-            const institutional = document.getElementById('institutionalContent');
-            const dashboard = document.getElementById('dashboardContainer');
-            const loginBtn = document.getElementById('openLoginBtn');
-            const logoutBtn = document.getElementById('logoutMainBtn');
-            
-            if (institutional) institutional.style.display = 'none';
-            if (dashboard) dashboard.style.display = 'block';
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'flex';
-            
-            const accountNumber = clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
-            const accountEl = document.getElementById('accountNumberValue');
-            if (accountEl) accountEl.textContent = accountNumber;
-            
-            const welcomeEl = document.getElementById('welcomeUser');
-            if (welcomeEl) {
-                try {
-                    welcomeEl.textContent = getTranslation('welcomeUser', { name: clienteEncontrado.nome || 'Cliente' });
-                } catch(e) {
-                    welcomeEl.textContent = 'Bem-vindo, ' + (clienteEncontrado.nome || 'Cliente');
-                }
-            }
-            
-            try {
-                showToast(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
-            } catch(e) {
-                alert(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
-            }
-            
-            if (typeof loadLocalBalances === 'function') loadLocalBalances();
-            if (typeof loadAllAssets === 'function') loadAllAssets();
-            if (typeof updateHistoryUI === 'function') updateHistoryUI();
-            return;
-        }
-    } catch(e) {
-        console.warn('⚠️ Erro ao ler localStorage:', e);
-    }
-    
-    // ============================================
-    //  TERCEIRO: TENTA LOGIN NO SUPABASE AUTH
-    // ============================================
-    try {
-        if (typeof supabaseClient === 'undefined') {
-            console.warn('⚠️ supabaseClient não definido');
-            // Fallback para credenciais inválidas
-            if (loginError) {
-                loginError.textContent = '❌ Invalid username or password';
-                loginError.classList.add('visible');
-            }
-            const pwdField = document.getElementById('loginPassword');
-            if (pwdField) {
-                pwdField.value = '';
-                pwdField.focus();
-            }
-            return;
-        }
-        
         const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
             email: username,
             password: password
@@ -1063,7 +947,6 @@ async function handleLogin() {
 
         if (authError) {
             console.warn('⚠️ Supabase Auth error:', authError.message);
-            // Credenciais inválidas
             if (loginError) {
                 loginError.textContent = '❌ Invalid username or password';
                 loginError.classList.add('visible');
@@ -1077,88 +960,39 @@ async function handleLogin() {
         }
 
         if (authData?.user) {
-            console.log('✅ Login bem-sucedido no Supabase:', authData.user.email);
+            console.log('✅ Login Supabase:', authData.user.email);
             
-            // Buscar dados do cliente
-            const { data: userData, error: userError } = await supabaseClient
+            const { data: userData } = await supabaseClient
                 .from('users')
                 .select('*')
                 .eq('id', authData.user.id)
                 .maybeSingle();
 
-            if (userError) {
-                console.warn('⚠️ Erro ao buscar dados do usuário:', userError);
-            }
-
-            // Buscar saldos
             const { data: balances } = await supabaseClient
                 .from('balances')
                 .select('currency, amount')
                 .eq('user_id', authData.user.id);
 
-            const saldoUSD = balances?.find(b => b.currency === 'USD')?.amount || 0;
-            const saldoEUR = balances?.find(b => b.currency === 'EUR')?.amount || 0;
-            const saldoBRL = balances?.find(b => b.currency === 'BRL')?.amount || 0;
-            const saldoGBP = balances?.find(b => b.currency === 'GBP')?.amount || 0;
-
-            // Salvar sessão do cliente
             const clienteData = {
                 id: authData.user.id,
                 email: authData.user.email,
                 nome: userData?.full_name || authData.user.user_metadata?.full_name || 'Cliente',
                 accountNumber: userData?.account_number || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
-                saldoUSD: saldoUSD,
-                saldoEUR: saldoEUR,
-                saldoBRL: saldoBRL,
-                saldoGBP: saldoGBP,
-                kyc_status: userData?.kyc_status || 'Pending'
+                balances: balances || []
             };
 
-            sessionStorage.setItem('clienteLogado', JSON.stringify(clienteData));
+            userProfile.firstName = clienteData.nome.split(' ')[0] || 'Cliente';
+            userProfile.email = clienteData.email;
+            localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
 
-            // Atualizar perfil do usuário
-            if (typeof userProfile !== 'undefined') {
-                userProfile.firstName = clienteData.nome.split(' ')[0] || 'Cliente';
-                userProfile.lastName = clienteData.nome.split(' ').slice(1).join(' ') || 'Zentronix';
-                userProfile.email = clienteData.email;
-                localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
-            }
-            
-            // Atualizar Account Number na interface
-            const accountNumberEl = document.getElementById('accountNumberValue');
-            if (accountNumberEl) {
-                accountNumberEl.textContent = clienteData.accountNumber;
-            }
+            const accountEl = document.getElementById('accountNumberValue');
+            if (accountEl) accountEl.textContent = clienteData.accountNumber;
 
-            // Atualizar nome na saudação
             const welcomeEl = document.getElementById('welcomeUser');
             if (welcomeEl) {
-                const nome = userProfile?.firstName || clienteData.nome.split(' ')[0] || 'Cliente';
-                try {
-                    welcomeEl.textContent = getTranslation('welcomeUser', { name: nome });
-                } catch(e) {
-                    welcomeEl.textContent = 'Bem-vindo, ' + nome;
-                }
+                welcomeEl.textContent = getTranslation('welcomeUser', { name: userProfile.firstName });
             }
 
-            // Carregar saldos na interface
-            if (typeof updateBalancesUI === 'function') {
-                updateBalancesUI(balances || []);
-            } else if (typeof loadLocalBalances === 'function') {
-                loadLocalBalances();
-            }
-            
-            // Carregar ativos
-            if (typeof loadAllAssets === 'function') {
-                loadAllAssets();
-            }
-            
-            // Carregar histórico
-            if (typeof updateHistoryUI === 'function') {
-                updateHistoryUI();
-            }
-
-            // Login bem-sucedido
             isLoggedIn = true;
             closeLoginModal();
             
@@ -1172,17 +1006,19 @@ async function handleLogin() {
             if (loginBtn) loginBtn.style.display = 'none';
             if (logoutBtn) logoutBtn.style.display = 'flex';
             
-            try {
-                showToast(`✅ Bem-vindo(a) ${clienteData.nome}!`);
-            } catch(e) {
-                alert(`✅ Bem-vindo(a) ${clienteData.nome}!`);
-            }
+            showToast(`✅ Bem-vindo(a) ${clienteData.nome}!`);
             
-            console.log('✅ Cliente logado:', clienteData.email, 'Conta:', clienteData.accountNumber);
+            if (balances && balances.length > 0) {
+                updateBalancesUI(balances);
+            } else {
+                loadLocalBalances();
+            }
+            loadAllAssets();
+            updateHistoryUI();
+            initStakingChart();
             return;
         }
 
-        // Se chegou aqui, credenciais inválidas
         if (loginError) {
             loginError.textContent = '❌ Invalid username or password';
             loginError.classList.add('visible');
@@ -1203,90 +1039,38 @@ async function handleLogin() {
 }
 
 // ============================================
-//  LOGOUT FUNCTIONS - GLOBAL SCOPE
+//  LOGOUT
 // ============================================
-
 function logout() {
-    console.log('🔴 logout() chamado');
-    const modal = document.getElementById('confirmLogoutModal');
-    if (modal) {
-        modal.classList.add('active');
-    } else {
-        console.warn('⚠️ Modal de logout não encontrado, fazendo logout direto');
-        confirmLogout();
-    }
+    document.getElementById('confirmLogoutModal').classList.add('active');
 }
 
 function confirmLogout() {
-    console.log('🔴 confirmLogout() chamado');
-    
-    // Fecha o modal
-    const modal = document.getElementById('confirmLogoutModal');
-    if (modal) {
-        modal.classList.remove('active');
-    }
-    
-    // Reseta estado
+    document.getElementById('confirmLogoutModal').classList.remove('active');
     isLoggedIn = false;
     
-    // Limpa sessão
     try {
         sessionStorage.removeItem('clienteLogado');
-        sessionStorage.removeItem('adminLoggedIn');
-        sessionStorage.removeItem('adminName');
-        console.log('✅ Sessão limpa');
-    } catch(e) {
-        console.warn('⚠️ Erro ao limpar sessão:', e);
-    }
+    } catch(e) {}
     
-    // Esconde dashboard
     const dashboard = document.getElementById('dashboardContainer');
-    if (dashboard) {
-        dashboard.style.display = 'none';
-    }
+    if (dashboard) dashboard.style.display = 'none';
     
-    // Mostra conteúdo institucional
     const institutional = document.getElementById('institutionalContent');
-    if (institutional) {
-        institutional.style.display = 'block';
-    }
+    if (institutional) institutional.style.display = 'block';
     
-    // Mostra botão de login
     const loginBtn = document.getElementById('openLoginBtn');
-    if (loginBtn) {
-        loginBtn.style.display = 'flex';
-    }
+    if (loginBtn) loginBtn.style.display = 'flex';
     
-    // Esconde botão de logout
     const logoutBtn = document.getElementById('logoutMainBtn');
-    if (logoutBtn) {
-        logoutBtn.style.display = 'none';
-    }
+    if (logoutBtn) logoutBtn.style.display = 'none';
     
-    // Mensagem de sucesso
-    try {
-        showToast(getTranslation('logoutSuccess'));
-    } catch(e) {
-        alert('Logout realizado com sucesso!');
-    }
-    
-    console.log('🔒 Logout realizado');
+    showToast(getTranslation('logoutSuccess'));
 }
 
 function cancelLogout() {
-    console.log('🔴 cancelLogout() chamado');
-    const modal = document.getElementById('confirmLogoutModal');
-    if (modal) {
-        modal.classList.remove('active');
-    }
+    document.getElementById('confirmLogoutModal').classList.remove('active');
 }
-
-// ============================================
-//  EXPORTA FUNÇÕES DE LOGOUT PARA O ESCOPO GLOBAL
-// ============================================
-window.logout = logout;
-window.confirmLogout = confirmLogout;
-window.cancelLogout = cancelLogout;
 
 // ============================================
 //  KYC FUNCTIONS
@@ -1311,36 +1095,11 @@ function updateKycSteps() {
 }
 
 // ============================================
-//  DASHBOARD - INIT (FUNÇÃO QUE ESTAVA FALTANDO)
-// ============================================
-function initDashboard() {
-    console.log('🟣 Dashboard initialized');
-    
-    // Carregar saldos
-    loadBalances();
-    
-    // Carregar todos os ativos (cripto + fiat)
-    loadAllAssets();
-    
-    // Iniciar gráfico de staking
-    initStakingChart();
-    
-    // Carregar perfil do usuário
-    loadProfileData();
-    
-    // Atualizar histórico
-    updateHistoryUI();
-    
-    console.log('✅ Dashboard carregado completamente');
-}
-
-// ============================================
-//  LOAD ALL ASSETS WITH BUTTONS (CRIPTO + FIAT)
+//  LOAD ALL ASSETS (CRIPTO + FIAT)
 // ============================================
 function loadAllAssets() {
     console.log('🟣 Carregando todos os ativos...');
     
-    // ===== CRIPTOMOEDAS =====
     const cryptoAssets = [
         { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
         { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
@@ -1352,15 +1111,14 @@ function loadAllAssets() {
         { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '+1.7%', chain: 'LTC', icon: 'Ł' }
     ];
     
-    // ===== MOEDAS FIAT =====
     const fiatAssets = [
-        { name: 'US Dollar', symbol: 'USD', price: 1.00, change: '+0.0%', icon: '💵', type: 'fiat' },
-        { name: 'Euro', symbol: 'EUR', price: 1.08, change: '+0.2%', icon: '💶', type: 'fiat' },
-        { name: 'British Pound', symbol: 'GBP', price: 1.26, change: '-0.1%', icon: '💷', type: 'fiat' },
-        { name: 'Brazilian Real', symbol: 'BRL', price: 0.18, change: '+0.5%', icon: 'R$', type: 'fiat' }
+        { name: 'US Dollar', symbol: 'USD', price: 1.00, change: '+0.0%', icon: '💵' },
+        { name: 'Euro', symbol: 'EUR', price: 1.08, change: '+0.2%', icon: '💶' },
+        { name: 'British Pound', symbol: 'GBP', price: 1.26, change: '-0.1%', icon: '💷' },
+        { name: 'Brazilian Real', symbol: 'BRL', price: 0.18, change: '+0.5%', icon: 'R$' }
     ];
     
-    // ===== RENDERIZAR CRIPTO =====
+    // Renderizar cripto
     const cryptoGrid = document.getElementById('cryptoAssetsGrid');
     if (cryptoGrid) {
         cryptoGrid.innerHTML = '';
@@ -1368,8 +1126,6 @@ function loadAllAssets() {
             const card = document.createElement('div');
             card.className = 'asset-card';
             const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
-            const isBradi = a.symbol === 'BRC';
-            
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h4>${a.icon} ${a.name} (${a.symbol})</h4>
@@ -1377,117 +1133,18 @@ function loadAllAssets() {
                 </div>
                 <div class="asset-price">$${a.price.toLocaleString()}</div>
                 <div class="button-group">
-                    <button class="deposit-btn" onclick="handleCryptoDeposit('${a.symbol}')">📥 DEPOSIT</button>
-                    <button class="receive-btn" onclick="handleCryptoReceive('${a.symbol}')">📤 RECEIVE</button>
-                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 DEPOSIT</button>
+                    <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 RECEIVE</button>
+                    <button class="swap-btn" onclick="openSwap('${a.symbol}')">🔄 SWAP</button>
                     <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
                     <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
-                    ${isBradi ? `<button class="buy-btn" onclick="handleBuy('${a.symbol}')">🟢 BUY</button>` : ''}
-                </div>
-            `;
-            cryptoGrid.appendChild(card);
-        });
-        console.log('✅ Criptomoedas renderizadas:', cryptoAssets.length);
-    } else {
-        console.warn('⚠️ Elemento cryptoAssetsGrid não encontrado!');
-    }
-    
-    // ===== RENDERIZAR FIAT =====
-    const fiatGrid = document.getElementById('fiatAssetsGrid');
-    if (fiatGrid) {
-        fiatGrid.innerHTML = '';
-        fiatAssets.forEach(a => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
-            const priceDisplay = a.symbol === 'BRL' ? 'R$' : '$';
-            
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
-                    <span style="color: ${changeColor}">${a.change}</span>
-                </div>
-                <div class="asset-price">${priceDisplay}${a.price.toFixed(2)}</div>
-                <div class="button-group">
-                    <button class="deposit-btn" onclick="handleFiatDeposit('${a.symbol}')">📥 DEPOSIT</button>
-                    <button class="receive-btn" onclick="handleFiatReceive('${a.symbol}')">📤 RECEIVE</button>
-                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
-                    <button class="staking-btn" onclick="handleFiatStaking('${a.symbol}')">⛓️ STAKE</button>
-                </div>
-            `;
-            fiatGrid.appendChild(card);
-        });
-        console.log('✅ Moedas Fiat renderizadas:', fiatAssets.length);
-    } else {
-        console.warn('⚠️ Elemento fiatAssetsGrid não encontrado!');
-    }
-}
-// ============================================
-//  DASHBOARD
-// ============================================
-function initDashboard() {
-    console.log('🟣 Dashboard initialized');
-    loadBalances();
-    loadAllAssets();
-    initStakingChart();
-    loadProfileData();
-    updateHistoryUI();
-}
-
-// ============================================
-//  LOAD ALL ASSETS WITH BUTTONS (CRIPTO + FIAT)
-//  ESTA É A VERSÃO CORRETA - APENAS UMA!
-// ============================================
-function loadAllAssets() {
-    // ===== CRIPTOMOEDAS =====
-    const cryptoAssets = [
-        { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
-        { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
-        { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+0.8%', chain: 'BNB', icon: 'BNB' },
-        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+5.6%', chain: 'BRC', icon: '🪙' },
-        { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+3.1%', chain: 'SOL', icon: '◎' },
-        { name: 'Polygon', symbol: 'MATIC', price: 0.52, change: '-0.5%', chain: 'MATIC', icon: '◇' },
-        { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.0%', chain: 'USDT', icon: '₮' },
-        { name: 'Litecoin', symbol: 'LTC', price: 82.50, change: '+1.7%', chain: 'LTC', icon: 'Ł' }
-    ];
-    
-    // ===== MOEDAS FIAT =====
-    const fiatAssets = [
-        { name: 'US Dollar', symbol: 'USD', price: 1.00, change: '+0.0%', icon: '💵', type: 'fiat' },
-        { name: 'Euro', symbol: 'EUR', price: 1.08, change: '+0.2%', icon: '💶', type: 'fiat' },
-        { name: 'British Pound', symbol: 'GBP', price: 1.26, change: '-0.1%', icon: '💷', type: 'fiat' },
-        { name: 'Brazilian Real', symbol: 'BRL', price: 0.18, change: '+0.5%', icon: 'R$', type: 'fiat' }
-    ];
-    
-    // ===== RENDERIZAR CRIPTO =====
-    const cryptoGrid = document.getElementById('cryptoAssetsGrid');
-    if (cryptoGrid) {
-        cryptoGrid.innerHTML = '';
-        cryptoAssets.forEach(a => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            const changeColor = a.change.startsWith('+') ? 'var(--neon-green)' : 'var(--neon-red)';
-            const isBradi = a.symbol === 'BRC';
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4>${a.icon} ${a.name} (${a.symbol})</h4>
-                    <span style="color: ${changeColor}">${a.change}</span>
-                </div>
-                <div class="asset-price">$${a.price.toLocaleString()}</div>
-                <div class="button-group">
-                    <button class="deposit-btn" onclick="handleCryptoDeposit('${a.symbol}')">📥 DEPOSIT</button>
-                    <button class="receive-btn" onclick="handleCryptoReceive('${a.symbol}')">📤 RECEIVE</button>
-                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
-                    <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
-                    <button class="generate-wallet-btn" onclick="generateWallet('${a.symbol}', '${a.chain}')">💳 WALLET</button>
-                    ${isBradi ? `<button class="buy-btn" onclick="handleBuy('${a.symbol}')">🟢 BUY</button>` : ''}
                 </div>
             `;
             cryptoGrid.appendChild(card);
         });
     }
     
-    // ===== RENDERIZAR FIAT =====
+    // Renderizar fiat
     const fiatGrid = document.getElementById('fiatAssetsGrid');
     if (fiatGrid) {
         fiatGrid.innerHTML = '';
@@ -1504,120 +1161,33 @@ function loadAllAssets() {
                 <div class="button-group">
                     <button class="deposit-btn" onclick="handleFiatDeposit('${a.symbol}')">📥 DEPOSIT</button>
                     <button class="receive-btn" onclick="handleFiatReceive('${a.symbol}')">📤 RECEIVE</button>
-                    <button class="swap-btn" onclick="handleSwap('${a.symbol}')">🔄 SWAP</button>
+                    <button class="swap-btn" onclick="openSwap('${a.symbol}')">🔄 SWAP</button>
                     <button class="staking-btn" onclick="handleFiatStaking('${a.symbol}')">⛓️ STAKE</button>
                 </div>
             `;
             fiatGrid.appendChild(card);
         });
     }
+    console.log('✅ Ativos carregados');
 }
 
 // ============================================
-//  LOAD BALANCES (FIXED - Creates user if not exists)
-// ============================================
-async function loadBalances() {
-    try {
-        let userId = null;
-        const { data: user, error: userError } = await supabaseClient
-            .from('users')
-            .select('id')
-            .eq('email', 'admin@zentronix.com')
-            .maybeSingle();
-        if (userError) { console.warn('⚠️ Error checking user:', userError.message); }
-        if (user) {
-            userId = user.id;
-            console.log('✅ Admin user found:', userId);
-        } else {
-            console.log('👤 Creating admin user...');
-            const { data: newUser, error: createError } = await supabaseClient
-                .from('users')
-                .insert([{ email: 'admin@zentronix.com', name: 'Admin', created_at: new Date().toISOString() }])
-                .select('id')
-                .single();
-            if (createError) { console.warn('⚠️ Could not create user:', createError.message); loadLocalBalances(); return; }
-            userId = newUser.id;
-            console.log('✅ Admin user created:', userId);
-            await createDefaultBalances(userId);
-        }
-        if (userId) {
-            const { data: balances, error: balError } = await supabaseClient
-                .from('balances')
-                .select('*')
-                .eq('user_id', userId);
-            if (balError) {
-                console.warn('⚠️ Error fetching balances:', balError.message);
-                await createDefaultBalances(userId);
-                const { data: newBalances, error: retryError } = await supabaseClient
-                    .from('balances')
-                    .select('*')
-                    .eq('user_id', userId);
-                if (!retryError && newBalances && newBalances.length > 0) { updateBalancesUI(newBalances); return; }
-                loadLocalBalances(); return;
-            }
-            if (balances && balances.length > 0) {
-                console.log('✅ Balances loaded from Supabase');
-                updateBalancesUI(balances);
-                return;
-            } else {
-                await createDefaultBalances(userId);
-                const { data: newBalances, error: retryError } = await supabaseClient
-                    .from('balances')
-                    .select('*')
-                    .eq('user_id', userId);
-                if (!retryError && newBalances && newBalances.length > 0) { updateBalancesUI(newBalances); return; }
-                loadLocalBalances(); return;
-            }
-        }
-        loadLocalBalances();
-    } catch (error) {
-        console.warn('⚠️ Using local balances (fallback):', error.message);
-        loadLocalBalances();
-    }
-}
-
-// ============================================
-//  CREATE DEFAULT BALANCES FOR NEW USER
-// ============================================
-async function createDefaultBalances(userId) {
-    try {
-        const defaultBalances = [
-            { user_id: userId, currency: 'USD', amount: 12450.75 },
-            { user_id: userId, currency: 'EUR', amount: 8200.50 },
-            { user_id: userId, currency: 'GBP', amount: 3500.00 },
-            { user_id: userId, currency: 'BRL', amount: 45000.00 },
-            { user_id: userId, currency: 'BTC', amount: 0.45 },
-            { user_id: userId, currency: 'ETH', amount: 3.20 },
-            { user_id: userId, currency: 'BNB', amount: 12.50 },
-            { user_id: userId, currency: 'SOL', amount: 45.80 },
-            { user_id: userId, currency: 'MATIC', amount: 1200.00 },
-            { user_id: userId, currency: 'USDT', amount: 5000.00 },
-            { user_id: userId, currency: 'LTC', amount: 8.90 },
-            { user_id: userId, currency: 'BRC', amount: 250.00 }
-        ];
-        const { error } = await supabaseClient.from('balances').insert(defaultBalances);
-        if (error) { console.warn('⚠️ Could not create default balances:', error.message); } 
-        else { console.log('✅ Default balances created for user'); }
-    } catch (error) { console.warn('⚠️ Error creating default balances:', error.message); }
-}
-
-// ============================================
-//  LOAD LOCAL BALANCES (FALLBACK)
+//  BALANCES
 // ============================================
 function loadLocalBalances() {
     const balances = [
-        { currency: 'USD', amount: 12450.75, icon: '💵' },
-        { currency: 'EUR', amount: 8200.50, icon: '💶' },
-        { currency: 'GBP', amount: 3500.00, icon: '💷' },
-        { currency: 'BRL', amount: 45000.00, icon: 'R$' },
-        { currency: 'BTC', amount: 0.45, icon: '₿' },
-        { currency: 'ETH', amount: 3.20, icon: 'Ξ' },
-        { currency: 'BNB', amount: 12.50, icon: 'BNB' },
-        { currency: 'SOL', amount: 45.80, icon: '◎' },
-        { currency: 'MATIC', amount: 1200.00, icon: '◇' },
-        { currency: 'USDT', amount: 5000.00, icon: '₮' },
-        { currency: 'LTC', amount: 8.90, icon: 'Ł' },
-        { currency: 'BRC', amount: 250.00, icon: '🪙' }
+        { currency: 'USD', amount: 12450.75 },
+        { currency: 'EUR', amount: 8200.50 },
+        { currency: 'GBP', amount: 3500.00 },
+        { currency: 'BRL', amount: 45000.00 },
+        { currency: 'BTC', amount: 0.45 },
+        { currency: 'ETH', amount: 3.20 },
+        { currency: 'BNB', amount: 12.50 },
+        { currency: 'SOL', amount: 45.80 },
+        { currency: 'MATIC', amount: 1200.00 },
+        { currency: 'USDT', amount: 5000.00 },
+        { currency: 'LTC', amount: 8.90 },
+        { currency: 'BRC', amount: 250.00 }
     ];
     const grid = document.getElementById('currencyGrid');
     if (!grid) return;
@@ -1627,30 +1197,17 @@ function loadLocalBalances() {
         const div = document.createElement('div');
         div.className = 'currency-item';
         const amount = typeof b.amount === 'number' ? b.amount : 0;
-        div.innerHTML = `<span><strong>${b.icon} ${b.currency}</strong></span><span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
+        const icon = getCurrencyIcon(b.currency);
+        div.innerHTML = `<span><strong>${icon} ${b.currency}</strong></span><span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
         grid.appendChild(div);
-        if (b.currency === 'USD') total += amount;
-        else if (b.currency === 'EUR') total += amount * 1.08;
-        else if (b.currency === 'GBP') total += amount * 1.26;
-        else if (b.currency === 'BRL') total += amount * 0.18;
-        else if (b.currency === 'BTC') total += amount * 67200;
-        else if (b.currency === 'ETH') total += amount * 3443;
-        else if (b.currency === 'BNB') total += amount * 312.50;
-        else if (b.currency === 'SOL') total += amount * 98.07;
-        else if (b.currency === 'MATIC') total += amount * 0.52;
-        else if (b.currency === 'USDT') total += amount * 1.00;
-        else if (b.currency === 'LTC') total += amount * 82.50;
-        else if (b.currency === 'BRC') total += amount * 9.87;
+        total += convertToUSD(b.currency, amount);
     });
     document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// ============================================
-//  UPDATE BALANCES UI
-// ============================================
 function updateBalancesUI(balances) {
     const grid = document.getElementById('currencyGrid');
-    if (!grid) { console.warn('⚠️ currencyGrid element not found'); return; }
+    if (!grid) return;
     grid.innerHTML = '';
     let total = 0;
     balances.forEach(b => {
@@ -1662,13 +1219,9 @@ function updateBalancesUI(balances) {
         grid.appendChild(div);
         total += convertToUSD(b.currency, amount);
     });
-    const totalElement = document.getElementById('totalBalance');
-    if (totalElement) { totalElement.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// ============================================
-//  GET CURRENCY ICON
-// ============================================
 function getCurrencyIcon(currency) {
     const icons = {
         'USD': '💵', 'EUR': '💶', 'GBP': '💷', 'BRL': 'R$',
@@ -1678,9 +1231,6 @@ function getCurrencyIcon(currency) {
     return icons[currency] || '💰';
 }
 
-// ============================================
-//  CONVERT TO USD
-// ============================================
 function convertToUSD(currency, amount) {
     const rates = {
         'USD': 1, 'EUR': 1.08, 'GBP': 1.26, 'BRL': 0.18,
@@ -1691,127 +1241,71 @@ function convertToUSD(currency, amount) {
 }
 
 // ============================================
-//  TATUM API - REAL FUNCTIONS
+//  CRYPTO ACTIONS
 // ============================================
-function isTatumConfigured() {
-    if (!TATUM_API_KEY || TATUM_API_KEY === 'YOUR_TATUM_API_KEY_HERE') {
-        console.warn('⚠️ Tatum API key not configured. Using demo mode.');
-        return false;
-    }
-    return true;
-}
-
-async function generateRealWallet(currency, chain) {
-    if (!isTatumConfigured()) {
-        showToast('⚠️ Tatum API not configured. Using demo wallet.');
-        const wallet = generateLocalWallet(chain);
-        showRealWalletModal({
-            currency: currency,
-            chain: chain,
-            address: wallet.address,
-            privateKey: wallet.privateKey,
-            timestamp: new Date().toISOString()
-        });
-        saveWalletLocal({ currency, chain, address: wallet.address, privateKey: wallet.privateKey });
-        return wallet;
-    }
-    try {
-        showToast('⏳ Generating ' + currency + ' wallet on blockchain...');
-        const blockchainMap = {
-            'BTC': 'bitcoin', 'ETH': 'ethereum', 'SOL': 'solana',
-            'USDT': 'ethereum', 'BNB': 'binance-smart-chain',
-            'LTC': 'litecoin', 'BRC': 'bitcoin', 'MATIC': 'polygon'
-        };
-        const blockchain = blockchainMap[chain] || 'bitcoin';
-        const response = await fetch(`${TATUM_API_URL}/${blockchain}/wallet`, {
-            method: 'GET',
-            headers: { 'x-api-key': TATUM_API_KEY, 'Content-Type': 'application/json' }
-        });
-        if (!response.ok) {
-            if (response.status === 401) throw new Error('Invalid Tatum API Key.');
-            throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        const walletData = {
-            currency: currency,
-            chain: chain,
-            address: data.address || data.xpub || 'Generated',
-            privateKey: data.privateKey || data.mnemonic || 'Securely saved',
-            timestamp: new Date().toISOString()
-        };
-        saveWalletLocal(walletData);
-        showRealWalletModal(walletData);
-        showToast('✅ ' + currency + ' wallet generated successfully!');
-        return walletData;
-    } catch (error) {
-        console.error('❌ Tatum Error:', error.message);
-        showToast('⚠️ Using local wallet (fallback): ' + error.message);
-        const wallet = generateLocalWallet(chain);
-        showRealWalletModal({
-            currency: currency,
-            chain: chain,
-            address: wallet.address,
-            privateKey: wallet.privateKey,
-            timestamp: new Date().toISOString()
-        });
-        saveWalletLocal({ currency, chain, address: wallet.address, privateKey: wallet.privateKey });
-        return wallet;
+function handleDeposit(currency) {
+    const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '0.01');
+    if (amount && parseFloat(amount) > 0) {
+        const valor = parseFloat(amount);
+        registerHistory('DEPOSIT', currency, valor, 'Crypto deposit', 'tx_' + Date.now());
+        showToast(`✅ ${valor} ${currency} deposited successfully!`);
+        updateBalanceLocal(currency, valor);
     }
 }
 
-function generateLocalWallet(chain) {
-    const wallets = {
-        'BTC': { address: 'bc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'L' + Math.random().toString(36).substring(2, 20) },
-        'ETH': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
-        'BNB': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
-        'SOL': { address: 'Sol' + Math.random().toString(36).substring(2, 15), privateKey: 'SolPriv' + Math.random().toString(36).substring(2, 20) },
-        'MATIC': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
-        'USDT': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
-        'LTC': { address: 'ltc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'L' + Math.random().toString(36).substring(2, 20) },
-        'BRC': { address: 'brc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'B' + Math.random().toString(36).substring(2, 20) }
-    };
-    return wallets[chain] || { address: 'Gen' + Math.random().toString(36).substring(2, 20), privateKey: 'Priv' + Math.random().toString(36).substring(2, 20) };
-}
-
-function saveWalletLocal(walletData) {
-    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
-    wallets.push(walletData);
-    localStorage.setItem('zentronix_wallets', JSON.stringify(wallets));
-}
-
-function showRealWalletModal(walletData) {
+function handleReceive(currency) {
+    const wallet = generateLocalWallet(currency);
     const modal = document.getElementById('walletModal');
     const title = document.getElementById('walletModalTitle');
     const addressDisplay = document.getElementById('walletAddressDisplay');
     const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
     const warning = document.getElementById('walletWarning');
-    title.textContent = '💰 ' + walletData.currency + ' Wallet Generated';
+    title.textContent = '📤 RECEIVE ' + currency;
     addressDisplay.innerHTML = `
-        <strong>📍 Address:</strong><br><span style="font-size:0.8rem;">${walletData.address}</span><br>
-        <button onclick="copyText('${walletData.address}')" style="margin-top:5px; background:rgba(0,242,255,0.2); border:1px solid var(--neon-blue); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-blue);">📋 Copy</button>
+        <strong>📍 Address:</strong><br><span style="font-size:0.8rem;">${wallet.address}</span><br>
+        <button onclick="copyText('${wallet.address}')" style="margin-top:5px; background:rgba(0,242,255,0.2); border:1px solid var(--neon-blue); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-blue);">📋 Copy</button>
     `;
-    privateKeyDisplay.innerHTML = `
-        <strong>🔑 Private Key (⚠️ NEVER SHARE):</strong><br>
-        <span style="font-size:0.65rem; word-break:break-all;">${walletData.privateKey}</span><br>
-        <button onclick="copyText('${walletData.privateKey}')" style="margin-top:5px; background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-red);">📋 Copy</button>
-    `;
-    warning.textContent = '⚠️ Save your private key securely! Never share it with anyone.';
-    privateKeyDisplay.style.display = 'block';
+    privateKeyDisplay.style.display = 'none';
+    warning.textContent = '⏳ Waiting for network confirmation...';
     modal.classList.add('active');
+    registerHistory('RECEIVE', currency, 0, 'Address generated', 'receive_' + Date.now());
+    showToast(`📤 ${currency} receiving address generated!`);
 }
 
-// ============================================
-//  FIAT FUNCTIONS - DEPOSIT, RECEIVE, STAKE
-// ============================================
+function handleStaking(currency) {
+    const amount = prompt(`⛓️ Enter ${currency} amount to stake:`, '1');
+    if (amount && parseFloat(amount) > 0) {
+        const valor = parseFloat(amount);
+        const rates = { 'BTC': 0.5, 'ETH': 3.2, 'SOL': 6.8, 'BNB': 4.5, 'MATIC': 5.1, 'USDT': 8.0, 'LTC': 1.2, 'BRC': 12.5 };
+        const rate = rates[currency] || 5.0;
+        const yieldAmount = (valor * rate) / 100;
+        const modal = document.getElementById('modalOverlay');
+        const content = document.getElementById('modalContent');
+        content.innerHTML = `
+            <h3 style="color:var(--neon-green);">⛓️ Staking Active</h3>
+            <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
+                <p><strong>Currency:</strong> ${currency}</p>
+                <p><strong>Amount:</strong> ${valor}</p>
+                <p><strong>APY:</strong> ${rate}%</p>
+                <p><strong>Estimated Yield:</strong> ${yieldAmount.toFixed(4)} ${currency}</p>
+                <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
+            </div>
+            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
+        `;
+        modal.classList.add('active');
+        registerHistory('STAKE', currency, valor, 'APY: ' + rate + '%', 'stake_' + Date.now());
+        showToast(`⛓️ Staking ${valor} ${currency} started! APY: ${rate}%`);
+    }
+}
+
 function handleFiatDeposit(currency) {
     const symbol = currency === 'BRL' ? 'R$' : '$';
     const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '1000');
     if (amount && parseFloat(amount) > 0) {
         const valor = parseFloat(amount);
-        const txId = 'fiat_' + Date.now();
-        registerHistory('DEPOSIT', currency, valor, 'Depósito via wire transfer', txId);
+        registerHistory('DEPOSIT', currency, valor, 'Fiat deposit', 'fiat_' + Date.now());
         showToast(`✅ ${symbol}${valor.toFixed(2)} ${currency} deposited successfully!`);
-        updateFiatBalance(currency, valor);
+        updateBalanceLocal(currency, valor);
     }
 }
 
@@ -1833,7 +1327,7 @@ function handleFiatReceive(currency) {
         <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
     `;
     modal.classList.add('active');
-    registerHistory('RECEIVE', currency, 0, 'Received account generated', 'fiat_receive_' + Date.now());
+    registerHistory('RECEIVE', currency, 0, 'Account generated', 'fiat_receive_' + Date.now());
     showToast(`📤 ${currency} receiving account generated!`);
 }
 
@@ -1863,182 +1357,138 @@ function handleFiatStaking(currency) {
     }
 }
 
-function updateFiatBalance(currency, amount) {
+function updateBalanceLocal(currency, amount) {
     const balances = JSON.parse(localStorage.getItem('zentronix_balances') || '[]');
     const existing = balances.find(b => b.currency === currency);
     if (existing) { existing.amount = (existing.amount || 0) + amount; } 
     else { balances.push({ currency: currency, amount: amount }); }
     localStorage.setItem('zentronix_balances', JSON.stringify(balances));
-    updateBalancesUI(balances);
+    loadLocalBalances();
 }
 
 // ============================================
-//  CRYPTO FUNCTIONS
+//  WALLET
 // ============================================
-function handleCryptoDeposit(currency) {
-    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
-    const wallet = wallets.find(w => w.currency === currency);
-    if (wallet) {
-        const amount = prompt('💰 Enter ' + currency + ' amount to deposit:', '0.01');
-        if (amount && parseFloat(amount) > 0) {
-            depositCryptoReal(currency, parseFloat(amount), wallet.address);
-        }
-    } else {
-        showToast('⚠️ Create a wallet for ' + currency + ' first (WALLET button)');
-    }
+function generateLocalWallet(chain) {
+    const wallets = {
+        'BTC': { address: 'bc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'L' + Math.random().toString(36).substring(2, 20) },
+        'ETH': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
+        'BNB': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
+        'SOL': { address: 'Sol' + Math.random().toString(36).substring(2, 15), privateKey: 'SolPriv' + Math.random().toString(36).substring(2, 20) },
+        'MATIC': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
+        'USDT': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
+        'LTC': { address: 'ltc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'L' + Math.random().toString(36).substring(2, 20) },
+        'BRC': { address: 'brc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'B' + Math.random().toString(36).substring(2, 20) }
+    };
+    return wallets[chain] || { address: 'Gen' + Math.random().toString(36).substring(2, 20), privateKey: 'Priv' + Math.random().toString(36).substring(2, 20) };
 }
 
-function handleCryptoReceive(currency) {
-    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
-    const wallet = wallets.find(w => w.currency === currency);
-    if (wallet) {
-        receiveCryptoReal(currency, wallet.address);
-    } else {
-        showToast('⚠️ Create a wallet for ' + currency + ' first (WALLET button)');
-    }
-}
-
-async function depositCryptoReal(currency, amount, destinationAddress) {
-    try {
-        if (!isTatumConfigured()) {
-            showToast('⚠️ Tatum API not configured. Demo deposit only.');
-            registerHistory('DEPOSIT_DEMO', currency, amount, 'Demo deposit to ' + destinationAddress, 'demo_tx_' + Date.now());
-            showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
-            return;
-        }
-        showToast('⏳ Processing ' + currency + ' deposit...');
-        const chainMap = {
-            'BTC': 'bitcoin', 'ETH': 'ethereum', 'SOL': 'solana',
-            'USDT': 'ethereum', 'BNB': 'binance-smart-chain',
-            'LTC': 'litecoin', 'BRC': 'bitcoin', 'MATIC': 'polygon'
-        };
-        const chain = chainMap[currency] || 'bitcoin';
-        const response = await fetch(`${TATUM_API_URL}/${chain}/transaction`, {
-            method: 'POST',
-            headers: {
-                'x-api-key': TATUM_API_KEY,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                fromAddress: destinationAddress,
-                toAddress: destinationAddress,
-                amount: amount,
-                currency: currency
-            })
-        });
-        if (!response.ok) {
-            if (response.status === 401) throw new Error('Invalid Tatum API Key.');
-            throw new Error('Transaction error: ' + response.status);
-        }
-        const data = await response.json();
-        showToast('✅ ' + currency + ' deposit completed! Tx: ' + (data.txId || 'confirmed'));
-        registerHistory('DEPOSIT', currency, amount, destinationAddress, data.txId || '');
-        return data;
-    } catch (error) {
-        console.error('❌ Deposit error:', error.message);
-        showToast('⚠️ Demo deposit (fallback): ' + error.message);
-        registerHistory('DEPOSIT_DEMO', currency, amount, 'Fallback deposit', 'demo_tx_' + Date.now());
-        showToast('✅ Demo deposit of ' + amount + ' ' + currency + ' completed!');
-    }
-}
-
-function receiveCryptoReal(currency, address) {
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(address)}`;
+function generateWallet(currency, chain) {
+    const wallet = generateLocalWallet(chain);
     const modal = document.getElementById('walletModal');
     const title = document.getElementById('walletModalTitle');
     const addressDisplay = document.getElementById('walletAddressDisplay');
     const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
     const warning = document.getElementById('walletWarning');
-    title.textContent = '📤 RECEIVE ' + currency;
+    title.textContent = '💰 ' + currency + ' Wallet Generated';
     addressDisplay.innerHTML = `
-        <strong>📱 Scan QR Code or copy address:</strong><br><br>
-        <img src="${qrUrl}" style="max-width:200px; border-radius:10px; margin:10px auto;"><br>
-        <div style="background:rgba(0,0,0,0.3); padding:0.8rem; border-radius:0.5rem; word-break:break-all; font-size:0.65rem; border:1px solid var(--neon-purple);">${address}</div>
-        <br>
-        <button onclick="copyText('${address}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">📋 COPY ADDRESS</button>
+        <strong>📍 Address:</strong><br><span style="font-size:0.8rem;">${wallet.address}</span><br>
+        <button onclick="copyText('${wallet.address}')" style="margin-top:5px; background:rgba(0,242,255,0.2); border:1px solid var(--neon-blue); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-blue);">📋 Copy</button>
     `;
-    privateKeyDisplay.style.display = 'none';
-    warning.textContent = '⏳ Waiting for network confirmation... (may take a few minutes)';
+    privateKeyDisplay.innerHTML = `
+        <strong>🔑 Private Key (⚠️ NEVER SHARE):</strong><br>
+        <span style="font-size:0.65rem; word-break:break-all;">${wallet.privateKey}</span><br>
+        <button onclick="copyText('${wallet.privateKey}')" style="margin-top:5px; background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-red);">📋 Copy</button>
+    `;
+    privateKeyDisplay.style.display = 'block';
+    warning.textContent = '⚠️ Save your private key securely! Never share it with anyone.';
     modal.classList.add('active');
-    setTimeout(() => {
-        warning.textContent = '✅ Address ready to receive ' + currency + '!';
-        warning.style.color = 'var(--neon-green)';
-    }, 2000);
-}
-
-async function stakeReal(currency, amount) {
-    try {
-        showToast('⛓️ Starting ' + currency + ' staking...');
-        const stakingRates = {
-            'BTC': 0.5, 'ETH': 3.2, 'SOL': 6.8, 'BNB': 4.5,
-            'MATIC': 5.1, 'USDT': 8.0, 'LTC': 1.2, 'BRC': 12.5
-        };
-        const rate = stakingRates[currency] || 5.0;
-        const yieldAmount = (amount * rate) / 100;
-        registerHistory('STAKE', currency, amount, 'APY: ' + rate + '%', 'stake_' + Date.now());
-        showToast(`⛓️ Staking ${amount} ${currency} started! APY: ${rate}%`);
-        const modal = document.getElementById('modalOverlay');
-        const content = document.getElementById('modalContent');
-        content.innerHTML = `
-            <h3 style="color:var(--neon-green);">⛓️ Staking Active</h3>
-            <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
-                <p><strong>Currency:</strong> ${currency}</p>
-                <p><strong>Amount:</strong> ${amount}</p>
-                <p><strong>APY:</strong> ${rate}%</p>
-                <p><strong>Estimated Yield:</strong> ${yieldAmount.toFixed(4)} ${currency}</p>
-                <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
-            </div>
-            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
-        `;
-        modal.classList.add('active');
-    } catch (error) {
-        console.error('❌ Staking error:', error);
-        showToast('⚠️ Staking error. Please try again.');
-    }
+    
+    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
+    wallets.push({ currency, chain, address: wallet.address, privateKey: wallet.privateKey, timestamp: new Date().toISOString() });
+    localStorage.setItem('zentronix_wallets', JSON.stringify(wallets));
+    showToast('✅ ' + currency + ' wallet generated!');
 }
 
 // ============================================
 //  SWAP
 // ============================================
-async function swapReal(from, to, amount) {
-    try {
-        showToast(`🔄 Converting ${amount} ${from} → ${to}...`);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const rates = {
-            'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
-            'USD_USDT': 1.00, 'BTC_USD': 67200, 'ETH_USD': 3443,
-            'SOL_USD': 98.07, 'BNB_USD': 312.50, 'MATIC_USD': 0.52,
-            'LTC_USD': 82.50, 'BRC_USD': 9.87,
-            'USD_EUR': 0.92, 'USD_GBP': 0.79, 'USD_BRL': 5.45,
-            'EUR_USD': 1.08, 'EUR_GBP': 0.86, 'EUR_BRL': 5.92,
-            'GBP_USD': 1.26, 'GBP_EUR': 1.16, 'GBP_BRL': 6.89,
-            'BRL_USD': 0.18, 'BRL_EUR': 0.17, 'BRL_GBP': 0.15,
-            'BTC_ETH': 19.5, 'BTC_SOL': 685, 'BTC_BNB': 215,
-            'BTC_LTC': 814, 'BTC_BRC': 6800, 'BTC_MATIC': 129230,
-            'ETH_BTC': 0.0513, 'ETH_SOL': 35.1, 'ETH_BNB': 11.02,
-            'ETH_LTC': 41.7, 'ETH_BRC': 348, 'ETH_MATIC': 6621,
-            'SOL_BTC': 0.00146, 'SOL_ETH': 0.0285, 'SOL_BNB': 0.314,
-            'SOL_LTC': 1.19, 'SOL_BRC': 9.93, 'SOL_MATIC': 188.6,
-            'BNB_BTC': 0.00465, 'BNB_ETH': 0.0907, 'BNB_SOL': 3.19,
-            'LTC_BTC': 0.00123, 'LTC_ETH': 0.0240, 'LTC_SOL': 0.841,
-            'BRC_BTC': 0.000147, 'BRC_ETH': 0.00287, 'BRC_SOL': 0.1007,
-            'MATIC_BTC': 0.00000774, 'MATIC_ETH': 0.000151, 'MATIC_SOL': 0.0053
-        };
-        const key = from + '_' + to;
-        const rate = rates[key] || rates[to + '_' + from] || 0;
-        let converted = amount * (rate || 0.001);
-        if (converted < 0.000001 && rate > 0) { converted = amount / (rates[to + '_' + from] || 1); }
-        registerHistory('SWAP', from + '→' + to, amount, 'Rate: ' + rate, 'swap_' + Date.now());
-        showToast(`✅ Swap completed! ${amount} ${from} = ${converted.toFixed(6)} ${to}`);
-        return { from, to, amount, converted, rate };
-    } catch (error) {
-        console.error('❌ Swap error:', error);
-        showToast('⚠️ Swap error. Please try again.');
+function openSwap(symbol) {
+    document.getElementById('swapModal').classList.add('active');
+    const fromSelect = document.getElementById('swapFromSelect');
+    for(let i = 0; i < fromSelect.options.length; i++) {
+        if(fromSelect.options[i].value === symbol) {
+            fromSelect.selectedIndex = i;
+            break;
+        }
     }
+    updateSwapRate();
+}
+
+function closeSwapModal() {
+    document.getElementById('swapModal').classList.remove('active');
+}
+
+function closeWalletModal() {
+    document.getElementById('walletModal').classList.remove('active');
+}
+
+function updateSwapRate() {
+    const from = document.getElementById('swapFromSelect').value;
+    const to = document.getElementById('swapToSelect').value;
+    const rates = {
+        'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
+        'USD_USDT': 1.00, 'USD_BNB': 0.0032, 'USD_LTC': 0.0121,
+        'USD_BRC': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
+        'USD_GBP': 0.79, 'USD_BRL': 5.45,
+        'BTC_USD': 67200, 'BTC_ETH': 19.5, 'BTC_SOL': 685,
+        'ETH_USD': 3443, 'ETH_BTC': 0.0513, 'ETH_SOL': 35.1,
+        'SOL_USD': 98.07, 'SOL_BTC': 0.00146, 'SOL_ETH': 0.0285,
+        'BNB_USD': 312.50, 'BNB_BTC': 0.00465, 'BNB_ETH': 0.0907,
+        'LTC_USD': 82.50, 'LTC_BTC': 0.00123, 'LTC_ETH': 0.0240,
+        'BRC_USD': 9.87, 'BRC_BTC': 0.000147, 'BRC_ETH': 0.00287,
+        'MATIC_USD': 0.52, 'MATIC_BTC': 0.00000774, 'MATIC_ETH': 0.000151,
+        'EUR_USD': 1.08, 'GBP_USD': 1.26, 'BRL_USD': 0.18
+    };
+    const key = from + '_' + to;
+    const rate = rates[key] || 'N/A';
+    document.getElementById('swapRateDisplay').textContent = `Rate: 1 ${from} = ${rate} ${to}`;
+}
+
+async function executeSwap() {
+    const from = document.getElementById('swapFromSelect').value;
+    const to = document.getElementById('swapToSelect').value;
+    const amount = parseFloat(document.getElementById('swapAmountInput').value);
+    if (!amount || amount <= 0) { showToast('⚠️ Enter a valid amount'); return; }
+    
+    const rates = {
+        'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
+        'USD_USDT': 1.00, 'USD_BNB': 0.0032, 'USD_LTC': 0.0121,
+        'USD_BRC': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
+        'USD_GBP': 0.79, 'USD_BRL': 5.45,
+        'BTC_USD': 67200, 'BTC_ETH': 19.5, 'BTC_SOL': 685,
+        'ETH_USD': 3443, 'ETH_BTC': 0.0513, 'ETH_SOL': 35.1,
+        'SOL_USD': 98.07, 'SOL_BTC': 0.00146, 'SOL_ETH': 0.0285,
+        'BNB_USD': 312.50, 'BNB_BTC': 0.00465, 'BNB_ETH': 0.0907,
+        'LTC_USD': 82.50, 'LTC_BTC': 0.00123, 'LTC_ETH': 0.0240,
+        'BRC_USD': 9.87, 'BRC_BTC': 0.000147, 'BRC_ETH': 0.00287,
+        'MATIC_USD': 0.52, 'MATIC_BTC': 0.00000774, 'MATIC_ETH': 0.000151,
+        'EUR_USD': 1.08, 'GBP_USD': 1.26, 'BRL_USD': 0.18
+    };
+    const key = from + '_' + to;
+    let rate = rates[key] || 0;
+    if (rate === 0) {
+        const reverseKey = to + '_' + from;
+        rate = rates[reverseKey] ? 1 / rates[reverseKey] : 0.001;
+    }
+    const converted = amount * rate;
+    registerHistory('SWAP', from + '→' + to, amount, 'Rate: ' + rate, 'swap_' + Date.now());
+    showToast(`✅ Swap completed! ${amount} ${from} = ${converted.toFixed(6)} ${to}`);
+    document.getElementById('swapModal').classList.remove('active');
 }
 
 // ============================================
-//  REGISTER HISTORY
+//  HISTORY
 // ============================================
 function registerHistory(type, currency, amount, detail, txId) {
     const history = JSON.parse(localStorage.getItem('zentronix_history') || '[]');
@@ -2065,10 +1515,9 @@ function updateHistoryUI() {
     }
     historyList.innerHTML = history.slice(0, 20).map(item => {
         const colors = {
-            'DEPOSIT': 'var(--neon-green)', 'DEPOSIT_DEMO': 'var(--neon-yellow)',
-            'RECEIVE': 'var(--neon-blue)', 'STAKE': 'var(--neon-purple)',
-            'SWAP': 'var(--neon-yellow)', 'BUY': 'var(--neon-green)',
-            'SELL': 'var(--neon-red)', 'LOAN_REQUEST': 'var(--neon-orange)'
+            'DEPOSIT': 'var(--neon-green)', 'RECEIVE': 'var(--neon-blue)',
+            'STAKE': 'var(--neon-purple)', 'SWAP': 'var(--neon-yellow)',
+            'BUY': 'var(--neon-green)', 'SELL': 'var(--neon-red)'
         };
         const color = colors[item.type] || 'var(--neon-blue)';
         const date = new Date(item.date).toLocaleString('en-US');
@@ -2083,6 +1532,80 @@ function updateHistoryUI() {
             </div>
         `;
     }).join('');
+}
+
+// ============================================
+//  STAKING CHART
+// ============================================
+function initStakingChart() {
+    const ctx = document.getElementById('stakingChart');
+    if (!ctx) return;
+    if (stakingChartInstance) { stakingChartInstance.destroy(); }
+    stakingChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Staking APR %',
+                data: [4.2, 4.5, 4.8, 5.1, 5.5, 5.8, 6.2, 6.5, 6.8, 7.0, 7.2, 7.5],
+                borderColor: '#00f2ff',
+                backgroundColor: 'rgba(0, 242, 255, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#bc13fe'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } } },
+            scales: {
+                x: { grid: { color: 'rgba(188, 19, 254, 0.1)' }, ticks: { color: '#a0a0b0' } },
+                y: { grid: { color: 'rgba(188, 19, 254, 0.1)' }, ticks: { color: '#a0a0b0' } }
+            }
+        }
+    });
+}
+
+// ============================================
+//  PROFILE
+// ============================================
+function loadProfileData() {
+    const savedProfile = localStorage.getItem('zentronix_profile');
+    if (savedProfile) {
+        try {
+            userProfile = JSON.parse(savedProfile);
+            updateProfileUI();
+        } catch(e) {}
+    }
+}
+
+function updateProfileUI() {
+    document.getElementById('profileFirstName').value = userProfile.firstName || 'Alexander';
+    document.getElementById('profileLastName').value = userProfile.lastName || 'Vance';
+    document.getElementById('profileEmail').value = userProfile.email || 'alexander.vance@zentronix.com';
+    document.getElementById('profilePhone').value = userProfile.phone || '+41 78 123 4567';
+    const name = userProfile.firstName || 'Admin';
+    document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: name });
+    if (userProfile.photo) {
+        document.getElementById('profileAvatarImg').src = userProfile.photo;
+        document.getElementById('profileAvatarImg').style.display = 'block';
+        document.getElementById('profileAvatarIcon').style.display = 'none';
+        document.getElementById('profileAvatarMini').src = userProfile.photo;
+        document.getElementById('profileAvatarMini').style.display = 'block';
+        document.getElementById('profileAvatarMiniIcon').style.display = 'none';
+    }
+}
+
+function saveProfile() {
+    userProfile.firstName = document.getElementById('profileFirstName').value.trim() || 'Alexander';
+    userProfile.lastName = document.getElementById('profileLastName').value.trim() || 'Vance';
+    userProfile.email = document.getElementById('profileEmail').value.trim() || 'alexander.vance@zentronix.com';
+    userProfile.phone = document.getElementById('profilePhone').value.trim() || '+41 78 123 4567';
+    localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
+    updateProfileUI();
+    document.getElementById('profileModal').classList.remove('active');
+    showToast('✅ Profile saved successfully!');
 }
 
 // ============================================
@@ -2131,7 +1654,7 @@ function openPersonalLoan() {
     modal.classList.add('active');
 }
 
-async function submitLoanRequest() {
+function submitLoanRequest() {
     const amount = document.getElementById('loanAmount').value;
     const currency = document.getElementById('loanCurrency').value;
     const reason = document.getElementById('loanReason').value;
@@ -2141,28 +1664,6 @@ async function submitLoanRequest() {
     resultDiv.style.display = 'block';
     resultDiv.style.background = 'rgba(0,255,136,0.1)';
     resultDiv.style.border = '1px solid var(--neon-green)';
-    try {
-        const { data: user, error: userError } = await supabaseClient
-            .from('users')
-            .select('id')
-            .eq('email', 'admin@zentronix.com')
-            .single();
-        if (!userError && user) {
-            const { error: loanError } = await supabaseClient
-                .from('loans')
-                .insert([{
-                    user_id: user.id,
-                    amount: parseFloat(amount),
-                    currency: currency,
-                    purpose: reason,
-                    term_months: parseInt(term),
-                    status: 'pending',
-                    created_at: new Date().toISOString()
-                }]);
-            if (loanError) { console.warn('⚠️ Could not save to Supabase:', loanError); } 
-            else { console.log('✅ Loan saved to Supabase'); }
-        }
-    } catch (error) { console.warn('⚠️ Supabase save failed, saving locally:', error); }
     registerHistory('LOAN_REQUEST', currency, amount, 'Purpose: ' + reason + ' | Term: ' + term + ' months', 'loan_' + Date.now());
     resultDiv.innerHTML = `
         <h4 style="color:var(--neon-green);">✅ REQUEST SUBMITTED!</h4>
@@ -2180,11 +1681,10 @@ async function submitLoanRequest() {
         </div>
     `;
     showToast('✅ Loan request submitted successfully!');
-    setTimeout(() => { if (confirm('Close this request?')) { closeModalOverlay(); } }, 8000);
 }
 
 // ============================================
-//  LOAD COMPLETE SERVICES
+//  COMPLETE SERVICES
 // ============================================
 function loadCompleteServices() {
     const container = document.getElementById('bankingServicesList');
@@ -2214,188 +1714,48 @@ function loadCompleteServices() {
 }
 
 // ============================================
-//  ACTION HANDLERS (GLOBAL SCOPE)
+//  EXPORTA FUNÇÕES PARA O ESCOPO GLOBAL
 // ============================================
-window.handleDeposit = function(currency) {
-    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
-    const wallet = wallets.find(w => w.currency === currency);
-    if (wallet) {
-        const amount = prompt('💰 Enter ' + currency + ' amount to deposit:', '0.01');
-        if (amount && parseFloat(amount) > 0) {
-            depositCryptoReal(currency, parseFloat(amount), wallet.address);
-        }
-    } else {
-        showToast('⚠️ Create a wallet for ' + currency + ' first (WALLET button)');
-    }
-};
-
-window.handleReceive = function(currency) {
-    const wallets = JSON.parse(localStorage.getItem('zentronix_wallets') || '[]');
-    const wallet = wallets.find(w => w.currency === currency);
-    if (wallet) {
-        receiveCryptoReal(currency, wallet.address);
-    } else {
-        showToast('⚠️ Create a wallet for ' + currency + ' first (WALLET button)');
-    }
-};
-
-window.handleStaking = function(currency) {
-    const amount = prompt('⛓️ Enter ' + currency + ' amount to stake:', '1');
-    if (amount && parseFloat(amount) > 0) {
-        stakeReal(currency, parseFloat(amount));
-    }
-};
-
-window.generateWallet = function(currency, chain) {
-    generateRealWallet(currency, chain);
-};
-
-window.executeSwap = async function() {
-    const from = document.getElementById('swapFromSelect').value;
-    const to = document.getElementById('swapToSelect').value;
-    const amount = parseFloat(document.getElementById('swapAmountInput').value);
-    if (!amount || amount <= 0) { showToast('⚠️ Enter a valid amount'); return; }
-    await swapReal(from, to, amount);
-    document.getElementById('swapModal').classList.remove('active');
-};
-
-window.handleBuy = function(currency) {
-    const amount = prompt('🟢 Enter USD amount to buy ' + currency + ':', '100');
-    if (amount && parseFloat(amount) > 0) {
-        const usdAmount = parseFloat(amount);
-        const price = currency === 'BRC' ? 9.87 : 1;
-        const quantity = usdAmount / price;
-        registerHistory('BUY', currency, usdAmount, quantity.toFixed(4) + ' ' + currency + ' purchased', 'buy_' + Date.now());
-        showToast(`🟢 Purchased ${quantity.toFixed(4)} ${currency} for $${usdAmount}!`);
-    }
-};
-
-window.handleSwap = function(symbol) {
-    document.getElementById('swapModal').classList.add('active');
-    const fromSelect = document.getElementById('swapFromSelect');
-    for(let i = 0; i < fromSelect.options.length; i++) {
-        if(fromSelect.options[i].value === symbol) {
-            fromSelect.selectedIndex = i;
-            break;
-        }
-    }
-    updateSwapRate();
-};
-
-window.updateSwapRate = function() {
-    const from = document.getElementById('swapFromSelect').value;
-    const to = document.getElementById('swapToSelect').value;
-    const rates = {
-        'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
-        'USD_USDT': 1.00, 'USD_BNB': 0.0032, 'USD_LTC': 0.0121,
-        'USD_BRC': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
-        'USD_GBP': 0.79, 'USD_BRL': 5.45,
-        'BTC_USD': 67200, 'BTC_ETH': 19.5, 'BTC_SOL': 685,
-        'BTC_USDT': 67200, 'BTC_BNB': 215, 'BTC_LTC': 814,
-        'BTC_BRC': 6800, 'BTC_MATIC': 129230,
-        'ETH_USD': 3443, 'ETH_BTC': 0.0513, 'ETH_SOL': 35.1,
-        'ETH_USDT': 3443, 'ETH_BNB': 11.02, 'ETH_LTC': 41.7,
-        'ETH_BRC': 348, 'ETH_MATIC': 6621,
-        'EUR_USD': 1.08, 'EUR_BTC': 0.0000161, 'EUR_ETH': 0.000314,
-        'GBP_USD': 1.26, 'GBP_BTC': 0.0000188,
-        'BRL_USD': 0.18, 'BRL_BTC': 0.00000268
-    };
-    const key = from + '_' + to;
-    const rate = rates[key] || 'N/A';
-    document.getElementById('swapRateDisplay').textContent = `Rate: 1 ${from} = ${rate} ${to}`;
-};
-
-window.closeSwapModal = function() { document.getElementById('swapModal').classList.remove('active'); };
-window.closeWalletModal = function() { document.getElementById('walletModal').classList.remove('active'); };
+window.handleLogin = handleLogin;
+window.logout = logout;
+window.confirmLogout = confirmLogout;
+window.cancelLogout = cancelLogout;
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.handleDeposit = handleDeposit;
+window.handleReceive = handleReceive;
+window.handleStaking = handleStaking;
+window.handleFiatDeposit = handleFiatDeposit;
+window.handleFiatReceive = handleFiatReceive;
+window.handleFiatStaking = handleFiatStaking;
+window.generateWallet = generateWallet;
+window.openSwap = openSwap;
+window.closeSwapModal = closeSwapModal;
+window.closeWalletModal = closeWalletModal;
+window.executeSwap = executeSwap;
+window.updateSwapRate = updateSwapRate;
+window.copyText = copyText;
+window.copyAccountNumber = copyAccountNumber;
+window.showToast = showToast;
+window.closeModalOverlay = closeModalOverlay;
 window.openPersonalLoan = openPersonalLoan;
 window.submitLoanRequest = submitLoanRequest;
-window.closeModalOverlay = closeModalOverlay;
-window.copyText = copyText;
-window.showToast = showToast;
+window.loadCompleteServices = loadCompleteServices;
+window.loadAllAssets = loadAllAssets;
+window.loadLocalBalances = loadLocalBalances;
+window.updateHistoryUI = updateHistoryUI;
+window.initStakingChart = initStakingChart;
+window.saveProfile = saveProfile;
 
 // ============================================
-//  STAKING CHART
-// ============================================
-function initStakingChart() {
-    const ctx = document.getElementById('stakingChart').getContext('2d');
-    if (stakingChartInstance) { stakingChartInstance.destroy(); }
-    stakingChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: 'Staking APR %',
-                data: [4.2, 4.5, 4.8, 5.1, 5.5, 5.8, 6.2, 6.5, 6.8, 7.0, 7.2, 7.5],
-                borderColor: '#00f2ff',
-                backgroundColor: 'rgba(0, 242, 255, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#bc13fe'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#a0a0b0', font: { family: 'Orbitron', size: 10 } } } },
-            scales: {
-                x: { grid: { color: 'rgba(188, 19, 254, 0.1)' }, ticks: { color: '#a0a0b0' } },
-                y: { grid: { color: 'rgba(188, 19, 254, 0.1)' }, ticks: { color: '#a0a0b0' } }
-            }
-        }
-    });
-}
-
-// ============================================
-//  PROFILE FUNCTIONS
-// ============================================
-function loadProfileData() {
-    const savedProfile = localStorage.getItem('zentronix_profile');
-    if (savedProfile) {
-        try {
-            userProfile = JSON.parse(savedProfile);
-            updateProfileUI();
-        } catch(e) {}
-    }
-}
-
-function updateProfileUI() {
-    document.getElementById('profileFirstName').value = userProfile.firstName || 'Alexander';
-    document.getElementById('profileLastName').value = userProfile.lastName || 'Vance';
-    document.getElementById('profileEmail').value = userProfile.email || 'alexander.vance@zentronix.com';
-    document.getElementById('profilePhone').value = userProfile.phone || '+41 78 123 4567';
-    const name = userProfile.firstName || 'Admin';
-    document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: name });
-    if (userProfile.photo) {
-        document.getElementById('profileAvatarImg').src = userProfile.photo;
-        document.getElementById('profileAvatarImg').style.display = 'block';
-        document.getElementById('profileAvatarIcon').style.display = 'none';
-        document.getElementById('profileAvatarMini').src = userProfile.photo;
-        document.getElementById('profileAvatarMini').style.display = 'block';
-        document.getElementById('profileAvatarMiniIcon').style.display = 'none';
-    }
-}
-
-function saveProfile() {
-    userProfile.firstName = document.getElementById('profileFirstName').value.trim() || 'Alexander';
-    userProfile.lastName = document.getElementById('profileLastName').value.trim() || 'Vance';
-    userProfile.email = document.getElementById('profileEmail').value.trim() || 'alexander.vance@zentronix.com';
-    userProfile.phone = document.getElementById('profilePhone').value.trim() || '+41 78 123 4567';
-    localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
-    updateProfileUI();
-    document.getElementById('profileModal').classList.remove('active');
-    showToast('✅ Profile saved successfully!');
-}
-
-// ============================================
-//  INITIALIZATION - CORRIGIDO E SEGURO
+//  ⭐ INICIALIZAÇÃO PRINCIPAL ⭐
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🟣 Initializing Zentronix Bank...');
-    console.log('🔑 Supabase Client:', supabaseClient ? '✅ Initialized' : '❌ Failed');
-    console.log('🔑 Tatum API:', isTatumConfigured() ? '✅ Configured' : '⚠️ Using Demo Mode');
+    console.log('🟣 Zentronix Bank - Inicializando...');
+    console.log('🔑 Supabase:', supabaseClient ? '✅ OK' : '❌ FAIL');
     
     // ============================================
-    //  CONFIGURAÇÃO DE IDIOMA
+    //  IDIOMA
     // ============================================
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
@@ -2405,39 +1765,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (langTrigger) {
         langTrigger.addEventListener('click', function(e) {
             e.stopPropagation();
-            const container = document.getElementById('langContainer');
-            if (container) container.classList.toggle('active');
+            document.getElementById('langContainer').classList.toggle('active');
         });
     }
-    
     document.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             setLanguage(this.dataset.lang);
-            const container = document.getElementById('langContainer');
-            if (container) container.classList.remove('active');
+            document.getElementById('langContainer').classList.remove('active');
         });
     });
-    
     document.addEventListener('click', function() {
-        const container = document.getElementById('langContainer');
-        if (container) container.classList.remove('active');
+        document.getElementById('langContainer').classList.remove('active');
     });
     
     // ============================================
-    //  ACCESS HUB BUTTON
+    //  LOGIN BUTTON
     // ============================================
     const openLoginBtn = document.getElementById('openLoginBtn');
     if (openLoginBtn) {
-        const newBtn = openLoginBtn.cloneNode(true);
-        openLoginBtn.parentNode.replaceChild(newBtn, openLoginBtn);
-        newBtn.addEventListener('click', function(e) {
+        openLoginBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             openLoginModal();
         });
-    } else {
-        console.warn('⚠️ Botão openLoginBtn não encontrado');
     }
     
     // ============================================
@@ -2445,223 +1795,116 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     const kycBtn = document.getElementById('kycBtn');
     if (kycBtn) {
-        const newKycBtn = kycBtn.cloneNode(true);
-        kycBtn.parentNode.replaceChild(newKycBtn, kycBtn);
-        newKycBtn.addEventListener('click', function(e) {
+        kycBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             document.getElementById('submitModal').classList.add('active');
             currentKycStep = 1;
             updateKycSteps();
         });
-    } else {
-        console.warn('⚠️ Botão kycBtn não encontrado');
     }
     
     // ============================================
     //  LOGIN MODAL
     // ============================================
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeLoginModal);
-    }
-    
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) {
-        loginModal.addEventListener('click', function(e) {
-            if (e.target === this) closeLoginModal();
-        });
-    }
-    
-    const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-    if (loginSubmitBtn) {
-        loginSubmitBtn.addEventListener('click', handleLogin);
-    }
-    
-    const loginId = document.getElementById('loginId');
-    if (loginId) {
-        loginId.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') handleLogin();
-        });
-    }
-    
-    const loginPassword = document.getElementById('loginPassword');
-    if (loginPassword) {
-        loginPassword.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') handleLogin();
-        });
-    }
-    
-    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-    if (togglePasswordBtn) {
-        togglePasswordBtn.addEventListener('click', function() {
-            const input = document.getElementById('loginPassword');
-            if (input) {
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                } else {
-                    input.type = 'password';
-                    this.innerHTML = '<i class="fas fa-eye"></i>';
-                }
-            }
-        });
-    }
+    document.getElementById('closeModalBtn').addEventListener('click', closeLoginModal);
+    document.getElementById('loginModal').addEventListener('click', function(e) {
+        if (e.target === this) closeLoginModal();
+    });
+    document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
+    document.getElementById('loginId').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') handleLogin();
+    });
+    document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') handleLogin();
+    });
+    document.getElementById('togglePasswordBtn').addEventListener('click', function() {
+        const input = document.getElementById('loginPassword');
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        } else {
+            input.type = 'password';
+            this.innerHTML = '<i class="fas fa-eye"></i>';
+        }
+    });
     
     // ============================================
-    //  LOGOUT BUTTONS
+    //  LOGOUT
     // ============================================
-    const logoutMainBtn = document.getElementById('logoutMainBtn');
-    if (logoutMainBtn) {
-        logoutMainBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            logout();
-        });
-    }
-    
-    const confirmLogoutYes = document.getElementById('confirmLogoutYes');
-    if (confirmLogoutYes) {
-        confirmLogoutYes.addEventListener('click', confirmLogout);
-    }
-    
-    const confirmLogoutNo = document.getElementById('confirmLogoutNo');
-    if (confirmLogoutNo) {
-        confirmLogoutNo.addEventListener('click', cancelLogout);
-    }
-    
-    const confirmLogoutModal = document.getElementById('confirmLogoutModal');
-    if (confirmLogoutModal) {
-        confirmLogoutModal.addEventListener('click', function(e) {
-            if (e.target === this) cancelLogout();
-        });
-    }
+    document.getElementById('logoutMainBtn').addEventListener('click', logout);
+    document.getElementById('confirmLogoutYes').addEventListener('click', confirmLogout);
+    document.getElementById('confirmLogoutNo').addEventListener('click', cancelLogout);
+    document.getElementById('confirmLogoutModal').addEventListener('click', function(e) {
+        if (e.target === this) cancelLogout();
+    });
     
     // ============================================
     //  SWAP
     // ============================================
-    const swapFromSelect = document.getElementById('swapFromSelect');
-    if (swapFromSelect) {
-        swapFromSelect.addEventListener('change', updateSwapRate);
-    }
-    
-    const swapToSelect = document.getElementById('swapToSelect');
-    if (swapToSelect) {
-        swapToSelect.addEventListener('change', updateSwapRate);
-    }
+    document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
+    document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
     updateSwapRate();
     
     // ============================================
-    //  KYC CLOSE
+    //  KYC - CLOSE
     // ============================================
-    const closeSubmitModalBtn = document.getElementById('closeSubmitModalBtn');
-    if (closeSubmitModalBtn) {
-        closeSubmitModalBtn.addEventListener('click', function() {
-            document.getElementById('submitModal').classList.remove('active');
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-                cameraStream = null;
-            }
-        });
-    }
+    document.getElementById('closeSubmitModalBtn').addEventListener('click', function() {
+        document.getElementById('submitModal').classList.remove('active');
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+            cameraStream = null;
+        }
+    });
     
     // ============================================
-    //  KYC UPLOADS
+    //  KYC - UPLOADS
     // ============================================
-    const uploadArea = document.getElementById('uploadArea');
-    if (uploadArea) {
-        uploadArea.addEventListener('click', function() {
-            document.getElementById('fileInput').click();
-        });
-    }
-    
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput) {
-        fileInput.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                idDocumentFile = this.files[0];
-                document.getElementById('fileNameDisplay').textContent = '✅ ' + idDocumentFile.name;
-                document.getElementById('uploadArea').classList.add('has-file');
-            }
-        });
-    }
-    
-    const addressUploadArea = document.getElementById('addressUploadArea');
-    if (addressUploadArea) {
-        addressUploadArea.addEventListener('click', function() {
-            document.getElementById('addressFileInput').click();
-        });
-    }
-    
-    const addressFileInput = document.getElementById('addressFileInput');
-    if (addressFileInput) {
-        addressFileInput.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                addressDocumentFile = this.files[0];
-                document.getElementById('addressFileNameDisplay').textContent = '✅ ' + addressDocumentFile.name;
-                document.getElementById('addressUploadArea').classList.add('has-file');
-            }
-        });
-    }
+    document.getElementById('uploadArea').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            idDocumentFile = this.files[0];
+            document.getElementById('fileNameDisplay').textContent = '✅ ' + idDocumentFile.name;
+            document.getElementById('uploadArea').classList.add('has-file');
+        }
+    });
+    document.getElementById('addressUploadArea').addEventListener('click', function() {
+        document.getElementById('addressFileInput').click();
+    });
+    document.getElementById('addressFileInput').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            addressDocumentFile = this.files[0];
+            document.getElementById('addressFileNameDisplay').textContent = '✅ ' + addressDocumentFile.name;
+            document.getElementById('addressUploadArea').classList.add('has-file');
+        }
+    });
     
     // ============================================
-    //  KYC NAVIGATION
+    //  KYC - NAVEGAÇÃO
     // ============================================
-    const kycNextBtn = document.getElementById('kycNextBtn');
-    if (kycNextBtn) {
-        kycNextBtn.addEventListener('click', function() {
-            if (currentKycStep === 1) {
-                const fullName = document.getElementById('fullNameDoc').value.trim();
-                const email = document.getElementById('emailDocInput').value.trim();
-                if (!fullName || !email) {
-                    showToast('⚠️ Fill all fields');
-                    return;
-                }
-                if (!email.includes('@')) {
-                    showToast('⚠️ Invalid email');
-                    return;
-                }
-            }
-            if (currentKycStep === 2) {
-                if (!idDocumentFile || !addressDocumentFile) {
-                    showToast('⚠️ Upload documents');
-                    return;
-                }
-            }
-            if (currentKycStep < 3) {
-                currentKycStep++;
-                updateKycSteps();
-            }
-        });
-    }
-    
-    const kycPrevBtn = document.getElementById('kycPrevBtn');
-    if (kycPrevBtn) {
-        kycPrevBtn.addEventListener('click', function() {
-            if (currentKycStep > 1) {
-                currentKycStep--;
-                updateKycSteps();
-            }
-        });
-    }
-    
-    const submitKycBtn = document.getElementById('submitKycBtn');
-    if (submitKycBtn) {
-        submitKycBtn.addEventListener('click', function() {
-            if (!idDocumentFile || !addressDocumentFile) {
-                showToast('⚠️ Complete all steps');
-                return;
-            }
-            showToast('✅ KYC submitted successfully!');
-            document.getElementById('submitModal').classList.remove('active');
-            document.getElementById('kycStatusBadge').style.display = 'block';
-            document.getElementById('kycPendingText').textContent = getTranslation('kycPendingText');
-        });
-    }
-    
-    // ============================================
-    //  ⚠️ STEALTH MODE - REMOVIDO (elemento não existe)
-    // ============================================
-    // O elemento stealthSwitch não existe no HTML, então removemos esta parte
+    document.getElementById('kycNextBtn').addEventListener('click', function() {
+        if (currentKycStep === 1) {
+            const fullName = document.getElementById('fullNameDoc').value.trim();
+            const email = document.getElementById('emailDocInput').value.trim();
+            if (!fullName || !email) { showToast('⚠️ Fill all fields'); return; }
+            if (!email.includes('@')) { showToast('⚠️ Invalid email'); return; }
+        }
+        if (currentKycStep === 2) {
+            if (!idDocumentFile || !addressDocumentFile) { showToast('⚠️ Upload documents'); return; }
+        }
+        if (currentKycStep < 3) { currentKycStep++; updateKycSteps(); }
+    });
+    document.getElementById('kycPrevBtn').addEventListener('click', function() {
+        if (currentKycStep > 1) { currentKycStep--; updateKycSteps(); }
+    });
+    document.getElementById('submitKycBtn').addEventListener('click', function() {
+        if (!idDocumentFile || !addressDocumentFile) { showToast('⚠️ Complete all steps'); return; }
+        showToast('✅ KYC submitted successfully!');
+        document.getElementById('submitModal').classList.remove('active');
+        document.getElementById('kycStatusBadge').style.display = 'block';
+        document.getElementById('kycPendingText').textContent = getTranslation('kycPendingText');
+    });
     
     // ============================================
     //  MENU NAVIGATION
@@ -2674,72 +1917,43 @@ document.addEventListener('DOMContentLoaded', function() {
             if (target) target.classList.add('active');
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             this.classList.add('active');
-            if (section === 'services') {
-                setTimeout(loadCompleteServices, 100);
-            }
-            if (section === 'history') {
-                setTimeout(updateHistoryUI, 100);
-            }
+            if (section === 'services') setTimeout(loadCompleteServices, 100);
+            if (section === 'history') setTimeout(updateHistoryUI, 100);
         });
     });
     
     // ============================================
     //  PROFILE
     // ============================================
-    const profileAvatarBtn = document.getElementById('profileAvatarBtn');
-    if (profileAvatarBtn) {
-        profileAvatarBtn.addEventListener('click', function() {
-            document.getElementById('profileModal').classList.add('active');
-            loadProfileData();
-        });
-    }
-    
-    const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
-    if (closeProfileModalBtn) {
-        closeProfileModalBtn.addEventListener('click', function() {
-            document.getElementById('profileModal').classList.remove('active');
-        });
-    }
-    
-    const profileModal = document.getElementById('profileModal');
-    if (profileModal) {
-        profileModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                document.getElementById('profileModal').classList.remove('active');
-            }
-        });
-    }
-    
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
-    if (saveProfileBtn) {
-        saveProfileBtn.addEventListener('click', saveProfile);
-    }
-    
-    const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
-    if (uploadPhotoBtn) {
-        uploadPhotoBtn.addEventListener('click', function() {
-            document.getElementById('profilePhotoInput').click();
-        });
-    }
-    
-    const profilePhotoInput = document.getElementById('profilePhotoInput');
-    if (profilePhotoInput) {
-        profilePhotoInput.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    userProfile.photo = event.target.result;
-                    localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
-                    updateProfileUI();
-                    showToast('✅ Photo uploaded successfully!');
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-    }
+    document.getElementById('profileAvatarBtn').addEventListener('click', function() {
+        document.getElementById('profileModal').classList.add('active');
+        loadProfileData();
+    });
+    document.getElementById('closeProfileModalBtn').addEventListener('click', function() {
+        document.getElementById('profileModal').classList.remove('active');
+    });
+    document.getElementById('profileModal').addEventListener('click', function(e) {
+        if (e.target === this) document.getElementById('profileModal').classList.remove('active');
+    });
+    document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+    document.getElementById('uploadPhotoBtn').addEventListener('click', function() {
+        document.getElementById('profilePhotoInput').click();
+    });
+    document.getElementById('profilePhotoInput').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                userProfile.photo = event.target.result;
+                localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
+                updateProfileUI();
+                showToast('✅ Photo uploaded!');
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
     
     // ============================================
-    //  ESC KEY TO CLOSE MODALS
+    //  ESC KEY
     // ============================================
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
@@ -2752,116 +1966,57 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modalOverlay').classList.remove('active');
         }
     });
-
-    // ⭐ CARREGAR OS ATIVOS IMEDIATAMENTE ⭐
+    
+    // ============================================
+    //  CARREGAR DADOS INICIAIS
+    // ============================================
     loadAllAssets();
+    loadLocalBalances();
+    updateHistoryUI();
+    initStakingChart();
+    loadProfileData();
     
     console.log('🟣 Zentronix Bank - System Active');
     console.log('🔑 Credentials: admin / zentronix');
     console.log('✅ Click "ACCESS HUB" to login');
-    console.log('🌐 Languages available: EN, PT, ES, AR');
+    console.log('🌐 Languages: EN, PT, ES, AR');
     console.log('🚀 Features: Wallet, Deposit, Receive, Stake, Swap, Personal Loan');
 });
 
-<!-- ============================================ -->
-<!-- FOOTER WITH PAYMENT AND SECURITY ICONS -->
-<!-- ============================================ -->
-<div style="
-    background: rgba(26, 27, 58, 0.8);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(188, 19, 254, 0.3);
-    padding: 20px 15px;
-    margin-top: 30px;
-    text-align: center;
-    border-radius: 15px 15px 0 0;
-    width: 100%;
-    position: relative;
-    bottom: 0;
-">
-    <div style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.2rem;
-        flex-wrap: wrap;
-        margin-bottom: 15px;
-    ">
-        <i class="fab fa-cc-visa" style="font-size: 1.8rem; color: #00f2ff; opacity: 0.8;"></i>
-        <i class="fab fa-cc-mastercard" style="font-size: 1.8rem; color: #00f2ff; opacity: 0.8;"></i>
-        <i class="fab fa-cc-amex" style="font-size: 1.8rem; color: #00f2ff; opacity: 0.8;"></i>
-        <i class="fab fa-google-pay" style="font-size: 1.8rem; color: #00f2ff; opacity: 0.8;"></i>
-        <i class="fab fa-apple-pay" style="font-size: 1.8rem; color: #00f2ff; opacity: 0.8;"></i>
-        <i class="fab fa-bitcoin" style="font-size: 1.8rem; color: #f7931a; opacity: 0.8;"></i>
-        <i class="fab fa-ethereum" style="font-size: 1.8rem; color: #627eea; opacity: 0.8;"></i>
-        <span style="font-size: 1.8rem;">🪙</span>
-        <span style="font-size: 1.8rem;">Ł</span>
-        <span style="font-size: 1.8rem;">BNB</span>
-        <span style="font-size: 1.8rem;">◇</span>
-        <span style="font-size: 1.8rem;">₮</span>
-    </div>
+</script>
 
-    <div style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        margin-bottom: 15px;
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-    ">
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-lock" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">EV SSL</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fab fa-cc-visa" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">PCI DSS</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-file-alt" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">SOC 2</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-shield" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">McAfee</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-certificate" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">ISO 27001</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-microchip" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">AES-256</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-code-branch" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">CertiK</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-id-card" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">KYC/AML</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.3rem;">
-            <i class="fas fa-gavel" style="font-size: 1.2rem; color: #00ff88;"></i>
-            <span style="font-size: 0.65rem; color: #a0a0b0; font-weight: bold;">License</span>
-        </div>
+<!-- ============================================ -->
+<!-- FOOTER                                       -->
+<!-- ============================================ -->
+<div style="background:rgba(26,27,58,0.8); backdrop-filter:blur(10px); border-top:1px solid rgba(188,19,254,0.3); padding:20px 15px; margin-top:30px; text-align:center; border-radius:15px 15px 0 0; width:100%;">
+    <div style="display:flex; justify-content:center; align-items:center; gap:1.2rem; flex-wrap:wrap; margin-bottom:15px;">
+        <i class="fab fa-cc-visa" style="font-size:1.8rem; color:#00f2ff; opacity:0.8;"></i>
+        <i class="fab fa-cc-mastercard" style="font-size:1.8rem; color:#00f2ff; opacity:0.8;"></i>
+        <i class="fab fa-cc-amex" style="font-size:1.8rem; color:#00f2ff; opacity:0.8;"></i>
+        <i class="fab fa-google-pay" style="font-size:1.8rem; color:#00f2ff; opacity:0.8;"></i>
+        <i class="fab fa-apple-pay" style="font-size:1.8rem; color:#00f2ff; opacity:0.8;"></i>
+        <i class="fab fa-bitcoin" style="font-size:1.8rem; color:#f7931a; opacity:0.8;"></i>
+        <i class="fab fa-ethereum" style="font-size:1.8rem; color:#627eea; opacity:0.8;"></i>
+        <span style="font-size:1.8rem;">🪙</span>
+        <span style="font-size:1.8rem;">Ł</span>
+        <span style="font-size:1.8rem;">BNB</span>
+        <span style="font-size:1.8rem;">◇</span>
+        <span style="font-size:1.8rem;">₮</span>
     </div>
-
-    <div style="
-        font-size: 0.65rem;
-        color: #666;
-        margin-top: 10px;
-        border-top: 1px solid rgba(188, 19, 254, 0.2);
-        padding-top: 10px;
-    ">
-        <p style="margin-bottom: 5px; opacity: 0.7;">
-            Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.
-        </p>
-        <p style="opacity: 0.5;">
-            © 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024
-        </p>
+    <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap; margin-bottom:15px; padding:10px; background:rgba(0,0,0,0.2); border-radius:10px;">
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-lock" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">EV SSL</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fab fa-cc-visa" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">PCI DSS</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-file-alt" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">SOC 2</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-shield" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">McAfee</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-certificate" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">ISO 27001</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-microchip" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">AES-256</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-code-branch" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">CertiK</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-id-card" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">KYC/AML</span></div>
+        <div style="display:flex; align-items:center; gap:0.3rem;"><i class="fas fa-gavel" style="font-size:1.2rem; color:#00ff88;"></i><span style="font-size:0.65rem; color:#a0a0b0; font-weight:bold;">License</span></div>
+    </div>
+    <div style="font-size:0.65rem; color:#666; margin-top:10px; border-top:1px solid rgba(188,19,254,0.2); padding-top:10px;">
+        <p style="margin-bottom:5px; opacity:0.7;">Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</p>
+        <p style="opacity:0.5;">© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</p>
     </div>
 </div>
 
