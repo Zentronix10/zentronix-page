@@ -1215,6 +1215,92 @@ window.handleLogin = handleLogin;
 window.fallbackLoginLocal = fallbackLoginLocal;
 
 // ============================================
+//  LOGOUT FUNCTIONS - GLOBAL SCOPE
+// ============================================
+
+function logout() {
+    console.log('🔴 logout() chamado');
+    const modal = document.getElementById('confirmLogoutModal');
+    if (modal) {
+        modal.classList.add('active');
+    } else {
+        console.warn('⚠️ Modal de logout não encontrado, fazendo logout direto');
+        confirmLogout();
+    }
+}
+
+function confirmLogout() {
+    console.log('🔴 confirmLogout() chamado');
+    
+    // Fecha o modal
+    const modal = document.getElementById('confirmLogoutModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    // Reseta estado
+    isLoggedIn = false;
+    
+    // Limpa sessão
+    try {
+        sessionStorage.removeItem('clienteLogado');
+        sessionStorage.removeItem('adminLoggedIn');
+        sessionStorage.removeItem('adminName');
+        console.log('✅ Sessão limpa');
+    } catch(e) {
+        console.warn('⚠️ Erro ao limpar sessão:', e);
+    }
+    
+    // Esconde dashboard
+    const dashboard = document.getElementById('dashboardContainer');
+    if (dashboard) {
+        dashboard.style.display = 'none';
+    }
+    
+    // Mostra conteúdo institucional
+    const institutional = document.getElementById('institutionalContent');
+    if (institutional) {
+        institutional.style.display = 'block';
+    }
+    
+    // Mostra botão de login
+    const loginBtn = document.getElementById('openLoginBtn');
+    if (loginBtn) {
+        loginBtn.style.display = 'flex';
+    }
+    
+    // Esconde botão de logout
+    const logoutBtn = document.getElementById('logoutMainBtn');
+    if (logoutBtn) {
+        logoutBtn.style.display = 'none';
+    }
+    
+    // Mensagem de sucesso
+    try {
+        showToast(getTranslation('logoutSuccess'));
+    } catch(e) {
+        alert('Logout realizado com sucesso!');
+    }
+    
+    console.log('🔒 Logout realizado');
+}
+
+function cancelLogout() {
+    console.log('🔴 cancelLogout() chamado');
+    const modal = document.getElementById('confirmLogoutModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// ============================================
+//  EXPORTA FUNÇÕES DE LOGOUT PARA O ESCOPO GLOBAL
+// ============================================
+window.logout = logout;
+window.confirmLogout = confirmLogout;
+window.cancelLogout = cancelLogout;
+
+// ============================================
 //  KYC FUNCTIONS
 // ============================================
 function updateKycSteps() {
