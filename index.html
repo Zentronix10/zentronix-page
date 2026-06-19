@@ -939,8 +939,9 @@ function closeModalOverlay() {
 }
 
 // ============================================
-//  LOGIN FUNCTIONS
+//  LOGIN FUNCTIONS - SUPABASE INTEGRATION
 // ============================================
+
 function openLoginModal() {
     document.getElementById('loginModal').classList.add('active');
     document.getElementById('loginError').classList.remove('visible');
@@ -951,47 +952,169 @@ function closeLoginModal() {
     document.getElementById('loginModal').classList.remove('active');
 }
 
-function handleLogin() {
+// ⭐ NOVA FUNÇÃO DE LOGIN COM SUPABASE ⭐
+async function handleLogin() {
     const username = document.getElementById('loginId').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
     const loginError = document.getElementById('loginError');
     loginError.classList.remove('visible');
-    if (username === 'admin' && password === 'zentronix') {
-        isLoggedIn = true;
-        closeLoginModal();
-        document.getElementById('institutionalContent').style.display = 'none';
-        document.getElementById('dashboardContainer').style.display = 'block';
-        const name = userProfile.firstName || 'Admin';
-        document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: name });
-        document.getElementById('openLoginBtn').style.display = 'none';
-        document.getElementById('logoutMainBtn').style.display = 'flex';
-        showToast(getTranslation('loginSuccess'));
-        try { initDashboard(); } catch(e) { console.error('Dashboard error:', e); }
-    } else {
+    
+    // ============================================
+    //  1. VALIDAÇÃO NO SUPABASE AUTH
+    // ============================================
+    try {
+        // Tenta fazer login no Supabase Auth
+        const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+            email: username,
+            password: password
+        });
+
+        if (authError) {
+            console.warn('⚠️ Supabase Auth error:', authError.message);
+            loginError.textContent = '❌ Invalid username or password';
+            loginError.classList.add('visible');
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginPassword').focus();
+            return;
+        }
+
+        if (authData?.user) {
+            console.log('✅ Login bem-sucedido no Supabase:', authData.user.email);
+            
+            // Buscar dados do cliente
+            const { data: userData, error: userError } = await supabaseClient
+                .from('users')
+                .select('*')
+                .eq('id', authData.user.id)
+                .maybeSingle();
+
+            if (userError) {
+                console.warn('⚠️ Erro ao buscar dados do usuário:', userError);
+            }
+
+            // Buscar saldos
+            const { data: balances } = await supabaseClient
+                .from('balances')
+                .select('currency, amount')
+                .eq('user_id', authData.user.id);
+
+            const saldoUSD = balances?.find(b => b.currency === 'USD')?.amount || 0;
+            const saldoEUR = balances?.find(b => b.currency === 'EUR')?.amount || 0;
+            const saldoBRL = balances?.find(b => b.currency === 'BRL')?.amount || 0;
+            const saldoGBP = balances?.find(b => b.currency === 'GBP')?.amount || 0;
+
+            // Salvar sessão do cliente
+            const clienteData = {
+                id: authData.user.id,
+                email: authData.user.email,
+                nome: userData?.full_name || authData.user.user_metadata?.full_name || 'Cliente',
+                accountNumber: userData?.account_number || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
+                saldoUSD: saldoUSD,
+                saldoEUR: saldoEUR,
+                saldoBRL: saldoBRL,
+                saldoGBP: saldoGBP,
+                kyc_status: userData?.kyc_status || 'Pending'
+            };
+
+            sessionStorage.setItem('clienteLogado', JSON.stringify(clienteData));
+
+            // Atualizar perfil do usuário
+            userProfile.firstName = clienteData.nome.split(' ')[0] || 'Cliente';
+            userProfile.lastName = clienteData.nome.split(' ').slice(1).join(' ') || 'Zentronix';
+            userProfile.email = clienteData.email;
+            
+            // Atualizar Account Number na interface
+            const accountNumberEl = document.getElementById('accountNumberValue');
+            if (accountNumberEl) {
+                accountNumberEl.textContent = clienteData.accountNumber;
+            }
+
+            // Atualizar nome na saudação
+            document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: userProfile.firstName });
+            
+            // Salvar perfil
+            localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
+
+            // Carregar saldos na interface
+            updateBalancesUI(balances || []);
+            
+            // Carregar ativos
+            loadAllAssets();
+            
+            // Carregar histórico
+            updateHistoryUI();
+
+            // Login bem-sucedido
+            isLoggedIn = true;
+            closeLoginModal();
+            document.getElementById('institutionalContent').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            document.getElementById('openLoginBtn').style.display = 'none';
+            document.getElementById('logoutMainBtn').style.display = 'flex';
+            
+            showToast(`✅ Bem-vindo(a) ${clienteData.nome}!`);
+            console.log('✅ Cliente logado:', clienteData.email, 'Conta:', clienteData.accountNumber);
+            
+            return;
+        }
+
+        // ============================================
+        //  2. FALLBACK: TENTAR LOGIN LOCAL
+        // ============================================
+        // Se o Supabase falhar, tenta o login local
+        if (username === 'admin' && password === 'zentronix') {
+            isLoggedIn = true;
+            closeLoginModal();
+            document.getElementById('institutionalContent').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            document.getElementById('openLoginBtn').style.display = 'none';
+            document.getElementById('logoutMainBtn').style.display = 'flex';
+            showToast('✅ Login local (admin)');
+            loadLocalBalances();
+            loadAllAssets();
+            updateHistoryUI();
+            return;
+        }
+
+        // ============================================
+        //  3. TENTAR LOGIN VIA LOCALSTORAGE
+        // ============================================
+        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+        const clienteEncontrado = clientes.find(c => c.email === username && c.password === password);
+
+        if (clienteEncontrado) {
+            isLoggedIn = true;
+            closeLoginModal();
+            document.getElementById('institutionalContent').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            document.getElementById('openLoginBtn').style.display = 'none';
+            document.getElementById('logoutMainBtn').style.display = 'flex';
+            
+            const accountNumber = clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('accountNumberValue').textContent = accountNumber;
+            document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: clienteEncontrado.nome || 'Cliente' });
+            
+            showToast(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
+            loadLocalBalances();
+            loadAllAssets();
+            updateHistoryUI();
+            return;
+        }
+
+        // ============================================
+        //  4. CREDENCIAIS INVÁLIDAS
+        // ============================================
+        loginError.textContent = '❌ Invalid username or password';
         loginError.classList.add('visible');
         document.getElementById('loginPassword').value = '';
         document.getElementById('loginPassword').focus();
+
+    } catch (error) {
+        console.error('❌ Erro no login:', error);
+        loginError.textContent = '❌ Erro ao conectar ao servidor';
+        loginError.classList.add('visible');
     }
 }
-
-function logout() {
-    document.getElementById('confirmLogoutModal').classList.add('active');
-}
-
-function confirmLogout() {
-    document.getElementById('confirmLogoutModal').classList.remove('active');
-    isLoggedIn = false;
-    document.getElementById('dashboardContainer').style.display = 'none';
-    document.getElementById('institutionalContent').style.display = 'block';
-    document.getElementById('openLoginBtn').style.display = 'flex';
-    document.getElementById('logoutMainBtn').style.display = 'none';
-    showToast(getTranslation('logoutSuccess'));
-}
-
-function cancelLogout() {
-    document.getElementById('confirmLogoutModal').classList.remove('active');
-}
-
 // ============================================
 //  KYC FUNCTIONS
 // ============================================
