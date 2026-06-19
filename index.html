@@ -952,18 +952,36 @@ function closeLoginModal() {
     document.getElementById('loginModal').classList.remove('active');
 }
 
-// ⭐ NOVA FUNÇÃO DE LOGIN COM SUPABASE ⭐
+// ⭐ FUNÇÃO DE LOGIN CORRIGIDA ⭐
 async function handleLogin() {
+    console.log('🔵 handleLogin() chamado');
     const username = document.getElementById('loginId').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
     const loginError = document.getElementById('loginError');
-    loginError.classList.remove('visible');
+    
+    if (loginError) loginError.classList.remove('visible');
+    
+    if (!username || !password) {
+        if (loginError) {
+            loginError.textContent = '❌ Preencha todos os campos!';
+            loginError.classList.add('visible');
+        }
+        return;
+    }
+    
+    console.log('🔵 Tentando login com:', username);
     
     // ============================================
     //  1. VALIDAÇÃO NO SUPABASE AUTH
     // ============================================
     try {
-        // Tenta fazer login no Supabase Auth
+        // Verifica se o supabaseClient está disponível
+        if (typeof supabaseClient === 'undefined') {
+            console.warn('⚠️ supabaseClient não definido, usando fallback local');
+            fallbackLoginLocal(username, password);
+            return;
+        }
+        
         const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
             email: username,
             password: password
@@ -971,10 +989,8 @@ async function handleLogin() {
 
         if (authError) {
             console.warn('⚠️ Supabase Auth error:', authError.message);
-            loginError.textContent = '❌ Invalid username or password';
-            loginError.classList.add('visible');
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('loginPassword').focus();
+            // Tenta fallback local
+            fallbackLoginLocal(username, password);
             return;
         }
 
@@ -1019,9 +1035,12 @@ async function handleLogin() {
             sessionStorage.setItem('clienteLogado', JSON.stringify(clienteData));
 
             // Atualizar perfil do usuário
-            userProfile.firstName = clienteData.nome.split(' ')[0] || 'Cliente';
-            userProfile.lastName = clienteData.nome.split(' ').slice(1).join(' ') || 'Zentronix';
-            userProfile.email = clienteData.email;
+            if (typeof userProfile !== 'undefined') {
+                userProfile.firstName = clienteData.nome.split(' ')[0] || 'Cliente';
+                userProfile.lastName = clienteData.nome.split(' ').slice(1).join(' ') || 'Zentronix';
+                userProfile.email = clienteData.email;
+                localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
+            }
             
             // Atualizar Account Number na interface
             const accountNumberEl = document.getElementById('accountNumberValue');
@@ -1030,91 +1049,171 @@ async function handleLogin() {
             }
 
             // Atualizar nome na saudação
-            document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: userProfile.firstName });
-            
-            // Salvar perfil
-            localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
+            const welcomeEl = document.getElementById('welcomeUser');
+            if (welcomeEl) {
+                const nome = userProfile?.firstName || clienteData.nome.split(' ')[0] || 'Cliente';
+                try {
+                    welcomeEl.textContent = getTranslation('welcomeUser', { name: nome });
+                } catch(e) {
+                    welcomeEl.textContent = 'Bem-vindo, ' + nome;
+                }
+            }
 
             // Carregar saldos na interface
-            updateBalancesUI(balances || []);
+            if (typeof updateBalancesUI === 'function') {
+                updateBalancesUI(balances || []);
+            } else if (typeof loadLocalBalances === 'function') {
+                loadLocalBalances();
+            }
             
             // Carregar ativos
-            loadAllAssets();
+            if (typeof loadAllAssets === 'function') {
+                loadAllAssets();
+            }
             
             // Carregar histórico
-            updateHistoryUI();
+            if (typeof updateHistoryUI === 'function') {
+                updateHistoryUI();
+            }
 
             // Login bem-sucedido
             isLoggedIn = true;
             closeLoginModal();
-            document.getElementById('institutionalContent').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
-            document.getElementById('openLoginBtn').style.display = 'none';
-            document.getElementById('logoutMainBtn').style.display = 'flex';
             
-            showToast(`✅ Bem-vindo(a) ${clienteData.nome}!`);
+            const institutional = document.getElementById('institutionalContent');
+            const dashboard = document.getElementById('dashboardContainer');
+            const loginBtn = document.getElementById('openLoginBtn');
+            const logoutBtn = document.getElementById('logoutMainBtn');
+            
+            if (institutional) institutional.style.display = 'none';
+            if (dashboard) dashboard.style.display = 'block';
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'flex';
+            
+            try {
+                showToast(`✅ Bem-vindo(a) ${clienteData.nome}!`);
+            } catch(e) {
+                alert(`✅ Bem-vindo(a) ${clienteData.nome}!`);
+            }
+            
             console.log('✅ Cliente logado:', clienteData.email, 'Conta:', clienteData.accountNumber);
-            
             return;
         }
 
-        // ============================================
-        //  2. FALLBACK: TENTAR LOGIN LOCAL
-        // ============================================
-        // Se o Supabase falhar, tenta o login local
-        if (username === 'admin' && password === 'zentronix') {
-            isLoggedIn = true;
-            closeLoginModal();
-            document.getElementById('institutionalContent').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
-            document.getElementById('openLoginBtn').style.display = 'none';
-            document.getElementById('logoutMainBtn').style.display = 'flex';
+        // Se chegou aqui, tenta fallback local
+        fallbackLoginLocal(username, password);
+
+    } catch (error) {
+        console.error('❌ Erro no login:', error);
+        // Tenta fallback local em caso de erro
+        fallbackLoginLocal(username, password);
+    }
+}
+
+// ============================================
+//  FALLBACK LOGIN LOCAL
+// ============================================
+function fallbackLoginLocal(username, password) {
+    console.log('🔵 Tentando fallback local...');
+    const loginError = document.getElementById('loginError');
+    
+    // 1. Tenta login admin
+    if (username === 'admin' && password === 'zentronix') {
+        console.log('✅ Login admin local');
+        isLoggedIn = true;
+        closeLoginModal();
+        
+        const institutional = document.getElementById('institutionalContent');
+        const dashboard = document.getElementById('dashboardContainer');
+        const loginBtn = document.getElementById('openLoginBtn');
+        const logoutBtn = document.getElementById('logoutMainBtn');
+        
+        if (institutional) institutional.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'block';
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'flex';
+        
+        try {
             showToast('✅ Login local (admin)');
-            loadLocalBalances();
-            loadAllAssets();
-            updateHistoryUI();
-            return;
+        } catch(e) {
+            alert('✅ Login local (admin)');
         }
-
-        // ============================================
-        //  3. TENTAR LOGIN VIA LOCALSTORAGE
-        // ============================================
+        
+        if (typeof loadLocalBalances === 'function') loadLocalBalances();
+        if (typeof loadAllAssets === 'function') loadAllAssets();
+        if (typeof updateHistoryUI === 'function') updateHistoryUI();
+        return;
+    }
+    
+    // 2. Tenta login via localStorage
+    try {
         const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
         const clienteEncontrado = clientes.find(c => c.email === username && c.password === password);
 
         if (clienteEncontrado) {
+            console.log('✅ Login local (cliente encontrado)');
             isLoggedIn = true;
             closeLoginModal();
-            document.getElementById('institutionalContent').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
-            document.getElementById('openLoginBtn').style.display = 'none';
-            document.getElementById('logoutMainBtn').style.display = 'flex';
+            
+            const institutional = document.getElementById('institutionalContent');
+            const dashboard = document.getElementById('dashboardContainer');
+            const loginBtn = document.getElementById('openLoginBtn');
+            const logoutBtn = document.getElementById('logoutMainBtn');
+            
+            if (institutional) institutional.style.display = 'none';
+            if (dashboard) dashboard.style.display = 'block';
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'flex';
             
             const accountNumber = clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('accountNumberValue').textContent = accountNumber;
-            document.getElementById('welcomeUser').textContent = getTranslation('welcomeUser', { name: clienteEncontrado.nome || 'Cliente' });
+            const accountEl = document.getElementById('accountNumberValue');
+            if (accountEl) accountEl.textContent = accountNumber;
             
-            showToast(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
-            loadLocalBalances();
-            loadAllAssets();
-            updateHistoryUI();
+            const welcomeEl = document.getElementById('welcomeUser');
+            if (welcomeEl) {
+                try {
+                    welcomeEl.textContent = getTranslation('welcomeUser', { name: clienteEncontrado.nome || 'Cliente' });
+                } catch(e) {
+                    welcomeEl.textContent = 'Bem-vindo, ' + (clienteEncontrado.nome || 'Cliente');
+                }
+            }
+            
+            try {
+                showToast(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
+            } catch(e) {
+                alert(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
+            }
+            
+            if (typeof loadLocalBalances === 'function') loadLocalBalances();
+            if (typeof loadAllAssets === 'function') loadAllAssets();
+            if (typeof updateHistoryUI === 'function') updateHistoryUI();
             return;
         }
-
-        // ============================================
-        //  4. CREDENCIAIS INVÁLIDAS
-        // ============================================
+    } catch(e) {
+        console.warn('⚠️ Erro ao ler localStorage:', e);
+    }
+    
+    // 3. Credenciais inválidas
+    console.warn('❌ Credenciais inválidas');
+    if (loginError) {
         loginError.textContent = '❌ Invalid username or password';
         loginError.classList.add('visible');
-        document.getElementById('loginPassword').value = '';
-        document.getElementById('loginPassword').focus();
-
-    } catch (error) {
-        console.error('❌ Erro no login:', error);
-        loginError.textContent = '❌ Erro ao conectar ao servidor';
-        loginError.classList.add('visible');
+    }
+    const pwdField = document.getElementById('loginPassword');
+    if (pwdField) {
+        pwdField.value = '';
+        pwdField.focus();
     }
 }
+
+// ============================================
+//  EXPORTA FUNÇÕES PARA O ESCOPO GLOBAL
+// ============================================
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.handleLogin = handleLogin;
+window.fallbackLoginLocal = fallbackLoginLocal;
+
 // ============================================
 //  KYC FUNCTIONS
 // ============================================
