@@ -938,21 +938,7 @@ function closeModalOverlay() {
     document.getElementById('modalOverlay').classList.remove('active');
 }
 
-// ============================================
-//  LOGIN FUNCTIONS - SUPABASE INTEGRATION
-// ============================================
-
-function openLoginModal() {
-    document.getElementById('loginModal').classList.add('active');
-    document.getElementById('loginError').classList.remove('visible');
-    document.getElementById('loginId').focus();
-}
-
-function closeLoginModal() {
-    document.getElementById('loginModal').classList.remove('active');
-}
-
-// ⭐ FUNÇÃO DE LOGIN CORRIGIDA ⭐
+// ⭐ FUNÇÃO DE LOGIN CORRIGIDA (COM SUPABASE) ⭐
 async function handleLogin() {
     console.log('🔵 handleLogin() chamado');
     const username = document.getElementById('loginId').value.trim();
@@ -972,13 +958,101 @@ async function handleLogin() {
     console.log('🔵 Tentando login com:', username);
     
     // ============================================
-    //  1. VALIDAÇÃO NO SUPABASE AUTH
+    //  PRIMEIRO: TENTA LOGIN LOCAL (admin/zentronix)
+    // ============================================
+    if (username === 'admin' && password === 'zentronix') {
+        console.log('✅ Login admin local');
+        isLoggedIn = true;
+        closeLoginModal();
+        
+        const institutional = document.getElementById('institutionalContent');
+        const dashboard = document.getElementById('dashboardContainer');
+        const loginBtn = document.getElementById('openLoginBtn');
+        const logoutBtn = document.getElementById('logoutMainBtn');
+        
+        if (institutional) institutional.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'block';
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'flex';
+        
+        try {
+            showToast('✅ Login local (admin)');
+        } catch(e) {
+            alert('✅ Login local (admin)');
+        }
+        
+        if (typeof loadLocalBalances === 'function') loadLocalBalances();
+        if (typeof loadAllAssets === 'function') loadAllAssets();
+        if (typeof updateHistoryUI === 'function') updateHistoryUI();
+        return;
+    }
+    
+    // ============================================
+    //  SEGUNDO: TENTA LOGIN VIA LOCALSTORAGE
     // ============================================
     try {
-        // Verifica se o supabaseClient está disponível
+        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
+        const clienteEncontrado = clientes.find(c => c.email === username && c.password === password);
+
+        if (clienteEncontrado) {
+            console.log('✅ Login local (cliente encontrado)');
+            isLoggedIn = true;
+            closeLoginModal();
+            
+            const institutional = document.getElementById('institutionalContent');
+            const dashboard = document.getElementById('dashboardContainer');
+            const loginBtn = document.getElementById('openLoginBtn');
+            const logoutBtn = document.getElementById('logoutMainBtn');
+            
+            if (institutional) institutional.style.display = 'none';
+            if (dashboard) dashboard.style.display = 'block';
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'flex';
+            
+            const accountNumber = clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
+            const accountEl = document.getElementById('accountNumberValue');
+            if (accountEl) accountEl.textContent = accountNumber;
+            
+            const welcomeEl = document.getElementById('welcomeUser');
+            if (welcomeEl) {
+                try {
+                    welcomeEl.textContent = getTranslation('welcomeUser', { name: clienteEncontrado.nome || 'Cliente' });
+                } catch(e) {
+                    welcomeEl.textContent = 'Bem-vindo, ' + (clienteEncontrado.nome || 'Cliente');
+                }
+            }
+            
+            try {
+                showToast(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
+            } catch(e) {
+                alert(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
+            }
+            
+            if (typeof loadLocalBalances === 'function') loadLocalBalances();
+            if (typeof loadAllAssets === 'function') loadAllAssets();
+            if (typeof updateHistoryUI === 'function') updateHistoryUI();
+            return;
+        }
+    } catch(e) {
+        console.warn('⚠️ Erro ao ler localStorage:', e);
+    }
+    
+    // ============================================
+    //  TERCEIRO: TENTA LOGIN NO SUPABASE AUTH
+    // ============================================
+    try {
         if (typeof supabaseClient === 'undefined') {
-            console.warn('⚠️ supabaseClient não definido, usando fallback local');
-            fallbackLoginLocal(username, password);
+            console.warn('⚠️ supabaseClient não definido');
+            // Fallback para credenciais inválidas
+            if (loginError) {
+                loginError.textContent = '❌ Invalid username or password';
+                loginError.classList.add('visible');
+            }
+            const pwdField = document.getElementById('loginPassword');
+            if (pwdField) {
+                pwdField.value = '';
+                pwdField.focus();
+            }
             return;
         }
         
@@ -989,8 +1063,16 @@ async function handleLogin() {
 
         if (authError) {
             console.warn('⚠️ Supabase Auth error:', authError.message);
-            // Tenta fallback local
-            fallbackLoginLocal(username, password);
+            // Credenciais inválidas
+            if (loginError) {
+                loginError.textContent = '❌ Invalid username or password';
+                loginError.classList.add('visible');
+            }
+            const pwdField = document.getElementById('loginPassword');
+            if (pwdField) {
+                pwdField.value = '';
+                pwdField.focus();
+            }
             return;
         }
 
@@ -1100,119 +1182,25 @@ async function handleLogin() {
             return;
         }
 
-        // Se chegou aqui, tenta fallback local
-        fallbackLoginLocal(username, password);
+        // Se chegou aqui, credenciais inválidas
+        if (loginError) {
+            loginError.textContent = '❌ Invalid username or password';
+            loginError.classList.add('visible');
+        }
+        const pwdField = document.getElementById('loginPassword');
+        if (pwdField) {
+            pwdField.value = '';
+            pwdField.focus();
+        }
 
     } catch (error) {
         console.error('❌ Erro no login:', error);
-        // Tenta fallback local em caso de erro
-        fallbackLoginLocal(username, password);
+        if (loginError) {
+            loginError.textContent = '❌ Erro ao conectar ao servidor';
+            loginError.classList.add('visible');
+        }
     }
 }
-
-// ============================================
-//  FALLBACK LOGIN LOCAL
-// ============================================
-function fallbackLoginLocal(username, password) {
-    console.log('🔵 Tentando fallback local...');
-    const loginError = document.getElementById('loginError');
-    
-    // 1. Tenta login admin
-    if (username === 'admin' && password === 'zentronix') {
-        console.log('✅ Login admin local');
-        isLoggedIn = true;
-        closeLoginModal();
-        
-        const institutional = document.getElementById('institutionalContent');
-        const dashboard = document.getElementById('dashboardContainer');
-        const loginBtn = document.getElementById('openLoginBtn');
-        const logoutBtn = document.getElementById('logoutMainBtn');
-        
-        if (institutional) institutional.style.display = 'none';
-        if (dashboard) dashboard.style.display = 'block';
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'flex';
-        
-        try {
-            showToast('✅ Login local (admin)');
-        } catch(e) {
-            alert('✅ Login local (admin)');
-        }
-        
-        if (typeof loadLocalBalances === 'function') loadLocalBalances();
-        if (typeof loadAllAssets === 'function') loadAllAssets();
-        if (typeof updateHistoryUI === 'function') updateHistoryUI();
-        return;
-    }
-    
-    // 2. Tenta login via localStorage
-    try {
-        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-        const clienteEncontrado = clientes.find(c => c.email === username && c.password === password);
-
-        if (clienteEncontrado) {
-            console.log('✅ Login local (cliente encontrado)');
-            isLoggedIn = true;
-            closeLoginModal();
-            
-            const institutional = document.getElementById('institutionalContent');
-            const dashboard = document.getElementById('dashboardContainer');
-            const loginBtn = document.getElementById('openLoginBtn');
-            const logoutBtn = document.getElementById('logoutMainBtn');
-            
-            if (institutional) institutional.style.display = 'none';
-            if (dashboard) dashboard.style.display = 'block';
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'flex';
-            
-            const accountNumber = clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
-            const accountEl = document.getElementById('accountNumberValue');
-            if (accountEl) accountEl.textContent = accountNumber;
-            
-            const welcomeEl = document.getElementById('welcomeUser');
-            if (welcomeEl) {
-                try {
-                    welcomeEl.textContent = getTranslation('welcomeUser', { name: clienteEncontrado.nome || 'Cliente' });
-                } catch(e) {
-                    welcomeEl.textContent = 'Bem-vindo, ' + (clienteEncontrado.nome || 'Cliente');
-                }
-            }
-            
-            try {
-                showToast(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
-            } catch(e) {
-                alert(`✅ Bem-vindo(a) ${clienteEncontrado.nome || 'Cliente'}!`);
-            }
-            
-            if (typeof loadLocalBalances === 'function') loadLocalBalances();
-            if (typeof loadAllAssets === 'function') loadAllAssets();
-            if (typeof updateHistoryUI === 'function') updateHistoryUI();
-            return;
-        }
-    } catch(e) {
-        console.warn('⚠️ Erro ao ler localStorage:', e);
-    }
-    
-    // 3. Credenciais inválidas
-    console.warn('❌ Credenciais inválidas');
-    if (loginError) {
-        loginError.textContent = '❌ Invalid username or password';
-        loginError.classList.add('visible');
-    }
-    const pwdField = document.getElementById('loginPassword');
-    if (pwdField) {
-        pwdField.value = '';
-        pwdField.focus();
-    }
-}
-
-// ============================================
-//  EXPORTA FUNÇÕES PARA O ESCOPO GLOBAL
-// ============================================
-window.openLoginModal = openLoginModal;
-window.closeLoginModal = closeLoginModal;
-window.handleLogin = handleLogin;
-window.fallbackLoginLocal = fallbackLoginLocal;
 
 // ============================================
 //  LOGOUT FUNCTIONS - GLOBAL SCOPE
