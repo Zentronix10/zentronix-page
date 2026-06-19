@@ -2387,35 +2387,46 @@ function saveProfile() {
 }
 
 // ============================================
-//  INITIALIZATION - CORRIGIDO
+//  INITIALIZATION - CORRIGIDO E SEGURO
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🟣 Initializing Zentronix Bank...');
     console.log('🔑 Supabase Client:', supabaseClient ? '✅ Initialized' : '❌ Failed');
     console.log('🔑 Tatum API:', isTatumConfigured() ? '✅ Configured' : '⚠️ Using Demo Mode');
     
+    // ============================================
+    //  CONFIGURAÇÃO DE IDIOMA
+    // ============================================
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
     
     // Language selector
-    document.getElementById('langTrigger').addEventListener('click', function(e) {
-        e.stopPropagation();
-        document.getElementById('langContainer').classList.toggle('active');
-    });
+    const langTrigger = document.getElementById('langTrigger');
+    if (langTrigger) {
+        langTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const container = document.getElementById('langContainer');
+            if (container) container.classList.toggle('active');
+        });
+    }
     
     document.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             setLanguage(this.dataset.lang);
-            document.getElementById('langContainer').classList.remove('active');
+            const container = document.getElementById('langContainer');
+            if (container) container.classList.remove('active');
         });
     });
     
     document.addEventListener('click', function() {
-        document.getElementById('langContainer').classList.remove('active');
+        const container = document.getElementById('langContainer');
+        if (container) container.classList.remove('active');
     });
     
-    // ACCESS HUB button
+    // ============================================
+    //  ACCESS HUB BUTTON
+    // ============================================
     const openLoginBtn = document.getElementById('openLoginBtn');
     if (openLoginBtn) {
         const newBtn = openLoginBtn.cloneNode(true);
@@ -2425,9 +2436,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             openLoginModal();
         });
+    } else {
+        console.warn('⚠️ Botão openLoginBtn não encontrado');
     }
     
-    // KYC button
+    // ============================================
+    //  KYC BUTTON
+    // ============================================
     const kycBtn = document.getElementById('kycBtn');
     if (kycBtn) {
         const newKycBtn = kycBtn.cloneNode(true);
@@ -2439,130 +2454,224 @@ document.addEventListener('DOMContentLoaded', function() {
             currentKycStep = 1;
             updateKycSteps();
         });
+    } else {
+        console.warn('⚠️ Botão kycBtn não encontrado');
     }
     
-    // Login
-    document.getElementById('closeModalBtn').addEventListener('click', closeLoginModal);
-    document.getElementById('loginModal').addEventListener('click', function(e) {
-        if (e.target === this) closeLoginModal();
-    });
-    document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
-    document.getElementById('loginId').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') handleLogin();
-    });
-    document.getElementById('loginPassword').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') handleLogin();
-    });
-    document.getElementById('togglePasswordBtn').addEventListener('click', function() {
-        const input = document.getElementById('loginPassword');
-        if (input.type === 'password') {
-            input.type = 'text';
-            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-        } else {
-            input.type = 'password';
-            this.innerHTML = '<i class="fas fa-eye"></i>';
-        }
-    });
+    // ============================================
+    //  LOGIN MODAL
+    // ============================================
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeLoginModal);
+    }
     
-    // Logout
-    document.getElementById('logoutMainBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        logout();
-    });
-    document.getElementById('confirmLogoutYes').addEventListener('click', confirmLogout);
-    document.getElementById('confirmLogoutNo').addEventListener('click', cancelLogout);
-    document.getElementById('confirmLogoutModal').addEventListener('click', function(e) {
-        if (e.target === this) cancelLogout();
-    });
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.addEventListener('click', function(e) {
+            if (e.target === this) closeLoginModal();
+        });
+    }
     
-    // Swap
-    document.getElementById('swapFromSelect').addEventListener('change', updateSwapRate);
-    document.getElementById('swapToSelect').addEventListener('change', updateSwapRate);
+    const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+    if (loginSubmitBtn) {
+        loginSubmitBtn.addEventListener('click', handleLogin);
+    }
+    
+    const loginId = document.getElementById('loginId');
+    if (loginId) {
+        loginId.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleLogin();
+        });
+    }
+    
+    const loginPassword = document.getElementById('loginPassword');
+    if (loginPassword) {
+        loginPassword.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleLogin();
+        });
+    }
+    
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    if (togglePasswordBtn) {
+        togglePasswordBtn.addEventListener('click', function() {
+            const input = document.getElementById('loginPassword');
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    input.type = 'password';
+                    this.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            }
+        });
+    }
+    
+    // ============================================
+    //  LOGOUT BUTTONS
+    // ============================================
+    const logoutMainBtn = document.getElementById('logoutMainBtn');
+    if (logoutMainBtn) {
+        logoutMainBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+    }
+    
+    const confirmLogoutYes = document.getElementById('confirmLogoutYes');
+    if (confirmLogoutYes) {
+        confirmLogoutYes.addEventListener('click', confirmLogout);
+    }
+    
+    const confirmLogoutNo = document.getElementById('confirmLogoutNo');
+    if (confirmLogoutNo) {
+        confirmLogoutNo.addEventListener('click', cancelLogout);
+    }
+    
+    const confirmLogoutModal = document.getElementById('confirmLogoutModal');
+    if (confirmLogoutModal) {
+        confirmLogoutModal.addEventListener('click', function(e) {
+            if (e.target === this) cancelLogout();
+        });
+    }
+    
+    // ============================================
+    //  SWAP
+    // ============================================
+    const swapFromSelect = document.getElementById('swapFromSelect');
+    if (swapFromSelect) {
+        swapFromSelect.addEventListener('change', updateSwapRate);
+    }
+    
+    const swapToSelect = document.getElementById('swapToSelect');
+    if (swapToSelect) {
+        swapToSelect.addEventListener('change', updateSwapRate);
+    }
     updateSwapRate();
     
-    // KYC close
-    document.getElementById('closeSubmitModalBtn').addEventListener('click', function() {
-        document.getElementById('submitModal').classList.remove('active');
-        if (cameraStream) {
-            cameraStream.getTracks().forEach(track => track.stop());
-            cameraStream = null;
-        }
-    });
-    
-    // KYC uploads
-    document.getElementById('uploadArea').addEventListener('click', function() {
-        document.getElementById('fileInput').click();
-    });
-    document.getElementById('fileInput').addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            idDocumentFile = this.files[0];
-            document.getElementById('fileNameDisplay').textContent = '✅ ' + idDocumentFile.name;
-            document.getElementById('uploadArea').classList.add('has-file');
-        }
-    });
-    
-    document.getElementById('addressUploadArea').addEventListener('click', function() {
-        document.getElementById('addressFileInput').click();
-    });
-    document.getElementById('addressFileInput').addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            addressDocumentFile = this.files[0];
-            document.getElementById('addressFileNameDisplay').textContent = '✅ ' + addressDocumentFile.name;
-            document.getElementById('addressUploadArea').classList.add('has-file');
-        }
-    });
-    
-    // KYC navigation
-    document.getElementById('kycNextBtn').addEventListener('click', function() {
-        if (currentKycStep === 1) {
-            const fullName = document.getElementById('fullNameDoc').value.trim();
-            const email = document.getElementById('emailDocInput').value.trim();
-            if (!fullName || !email) {
-                showToast('⚠️ Fill all fields');
-                return;
+    // ============================================
+    //  KYC CLOSE
+    // ============================================
+    const closeSubmitModalBtn = document.getElementById('closeSubmitModalBtn');
+    if (closeSubmitModalBtn) {
+        closeSubmitModalBtn.addEventListener('click', function() {
+            document.getElementById('submitModal').classList.remove('active');
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
             }
-            if (!email.includes('@')) {
-                showToast('⚠️ Invalid email');
-                return;
+        });
+    }
+    
+    // ============================================
+    //  KYC UPLOADS
+    // ============================================
+    const uploadArea = document.getElementById('uploadArea');
+    if (uploadArea) {
+        uploadArea.addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+    }
+    
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                idDocumentFile = this.files[0];
+                document.getElementById('fileNameDisplay').textContent = '✅ ' + idDocumentFile.name;
+                document.getElementById('uploadArea').classList.add('has-file');
             }
-        }
-        if (currentKycStep === 2) {
+        });
+    }
+    
+    const addressUploadArea = document.getElementById('addressUploadArea');
+    if (addressUploadArea) {
+        addressUploadArea.addEventListener('click', function() {
+            document.getElementById('addressFileInput').click();
+        });
+    }
+    
+    const addressFileInput = document.getElementById('addressFileInput');
+    if (addressFileInput) {
+        addressFileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                addressDocumentFile = this.files[0];
+                document.getElementById('addressFileNameDisplay').textContent = '✅ ' + addressDocumentFile.name;
+                document.getElementById('addressUploadArea').classList.add('has-file');
+            }
+        });
+    }
+    
+    // ============================================
+    //  KYC NAVIGATION
+    // ============================================
+    const kycNextBtn = document.getElementById('kycNextBtn');
+    if (kycNextBtn) {
+        kycNextBtn.addEventListener('click', function() {
+            if (currentKycStep === 1) {
+                const fullName = document.getElementById('fullNameDoc').value.trim();
+                const email = document.getElementById('emailDocInput').value.trim();
+                if (!fullName || !email) {
+                    showToast('⚠️ Fill all fields');
+                    return;
+                }
+                if (!email.includes('@')) {
+                    showToast('⚠️ Invalid email');
+                    return;
+                }
+            }
+            if (currentKycStep === 2) {
+                if (!idDocumentFile || !addressDocumentFile) {
+                    showToast('⚠️ Upload documents');
+                    return;
+                }
+            }
+            if (currentKycStep < 3) {
+                currentKycStep++;
+                updateKycSteps();
+            }
+        });
+    }
+    
+    const kycPrevBtn = document.getElementById('kycPrevBtn');
+    if (kycPrevBtn) {
+        kycPrevBtn.addEventListener('click', function() {
+            if (currentKycStep > 1) {
+                currentKycStep--;
+                updateKycSteps();
+            }
+        });
+    }
+    
+    const submitKycBtn = document.getElementById('submitKycBtn');
+    if (submitKycBtn) {
+        submitKycBtn.addEventListener('click', function() {
             if (!idDocumentFile || !addressDocumentFile) {
-                showToast('⚠️ Upload documents');
+                showToast('⚠️ Complete all steps');
                 return;
             }
-        }
-        if (currentKycStep < 3) {
-            currentKycStep++;
-            updateKycSteps();
-        }
-    });
+            showToast('✅ KYC submitted successfully!');
+            document.getElementById('submitModal').classList.remove('active');
+            document.getElementById('kycStatusBadge').style.display = 'block';
+            document.getElementById('kycPendingText').textContent = getTranslation('kycPendingText');
+        });
+    }
     
-    document.getElementById('kycPrevBtn').addEventListener('click', function() {
-        if (currentKycStep > 1) {
-            currentKycStep--;
-            updateKycSteps();
-        }
-    });
+    // ============================================
+    //  STEALTH MODE
+    // ============================================
+    const stealthSwitch = document.getElementById('stealthSwitch');
+    if (stealthSwitch) {
+        stealthSwitch.addEventListener('click', function() {
+            this.classList.toggle('active');
+            showToast(this.classList.contains('active') ? getTranslation('stealthActivated') : getTranslation('stealthDeactivated'));
+        });
+    }
     
-    document.getElementById('submitKycBtn').addEventListener('click', function() {
-        if (!idDocumentFile || !addressDocumentFile) {
-            showToast('⚠️ Complete all steps');
-            return;
-        }
-        showToast('✅ KYC submitted successfully!');
-        document.getElementById('submitModal').classList.remove('active');
-        document.getElementById('kycStatusBadge').style.display = 'block';
-        document.getElementById('kycPendingText').textContent = getTranslation('kycPendingText');
-    });
-    
-    // Stealth mode
-    document.getElementById('stealthSwitch').addEventListener('click', function() {
-        this.classList.toggle('active');
-        showToast(this.classList.contains('active') ? getTranslation('stealthActivated') : getTranslation('stealthDeactivated'));
-    });
-    
-    // Menu navigation
+    // ============================================
+    //  MENU NAVIGATION
+    // ============================================
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
         item.addEventListener('click', function() {
             const section = this.dataset.section;
@@ -2580,42 +2689,64 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Profile
-    document.getElementById('profileAvatarBtn').addEventListener('click', function() {
-        document.getElementById('profileModal').classList.add('active');
-        loadProfileData();
-    });
+    // ============================================
+    //  PROFILE
+    // ============================================
+    const profileAvatarBtn = document.getElementById('profileAvatarBtn');
+    if (profileAvatarBtn) {
+        profileAvatarBtn.addEventListener('click', function() {
+            document.getElementById('profileModal').classList.add('active');
+            loadProfileData();
+        });
+    }
     
-    document.getElementById('closeProfileModalBtn').addEventListener('click', function() {
-        document.getElementById('profileModal').classList.remove('active');
-    });
-    
-    document.getElementById('profileModal').addEventListener('click', function(e) {
-        if (e.target === this) {
+    const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
+    if (closeProfileModalBtn) {
+        closeProfileModalBtn.addEventListener('click', function() {
             document.getElementById('profileModal').classList.remove('active');
-        }
-    });
+        });
+    }
     
-    document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+    const profileModal = document.getElementById('profileModal');
+    if (profileModal) {
+        profileModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('profileModal').classList.remove('active');
+            }
+        });
+    }
     
-    document.getElementById('uploadPhotoBtn').addEventListener('click', function() {
-        document.getElementById('profilePhotoInput').click();
-    });
+    const saveProfileBtn = document.getElementById('saveProfileBtn');
+    if (saveProfileBtn) {
+        saveProfileBtn.addEventListener('click', saveProfile);
+    }
     
-    document.getElementById('profilePhotoInput').addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                userProfile.photo = event.target.result;
-                localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
-                updateProfileUI();
-                showToast('✅ Photo uploaded successfully!');
-            };
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
+    const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+    if (uploadPhotoBtn) {
+        uploadPhotoBtn.addEventListener('click', function() {
+            document.getElementById('profilePhotoInput').click();
+        });
+    }
     
-    // ESC key to close modals
+    const profilePhotoInput = document.getElementById('profilePhotoInput');
+    if (profilePhotoInput) {
+        profilePhotoInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    userProfile.photo = event.target.result;
+                    localStorage.setItem('zentronix_profile', JSON.stringify(userProfile));
+                    updateProfileUI();
+                    showToast('✅ Photo uploaded successfully!');
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+    
+    // ============================================
+    //  ESC KEY TO CLOSE MODALS
+    // ============================================
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             document.getElementById('loginModal').classList.remove('active');
@@ -2629,7 +2760,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ⭐ CARREGAR OS ATIVOS IMEDIATAMENTE ⭐
-    // Isso garante que as moedas apareçam assim que o login for feito
     loadAllAssets();
     
     console.log('🟣 Zentronix Bank - System Active');
@@ -2638,8 +2768,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🌐 Languages available: EN, PT, ES, AR');
     console.log('🚀 Features: Wallet, Deposit, Receive, Stake, Swap, Personal Loan');
 });
-
-</script>
 
 <!-- ============================================ -->
 <!-- FOOTER WITH PAYMENT AND SECURITY ICONS -->
