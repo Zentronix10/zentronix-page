@@ -2264,220 +2264,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-<!-- ============================================ -->
-<!-- FOOTER                                       -->
-<!-- ============================================ -->
-<style>
-    /* Reset e estrutura da página */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+<script>
 
-    html, body {
-        height: 100%;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        display: flex;
-        flex-direction: column;
-        background: linear-gradient(135deg, #1a1b3a, #2d1b4e);
-        font-family: Arial, sans-serif;
-    }
-
-    /* Conteúdo principal ocupa todo o espaço disponível */
-    .main-content {
-        flex: 1;
-        padding: 20px;
-    }
-
-    /* Garantir que o footer seja visível no final da página */
-    .footer-wrapper {
-        width: 100%;
-        padding: 25px 20px 15px 20px;
-        background: rgba(26, 27, 58, 0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-top: 2px solid rgba(188, 19, 254, 0.5);
-        border-radius: 15px 15px 0 0;
-        text-align: center;
-        position: relative;
-        z-index: 1000;
-        margin-top: auto;
-        box-shadow: 0 -10px 40px rgba(188, 19, 254, 0.15);
-        flex-shrink: 0;
-    }
-
-    /* Ícones de pagamento e criptomoedas */
-    .footer-icons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.2rem;
-        flex-wrap: wrap;
-        margin-bottom: 18px;
-    }
-
-    .footer-icons i,
-    .footer-icons span {
-        font-size: 2rem !important;
-        opacity: 0.9;
-        transition: all 0.3s ease;
-        cursor: default;
-    }
-
-    .footer-icons i:hover,
-    .footer-icons span:hover {
-        transform: scale(1.2) translateY(-3px);
-        opacity: 1;
-    }
-
-    .footer-icons i.fa-bitcoin { color: #f7931a; }
-    .footer-icons i.fa-ethereum { color: #627eea; }
-    .footer-icons i.fa-cc-visa,
-    .footer-icons i.fa-cc-mastercard,
-    .footer-icons i.fa-cc-amex,
-    .footer-icons i.fa-google-pay,
-    .footer-icons i.fa-apple-pay { color: #00f2ff; }
-
-    /* Certificados de segurança */
-    .certificates {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        margin-bottom: 18px;
-        padding: 12px 20px;
-        background: rgba(0, 0, 0, 0.4);
-        border-radius: 12px;
-        border: 1px solid rgba(188, 19, 254, 0.2);
-    }
-
-    .cert-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .cert-item i {
-        font-size: 1.2rem;
-        color: #00ff88;
-        filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.3));
-    }
-
-    .cert-item span {
-        font-size: 0.7rem;
-        color: #c0c0d0;
-        font-weight: bold;
-        letter-spacing: 0.5px;
-    }
-
-    /* Texto do footer */
-    .footer-text {
-        font-size: 0.7rem;
-        color: #8888aa;
-        margin-top: 10px;
-        border-top: 1px solid rgba(188, 19, 254, 0.2);
-        padding-top: 15px;
-    }
-
-    .footer-text p {
-        margin-bottom: 5px;
-        line-height: 1.6;
-    }
-
-    .footer-text p:first-child { 
-        opacity: 0.8; 
-        color: #aaaacc;
+// ============================================
+//  FORCE FOOTER AT THE BOTTOM OF THE PAGE
+//  WITHOUT BREAKING THE TRANSLATOR AND DASHBOARD
+// ============================================
+(function ensureFooterVisible() {
+    console.log('🦶 Checking footer...');
+    
+    // Ensure body has flex
+    document.body.style.display = 'flex';
+    document.body.style.flexDirection = 'column';
+    document.body.style.minHeight = '100vh';
+    
+    // Ensure main-container is flexible
+    const mainContainer = document.querySelector('.main-container');
+    if (mainContainer) {
+        mainContainer.style.flex = '1 0 auto';
+        mainContainer.style.width = '100%';
     }
     
-    .footer-text p:last-child { 
-        opacity: 0.6; 
-        color: #777799;
+    // Ensure footer is visible
+    const footer = document.querySelector('.footer-wrapper');
+    if (footer) {
+        footer.style.display = 'block !important';
+        footer.style.visibility = 'visible !important';
+        footer.style.opacity = '1 !important';
+        footer.style.flexShrink = '0';
+        footer.style.marginTop = 'auto';
+        footer.style.minHeight = '180px';
+        console.log('✅ Footer verified and visible');
     }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-        .footer-wrapper {
-            padding: 20px 10px 10px 10px;
-        }
-
-        .footer-icons i,
-        .footer-icons span {
-            font-size: 1.5rem !important;
-        }
-        
-        .certificates {
-            gap: 0.8rem;
-            padding: 10px 12px;
-        }
-        
-        .cert-item span {
-            font-size: 0.55rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .footer-icons i,
-        .footer-icons span {
-            font-size: 1.2rem !important;
-        }
-        
-        .cert-item {
-            gap: 0.3rem;
-        }
-        
-        .cert-item i {
-            font-size: 1rem;
-        }
-        
-        .cert-item span {
-            font-size: 0.5rem;
-        }
-    }
-</style>
-
-<div class="footer-wrapper">
-    <!-- Payment and cryptocurrency icons -->
-    <div class="footer-icons">
-        <i class="fab fa-cc-visa"></i>
-        <i class="fab fa-cc-mastercard"></i>
-        <i class="fab fa-cc-amex"></i>
-        <i class="fab fa-google-pay"></i>
-        <i class="fab fa-apple-pay"></i>
-        <i class="fab fa-bitcoin"></i>
-        <i class="fab fa-ethereum"></i>
-        <span>🪙</span>
-        <span>Ł</span>
-        <span>BNB</span>
-        <span>◇</span>
-        <span>₮</span>
-    </div>
     
-    <!-- Security certificates -->
-    <div class="certificates">
-        <div class="cert-item"><i class="fas fa-lock"></i><span>EV SSL</span></div>
-        <div class="cert-item"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div>
-        <div class="cert-item"><i class="fas fa-file-alt"></i><span>SOC 2</span></div>
-        <div class="cert-item"><i class="fas fa-shield"></i><span>McAfee</span></div>
-        <div class="cert-item"><i class="fas fa-certificate"></i><span>ISO 27001</span></div>
-        <div class="cert-item"><i class="fas fa-microchip"></i><span>AES-256</span></div>
-        <div class="cert-item"><i class="fas fa-code-branch"></i><span>CertiK</span></div>
-        <div class="cert-item"><i class="fas fa-id-card"></i><span>KYC/AML</span></div>
-        <div class="cert-item"><i class="fas fa-gavel"></i><span>License</span></div>
-    </div>
-    
-    <!-- Footer text -->
-    <div class="footer-text">
-        <p>Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</p>
-        <p>© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</p>
-    </div>
-</div>
+    // If footer is not found, create an emergency one
+    if (!footer) {
+        console.warn('⚠️ Footer not found! Creating...');
+        const newFooter = document.createElement('div');
+        newFooter.className = 'footer-wrapper';
+        newFooter.innerHTML = `
+            <div class="footer-icons">
+                <i class="fab fa-cc-visa"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <i class="fab fa-cc-amex"></i>
+                <i class="fab fa-google-pay"></i>
+                <i class="fab fa-apple-pay"></i>
+                <i class="fab fa-bitcoin"></i>
+                <i class="fab fa-ethereum"></i>
+                <span>🪙</span>
+                <span>Ł</span>
+                <span>BNB</span>
+                <span>◇</span>
+                <span>₮</span>
+            </div>
+            <div class="certificates">
+                <div class="cert-item"><i class="fas fa-lock"></i><span>EV SSL</span></div>
+                <div class="cert-item"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div>
+                <div class="cert-item"><i class="fas fa-file-alt"></i><span>SOC 2</span></div>
+                <div class="cert-item"><i class="fas fa-shield"></i><span>McAfee</span></div>
+                <div class="cert-item"><i class="fas fa-certificate"></i><span>ISO 27001</span></div>
+                <div class="cert-item"><i class="fas fa-microchip"></i><span>AES-256</span></div>
+                <div class="cert-item"><i class="fas fa-code-branch"></i><span>CertiK</span></div>
+                <div class="cert-item"><i class="fas fa-id-card"></i><span>KYC/AML</span></div>
+                <div class="cert-item"><i class="fas fa-gavel"></i><span>License</span></div>
+            </div>
+            <div class="footer-text">
+                <p>Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</p>
+                <p>© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</p>
+            </div>
+        `;
+        document.body.appendChild(newFooter);
+        console.log('✅ Emergency footer created!');
+    }
+})();
 
 </body>
 </html>
