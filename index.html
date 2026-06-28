@@ -2267,42 +2267,43 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 
 // ============================================
-//  FORCE FOOTER AT THE BOTTOM OF THE PAGE
-//  WITHOUT BREAKING THE TRANSLATOR AND DASHBOARD
+//  DEFINITIVE SOLUTION FOR THE FOOTER
 // ============================================
-(function ensureFooterVisible() {
-    console.log('🦶 Checking footer...');
-    
-    // Ensure body has flex
-    document.body.style.display = 'flex';
-    document.body.style.flexDirection = 'column';
-    document.body.style.minHeight = '100vh';
-    
-    // Ensure main-container is flexible
-    const mainContainer = document.querySelector('.main-container');
-    if (mainContainer) {
-        mainContainer.style.flex = '1 0 auto';
-        mainContainer.style.width = '100%';
+(function forceFooter() {
+    // Wait for page to load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', forceFooter);
+        return;
     }
     
-    // Ensure footer is visible
-    const footer = document.querySelector('.footer-wrapper');
-    if (footer) {
-        footer.style.display = 'block !important';
-        footer.style.visibility = 'visible !important';
-        footer.style.opacity = '1 !important';
-        footer.style.flexShrink = '0';
-        footer.style.marginTop = 'auto';
-        footer.style.minHeight = '180px';
-        console.log('✅ Footer verified and visible');
+    console.log('🦶 FORCING FOOTER...');
+    
+    // 1. Force the body
+    document.body.style.cssText = `
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    `;
+    
+    // 2. Force the main-container
+    const main = document.querySelector('.main-container');
+    if (main) {
+        main.style.cssText = `
+            flex: 1 0 auto !important;
+            width: 100% !important;
+        `;
     }
     
-    // If footer is not found, create an emergency one
+    // 3. Find or create the footer
+    let footer = document.querySelector('.footer-wrapper');
+    
     if (!footer) {
         console.warn('⚠️ Footer not found! Creating...');
-        const newFooter = document.createElement('div');
-        newFooter.className = 'footer-wrapper';
-        newFooter.innerHTML = `
+        footer = document.createElement('div');
+        footer.className = 'footer-wrapper';
+        footer.innerHTML = `
             <div class="footer-icons">
                 <i class="fab fa-cc-visa"></i>
                 <i class="fab fa-cc-mastercard"></i>
@@ -2333,9 +2334,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p>© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</p>
             </div>
         `;
-        document.body.appendChild(newFooter);
-        console.log('✅ Emergency footer created!');
+        document.body.appendChild(footer);
+        console.log('✅ Footer created!');
     }
+    
+    // 4. FORCE THE FOOTER TO APPEAR
+    if (footer) {
+        footer.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            width: 100% !important;
+            padding: 25px 20px 15px 20px !important;
+            background: rgba(26, 27, 58, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            border-top: 3px solid #bc13fe !important;
+            border-radius: 15px 15px 0 0 !important;
+            text-align: center !important;
+            position: relative !important;
+            z-index: 9999 !important;
+            margin-top: 30px !important;
+            box-shadow: 0 -10px 40px rgba(188, 19, 254, 0.3) !important;
+            min-height: 200px !important;
+            flex-shrink: 0 !important;
+            clear: both !important;
+        `;
+        console.log('✅ Footer FORCED to appear!');
+    }
+    
+    // 5. Check if it appeared
+    setTimeout(() => {
+        const check = document.querySelector('.footer-wrapper');
+        if (check) {
+            const rect = check.getBoundingClientRect();
+            console.log(`📏 Footer: top=${rect.top}, bottom=${rect.bottom}, height=${rect.height}`);
+            if (rect.height < 50) {
+                console.warn('⚠️ Footer is too small!');
+                check.style.minHeight = '250px !important';
+                check.style.padding = '30px 20px !important';
+            }
+        }
+    }, 500);
 })();
 
 </body>
