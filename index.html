@@ -333,6 +333,409 @@
         body.rtl .kyc-status { right: auto; left: 20px; }
         body.rtl .notification-badge { right: auto; left: 20px; }
         body.rtl .toast-notification { direction: ltr; }
+
+                /* ============================================ */
+        /* FOOTER OFICIAL                               */
+        /* ============================================ */
+        .footer-wrapper {
+            width: 100%;
+            padding: 2rem 1.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(26, 27, 58, 0.95), rgba(42, 27, 74, 0.95));
+            backdrop-filter: blur(15px);
+            border-top: 3px solid var(--neon-purple);
+            border-radius: 1.5rem 1.5rem 0 0;
+            margin-top: 2rem;
+            text-align: center;
+            box-shadow: 0 -10px 40px rgba(188, 19, 254, 0.25);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .footer-icons i,
+        .footer-icons span {
+            font-size: 1.6rem;
+            color: var(--neon-blue);
+            opacity: 0.7;
+            transition: all 0.3s;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .footer-icons i:hover,
+        .footer-icons span:hover {
+            opacity: 1;
+            transform: translateY(-4px) scale(1.1);
+            color: var(--neon-purple);
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .certificates {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid var(--border-glow);
+            border-radius: 2rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .cert-item i {
+            color: var(--neon-green);
+            font-size: 0.85rem;
+        }
+
+        .cert-item:hover {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            background: rgba(0, 242, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-text p {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            line-height: 1.6;
+            margin: 0.2rem 0;
+        }
+
+        body.rtl .footer-wrapper { direction: ltr; }
+
+        @media (max-width: 600px) {
+            .footer-icons { gap: 0.8rem; }
+            .footer-icons i, .footer-icons span { font-size: 1.2rem; }
+            .certificates { gap: 0.5rem; }
+            .cert-item { font-size: 0.55rem; padding: 0.3rem 0.5rem; }
+        }
+
+            /* ============================================ */
+        /* FASE 2A — EXTRATO BANCÁRIO                   */
+        /* ============================================ */
+        .statement-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .statement-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.6rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 1rem;
+            border: 1px solid var(--border-glow);
+        }
+
+        .statement-filters .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .statement-filters label {
+            font-size: 0.6rem;
+            color: var(--neon-purple);
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .statement-filters input,
+        .statement-filters select {
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            background: rgba(26, 27, 58, 0.9);
+            border: 1px solid var(--border-glow);
+            border-radius: 0.6rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .statement-filters input:focus,
+        .statement-filters select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+
+        .statement-actions {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.3rem;
+        }
+
+        .statement-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.6rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .statement-btn-primary {
+            background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            color: #0a0b1e;
+        }
+        .statement-btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        .statement-btn-ghost {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+        .statement-btn-ghost:hover { background: rgba(0, 242, 255, 0.25); }
+
+        .statement-btn-danger {
+            background: rgba(255, 68, 102, 0.1);
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+        }
+        .statement-btn-danger:hover { background: rgba(255, 68, 102, 0.25); }
+
+        .statement-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+            border-left: 3px solid var(--neon-blue);
+        }
+
+        .summary-card.income { border-left-color: var(--neon-green); }
+        .summary-card.expense { border-left-color: var(--neon-red); }
+        .summary-card.count { border-left-color: var(--neon-purple); }
+
+        .summary-card .label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-card .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 0.2rem;
+        }
+
+        .summary-card.income .value { color: var(--neon-green); }
+        .summary-card.expense .value { color: var(--neon-red); }
+        .summary-card.count .value { color: var(--neon-purple); }
+
+        .statement-table-wrapper {
+            overflow-x: auto;
+            border-radius: 1rem;
+            border: 1px solid var(--border-glow);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .statement-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+
+        .statement-table thead {
+            background: rgba(188, 19, 254, 0.15);
+        }
+
+        .statement-table th {
+            padding: 0.7rem 0.8rem;
+            text-align: left;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.6rem;
+            color: var(--neon-purple);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-glow);
+            white-space: nowrap;
+        }
+
+        .statement-table td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid rgba(188, 19, 254, 0.08);
+            vertical-align: middle;
+        }
+
+        .statement-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .statement-table tbody tr:hover {
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .statement-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tx-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.4rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.55rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .tx-badge.DEPOSIT    { background: rgba(0, 255, 136, 0.15); color: var(--neon-green); }
+        .tx-badge.RECEIVE    { background: rgba(0, 242, 255, 0.15); color: var(--neon-blue); }
+        .tx-badge.STAKE      { background: rgba(188, 19, 254, 0.15); color: var(--neon-purple); }
+        .tx-badge.SWAP       { background: rgba(255, 215, 0, 0.15); color: var(--neon-yellow); }
+        .tx-badge.BUY        { background: rgba(0, 255, 136, 0.15); color: var(--neon-green); }
+        .tx-badge.SELL       { background: rgba(255, 68, 102, 0.15); color: var(--neon-red); }
+        .tx-badge.PAYMENT    { background: rgba(255, 107, 53, 0.15); color: var(--neon-orange); }
+        .tx-badge.CONVERSION { background: rgba(255, 215, 0, 0.15); color: var(--neon-yellow); }
+        .tx-badge.INVESTMENT { background: rgba(0, 255, 136, 0.15); color: var(--neon-green); }
+        .tx-badge.LOAN_REQUEST { background: rgba(255, 215, 0, 0.15); color: var(--neon-yellow); }
+
+        .tx-amount {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .tx-amount.positive { color: var(--neon-green); }
+        .tx-amount.negative { color: var(--neon-red); }
+
+        .tx-id {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tx-date {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .statement-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .statement-empty i {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            display: block;
+            color: var(--neon-purple);
+            opacity: 0.4;
+        }
+
+        .statement-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            padding: 0.6rem 0;
+        }
+
+        .pagination-info {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 0.3rem;
+            align-items: center;
+        }
+
+        .pagination-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0 0.5rem;
+            border-radius: 0.5rem;
+            background: rgba(26, 27, 58, 0.8);
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: rgba(0, 242, 255, 0.15);
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .pagination-btn.active {
+            background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            color: #0a0b1e;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 700px) {
+            .statement-table th:nth-child(4),
+            .statement-table td:nth-child(4),
+            .statement-table th:nth-child(5),
+            .statement-table td:nth-child(5) {
+                display: none;
+            }
+        }
+    
     </style>
 </head>
 <body>
@@ -718,7 +1121,130 @@
                 </div>
                 
                 <div id="cryptoTransactionsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="cryptoTxTitle">Crypto Transactions</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="cryptoTxList"></div></div></div>
-                <div id="historySec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="historyTitle">Transaction History / Extrato</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="historyList" class="history-list"></div></div></div>
+                                <div id="historySec" class="investment-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h4 id="historyTitle">Transaction History / Extrato</h4>
+                            <button class="close-section-btn" onclick="closeCurrentSection()">✕</button>
+                        </div>
+
+                        <div class="statement-container">
+                            <!-- Filtros -->
+                            <div class="statement-filters">
+                                <div class="filter-group">
+                                    <label for="filterDateFrom">📅 Data inicial</label>
+                                    <input type="date" id="filterDateFrom">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="filterDateTo">📅 Data final</label>
+                                    <input type="date" id="filterDateTo">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="filterType">📋 Tipo</label>
+                                    <select id="filterType">
+                                        <option value="">Todos</option>
+                                        <option value="DEPOSIT">Depósito</option>
+                                        <option value="RECEIVE">Recebimento</option>
+                                        <option value="STAKE">Staking</option>
+                                        <option value="SWAP">Swap</option>
+                                        <option value="BUY">Compra</option>
+                                        <option value="SELL">Venda</option>
+                                        <option value="PAYMENT">Pagamento</option>
+                                        <option value="CONVERSION">Conversão</option>
+                                        <option value="INVESTMENT">Investimento</option>
+                                        <option value="LOAN_REQUEST">Empréstimo</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="filterCurrency">💱 Moeda</label>
+                                    <select id="filterCurrency">
+                                        <option value="">Todas</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                        <option value="BRL">BRL</option>
+                                        <option value="BTC">BTC</option>
+                                        <option value="ETH">ETH</option>
+                                        <option value="BNB">BNB</option>
+                                        <option value="SOL">SOL</option>
+                                        <option value="MATIC">MATIC</option>
+                                        <option value="USDT">USDT</option>
+                                        <option value="LTC">LTC</option>
+                                        <option value="BRC">BRC</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="filterSearch">🔍 Buscar</label>
+                                    <input type="text" id="filterSearch" placeholder="Tx ID, detalhe...">
+                                </div>
+                            </div>
+
+                            <!-- Ações -->
+                            <div class="statement-actions">
+                                <button class="statement-btn statement-btn-primary" id="applyFiltersBtn">
+                                    <i class="fas fa-filter"></i> Aplicar Filtros
+                                </button>
+                                <button class="statement-btn statement-btn-ghost" id="clearFiltersBtn">
+                                    <i class="fas fa-eraser"></i> Limpar
+                                </button>
+                                <button class="statement-btn statement-btn-ghost" id="exportCsvBtn">
+                                    <i class="fas fa-file-csv"></i> Exportar CSV
+                                </button>
+                                <button class="statement-btn statement-btn-ghost" id="exportPdfBtn">
+                                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                                </button>
+                                <button class="statement-btn statement-btn-danger" id="clearHistoryBtn">
+                                    <i class="fas fa-trash-alt"></i> Limpar Histórico
+                                </button>
+                            </div>
+
+                            <!-- Resumo -->
+                            <div class="statement-summary" id="statementSummary">
+                                <div class="summary-card income">
+                                    <div class="label">Total Entradas</div>
+                                    <div class="value" id="summaryIncome">$0.00</div>
+                                </div>
+                                <div class="summary-card expense">
+                                    <div class="label">Total Saídas</div>
+                                    <div class="value" id="summaryExpense">$0.00</div>
+                                </div>
+                                <div class="summary-card count">
+                                    <div class="label">Transações</div>
+                                    <div class="value" id="summaryCount">0</div>
+                                </div>
+                            </div>
+
+                            <!-- Tabela -->
+                            <div class="statement-table-wrapper">
+                                <table class="statement-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Moeda</th>
+                                            <th>Valor</th>
+                                            <th>Detalhe</th>
+                                            <th>Data</th>
+                                            <th>Tx ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="statementBody">
+                                        <!-- preenchido por JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Paginação -->
+                            <div class="statement-pagination">
+                                <div class="pagination-info" id="paginationInfo">
+                                    Mostrando 0 de 0
+                                </div>
+                                <div class="pagination-controls" id="paginationControls">
+                                    <!-- preenchido por JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="tradingSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="tradingTitle">Trading Hub</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">BTC/USD - $67,234</div><button class="buy-btn" id="buyBtn">BUY</button><button class="sell-btn" id="sellBtn">SELL</button></div></div></div>
                 <div id="conversionSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="conversionTitle">Currency Conversion</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><select id="convFrom" style="width:100%; padding:0.5rem; margin:0.5rem 0;"><option>USD</option><option>EUR</option><option>GBP</option><option>BRL</option></select><select id="convTo" style="width:100%; padding:0.5rem; margin:0.5rem 0;"><option>BTC</option><option>ETH</option><option>SOL</option><option>BRADICOIN</option></select><input type="number" id="convAmount" placeholder="Amount"><button class="buy-btn" id="doConvertBtn">Convert</button></div></div>
                 <div id="treasuriesSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="treasuriesTitle">Treasuries & Bonds</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">10Y Treasury - 4.2%</div><button class="buy-btn" id="investBtn1">Invest</button></div></div></div>
@@ -742,8 +1268,53 @@
                 <div id="digitalPaymentSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="digitalPaymentTitle">Digital Payment</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div style="display:flex; gap:1rem;"><button class="buy-btn" id="googlePayBtn"><i class="fab fa-google-pay"></i> Google Pay</button><button class="buy-btn" id="applePayBtn"><i class="fab fa-apple-pay"></i> Apple Pay</button></div></div></div>
             </div>
 
-            <div class="right-column">
-                <div class="balance-section"><div class="balance-header"><h4 id="yourBalancesTitle">YOUR BALANCES</h4><div class="balance-total" id="totalBalance">$0.00</div></div><div class="currency-grid" id="currencyGrid"></div></div>
+                        <div class="right-column">
+                <div class="balance-section">
+                    <div class="balance-header">
+                        <h4 id="yourBalancesTitle">YOUR BALANCES</h4>
+                        <div class="balance-total" id="totalBalance">$0.00</div>
+                    </div>
+                    <div class="currency-grid" id="currencyGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- FOOTER                                       -->
+    <!-- ============================================ -->
+    <footer class="footer-wrapper">
+        <div class="footer-icons">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-amex"></i>
+            <i class="fab fa-google-pay"></i>
+            <i class="fab fa-apple-pay"></i>
+            <i class="fab fa-bitcoin"></i>
+            <i class="fab fa-ethereum"></i>
+            <span>🪙</span>
+            <span>Ł</span>
+            <span>BNB</span>
+            <span>◇</span>
+            <span>₮</span>
+        </div>
+        <div class="certificates">
+            <div class="cert-item"><i class="fas fa-lock"></i><span>EV SSL</span></div>
+            <div class="cert-item"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div>
+            <div class="cert-item"><i class="fas fa-file-alt"></i><span>SOC 2</span></div>
+            <div class="cert-item"><i class="fas fa-shield"></i><span>McAfee</span></div>
+            <div class="cert-item"><i class="fas fa-certificate"></i><span>ISO 27001</span></div>
+            <div class="cert-item"><i class="fas fa-microchip"></i><span>AES-256</span></div>
+            <div class="cert-item"><i class="fas fa-code-branch"></i><span>CertiK</span></div>
+            <div class="cert-item"><i class="fas fa-id-card"></i><span>KYC/AML</span></div>
+            <div class="cert-item"><i class="fas fa-gavel"></i><span>License</span></div>
+        </div>
+        <div class="footer-text">
+            <p>Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</p>
+            <p>© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</p>
+        </div>
+    </footer>
+</div>
 
 <script>
 // ============================================
@@ -787,57 +1358,291 @@ let userProfile = {
 //  TRADUÇÕES (resumido para economizar espaço)
 // ============================================
 const translations = {
-    'en': { 
-        'bankSubtitle': 'Offshore Private Banking', 
-        'accessHubBtn': 'ACCESS HUB', 
-        'kycBtnText': 'KYC', 
-        'logoutBtnText': 'LOGOUT', 
-        'kycPendingText': 'KYC PENDING', 
-        'modalTitle': 'ACCESS INVESTMENT HUB', 
-        'loginSuccess': '✅ Login successful!', 
-        'logoutSuccess': '🔒 You have been logged out.', 
-        'invalidCredentials': '❌ Invalid credentials!', 
-        'welcomeUser': 'Welcome, {name}', 
-        'profileRole': 'Private Banking Elite' 
+    'en': {
+        'bankSubtitle': 'Offshore Private Banking',
+        'accessHubBtn': 'ACCESS HUB',
+        'kycBtnText': 'KYC',
+        'logoutBtnText': 'LOGOUT',
+        'kycPendingText': 'KYC PENDING',
+        'modalTitle': 'ACCESS INVESTMENT HUB',
+        'loginSuccess': '✅ Login successful!',
+        'logoutSuccess': '🔒 You have been logged out.',
+        'invalidCredentials': '❌ Invalid credentials!',
+        'welcomeUser': 'Welcome, {name}',
+        'profileRole': 'Private Banking Elite',
+        'menuSecurityTitle': '⚙️ SECURITY SETTINGS',
+        'menuSecurityCenter': 'Security Center',
+        'menuCryptoTitle': '⛓️ CRYPTO & DEFI',
+        'menuStaking': 'Staking Center',
+        'menuCryptoTransactions': 'Crypto Transactions',
+        'menuHistory': 'History / Statement',
+        'menuTradingTitle': '📊 TRADING',
+        'menuTradingHub': 'Trading Hub',
+        'menuConversion': 'Conversion',
+        'menuFixedIncomeTitle': '🏛️ FIXED INCOME',
+        'menuTreasuries': 'Treasuries & Bonds',
+        'menuCDs': 'CDs / Time Deposits',
+        'menuDebentures': 'Debentures',
+        'menuREITs': 'REITs',
+        'menuPrivateCredit': 'Private Credit',
+        'menuStructuredNotes': 'Structured Notes',
+        'menuMunicipalBonds': 'Municipal Bonds',
+        'menuCardsTitle': '💳 CARDS & PAYMENTS',
+        'menuMyCards': 'My Cards',
+        'menuPayments': 'Payments',
+        'menuSwapTitle': '🔄 SWAP',
+        'menuSwapCenter': 'Swap Center',
+        'menuAnalyticsTitle': '📊 ANALYTICS',
+        'menuAnalytics': 'Analytics',
+        'menuReports': 'Reports',
+        'menuSecurityKYCTitle': '🔒 SECURITY & KYC',
+        'menuSecuritySettings': 'Security Settings',
+        'menuSessions': 'Active Sessions',
+        'menuCompliance': 'KYC & Compliance',
+        'menuAntiHack': 'Anti-Hack',
+        'menuSystemTitle': '⚙️ SYSTEM CONTROLS',
+        'menuGhostMode': 'Ghost Mode',
+        'menuSimulator': 'Scenario Simulator',
+        'menuThemes': 'Theme Weaver',
+        'menuAudit': 'Audit Logs',
+        'menuServicesTitle': '✨ BANKING SERVICES',
+        'menuCompleteServices': 'Complete Services',
+        'menuDigitalPayment': 'Digital Payment',
+        'stakingChartTitle': 'Staking Performance',
+        'yourBalancesTitle': 'YOUR BALANCES',
+        'accountLabel': 'ACCOUNT NUMBER',
+        'copyBtnText': 'COPY',
+        'historyTitle': 'Transaction History / Statement',
+        'cryptoTxTitle': 'Crypto Transactions',
+        'tradingTitle': 'Trading Hub',
+        'conversionTitle': 'Currency Conversion',
+        'treasuriesTitle': 'Treasuries & Bonds',
+        'cdsTitle': 'CDs / Time Deposits',
+        'debenturesTitle': 'Debentures',
+        'reitsTitle': 'REITs',
+        'privateCreditTitle': 'Private Credit',
+        'structuredNotesTitle': 'Structured Notes',
+        'municipalBondsTitle': 'Municipal Bonds',
+        'cardsTitle': 'My Cards',
+        'paymentsTitle': 'Payments',
+        'swapCenterTitle': 'Swap Center',
+        'analyticsTitle': 'Analytics',
+        'reportsTitle': 'Reports',
+        'securitySettingsTitle': 'Security Settings',
+        'securityCenterTitle': 'Security Center',
+        'sessionsTitle': 'Active Sessions',
+        'complianceTitle': 'KYC & Compliance',
+        'antihackTitle': 'Anti-Hack',
+        'servicesTitle': 'Complete Banking Services',
+        'digitalPaymentTitle': 'Digital Payment',
+        'kycModalTitle': 'KYC VERIFICATION',
+        'step1Label': 'Personal Info',
+        'step2Label': 'Documents',
+        'step3Label': 'Selfie',
+        'fullNameLabel': 'Full Name',
+        'emailLabel': 'Email',
+        'phoneLabel': 'Phone',
+        'addressLabel': 'Street Address',
+        'nationalityLabel': 'Nationality',
+        'idDocumentLabel': 'ID Document (Passport / ID Card / Driver License)',
+        'proofAddressLabel': 'Proof of Address (Utility bill, Bank statement, etc.)',
+        'uploadClickText': 'Click to upload document',
+        'proofClickText': 'Click to upload proof of address',
+        'acceptedFormatsText': 'Accepted formats: JPG, PNG, PDF (Max 10MB)',
+        'selfieInstruction': 'Take a selfie holding your ID document',
+        'startCameraText': 'Start Camera',
+        'captureText': 'Capture',
+        'uploadText': 'Upload Photo',
+        'reviewTitle': 'Please review your information before submitting:',
+        'prevBtnText': 'Previous',
+        'nextBtnText': 'Next →',
+        'submitKycText': 'SUBMIT KYC',
+        'heroTitle': 'Zentronix Offshore Bank: Sovereignty, Technology and Financial Elite',
+        'heroBadge': '🏆 Leading the Offshore Revolution since 2017',
+        'heroDesc': 'Founded in 2017, Zentronix Bank is not just a financial institution; it is a fortress for global capital.',
+        'card1Title': '🌍 Total Convergence: Fiat and Crypto',
+        'card1Desc': 'Unlike traditional banks, Zentronix was designed for the digital age.',
+        'card2Title': '📈 Next-Generation Investment Portfolio',
+        'card2Desc': 'Our financial product shelf is the most complete in the offshore sector.',
+        'card3Title': '🔐 Technology, Privacy and Succession',
+        'card3Desc': 'Zentronix Bank goes beyond simple transactions; we take care of your legacy.',
+        'impactPhrase': '✨ Zentronix Offshore Bank: The evolution of your financial power begins here. ✨',
+        'impactSmall': 'Founded in 2017. Connected to the Future.',
+        'aboutTitle': '🌟 ABOUT ZENTRONIX BANK',
+        'aboutHistoryTitle': 'Our History',
+        'aboutHistoryDesc': 'Founded in 2018, serving 156+ countries',
+        'aboutSecurityTitle': 'Security First',
+        'aboutSecurityDesc': 'Quantum-resistant protocols',
+        'aboutReachTitle': 'Global Reach',
+        'aboutReachDesc': 'Offices in Switzerland, Singapore, Dubai',
+        'aboutReturnsTitle': 'Premium Returns',
+        'aboutReturnsDesc': 'Up to 12% annual yield',
+        'currenciesTitle': '💱 CURRENCIES WE ACCEPT',
+        'cryptoTitles': '💎 SUPPORTED CRYPTOCURRENCIES',
+        'statAum': 'AUM',
+        'statClients': 'Clients',
+        'statCountries': 'Countries',
+        'statEncryption': 'Encryption'
     },
-    'pt': { 
-        'bankSubtitle': 'Offshore Private Banking', 
-        'accessHubBtn': 'ACESSAR HUB', 
-        'kycBtnText': 'KYC', 
-        'logoutBtnText': 'SAIR', 
-        'kycPendingText': 'KYC PENDENTE', 
-        'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS', 
-        'loginSuccess': '✅ Login realizado com sucesso!', 
-        'logoutSuccess': '🔒 Você foi desconectado.', 
-        'invalidCredentials': '❌ Credenciais inválidas!', 
-        'welcomeUser': 'Bem-vindo, {name}', 
-        'profileRole': 'Elite do Private Banking' 
+    'pt': {
+        'bankSubtitle': 'Offshore Private Banking',
+        'accessHubBtn': 'ACESSAR HUB',
+        'kycBtnText': 'KYC',
+        'logoutBtnText': 'SAIR',
+        'kycPendingText': 'KYC PENDENTE',
+        'modalTitle': 'ACESSAR HUB DE INVESTIMENTOS',
+        'loginSuccess': '✅ Login realizado com sucesso!',
+        'logoutSuccess': '🔒 Você foi desconectado.',
+        'invalidCredentials': '❌ Credenciais inválidas!',
+        'welcomeUser': 'Bem-vindo, {name}',
+        'profileRole': 'Elite do Private Banking',
+        'menuSecurityTitle': '⚙️ SEGURANÇA',
+        'menuSecurityCenter': 'Central de Segurança',
+        'menuCryptoTitle': '⛓️ CRIPTO & DEFI',
+        'menuStaking': 'Central de Staking',
+        'menuCryptoTransactions': 'Transações Cripto',
+        'menuHistory': 'Histórico / Extrato',
+        'menuTradingTitle': '📊 TRADING',
+        'menuTradingHub': 'Central de Trading',
+        'menuConversion': 'Conversão',
+        'menuFixedIncomeTitle': '🏛️ RENDA FIXA',
+        'menuTreasuries': 'Títulos & Bonds',
+        'menuCDs': 'CDB / Depósitos a Prazo',
+        'menuDebentures': 'Debêntures',
+        'menuREITs': 'REITs',
+        'menuPrivateCredit': 'Crédito Privado',
+        'menuStructuredNotes': 'Notas Estruturadas',
+        'menuMunicipalBonds': 'Títulos Municipais',
+        'menuCardsTitle': '💳 CARTÕES & PAGAMENTOS',
+        'menuMyCards': 'Meus Cartões',
+        'menuPayments': 'Pagamentos',
+        'menuSwapTitle': '🔄 SWAP',
+        'menuSwapCenter': 'Central de Swap',
+        'menuAnalyticsTitle': '📊 ANÁLISES',
+        'menuAnalytics': 'Análises',
+        'menuReports': 'Relatórios',
+        'menuSecurityKYCTitle': '🔒 SEGURANÇA & KYC',
+        'menuSecuritySettings': 'Configurações de Segurança',
+        'menuSessions': 'Sessões Ativas',
+        'menuCompliance': 'KYC & Compliance',
+        'menuAntiHack': 'Anti-Hack',
+        'menuSystemTitle': '⚙️ CONTROLES DO SISTEMA',
+        'menuGhostMode': 'Modo Fantasma',
+        'menuSimulator': 'Simulador de Cenários',
+        'menuThemes': 'Temas',
+        'menuAudit': 'Logs de Auditoria',
+        'menuServicesTitle': '✨ SERVIÇOS BANCÁRIOS',
+        'menuCompleteServices': 'Serviços Completos',
+        'menuDigitalPayment': 'Pagamento Digital',
+        'stakingChartTitle': 'Desempenho de Staking',
+        'yourBalancesTitle': 'SEUS SALDOS',
+        'accountLabel': 'NÚMERO DA CONTA',
+        'copyBtnText': 'COPIAR',
+        'historyTitle': 'Histórico de Transações / Extrato',
+        'cryptoTxTitle': 'Transações Cripto',
+        'tradingTitle': 'Central de Trading',
+        'conversionTitle': 'Conversão de Moedas',
+        'treasuriesTitle': 'Títulos & Bonds',
+        'cdsTitle': 'CDB / Depósitos a Prazo',
+        'debenturesTitle': 'Debêntures',
+        'reitsTitle': 'REITs',
+        'privateCreditTitle': 'Crédito Privado',
+        'structuredNotesTitle': 'Notas Estruturadas',
+        'municipalBondsTitle': 'Títulos Municipais',
+        'cardsTitle': 'Meus Cartões',
+        'paymentsTitle': 'Pagamentos',
+        'swapCenterTitle': 'Central de Swap',
+        'analyticsTitle': 'Análises',
+        'reportsTitle': 'Relatórios',
+        'securitySettingsTitle': 'Configurações de Segurança',
+        'securityCenterTitle': 'Central de Segurança',
+        'sessionsTitle': 'Sessões Ativas',
+        'complianceTitle': 'KYC & Compliance',
+        'antihackTitle': 'Anti-Hack',
+        'servicesTitle': 'Serviços Bancários Completos',
+        'digitalPaymentTitle': 'Pagamento Digital',
+        'kycModalTitle': 'VERIFICAÇÃO KYC',
+        'step1Label': 'Dados Pessoais',
+        'step2Label': 'Documentos',
+        'step3Label': 'Selfie',
+        'fullNameLabel': 'Nome Completo',
+        'emailLabel': 'E-mail',
+        'phoneLabel': 'Telefone',
+        'addressLabel': 'Endereço',
+        'nationalityLabel': 'Nacionalidade',
+        'idDocumentLabel': 'Documento de Identidade (Passaporte / RG / CNH)',
+        'proofAddressLabel': 'Comprovante de Endereço (Conta de luz, extrato bancário, etc.)',
+        'uploadClickText': 'Clique para enviar documento',
+        'proofClickText': 'Clique para enviar comprovante',
+        'acceptedFormatsText': 'Formatos aceitos: JPG, PNG, PDF (Máx 10MB)',
+        'selfieInstruction': 'Tire uma selfie segurando seu documento',
+        'startCameraText': 'Iniciar Câmera',
+        'captureText': 'Capturar',
+        'uploadText': 'Enviar Foto',
+        'reviewTitle': 'Revise suas informações antes de enviar:',
+        'prevBtnText': 'Anterior',
+        'nextBtnText': 'Próximo →',
+        'submitKycText': 'ENVIAR KYC',
+        'heroTitle': 'Zentronix Offshore Bank: Soberania, Tecnologia e Elite Financeira',
+        'heroBadge': '🏆 Liderando a Revolução Offshore desde 2017',
+        'heroDesc': 'Fundado em 2017, o Zentronix Bank não é apenas uma instituição financeira; é uma fortaleza para o capital global.',
+        'card1Title': '🌍 Convergência Total: Fiat e Cripto',
+        'card1Desc': 'Diferente dos bancos tradicionais, a Zentronix foi desenhada para a era digital.',
+        'card2Title': '📈 Portfólio de Investimentos de Nova Geração',
+        'card2Desc': 'Nossa prateleira de produtos financeiros é a mais completa do setor offshore.',
+        'card3Title': '🔐 Tecnologia, Privacidade e Sucessão',
+        'card3Desc': 'O Zentronix Bank vai além de simples transações; cuidamos do seu legado.',
+        'impactPhrase': '✨ Zentronix Offshore Bank: A evolução do seu poder financeiro começa aqui. ✨',
+        'impactSmall': 'Fundado em 2017. Conectado ao Futuro.',
+        'aboutTitle': '🌟 SOBRE O ZENTRONIX BANK',
+        'aboutHistoryTitle': 'Nossa História',
+        'aboutHistoryDesc': 'Fundado em 2018, atendendo 156+ países',
+        'aboutSecurityTitle': 'Segurança em Primeiro',
+        'aboutSecurityDesc': 'Protocolos resistentes a quantum',
+        'aboutReachTitle': 'Alcance Global',
+        'aboutReachDesc': 'Escritórios na Suíça, Singapura, Dubai',
+        'aboutReturnsTitle': 'Retornos Premium',
+        'aboutReturnsDesc': 'Até 12% de rendimento anual',
+        'currenciesTitle': '💱 MOEDAS QUE ACEITAMOS',
+        'cryptoTitles': '💎 CRIPTOMOEDAS SUPORTADAS',
+        'statAum': 'Ativos sob Gestão',
+        'statClients': 'Clientes',
+        'statCountries': 'Países',
+        'statEncryption': 'Criptografia'
     },
-    'es': { 
-        'bankSubtitle': 'Banca Offshore Privada', 
-        'accessHubBtn': 'ACCEDER HUB', 
-        'kycBtnText': 'KYC', 
-        'logoutBtnText': 'SALIR', 
-        'kycPendingText': 'KYC PENDIENTE', 
-        'modalTitle': 'ACCEDER HUB DE INVERSIONES', 
-        'loginSuccess': '✅ Inicio de sesión exitoso!', 
-        'logoutSuccess': '🔒 Has cerrado sesión.', 
-        'invalidCredentials': '❌ Credenciales inválidas!', 
-        'welcomeUser': 'Bienvenido, {name}', 
-        'profileRole': 'Élite de Banca Privada' 
+    'es': {
+        'bankSubtitle': 'Banca Offshore Privada',
+        'accessHubBtn': 'ACCEDER HUB',
+        'kycBtnText': 'KYC',
+        'logoutBtnText': 'SALIR',
+        'kycPendingText': 'KYC PENDIENTE',
+        'modalTitle': 'ACCEDER HUB DE INVERSIONES',
+        'loginSuccess': '✅ ¡Inicio de sesión exitoso!',
+        'logoutSuccess': '🔒 Has cerrado sesión.',
+        'invalidCredentials': '❌ ¡Credenciales inválidas!',
+        'welcomeUser': 'Bienvenido, {name}',
+        'profileRole': 'Élite de Banca Privada',
+        'menuHistory': 'Historial / Extracto',
+        'yourBalancesTitle': 'TUS SALDOS',
+        'historyTitle': 'Historial de Transacciones / Extracto',
+        'menuSwapTitle': '🔄 SWAP',
+        'menuSwapCenter': 'Centro de Swap'
     },
-    'ar': { 
-        'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية', 
-        'accessHubBtn': 'الوصول إلى المركز', 
-        'kycBtnText': 'التحقق من الهوية', 
-        'logoutBtnText': 'تسجيل الخروج', 
-        'kycPendingText': 'التحقق من الهوية قيد الانتظار', 
-        'modalTitle': 'الوصول إلى مركز الاستثمار', 
-        'loginSuccess': '✅ تم تسجيل الدخول بنجاح!', 
-        'logoutSuccess': '🔒 تم تسجيل الخروج.', 
-        'invalidCredentials': '❌ بيانات اعتماد غير صالحة!', 
-        'welcomeUser': 'مرحبًا, {name}', 
-        'profileRole': 'النخبة المصرفية الخاصة' 
+    'ar': {
+        'bankSubtitle': 'الخدمات المصرفية الخاصة الخارجية',
+        'accessHubBtn': 'الوصول إلى المركز',
+        'kycBtnText': 'التحقق من الهوية',
+        'logoutBtnText': 'تسجيل الخروج',
+        'kycPendingText': 'التحقق من الهوية قيد الانتظار',
+        'modalTitle': 'الوصول إلى مركز الاستثمار',
+        'loginSuccess': '✅ تم تسجيل الدخول بنجاح!',
+        'logoutSuccess': '🔒 تم تسجيل الخروج.',
+        'invalidCredentials': '❌ بيانات اعتماد غير صالحة!',
+        'welcomeUser': 'مرحبًا, {name}',
+        'profileRole': 'النخبة المصرفية الخاصة',
+        'menuHistory': 'السجل / كشف الحساب',
+        'yourBalancesTitle': 'أرصدتك',
+        'historyTitle': 'سجل المعاملات / كشف الحساب'
     }
 };
 
@@ -853,11 +1658,48 @@ function getTranslation(key, params = {}) {
 }
 
 function applyTranslations() {
-    const elements = ['bankSubtitle', 'accessHubBtn', 'kycBtnText', 'logoutBtnText', 'kycPendingText', 'modalTitle'];
-    elements.forEach(id => {
+    const ids = [
+        'bankSubtitle', 'accessHubBtn', 'kycBtnText', 'logoutBtnText', 'kycPendingText',
+        'modalTitle', 'menuSecurityTitle', 'menuSecurityCenter', 'menuCryptoTitle',
+        'menuStaking', 'menuCryptoTransactions', 'menuHistory', 'menuTradingTitle',
+        'menuTradingHub', 'menuConversion', 'menuFixedIncomeTitle', 'menuTreasuries',
+        'menuCDs', 'menuDebentures', 'menuREITs', 'menuPrivateCredit',
+        'menuStructuredNotes', 'menuMunicipalBonds', 'menuCardsTitle', 'menuMyCards',
+        'menuPayments', 'menuSwapTitle', 'menuSwapCenter', 'menuAnalyticsTitle',
+        'menuAnalytics', 'menuReports', 'menuSecurityKYCTitle', 'menuSecuritySettings',
+        'menuSessions', 'menuCompliance', 'menuAntiHack', 'menuSystemTitle',
+        'menuGhostMode', 'menuSimulator', 'menuThemes', 'menuAudit',
+        'menuServicesTitle', 'menuCompleteServices', 'menuDigitalPayment',
+        'stakingChartTitle', 'yourBalancesTitle', 'accountLabel', 'copyBtnText',
+        'historyTitle', 'cryptoTxTitle', 'tradingTitle', 'conversionTitle',
+        'treasuriesTitle', 'cdsTitle', 'debenturesTitle', 'reitsTitle',
+        'privateCreditTitle', 'structuredNotesTitle', 'municipalBondsTitle',
+        'cardsTitle', 'paymentsTitle', 'swapCenterTitle', 'analyticsTitle',
+        'reportsTitle', 'securitySettingsTitle', 'securityCenterTitle',
+        'sessionsTitle', 'complianceTitle', 'antihackTitle', 'servicesTitle',
+        'digitalPaymentTitle', 'kycModalTitle', 'step1Label', 'step2Label',
+        'step3Label', 'fullNameLabel', 'emailLabel', 'phoneLabel', 'addressLabel',
+        'nationalityLabel', 'idDocumentLabel', 'proofAddressLabel',
+        'uploadClickText', 'proofClickText', 'acceptedFormatsText',
+        'selfieInstruction', 'startCameraText', 'captureText', 'uploadText',
+        'reviewTitle', 'prevBtnText', 'nextBtnText', 'submitKycText',
+        'heroTitle', 'heroBadge', 'heroDesc', 'card1Title', 'card1Desc',
+        'card2Title', 'card2Desc', 'card3Title', 'card3Desc',
+        'impactPhrase', 'impactSmall', 'aboutTitle', 'aboutHistoryTitle',
+        'aboutHistoryDesc', 'aboutSecurityTitle', 'aboutSecurityDesc',
+        'aboutReachTitle', 'aboutReachDesc', 'aboutReturnsTitle',
+        'aboutReturnsDesc', 'currenciesTitle', 'cryptoTitles',
+        'statAum', 'statClients', 'statCountries', 'statEncryption'
+    ];
+
+    ids.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.textContent = getTranslation(id);
+        if (el) {
+            const translated = getTranslation(id);
+            if (translated && translated !== id) el.textContent = translated;
+        }
     });
+
     const welcomeUser = document.getElementById('welcomeUser');
     if (welcomeUser && currentUser) {
         welcomeUser.textContent = getTranslation('welcomeUser', { name: currentUser.name || 'Admin' });
@@ -1286,80 +2128,57 @@ function loadAllAssets() {
 }
 
 // ============================================
-//  BALANCES
+//  SALDOS — UNIFICADO
+//  Fonte de verdade: currentUser.balances
+//  Fallback: saldos do cliente no localStorage
 // ============================================
 function loadLocalBalances() {
-    // Se estiver logado com um cliente, mostrar o saldo dele
-    if (currentUser && currentUser.email !== 'admin@zentronix.com') {
-        const balances = [
-            { currency: 'USD', amount: currentUser.saldoUSD || 0 },
-            { currency: 'EUR', amount: currentUser.saldoEUR || 0 },
-            { currency: 'BRL', amount: currentUser.saldoBRL || 0 },
-            { currency: 'GBP', amount: currentUser.saldoGBP || 0 },
-            { currency: 'BTC', amount: 0.45 },
-            { currency: 'ETH', amount: 3.20 },
-            { currency: 'BNB', amount: 12.50 },
-            { currency: 'SOL', amount: 45.80 },
-            { currency: 'MATIC', amount: 1200.00 },
-            { currency: 'USDT', amount: 5000.00 },
-            { currency: 'LTC', amount: 8.90 },
-            { currency: 'BRC', amount: 250.00 }
-        ];
-        updateBalancesUI(balances);
-        return;
+    let balances = [];
+
+    // 1. Se o usuário tem balances estruturados, usa eles
+    if (currentUser && Array.isArray(currentUser.balances) && currentUser.balances.length > 0) {
+        balances = currentUser.balances;
     }
-    
-    // Fallback: saldos padrão
-    const balances = [
-        { currency: 'USD', amount: 12450.75 },
-        { currency: 'EUR', amount: 8200.50 },
-        { currency: 'GBP', amount: 3500.00 },
-        { currency: 'BRL', amount: 45000.00 },
-        { currency: 'BTC', amount: 0.45 },
-        { currency: 'ETH', amount: 3.20 },
-        { currency: 'BNB', amount: 12.50 },
-        { currency: 'SOL', amount: 45.80 },
-        { currency: 'MATIC', amount: 1200.00 },
-        { currency: 'USDT', amount: 5000.00 },
-        { currency: 'LTC', amount: 8.90 },
-        { currency: 'BRC', amount: 250.00 }
-    ];
+    // 2. Se é cliente do localStorage (com saldoUSD, saldoEUR, etc.)
+    else if (currentUser && currentUser.email !== 'admin@zentronix.com') {
+        balances = [
+            { currency: 'USD', amount: Number(currentUser.saldoUSD) || 0 },
+            { currency: 'EUR', amount: Number(currentUser.saldoEUR) || 0 },
+            { currency: 'GBP', amount: Number(currentUser.saldoGBP) || 0 },
+            { currency: 'BRL', amount: Number(currentUser.saldoBRL) || 0 },
+            { currency: 'BTC',  amount: Number(currentUser.saldoBTC) || 0 },
+            { currency: 'ETH',  amount: Number(currentUser.saldoETH) || 0 },
+            { currency: 'BNB',  amount: Number(currentUser.saldoBNB) || 0 },
+            { currency: 'SOL',  amount: Number(currentUser.saldoSOL) || 0 },
+            { currency: 'MATIC',amount: Number(currentUser.saldoMATIC) || 0 },
+            { currency: 'USDT', amount: Number(currentUser.saldoUSDT) || 0 },
+            { currency: 'LTC',  amount: Number(currentUser.saldoLTC) || 0 },
+            { currency: 'BRC',  amount: Number(currentUser.saldoBRC) || 0 }
+        ];
+    }
+    // 3. Admin (tudo zerado, honesto)
+    else if (currentUser && currentUser.email === 'admin@zentronix.com') {
+        balances = [
+            { currency: 'USD', amount: 0 },
+            { currency: 'EUR', amount: 0 },
+            { currency: 'GBP', amount: 0 },
+            { currency: 'BRL', amount: 0 },
+            { currency: 'BTC', amount: 0 },
+            { currency: 'ETH', amount: 0 },
+            { currency: 'BNB', amount: 0 },
+            { currency: 'SOL', amount: 0 },
+            { currency: 'MATIC', amount: 0 },
+            { currency: 'USDT', amount: 0 },
+            { currency: 'LTC', amount: 0 },
+            { currency: 'BRC', amount: 0 }
+        ];
+    }
+    // 4. Ninguém logado — não mostra nada
+    else {
+        balances = [];
+    }
+
     updateBalancesUI(balances);
-}
-
-function updateBalancesUI(balances) {
-    const grid = document.getElementById('currencyGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    let total = 0;
-    balances.forEach(b => {
-        const div = document.createElement('div');
-        div.className = 'currency-item';
-        const amount = b.amount || 0;
-        const icon = getCurrencyIcon(b.currency);
-        div.innerHTML = `<span><strong>${icon} ${b.currency}</strong></span><span class="currency-balance">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
-        grid.appendChild(div);
-        total += convertToUSD(b.currency, amount);
-    });
-    document.getElementById('totalBalance').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function getCurrencyIcon(currency) {
-    const icons = {
-        'USD': '💵', 'EUR': '💶', 'GBP': '💷', 'BRL': 'R$',
-        'BTC': '₿', 'ETH': 'Ξ', 'BNB': 'BNB', 'SOL': '◎',
-        'MATIC': '◇', 'USDT': '₮', 'LTC': 'Ł', 'BRC': '🪙'
-    };
-    return icons[currency] || '💰';
-}
-
-function convertToUSD(currency, amount) {
-    const rates = {
-        'USD': 1, 'EUR': 1.08, 'GBP': 1.26, 'BRL': 0.18,
-        'BTC': 67200, 'ETH': 3443, 'BNB': 312.50, 'SOL': 98.07,
-        'MATIC': 0.52, 'USDT': 1.00, 'LTC': 82.50, 'BRC': 9.87
-    };
-    return amount * (rates[currency] || 1);
 }
 
 // ============================================
@@ -1642,33 +2461,318 @@ function registerHistory(type, currency, amount, detail, txId) {
     updateHistoryUI();
 }
 
-function updateHistoryUI() {
-    const historyList = document.getElementById('historyList');
-    if (!historyList) return;
+// ============================================
+//  FASE 2A — EXTRATO BANCÁRIO COM FILTROS
+// ============================================
+let statementFilters = {
+    dateFrom: '',
+    dateTo: '',
+    type: '',
+    currency: '',
+    search: ''
+};
+let statementPage = 1;
+const statementPerPage = 10;
+
+function getStatementData() {
     const history = JSON.parse(localStorage.getItem('zentronix_history') || '[]');
-    if (history.length === 0) {
-        historyList.innerHTML = '<p style="text-align:center;opacity:0.5;padding:2rem;">No transactions recorded</p>';
+    return history;
+}
+
+function applyStatementFilters(data) {
+    return data.filter(item => {
+        if (statementFilters.dateFrom) {
+            const from = new Date(statementFilters.dateFrom + 'T00:00:00').getTime();
+            const itemTime = new Date(item.date).getTime();
+            if (itemTime < from) return false;
+        }
+        if (statementFilters.dateTo) {
+            const to = new Date(statementFilters.dateTo + 'T23:59:59').getTime();
+            const itemTime = new Date(item.date).getTime();
+            if (itemTime > to) return false;
+        }
+        if (statementFilters.type && item.type !== statementFilters.type) return false;
+        if (statementFilters.currency) {
+            const cur = item.currency || '';
+            if (!cur.includes(statementFilters.currency)) return false;
+        }
+        if (statementFilters.search) {
+            const q = statementFilters.search.toLowerCase();
+            const haystack = (
+                (item.type || '') + ' ' +
+                (item.currency || '') + ' ' +
+                (item.detail || '') + ' ' +
+                (item.txId || '')
+            ).toLowerCase();
+            if (!haystack.includes(q)) return false;
+        }
+        return true;
+    });
+}
+
+function calculateStatementSummary(data) {
+    let income = 0;
+    let expense = 0;
+    const expenseTypes = ['SELL', 'PAYMENT', 'LOAN_REQUEST'];
+
+    data.forEach(item => {
+        const amount = Number(item.amount) || 0;
+        const currency = item.currency || 'USD';
+        const usd = convertToUSD(currency.split('→')[0] || 'USD', amount);
+        if (expenseTypes.includes(item.type)) {
+            expense += usd;
+        } else {
+            income += usd;
+        }
+    });
+
+    return { income, expense, count: data.length };
+}
+
+function renderStatementSummary(summary) {
+    const incomeEl = document.getElementById('summaryIncome');
+    const expenseEl = document.getElementById('summaryExpense');
+    const countEl = document.getElementById('summaryCount');
+    if (incomeEl) incomeEl.textContent = '$' + summary.income.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (expenseEl) expenseEl.textContent = '$' + summary.expense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (countEl) countEl.textContent = summary.count;
+}
+
+function renderStatementTable(data) {
+    const body = document.getElementById('statementBody');
+    if (!body) return;
+
+    if (data.length === 0) {
+        body.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="statement-empty">
+                        <i class="fas fa-inbox"></i>
+                        <p>Nenhuma transação encontrada</p>
+                    </div>
+                </td>
+            </tr>
+        `;
         return;
     }
-    historyList.innerHTML = history.slice(0, 20).map(item => {
-        const colors = {
-            'DEPOSIT': 'var(--neon-green)', 'RECEIVE': 'var(--neon-blue)',
-            'STAKE': 'var(--neon-purple)', 'SWAP': 'var(--neon-yellow)',
-            'BUY': 'var(--neon-green)', 'SELL': 'var(--neon-red)'
-        };
-        const color = colors[item.type] || 'var(--neon-blue)';
-        const date = new Date(item.date).toLocaleString('en-US');
+
+    const expenseTypes = ['SELL', 'PAYMENT', 'LOAN_REQUEST'];
+    const start = (statementPage - 1) * statementPerPage;
+    const pageData = data.slice(start, start + statementPerPage);
+
+    body.innerHTML = pageData.map(item => {
+        const isExpense = expenseTypes.includes(item.type);
+        const sign = isExpense ? '-' : '+';
+        const amountClass = isExpense ? 'negative' : 'positive';
+        const date = new Date(item.date).toLocaleString('pt-BR', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+        const detail = (item.detail || '').substring(0, 40);
+        const txId = (item.txId || 'N/A').substring(0, 16);
+        const currency = (item.currency || '').substring(0, 12);
+
         return `
-            <div class="history-item" style="border-left-color:${color};">
-                <div class="history-content">
-                    <div class="history-type">${item.type}</div>
-                    <div class="history-detail">💰 ${item.amount} ${item.currency} ${item.detail ? '| ' + item.detail : ''}</div>
-                    <div class="history-time">🕐 ${date}</div>
-                    <div style="font-size:0.5rem;opacity:0.3;word-break:break-all;">Tx: ${item.txId}</div>
-                </div>
-            </div>
+            <tr>
+                <td><span class="tx-badge ${item.type}">${item.type}</span></td>
+                <td style="font-family:'Space Mono',monospace; font-size:0.7rem;">${currency}</td>
+                <td><span class="tx-amount ${amountClass}">${sign}${Number(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</span></td>
+                <td style="font-size:0.7rem; opacity:0.85;">${detail}</td>
+                <td><span class="tx-date">${date}</span></td>
+                <td><span class="tx-id" title="${item.txId || ''}">${txId}</span></td>
+            </tr>
         `;
     }).join('');
+}
+
+function renderStatementPagination(totalItems) {
+    const info = document.getElementById('paginationInfo');
+    const controls = document.getElementById('paginationControls');
+    if (!info || !controls) return;
+
+    const totalPages = Math.max(1, Math.ceil(totalItems / statementPerPage));
+    const start = totalItems === 0 ? 0 : (statementPage - 1) * statementPerPage + 1;
+    const end = Math.min(statementPage * statementPerPage, totalItems);
+
+    info.textContent = `Mostrando ${start}–${end} de ${totalItems}`;
+
+    let html = '';
+    html += `<button class="pagination-btn" ${statementPage === 1 ? 'disabled' : ''} data-page="prev">‹</button>`;
+
+    const maxButtons = 5;
+    let startPage = Math.max(1, statementPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+    if (endPage - startPage < maxButtons - 1) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        html += `<button class="pagination-btn ${i === statementPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
+
+    html += `<button class="pagination-btn" ${statementPage === totalPages ? 'disabled' : ''} data-page="next">›</button>`;
+
+    controls.innerHTML = html;
+
+    controls.querySelectorAll('.pagination-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.disabled) return;
+            const p = this.dataset.page;
+            if (p === 'prev') statementPage = Math.max(1, statementPage - 1);
+            else if (p === 'next') statementPage = Math.min(totalPages, statementPage + 1);
+            else statementPage = parseInt(p);
+            updateHistoryUI();
+        });
+    });
+}
+
+function updateHistoryUI() {
+    const allData = getStatementData();
+    const filtered = applyStatementFilters(allData);
+
+    const totalPages = Math.max(1, Math.ceil(filtered.length / statementPerPage));
+    if (statementPage > totalPages) statementPage = totalPages;
+
+    const summary = calculateStatementSummary(filtered);
+    renderStatementSummary(summary);
+    renderStatementTable(filtered);
+    renderStatementPagination(filtered.length);
+}
+
+function exportStatementCSV() {
+    const data = applyStatementFilters(getStatementData());
+    if (data.length === 0) { showToast('⚠️ Nenhuma transação para exportar'); return; }
+
+    const header = ['Tipo', 'Moeda', 'Valor', 'Detalhe', 'Data', 'TxID'];
+    const rows = data.map(item => [
+        item.type || '',
+        item.currency || '',
+        item.amount || 0,
+        (item.detail || '').replace(/[",\n]/g, ' '),
+        new Date(item.date).toLocaleString('pt-BR'),
+        item.txId || ''
+    ]);
+
+    const csv = [header, ...rows]
+        .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
+        .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zentronix_extrato_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('✅ CSV exportado!');
+}
+
+function exportStatementPDF() {
+    const data = applyStatementFilters(getStatementData());
+    if (data.length === 0) { showToast('⚠️ Nenhuma transação para exportar'); return; }
+
+    const w = window.open('', '_blank');
+    if (!w) { showToast('⚠️ Bloqueador de pop-up ativo'); return; }
+
+    const summary = calculateStatementSummary(data);
+
+    const html = `
+        <!DOCTYPE html>
+        <html><head><meta charset="UTF-8"><title>Extrato Zentronix Bank</title>
+        <style>
+            body { font-family: Arial, sans-serif; padding: 20px; color: #111; }
+            h1 { color: #6a0dad; border-bottom: 3px solid #6a0dad; padding-bottom: 8px; }
+            .meta { font-size: 12px; margin-bottom: 15px; }
+            .summary { display: flex; gap: 15px; margin-bottom: 20px; }
+            .summary div { border: 1px solid #ddd; padding: 10px; border-radius: 6px; flex: 1; }
+            .summary .label { font-size: 10px; color: #666; text-transform: uppercase; }
+            .summary .val { font-size: 18px; font-weight: bold; margin-top: 4px; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background: #6a0dad; color: white; padding: 8px; text-align: left; }
+            td { padding: 6px 8px; border-bottom: 1px solid #eee; }
+            tr:nth-child(even) { background: #f9f9f9; }
+            .footer { margin-top: 25px; font-size: 10px; color: #888; text-align: center; }
+        </style></head><body>
+            <h1>ZENTRONIX BANK — Extrato</h1>
+            <div class="meta">
+                Gerado em: ${new Date().toLocaleString('pt-BR')}<br>
+                Conta: ${currentUser?.accountNumber || 'N/A'} — ${currentUser?.name || 'N/A'}
+            </div>
+            <div class="summary">
+                <div><div class="label">Entradas</div><div class="val" style="color:#008000;">$${summary.income.toFixed(2)}</div></div>
+                <div><div class="label">Saídas</div><div class="val" style="color:#c00;">$${summary.expense.toFixed(2)}</div></div>
+                <div><div class="label">Transações</div><div class="val">${summary.count}</div></div>
+            </div>
+            <table>
+                <thead><tr><th>Tipo</th><th>Moeda</th><th>Valor</th><th>Detalhe</th><th>Data</th><th>TxID</th></tr></thead>
+                <tbody>
+                    ${data.map(item => `
+                        <tr>
+                            <td>${item.type || ''}</td>
+                            <td>${item.currency || ''}</td>
+                            <td>${Number(item.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td>${(item.detail || '').substring(0, 50)}</td>
+                            <td>${new Date(item.date).toLocaleString('pt-BR')}</td>
+                            <td>${item.txId || ''}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <div class="footer">Zentronix Bank — Documento gerado automaticamente. © 2025</div>
+            <script>window.onload = () => setTimeout(() => window.print(), 300);<\/script>
+        </body></html>
+    `;
+    w.document.write(html);
+    w.document.close();
+    showToast('🖨️ Janela de impressão aberta');
+}
+
+function bindStatementEvents() {
+    const applyBtn = document.getElementById('applyFiltersBtn');
+    const clearBtn = document.getElementById('clearFiltersBtn');
+    const csvBtn = document.getElementById('exportCsvBtn');
+    const pdfBtn = document.getElementById('exportPdfBtn');
+    const clearHistBtn = document.getElementById('clearHistoryBtn');
+
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function() {
+            statementFilters.dateFrom = document.getElementById('filterDateFrom')?.value || '';
+            statementFilters.dateTo = document.getElementById('filterDateTo')?.value || '';
+            statementFilters.type = document.getElementById('filterType')?.value || '';
+            statementFilters.currency = document.getElementById('filterCurrency')?.value || '';
+            statementFilters.search = document.getElementById('filterSearch')?.value || '';
+            statementPage = 1;
+            updateHistoryUI();
+            showToast('🔍 Filtros aplicados');
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            ['filterDateFrom', 'filterDateTo', 'filterType', 'filterCurrency', 'filterSearch']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+            statementFilters = { dateFrom: '', dateTo: '', type: '', currency: '', search: '' };
+            statementPage = 1;
+            updateHistoryUI();
+            showToast('🧹 Filtros limpos');
+        });
+    }
+
+    if (csvBtn) csvBtn.addEventListener('click', exportStatementCSV);
+    if (pdfBtn) pdfBtn.addEventListener('click', exportStatementPDF);
+
+    if (clearHistBtn) {
+        clearHistBtn.addEventListener('click', function() {
+            if (confirm('⚠️ Apagar TODO o histórico de transações? Isso não pode ser desfeito!')) {
+                localStorage.removeItem('zentronix_history');
+                statementPage = 1;
+                updateHistoryUI();
+                showToast('🗑️ Histórico apagado');
+            }
+        });
+    }
 }
 
 // ============================================
@@ -2131,7 +3235,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             this.classList.add('active');
             if (section === 'services') setTimeout(loadCompleteServices, 100);
-            if (section === 'history') setTimeout(updateHistoryUI, 100);
+            if (section === 'history') setTimeout(() => { updateHistoryUI(); bindStatementEvents(); }, 100);
         });
     });
     
@@ -2187,7 +3291,317 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
+        // ============================================
+    //  SELFIE / CÂMERA (KYC Step 3)
+    // ============================================
+    const startCameraBtn = document.getElementById('startCameraBtn');
+    const captureSelfieBtn = document.getElementById('captureSelfieBtn');
+    const uploadSelfieBtn = document.getElementById('uploadSelfieBtn');
+    const selfieVideo = document.getElementById('selfieVideo');
+    const selfieCanvas = document.getElementById('selfieCanvas');
+    const selfiePreview = document.getElementById('selfiePreview');
+    const selfieStatus = document.getElementById('selfieStatus');
+
+    if (startCameraBtn) {
+        startCameraBtn.addEventListener('click', async function() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                selfieVideo.srcObject = cameraStream;
+                selfieVideo.style.display = 'block';
+                selfieVideo.play();
+                const icon = selfiePreview.querySelector('i');
+                if (icon) icon.style.display = 'none';
+                startCameraBtn.style.display = 'none';
+                captureSelfieBtn.style.display = 'inline-flex';
+                uploadSelfieBtn.style.display = 'inline-flex';
+                if (selfieStatus) {
+                    selfieStatus.textContent = '📷 Câmera ativa';
+                    selfieStatus.className = 'selfie-status success';
+                }
+            } catch (err) {
+                if (selfieStatus) {
+                    selfieStatus.textContent = '❌ Não foi possível acessar a câmera';
+                    selfieStatus.className = 'selfie-status error';
+                }
+                console.error('Erro câmera:', err);
+            }
+        });
+    }
+
+    if (captureSelfieBtn) {
+        captureSelfieBtn.addEventListener('click', function() {
+            if (!selfieVideo.srcObject) return;
+            selfieCanvas.width = selfieVideo.videoWidth;
+            selfieCanvas.height = selfieVideo.videoHeight;
+            selfieCanvas.getContext('2d').drawImage(selfieVideo, 0, 0);
+            selfieDataURL = selfieCanvas.toDataURL('image/png');
+
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(t => t.stop());
+                cameraStream = null;
+            }
+            selfieVideo.style.display = 'none';
+
+            let img = selfiePreview.querySelector('img.preview-selfie');
+            if (!img) {
+                img = document.createElement('img');
+                img.className = 'preview-selfie';
+                selfiePreview.appendChild(img);
+            }
+            img.src = selfieDataURL;
+            img.style.display = 'block';
+
+            captureSelfieBtn.style.display = 'none';
+            uploadSelfieBtn.style.display = 'none';
+            startCameraBtn.style.display = 'inline-flex';
+
+            if (selfieStatus) {
+                selfieStatus.textContent = '✅ Selfie capturada!';
+                selfieStatus.className = 'selfie-status success';
+            }
+            updateKycReview();
+        });
+    }
+
+    if (uploadSelfieBtn) {
+        uploadSelfieBtn.addEventListener('click', function() {
+            const fi = document.getElementById('selfieFileInput');
+            if (fi) fi.click();
+        });
+    }
+
+    const selfieFileInput = document.getElementById('selfieFileInput');
+    if (selfieFileInput) {
+        selfieFileInput.addEventListener('change', function(e) {
+            if (!this.files || !this.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                selfieDataURL = ev.target.result;
+                let img = selfiePreview.querySelector('img.preview-selfie');
+                if (!img) {
+                    img = document.createElement('img');
+                    img.className = 'preview-selfie';
+                    selfiePreview.appendChild(img);
+                }
+                img.src = selfieDataURL;
+                img.style.display = 'block';
+                const icon = selfiePreview.querySelector('i');
+                if (icon) icon.style.display = 'none';
+                if (selfieVideo) selfieVideo.style.display = 'none';
+                if (selfieStatus) {
+                    selfieStatus.textContent = '✅ Selfie carregada!';
+                    selfieStatus.className = 'selfie-status success';
+                }
+                updateKycReview();
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    }
+
+    function updateKycReview() {
+        const reviewEl = document.getElementById('kycReviewInfo');
+        if (!reviewEl) return;
+        const fullName = document.getElementById('fullNameDoc')?.value || '—';
+        const email = document.getElementById('emailDocInput')?.value || '—';
+        const phone = document.getElementById('phoneDoc')?.value || '—';
+        const nationality = document.getElementById('nationalityDoc')?.value || '—';
+        reviewEl.innerHTML = `
+            <strong>Nome:</strong> ${fullName}<br>
+            <strong>Email:</strong> ${email}<br>
+            <strong>Telefone:</strong> ${phone}<br>
+            <strong>Nacionalidade:</strong> ${nationality}<br>
+            <strong>Documento ID:</strong> ${idDocumentFile ? '✅' : '❌'}<br>
+            <strong>Comprovante:</strong> ${addressDocumentFile ? '✅' : '❌'}<br>
+            <strong>Selfie:</strong> ${selfieDataURL ? '✅' : '❌'}
+        `;
+    }
+
+    // ============================================
+    //  CARDS
+    // ============================================
+    const createCardBtn = document.getElementById('createCardBtn');
+    if (createCardBtn) {
+        createCardBtn.addEventListener('click', function() {
+            const cardNumber = '4000 ' + Math.floor(1000 + Math.random() * 9000) + ' ' +
+                               Math.floor(1000 + Math.random() * 9000) + ' ' +
+                               Math.floor(1000 + Math.random() * 9000);
+            const cvv = Math.floor(100 + Math.random() * 900);
+            const expiry = '12/29';
+            const cardsList = document.getElementById('cardsList');
+            if (cardsList) {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'asset-card';
+                cardDiv.style.marginBottom = '0.8rem';
+                cardDiv.innerHTML = `
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong style="color:var(--neon-blue);">ZENTRONIX VIRTUAL</strong>
+                        <i class="fas fa-credit-card" style="color:var(--neon-purple);"></i>
+                    </div>
+                    <div style="font-family:'Space Mono'; font-size:1rem; margin:0.8rem 0; color:var(--neon-blue); letter-spacing:2px;">
+                        ${cardNumber}
+                    </div>
+                    <div style="display:flex; gap:1.5rem; font-size:0.7rem; opacity:0.8;">
+                        <span>VAL: ${expiry}</span>
+                        <span>CVV: ${cvv}</span>
+                    </div>
+                    <button class="sell-btn" style="margin-top:0.6rem; width:100%;" onclick="this.parentElement.remove()">🗑️ REMOVER</button>
+                `;
+                cardsList.appendChild(cardDiv);
+                showToast('✅ Cartão virtual criado!');
+            }
+        });
+    }
+
+    // ============================================
+    //  PAYMENTS
+    // ============================================
+    const makePaymentBtn = document.getElementById('makePaymentBtn');
+    if (makePaymentBtn) {
+        makePaymentBtn.addEventListener('click', function() {
+            const amount = prompt('💰 Valor do pagamento (USD):', '100');
+            if (!amount || parseFloat(amount) <= 0) return;
+            const recipient = prompt('👤 Nome do destinatário:', '');
+            if (!recipient) return;
+            registerHistory('PAYMENT', 'USD', parseFloat(amount), 'Para: ' + recipient, 'pay_' + Date.now());
+            showToast(`✅ Pagamento de $${amount} enviado para ${recipient}`);
+        });
+    }
+
+    // ============================================
+    //  CONVERSÃO
+    // ============================================
+    const doConvertBtn = document.getElementById('doConvertBtn');
+    if (doConvertBtn) {
+        doConvertBtn.addEventListener('click', function() {
+            const from = document.getElementById('convFrom')?.value;
+            const to = document.getElementById('convTo')?.value;
+            const amount = parseFloat(document.getElementById('convAmount')?.value || 0);
+            if (!amount || amount <= 0) { showToast('⚠️ Informe um valor válido'); return; }
+            registerHistory('CONVERSION', from + '→' + to, amount, 'Conversão', 'conv_' + Date.now());
+            showToast(`✅ Convertido ${amount} ${from} → ${to}`);
+        });
+    }
+
+    // ============================================
+    //  BOTÕES DE INVESTIMENTO
+    // ============================================
+    ['investBtn1','investBtn2','investBtn3','investBtn4','investBtn5','investBtn6','subscribeBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', function() {
+                const amount = prompt('💵 Valor do investimento (USD):', '1000');
+                if (!amount || parseFloat(amount) <= 0) return;
+                registerHistory('INVESTMENT', 'USD', parseFloat(amount), 'Produto: ' + id, 'inv_' + Date.now());
+                showToast(`✅ Investimento de $${amount} realizado!`);
+            });
+        }
+    });
+
+    // ============================================
+    //  TRADING
+    // ============================================
+    const buyBtn = document.getElementById('buyBtn');
+    if (buyBtn) buyBtn.addEventListener('click', () => {
+        const amount = prompt('💰 Comprar BTC — valor em USD:', '100');
+        if (amount && parseFloat(amount) > 0) {
+            registerHistory('BUY', 'BTC', parseFloat(amount), 'Compra BTC', 'buy_' + Date.now());
+            showToast('✅ Compra de BTC executada!');
+        }
+    });
+    const sellBtn = document.getElementById('sellBtn');
+    if (sellBtn) sellBtn.addEventListener('click', () => {
+        const amount = prompt('💰 Vender BTC — valor em USD:', '100');
+        if (amount && parseFloat(amount) > 0) {
+            registerHistory('SELL', 'BTC', parseFloat(amount), 'Venda BTC', 'sell_' + Date.now());
+            showToast('✅ Venda de BTC executada!');
+        }
+    });
+
+    // ============================================
+    //  SESSIONS
+    // ============================================
+    const terminateAllBtn = document.getElementById('terminateAllBtn');
+    if (terminateAllBtn) {
+        terminateAllBtn.addEventListener('click', function() {
+            showToast('🔒 Todas as outras sessões foram encerradas');
+        });
+    }
+
+    // ============================================
+    //  COMPLIANCE — START KYC
+    // ============================================
+    const startKycBtn = document.getElementById('startKycBtn');
+    if (startKycBtn) {
+        startKycBtn.addEventListener('click', function() {
+            currentKycStep = 1;
+            updateKycSteps();
+            document.getElementById('submitModal').classList.add('active');
+        });
+    }
+
+    // ============================================
+    //  ANTI-HACK — ADD ADDRESS
+    // ============================================
+    const addAddressBtn = document.getElementById('addAddressBtn');
+    if (addAddressBtn) {
+        addAddressBtn.addEventListener('click', function() {
+            const addr = prompt('🔒 Endereço para blacklist:');
+            if (addr) showToast('✅ Endereço adicionado à blacklist');
+        });
+    }
+
+    // ============================================
+    //  DIGITAL PAYMENT
+    // ============================================
+    const googlePayBtn = document.getElementById('googlePayBtn');
+    if (googlePayBtn) googlePayBtn.addEventListener('click', () => showToast('💳 Google Pay selecionado'));
+    const applePayBtn = document.getElementById('applePayBtn');
+    if (applePayBtn) applePayBtn.addEventListener('click', () => showToast('💳 Apple Pay selecionado'));
+
+    // ============================================
+    //  STEALTH MODE
+    // ============================================
+    const stealthSwitch = document.getElementById('stealthSwitch');
+    if (stealthSwitch) {
+        stealthSwitch.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const level = document.getElementById('stealthLevel');
+            if (level) {
+                const on = this.classList.contains('active');
+                level.textContent = on ? 'ON' : 'OFF';
+                level.style.color = on ? 'var(--neon-green)' : 'var(--neon-yellow)';
+            }
+            showToast(this.classList.contains('active') ? '🥷 Modo Fantasma ATIVADO' : '👁️ Modo Fantasma DESATIVADO');
+        });
+    }
+
+    // ============================================
+    //  KYC STATUS BADGE
+    // ============================================
+    const kycStatusBadge = document.getElementById('kycStatusBadge');
+    if (kycStatusBadge) {
+        kycStatusBadge.addEventListener('click', function() {
+            currentKycStep = 1;
+            updateKycSteps();
+            document.getElementById('submitModal').classList.add('active');
+        });
+    }
+
+    // ============================================
+    //  SECURITY CENTER — DELETE ACCOUNT
+    // ============================================
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', function() {
+            if (confirm('⚠️ Tem certeza que deseja DELETAR sua conta? Isso não pode ser desfeito!')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                location.reload();
+            }
+        });
+    }
+
     // ============================================
     //  ESC KEY
     // ============================================
@@ -2239,6 +3653,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllAssets();
     loadLocalBalances();
     updateHistoryUI();
+    bindStatementEvents();
     initStakingChart();
     loadProfileData();
     
@@ -2263,120 +3678,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
-
-<script>
-
-// ============================================
-//  DEFINITIVE SOLUTION FOR THE FOOTER
-// ============================================
-(function forceFooter() {
-    // Wait for page to load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', forceFooter);
-        return;
-    }
-    
-    console.log('🦶 FORCING FOOTER...');
-    
-    // 1. Force the body
-    document.body.style.cssText = `
-        display: flex !important;
-        flex-direction: column !important;
-        min-height: 100vh !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    `;
-    
-    // 2. Force the main-container
-    const main = document.querySelector('.main-container');
-    if (main) {
-        main.style.cssText = `
-            flex: 1 0 auto !important;
-            width: 100% !important;
-        `;
-    }
-    
-    // 3. Find or create the footer
-    let footer = document.querySelector('.footer-wrapper');
-    
-    if (!footer) {
-        console.warn('⚠️ Footer not found! Creating...');
-        footer = document.createElement('div');
-        footer.className = 'footer-wrapper';
-        footer.innerHTML = `
-            <div class="footer-icons">
-                <i class="fab fa-cc-visa"></i>
-                <i class="fab fa-cc-mastercard"></i>
-                <i class="fab fa-cc-amex"></i>
-                <i class="fab fa-google-pay"></i>
-                <i class="fab fa-apple-pay"></i>
-                <i class="fab fa-bitcoin"></i>
-                <i class="fab fa-ethereum"></i>
-                <span>🪙</span>
-                <span>Ł</span>
-                <span>BNB</span>
-                <span>◇</span>
-                <span>₮</span>
-            </div>
-            <div class="certificates">
-                <div class="cert-item"><i class="fas fa-lock"></i><span>EV SSL</span></div>
-                <div class="cert-item"><i class="fab fa-cc-visa"></i><span>PCI DSS</span></div>
-                <div class="cert-item"><i class="fas fa-file-alt"></i><span>SOC 2</span></div>
-                <div class="cert-item"><i class="fas fa-shield"></i><span>McAfee</span></div>
-                <div class="cert-item"><i class="fas fa-certificate"></i><span>ISO 27001</span></div>
-                <div class="cert-item"><i class="fas fa-microchip"></i><span>AES-256</span></div>
-                <div class="cert-item"><i class="fas fa-code-branch"></i><span>CertiK</span></div>
-                <div class="cert-item"><i class="fas fa-id-card"></i><span>KYC/AML</span></div>
-                <div class="cert-item"><i class="fas fa-gavel"></i><span>License</span></div>
-            </div>
-            <div class="footer-text">
-                <p>Zentronix Bank is currently undergoing regulatory licensing as a Virtual Asset Service Provider.</p>
-                <p>© 2025 Zentronix Bank - Blue & Purple Edition | Offshore Banking License No. ZNTX-2024</p>
-            </div>
-        `;
-        document.body.appendChild(footer);
-        console.log('✅ Footer created!');
-    }
-    
-    // 4. FORCE THE FOOTER TO APPEAR
-    if (footer) {
-        footer.style.cssText = `
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            width: 100% !important;
-            padding: 25px 20px 15px 20px !important;
-            background: rgba(26, 27, 58, 0.95) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-top: 3px solid #bc13fe !important;
-            border-radius: 15px 15px 0 0 !important;
-            text-align: center !important;
-            position: relative !important;
-            z-index: 9999 !important;
-            margin-top: 30px !important;
-            box-shadow: 0 -10px 40px rgba(188, 19, 254, 0.3) !important;
-            min-height: 200px !important;
-            flex-shrink: 0 !important;
-            clear: both !important;
-        `;
-        console.log('✅ Footer FORCED to appear!');
-    }
-    
-    // 5. Check if it appeared
-    setTimeout(() => {
-        const check = document.querySelector('.footer-wrapper');
-        if (check) {
-            const rect = check.getBoundingClientRect();
-            console.log(`📏 Footer: top=${rect.top}, bottom=${rect.bottom}, height=${rect.height}`);
-            if (rect.height < 50) {
-                console.warn('⚠️ Footer is too small!');
-                check.style.minHeight = '250px !important';
-                check.style.padding = '30px 20px !important';
-            }
-        }
-    }, 500);
-})();
-
 </body>
 </html>
