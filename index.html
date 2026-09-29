@@ -735,7 +735,549 @@
                 display: none;
             }
         }
-    
+        
+        /* ============================================ */
+        /* FASE 2E — CARTÕES VIRTUAIS                   */
+        /* ============================================ */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .vcard {
+            position: relative;
+            aspect-ratio: 1.586 / 1;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vcard:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.3);
+        }
+
+        .vcard::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .vcard::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Temas dos cartões */
+        .vcard.theme-neon-blue {
+            background: linear-gradient(135deg, #0a0b1e 0%, #003d4d 50%, #00f2ff 150%);
+        }
+        .vcard.theme-neon-purple {
+            background: linear-gradient(135deg, #1a0b2e 0%, #4a0a5e 50%, #bc13fe 150%);
+        }
+        .vcard.theme-neon-green {
+            background: linear-gradient(135deg, #0a1f1a 0%, #0d4d3a 50%, #00ff88 150%);
+        }
+        .vcard.theme-gold {
+            background: linear-gradient(135deg, #1a1400 0%, #5e4a00 50%, #ffd700 150%);
+        }
+        .vcard.theme-red {
+            background: linear-gradient(135deg, #2e0a0a 0%, #5e0a1a 50%, #ff4466 150%);
+        }
+        .vcard.theme-dark {
+            background: linear-gradient(135deg, #050608 0%, #1a1b3a 50%, #2a1b4a 150%);
+        }
+
+        .vcard.blocked {
+            filter: grayscale(0.8);
+            opacity: 0.7;
+        }
+
+        .vcard.blocked::after {
+            content: '🔒 BLOQUEADO';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            background: rgba(255, 68, 102, 0.9);
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            z-index: 5;
+            border: 2px solid #fff;
+        }
+
+        .vcard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+
+        .vcard-brand {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        .vcard-brand small {
+            display: block;
+            font-size: 0.55rem;
+            opacity: 0.6;
+            letter-spacing: 1px;
+            margin-top: 0.1rem;
+        }
+
+        .vcard-chip {
+            width: 36px;
+            height: 28px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 0.4rem;
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+        }
+
+        .vcard-chip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: rgba(0,0,0,0.4);
+            transform: translateY(-50%);
+        }
+
+        .vcard-chip::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            bottom: 10%;
+            left: 50%;
+            width: 1px;
+            background: rgba(0,0,0,0.4);
+            transform: translateX(-50%);
+        }
+
+        .vcard-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin: 0.8rem 0 0.3rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .vcard-number .masked {
+            letter-spacing: 3px;
+        }
+
+        .vcard-number .toggle-visibility {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            transition: all 0.2s;
+            pointer-events: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .vcard-number .toggle-visibility:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .vcard-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .vcard-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .vcard-detail .label {
+            font-size: 0.5rem;
+            opacity: 0.6;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .vcard-detail .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 0.15rem;
+        }
+
+        .vcard-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0.95;
+        }
+
+        .vcard-actions {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .vcard-action-btn {
+            flex: 1;
+            padding: 0.4rem 0.5rem;
+            border-radius: 0.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.55rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            min-width: 60px;
+        }
+
+        .vcard-action-btn:hover {
+            background: rgba(0, 242, 255, 0.2);
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .vcard-action-btn.danger:hover {
+            background: rgba(255, 68, 102, 0.2);
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+        }
+
+        .vcard-action-btn.success:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .vcard-info {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.6rem;
+        }
+
+        .vcard-info-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 0.6rem;
+            padding: 0.6rem;
+            border-left: 3px solid var(--neon-blue);
+        }
+
+        .vcard-info-item.limit {
+            border-left-color: var(--neon-yellow);
+        }
+        .vcard-info-item.spent {
+            border-left-color: var(--neon-red);
+        }
+        .vcard-info-item.available {
+            border-left-color: var(--neon-green);
+        }
+
+        .vcard-info-item .label {
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vcard-info-item .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-top: 0.2rem;
+        }
+
+        .vcard-info-item.limit .value { color: var(--neon-yellow); }
+        .vcard-info-item.spent .value { color: var(--neon-red); }
+        .vcard-info-item.available .value { color: var(--neon-green); }
+
+        .vcard-progress {
+            height: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .vcard-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-yellow), var(--neon-red));
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .cards-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .cards-empty i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--neon-purple);
+            opacity: 0.4;
+        }
+
+        .cards-toolbar {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 1rem;
+            border: 1px solid var(--border-glow);
+            align-items: center;
+        }
+
+        .cards-toolbar-info {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-right: auto;
+        }
+
+        .cards-toolbar-info strong {
+            color: var(--neon-blue);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .create-card-btn {
+            background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.6rem;
+            color: #0a0b1e;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .create-card-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        /* Modal de criação de cartão */
+        .card-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 11, 30, 0.98);
+            backdrop-filter: blur(25px);
+            z-index: 6000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-modal.active { display: flex; }
+
+        .card-modal-content {
+            background: linear-gradient(135deg, #1a1b3a, #0a0b1e);
+            border: 2px solid var(--neon-blue);
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 520px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .card-modal-content h3 {
+            color: var(--neon-blue);
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .card-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .card-form-group label {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--neon-purple);
+            margin-bottom: 0.3rem;
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+        }
+
+        .card-form-group input,
+        .card-form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            background: rgba(26, 27, 58, 0.9);
+            border: 1px solid var(--border-glow);
+            border-radius: 0.8rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .card-form-group input:focus,
+        .card-form-group select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+
+        .theme-picker {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.3rem;
+        }
+
+        .theme-option {
+            aspect-ratio: 1.586 / 1;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-option.selected {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        .theme-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--neon-blue);
+            color: #0a0b1e;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+
+        .theme-option.theme-neon-blue { background: linear-gradient(135deg, #0a0b1e 0%, #00f2ff 150%); }
+        .theme-option.theme-neon-purple { background: linear-gradient(135deg, #1a0b2e 0%, #bc13fe 150%); }
+        .theme-option.theme-neon-green { background: linear-gradient(135deg, #0a1f1a 0%, #00ff88 150%); }
+        .theme-option.theme-gold { background: linear-gradient(135deg, #1a1400 0%, #ffd700 150%); }
+        .theme-option.theme-red { background: linear-gradient(135deg, #2e0a0a 0%, #ff4466 150%); }
+        .theme-option.theme-dark { background: linear-gradient(135deg, #050608 0%, #2a1b4a 150%); }
+
+        .card-modal-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .card-modal-buttons button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card-modal-save {
+            background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            color: #0a0b1e;
+        }
+        .card-modal-save:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
+
+        .card-modal-cancel {
+            background: rgba(255, 68, 102, 0.15);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+        }
+        .card-modal-cancel:hover { background: rgba(255, 68, 102, 0.3); }
+
+        @media (max-width: 700px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .vcard-number {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -1254,7 +1796,86 @@
                 <div id="privateCreditSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="privateCreditTitle">Private Credit</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Senior Loans - 9.2%</div><button class="buy-btn" id="investBtn4">Invest</button></div></div></div>
                 <div id="structuredNotesSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="structuredNotesTitle">Structured Notes</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Market Linked Notes - 7.5%</div><button class="buy-btn" id="investBtn5">Invest</button></div></div></div>
                 <div id="municipalBondsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="municipalBondsTitle">Municipal Bonds</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div class="asset-card"><div class="asset-price">Tax-Free Muni Bonds - 4.8%</div><button class="buy-btn" id="investBtn6">Invest</button></div></div></div>
-                <div id="cardsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="cardsTitle">My Cards</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="cardsList"></div><button class="buy-btn" id="createCardBtn">+ Create Virtual Card</button></div></div>
+                                <div id="cardsSec" class="investment-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h4 id="cardsTitle">My Cards</h4>
+                            <button class="close-section-btn" onclick="closeCurrentSection()">✕</button>
+                        </div>
+
+                        <div class="cards-toolbar">
+                            <div class="cards-toolbar-info">
+                                <i class="fas fa-credit-card"></i>
+                                <span id="cardsCountText">0 cartões ativos</span>
+                                <span style="margin-left: 1rem;">
+                                    Limite total: <strong id="cardsTotalLimit">$0.00</strong>
+                                </span>
+                                <span style="margin-left: 1rem;">
+                                    Gasto total: <strong id="cardsTotalSpent">$0.00</strong>
+                                </span>
+                            </div>
+                            <button class="create-card-btn" id="createCardBtn">
+                                <i class="fas fa-plus"></i> Criar Cartão Virtual
+                            </button>
+                        </div>
+
+                        <div id="cardsList" class="cards-grid"></div>
+
+                        <div id="cardsEmpty" class="cards-empty">
+                            <i class="fas fa-credit-card"></i>
+                            <p style="font-family: 'Orbitron', monospace; margin-bottom: 0.5rem;">Nenhum cartão virtual ainda</p>
+                            <p style="font-size: 0.8rem;">Clique em "Criar Cartão Virtual" para começar</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de criação de cartão -->
+                <div class="card-modal" id="createCardModal">
+                    <div class="card-modal-content">
+                        <h3>💳 Criar Cartão Virtual</h3>
+
+                        <div class="card-form-group">
+                            <label for="cardNameInput">Nome do cartão</label>
+                            <input type="text" id="cardNameInput" placeholder="Ex: Cartão de Compras Online" maxlength="30">
+                        </div>
+
+                        <div class="card-form-group">
+                            <label for="cardLimitInput">Limite mensal (USD)</label>
+                            <input type="number" id="cardLimitInput" placeholder="Ex: 5000" step="0.01" min="0">
+                        </div>
+
+                        <div class="card-form-group">
+                            <label for="cardTypeSelect">Tipo de cartão</label>
+                            <select id="cardTypeSelect">
+                                <option value="virtual">Virtual (online)</option>
+                                <option value="single-use">Uso único</option>
+                                <option value="subscription">Assinaturas</option>
+                            </select>
+                        </div>
+
+                        <div class="card-form-group">
+                            <label>Tema do cartão</label>
+                            <div class="theme-picker">
+                                <div class="theme-option theme-neon-blue selected" data-theme="theme-neon-blue"></div>
+                                <div class="theme-option theme-neon-purple" data-theme="theme-neon-purple"></div>
+                                <div class="theme-option theme-neon-green" data-theme="theme-neon-green"></div>
+                                <div class="theme-option theme-gold" data-theme="theme-gold"></div>
+                                <div class="theme-option theme-red" data-theme="theme-red"></div>
+                                <div class="theme-option theme-dark" data-theme="theme-dark"></div>
+                            </div>
+                            <input type="hidden" id="cardThemeInput" value="theme-neon-blue">
+                        </div>
+
+                        <div class="card-modal-buttons">
+                            <button class="card-modal-save" id="confirmCreateCardBtn">
+                                <i class="fas fa-check"></i> Criar
+                            </button>
+                            <button class="card-modal-cancel" id="cancelCreateCardBtn">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div id="paymentsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="paymentsTitle">Payments</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><button class="buy-btn" id="makePaymentBtn">Make Payment</button></div></div>
                 <div id="swapSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="swapCenterTitle">Swap Center</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="swapCenterContent"></div></div></div>
                 <div id="analyticsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="analyticsTitle">Analytics</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><canvas id="analyticsChart" height="150"></canvas></div></div>
@@ -2987,6 +3608,12 @@ window.loadLocalBalances = loadLocalBalances;
 window.updateHistoryUI = updateHistoryUI;
 window.initStakingChart = initStakingChart;
 window.saveProfile = saveProfile;
+window.renderCards = renderCards;
+window.createCard = createCard;
+window.deleteCard = deleteCard;
+window.blockCard = blockCard;
+window.updateCardLimit = updateCardLimit;
+window.registerCardTransaction = registerCardTransaction;
 
 // ============================================
 //  ⭐ INICIALIZAÇÃO PRINCIPAL ⭐
@@ -3236,6 +3863,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
             if (section === 'services') setTimeout(loadCompleteServices, 100);
             if (section === 'history') setTimeout(() => { updateHistoryUI(); bindStatementEvents(); }, 100);
+            if (section === 'cards') setTimeout(() => { renderCards(); bindCardsEvents(); }, 100);
         });
     });
     
@@ -3417,42 +4045,401 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    // ============================================
-    //  CARDS
-    // ============================================
-    const createCardBtn = document.getElementById('createCardBtn');
-    if (createCardBtn) {
-        createCardBtn.addEventListener('click', function() {
-            const cardNumber = '4000 ' + Math.floor(1000 + Math.random() * 9000) + ' ' +
-                               Math.floor(1000 + Math.random() * 9000) + ' ' +
-                               Math.floor(1000 + Math.random() * 9000);
-            const cvv = Math.floor(100 + Math.random() * 900);
-            const expiry = '12/29';
-            const cardsList = document.getElementById('cardsList');
-            if (cardsList) {
-                const cardDiv = document.createElement('div');
-                cardDiv.className = 'asset-card';
-                cardDiv.style.marginBottom = '0.8rem';
-                cardDiv.innerHTML = `
-                    <div style="display:flex; justify-content:space-between;">
-                        <strong style="color:var(--neon-blue);">ZENTRONIX VIRTUAL</strong>
-                        <i class="fas fa-credit-card" style="color:var(--neon-purple);"></i>
+// ============================================
+// CARTÕES VIRTUAIS
+// ============================================
+function getCardsStorageKey() {
+    const userKey = currentUser?.email || 'anon';
+    return 'zentronix_cards_' + userKey;
+}
+
+function getCards() {
+    try {
+        return JSON.parse(localStorage.getItem(getCardsStorageKey()) || '[]');
+    } catch(e) {
+        return [];
+    }
+}
+
+function saveCards(cards) {
+    localStorage.setItem(getCardsStorageKey(), JSON.stringify(cards));
+}
+
+function generateCardNumber() {
+    let num = '4000';
+    for (let i = 0; i < 3; i++) {
+        num += String(Math.floor(1000 + Math.random() * 9000));
+    }
+    return num;
+}
+
+function generateCVV() {
+    return String(Math.floor(100 + Math.random() * 900));
+}
+
+function generateCardId() {
+    return 'card_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+}
+
+function createCard(name, limit, type, theme) {
+    const cards = getCards();
+    const card = {
+        id: generateCardId(),
+        name: name || 'Cartão Virtual',
+        number: generateCardNumber(),
+        cvv: generateCVV(),
+        expiryMonth: '12',
+        expiryYear: '29',
+        holder: (currentUser?.name || 'ZENTRONIX USER').toUpperCase(),
+        type: type || 'virtual',
+        theme: theme || 'theme-neon-blue',
+        limit: parseFloat(limit) || 0,
+        spent: 0,
+        blocked: false,
+        createdAt: new Date().toISOString(),
+        transactions: []
+    };
+    cards.push(card);
+    saveCards(cards);
+    return card;
+}
+
+function blockCard(cardId) {
+    const cards = getCards();
+    const idx = cards.findIndex(c => c.id === cardId);
+    if (idx === -1) return false;
+    cards[idx].blocked = !cards[idx].blocked;
+    saveCards(cards);
+    return cards[idx].blocked;
+}
+
+function deleteCard(cardId) {
+    const cards = getCards();
+    const filtered = cards.filter(c => c.id !== cardId);
+    saveCards(filtered);
+}
+
+function updateCardLimit(cardId, newLimit) {
+    const cards = getCards();
+    const idx = cards.findIndex(c => c.id === cardId);
+    if (idx === -1) return false;
+    cards[idx].limit = parseFloat(newLimit) || 0;
+    saveCards(cards);
+    return true;
+}
+
+function registerCardTransaction(cardId, amount, description) {
+    const cards = getCards();
+    const idx = cards.findIndex(c => c.id === cardId);
+    if (idx === -1) return { ok: false, msg: 'Cartão não encontrado' };
+
+    const card = cards[idx];
+    if (card.blocked) return { ok: false, msg: 'Cartão bloqueado' };
+
+    const valor = parseFloat(amount) || 0;
+    if (valor <= 0) return { ok: false, msg: 'Valor inválido' };
+
+    const available = card.limit - card.spent;
+    if (valor > available) {
+        return { ok: false, msg: `Limite insuficiente. Disponível: $${available.toFixed(2)}` };
+    }
+
+    card.spent += valor;
+    card.transactions.unshift({
+        date: new Date().toISOString(),
+        amount: valor,
+        description: description || 'Compra'
+    });
+    if (card.transactions.length > 50) card.transactions.pop();
+    saveCards(cards);
+    return { ok: true, card };
+}
+
+function maskCardNumber(number) {
+    return number.slice(0, 4) + ' **** **** ' + number.slice(-4);
+}
+
+function formatCardNumber(number) {
+    return number.replace(/(\d{4})(?=\d)/g, '$1 ');
+}
+
+function getCardTypeLabel(type) {
+    const map = {
+        'virtual': 'Virtual',
+        'single-use': 'Uso Único',
+        'subscription': 'Assinaturas'
+    };
+    return map[type] || type;
+}
+
+function renderCards() {
+    const list = document.getElementById('cardsList');
+    const empty = document.getElementById('cardsEmpty');
+    const countEl = document.getElementById('cardsCountText');
+    const totalLimitEl = document.getElementById('cardsTotalLimit');
+    const totalSpentEl = document.getElementById('cardsTotalSpent');
+    if (!list) return;
+
+    const cards = getCards();
+
+    if (countEl) {
+        countEl.textContent = cards.length === 1 ? '1 cartão ativo' : cards.length + ' cartões ativos';
+    }
+
+    const totalLimit = cards.reduce((sum, c) => sum + (c.limit || 0), 0);
+    const totalSpent = cards.reduce((sum, c) => sum + (c.spent || 0), 0);
+
+    if (totalLimitEl) totalLimitEl.textContent = '$' + totalLimit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (totalSpentEl) totalSpentEl.textContent = '$' + totalSpent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    if (cards.length === 0) {
+        list.innerHTML = '';
+        if (empty) empty.style.display = 'block';
+        return;
+    }
+
+    if (empty) empty.style.display = 'none';
+
+    list.innerHTML = cards.map(card => {
+        const available = Math.max(0, card.limit - card.spent);
+        const usagePercent = card.limit > 0 ? Math.min(100, (card.spent / card.limit) * 100) : 0;
+        const blockedClass = card.blocked ? 'blocked' : '';
+
+        return `
+            <div class="vcard ${card.theme} ${blockedClass}" data-card-id="${card.id}">
+                <div class="vcard-header">
+                    <div class="vcard-brand">
+                        ZENTRONIX
+                        <small>${getCardTypeLabel(card.type)}</small>
                     </div>
-                    <div style="font-family:'Space Mono'; font-size:1rem; margin:0.8rem 0; color:var(--neon-blue); letter-spacing:2px;">
-                        ${cardNumber}
+                    <div class="vcard-chip"></div>
+                </div>
+
+                <div class="vcard-number">
+                    <span class="masked" data-real="${formatCardNumber(card.number)}" data-masked="${maskCardNumber(card.number)}">
+                        ${maskCardNumber(card.number)}
+                    </span>
+                    <button class="toggle-visibility" data-card-id="${card.id}" title="Mostrar/ocultar número">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="vcard-details">
+                    <div class="vcard-detail">
+                        <div class="label">Titular</div>
+                        <div class="value">${card.holder.substring(0, 20)}</div>
                     </div>
-                    <div style="display:flex; gap:1.5rem; font-size:0.7rem; opacity:0.8;">
-                        <span>VAL: ${expiry}</span>
-                        <span>CVV: ${cvv}</span>
+                    <div class="vcard-detail">
+                        <div class="label">Validade</div>
+                        <div class="value">${card.expiryMonth}/${card.expiryYear}</div>
                     </div>
-                    <button class="sell-btn" style="margin-top:0.6rem; width:100%;" onclick="this.parentElement.remove()">🗑️ REMOVER</button>
-                `;
-                cardsList.appendChild(cardDiv);
-                showToast('✅ Cartão virtual criado!');
+                    <div class="vcard-detail">
+                        <div class="label">CVV</div>
+                        <div class="value">${card.cvv}</div>
+                    </div>
+                    <div class="vcard-logo">
+                        <i class="fab fa-cc-visa"></i>
+                    </div>
+                </div>
+
+                <div class="vcard-actions">
+                    <button class="vcard-action-btn" data-action="rename" data-card-id="${card.id}">
+                        <i class="fas fa-edit"></i> Nome
+                    </button>
+                    <button class="vcard-action-btn" data-action="limit" data-card-id="${card.id}">
+                        <i class="fas fa-sliders-h"></i> Limite
+                    </button>
+                    <button class="vcard-action-btn" data-action="buy" data-card-id="${card.id}">
+                        <i class="fas fa-shopping-cart"></i> Simular Compra
+                    </button>
+                    <button class="vcard-action-btn success" data-action="toggle" data-card-id="${card.id}">
+                        <i class="fas fa-${card.blocked ? 'unlock' : 'lock'}"></i> ${card.blocked ? 'Desbloquear' : 'Bloquear'}
+                    </button>
+                    <button class="vcard-action-btn danger" data-action="delete" data-card-id="${card.id}">
+                        <i class="fas fa-trash-alt"></i> Excluir
+                    </button>
+                </div>
+
+                <div class="vcard-info">
+                    <div class="vcard-info-item limit">
+                        <div class="label">Limite</div>
+                        <div class="value">$${card.limit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                    </div>
+                    <div class="vcard-info-item spent">
+                        <div class="label">Gasto</div>
+                        <div class="value">$${card.spent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                    </div>
+                    <div class="vcard-info-item available">
+                        <div class="label">Disponível</div>
+                        <div class="value">$${available.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                    </div>
+                </div>
+
+                <div class="vcard-progress">
+                    <div class="vcard-progress-bar" style="width: ${usagePercent}%;"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Bind dos eventos dos cartões
+    list.querySelectorAll('.vcard-action-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            handleCardAction(this.dataset.action, this.dataset.cardId);
+        });
+    });
+
+    // Bind do toggle de visibilidade
+    list.querySelectorAll('.toggle-visibility').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const cardEl = this.closest('.vcard-number');
+            const span = cardEl.querySelector('.masked');
+            const real = span.dataset.real;
+            const masked = span.dataset.masked;
+            const icon = this.querySelector('i');
+
+            if (span.textContent.trim() === masked) {
+                span.textContent = real;
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                span.textContent = masked;
+                icon.className = 'fas fa-eye';
             }
+        });
+    });
+}
+
+function handleCardAction(action, cardId) {
+    if (!cardId) return;
+
+    if (action === 'rename') {
+        const cards = getCards();
+        const card = cards.find(c => c.id === cardId);
+        if (!card) return;
+        const newName = prompt('Novo nome para o cartão:', card.name);
+        if (newName && newName.trim()) {
+            card.name = newName.trim().substring(0, 30);
+            saveCards(cards);
+            renderCards();
+            showToast('✅ Nome atualizado!');
+        }
+    }
+    else if (action === 'limit') {
+        const cards = getCards();
+        const card = cards.find(c => c.id === cardId);
+        if (!card) return;
+        const newLimit = prompt('Novo limite mensal (USD):', card.limit);
+        if (newLimit !== null && !isNaN(parseFloat(newLimit)) && parseFloat(newLimit) >= 0) {
+            updateCardLimit(cardId, parseFloat(newLimit));
+            renderCards();
+            showToast('✅ Limite atualizado!');
+        }
+    }
+    else if (action === 'buy') {
+        const amount = prompt('💰 Valor da compra simulada (USD):', '50');
+        if (!amount || parseFloat(amount) <= 0) return;
+        const desc = prompt('📝 Descrição da compra:', 'Compra online');
+        if (!desc) return;
+        const result = registerCardTransaction(cardId, parseFloat(amount), desc);
+        if (result.ok) {
+            registerHistory('PAYMENT', 'USD', parseFloat(amount), 'Cartão: ' + desc, 'card_' + Date.now());
+            showToast('✅ Compra aprovada!');
+            renderCards();
+        } else {
+            showToast('❌ ' + result.msg);
+        }
+    }
+    else if (action === 'toggle') {
+        const blocked = blockCard(cardId);
+        renderCards();
+        showToast(blocked ? '🔒 Cartão bloqueado' : '🔓 Cartão desbloqueado');
+    }
+    else if (action === 'delete') {
+        if (confirm('⚠️ Excluir este cartão? Essa ação não pode ser desfeita.')) {
+            deleteCard(cardId);
+            renderCards();
+            showToast('🗑️ Cartão excluído');
+        }
+    }
+}
+
+function openCreateCardModal() {
+    const modal = document.getElementById('createCardModal');
+    if (!modal) return;
+
+    const nameInput = document.getElementById('cardNameInput');
+    const limitInput = document.getElementById('cardLimitInput');
+    const typeSelect = document.getElementById('cardTypeSelect');
+    const themeInput = document.getElementById('cardThemeInput');
+
+    if (nameInput) nameInput.value = '';
+    if (limitInput) limitInput.value = '5000';
+    if (typeSelect) typeSelect.value = 'virtual';
+    if (themeInput) themeInput.value = 'theme-neon-blue';
+
+    document.querySelectorAll('.theme-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.theme === 'theme-neon-blue');
+    });
+
+    modal.classList.add('active');
+}
+
+function closeCreateCardModal() {
+    const modal = document.getElementById('createCardModal');
+    if (modal) modal.classList.remove('active');
+}
+
+function bindCardsEvents() {
+    const createBtn = document.getElementById('createCardBtn');
+    if (createBtn) {
+        createBtn.addEventListener('click', openCreateCardModal);
+    }
+
+    const confirmBtn = document.getElementById('confirmCreateCardBtn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', function() {
+            const name = document.getElementById('cardNameInput')?.value.trim() || 'Cartão Virtual';
+            const limit = parseFloat(document.getElementById('cardLimitInput')?.value || 0);
+            const type = document.getElementById('cardTypeSelect')?.value || 'virtual';
+            const theme = document.getElementById('cardThemeInput')?.value || 'theme-neon-blue';
+
+            if (limit <= 0) {
+                showToast('⚠️ Informe um limite maior que zero');
+                return;
+            }
+
+            const card = createCard(name, limit, type, theme);
+            closeCreateCardModal();
+            renderCards();
+            registerHistory('CARD_CREATED', 'USD', limit, 'Cartão: ' + name, 'card_create_' + Date.now());
+            showToast('💳 Cartão virtual criado!');
         });
     }
 
+    const cancelBtn = document.getElementById('cancelCreateCardBtn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeCreateCardModal);
+    }
+
+    const modal = document.getElementById('createCardModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) closeCreateCardModal();
+        });
+    }
+
+    document.querySelectorAll('.theme-option').forEach(el => {
+        el.addEventListener('click', function() {
+            document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            const themeInput = document.getElementById('cardThemeInput');
+            if (themeInput) themeInput.value = this.dataset.theme;
+        });
+    });
+}
+    
     // ============================================
     //  PAYMENTS
     // ============================================
@@ -3628,10 +4615,14 @@ document.addEventListener('DOMContentLoaded', function() {
             currentUser = parsedUser;
             isLoggedIn = true;
             showDashboard();
-            loadLocalBalances();
             loadAllAssets();
+            loadLocalBalances();
             updateHistoryUI();
+            bindStatementEvents();
+            renderCards();
+            bindCardsEvents();
             initStakingChart();
+            loadProfileData();
             
             const welcomeEl = document.getElementById('welcomeUser');
             if (welcomeEl) {
