@@ -2402,18 +2402,17 @@ function closeLoginModal() {
     if (errorEl) errorEl.classList.remove('visible');
 }
 
-// ============================================
-//  ⭐ FUNÇÃO DE LOGIN CORRIGIDA ⭐
-//  PRIORIZA O LOCALSTORAGE (CLIENTES DO PAINEL)
+    // ============================================
+//  BLOCO S1 — LOGIN VIA SUPABASE (produção)
 // ============================================
 async function handleLogin() {
     console.log('🔵 handleLogin() chamado');
     const username = document.getElementById('loginId').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
     const loginError = document.getElementById('loginError');
-    
+
     if (loginError) loginError.classList.remove('visible');
-    
+
     if (!username || !password) {
         if (loginError) {
             loginError.textContent = '❌ Preencha todos os campos!';
@@ -2421,178 +2420,137 @@ async function handleLogin() {
         }
         return;
     }
-    
-    console.log('🔵 Tentando login com:', username);
-    
-    // ============================================
-    //  1. ⭐ LOGIN VIA LOCALSTORAGE (PRIORITÁRIO) ⭐
-    //     Esta é a chave! O painel salva os clientes aqui.
-    // ============================================
-    try {
-        let clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-        console.log('🔍 Clientes no localStorage:', clientes.length);
-        
-        // DEBUG: Mostrar os clientes salvos
-        clientes.forEach(c => {
-            console.log(`  - ${c.email} / ${c.password} (${c.nome})`);
-        });
-        
-        // Procurar por email OU username
-        const clienteEncontrado = clientes.find(c => {
-            const emailMatch = c.email && c.email.toLowerCase() === username.toLowerCase();
-            const usernameMatch = c.username && c.username.toLowerCase() === username.toLowerCase();
-            const passwordMatch = c.password === password;
-            return (emailMatch || usernameMatch) && passwordMatch;
-        });
 
-        if (clienteEncontrado) {
-            console.log('✅ Login LOCAL encontrado:', clienteEncontrado.nome);
-            
-            // Criar usuário logado
-            currentUser = {
-                id: clienteEncontrado.id || Date.now(),
-                name: clienteEncontrado.nome || clienteEncontrado.name || 'Cliente',
-                email: clienteEncontrado.email,
-                username: clienteEncontrado.username || clienteEncontrado.email.split('@')[0],
-                accountNumber: clienteEncontrado.accountNumber || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
-                saldoUSD: clienteEncontrado.saldoUSD || 0,
-                saldoEUR: clienteEncontrado.saldoEUR || 0,
-                saldoBRL: clienteEncontrado.saldoBRL || 0,
-                saldoGBP: clienteEncontrado.saldoGBP || 0,
-                kyc: clienteEncontrado.kyc || 'Pending',
-                transactionHistory: clienteEncontrado.transactionHistory || []
-            };
-            
-            isLoggedIn = true;
-            closeLoginModal();
-            showDashboard();
-            
-            // Atualizar número da conta
-            const accountEl = document.getElementById('accountNumberValue');
-            if (accountEl) accountEl.textContent = currentUser.accountNumber;
-            
-            // Atualizar saudação
-            const welcomeEl = document.getElementById('welcomeUser');
-            if (welcomeEl) {
-                welcomeEl.textContent = getTranslation('welcomeUser', { name: currentUser.name });
-            }
-            
-            showToast(`✅ Bem-vindo(a) ${currentUser.name}!`);
-            
-            // Carregar dados do dashboard
-            loadLocalBalances();
-            loadAllAssets();
-            updateHistoryUI();
-            initStakingChart();
-            
-            // Salvar na sessão para persistência
-            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            return;
-        } else {
-            console.log('⚠️ Nenhum cliente encontrado no localStorage com essas credenciais');
-        }
-    } catch(e) {
-        console.warn('⚠️ Erro ao ler localStorage:', e);
-    }
-    
+    console.log('🔵 Tentando login com:', username);
+
     // ============================================
-    //  2. TENTA LOGIN ADMIN LOCAL (admin/zentronix)
+    //  1. ADMIN LOCAL (fallback rápido)
     // ============================================
     if (username === 'admin' && password === 'zentronix') {
         console.log('✅ Login admin local');
-        isLoggedIn = true;
-        currentUser = { 
-            name: 'Admin', 
+        currentUser = {
+            id: 'admin-local',
+            name: 'Admin',
             email: 'admin@zentronix.com',
-            accountNumber: 'ZNTX-0000-0000-0000'
+            accountNumber: 'ZNTX-0000-0000-0000',
+            kyc: 'Approved',
+            balances: [
+                { currency: 'USD', amount: 0 },
+                { currency: 'EUR', amount: 0 },
+                { currency: 'GBP', amount: 0 },
+                { currency: 'BRL', amount: 0 }
+            ]
         };
+        isLoggedIn = true;
         closeLoginModal();
         showDashboard();
-        showToast('✅ Login successful! Welcome, Admin');
-        loadLocalBalances();
-        loadAllAssets();
-        updateHistoryUI();
-        initStakingChart();
+        updateUserUI();
+        showToast('✅ Bem-vindo, Admin!');
         return;
     }
-    
+
     // ============================================
-    //  3. TENTA LOGIN VIA SUPABASE (FALLBACK)
+    //  2. LOGIN VIA SUPABASE AUTH
     // ============================================
-    if (supabaseClient) {
-        try {
-            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
-                email: username,
-                password: password
-            });
-
-            if (authError) {
-                console.warn('⚠️ Supabase Auth error:', authError.message);
-            } else if (authData?.user) {
-                console.log('✅ Login Supabase:', authData.user.email);
-                
-                const { data: userData } = await supabaseClient
-                    .from('users')
-                    .select('*')
-                    .eq('id', authData.user.id)
-                    .maybeSingle();
-
-                const { data: balances } = await supabaseClient
-                    .from('balances')
-                    .select('currency, amount')
-                    .eq('user_id', authData.user.id);
-
-                currentUser = {
-                    id: authData.user.id,
-                    email: authData.user.email,
-                    name: userData?.full_name || authData.user.user_metadata?.full_name || 'Cliente',
-                    accountNumber: userData?.account_number || 'ZNTX-' + Math.floor(100000 + Math.random() * 900000),
-                    balances: balances || []
-                };
-
-                closeLoginModal();
-                showDashboard();
-                
-                const accountEl = document.getElementById('accountNumberValue');
-                if (accountEl) accountEl.textContent = currentUser.accountNumber;
-
-                const welcomeEl = document.getElementById('welcomeUser');
-                if (welcomeEl) {
-                    welcomeEl.textContent = getTranslation('welcomeUser', { name: currentUser.name });
-                }
-                
-                showToast(`✅ Bem-vindo(a) ${currentUser.name}!`);
-                
-                if (balances && balances.length > 0) {
-                    updateBalancesUI(balances);
-                } else {
-                    loadLocalBalances();
-                }
-                loadAllAssets();
-                updateHistoryUI();
-                initStakingChart();
-                return;
-            }
-        } catch (error) {
-            console.error('❌ Erro no login Supabase:', error);
+    if (!supabaseClient) {
+        if (loginError) {
+            loginError.textContent = '❌ Erro: Supabase não disponível';
+            loginError.classList.add('visible');
         }
+        return;
     }
-    
-    // ============================================
-    //  4. ⚠️ CREDENCIAIS INVÁLIDAS
-    // ============================================
-    console.log('❌ Login falhou para:', username);
-    if (loginError) {
-        loginError.textContent = '❌ Email ou senha inválidos! Verifique suas credenciais.';
-        loginError.classList.add('visible');
-    }
-    
-    // Limpar campo de senha
-    const pwdField = document.getElementById('loginPassword');
-    if (pwdField) {
-        pwdField.value = '';
-        pwdField.focus();
+
+    try {
+        if (loginError) {
+            loginError.textContent = '⏳ Autenticando...';
+            loginError.style.color = 'var(--neon-blue)';
+            loginError.classList.add('visible');
+        }
+
+        // 2.1. Autenticar com Supabase
+        const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+            email: username,
+            password: password
+        });
+
+        if (authError) {
+            console.warn('⚠️ Auth error:', authError.message);
+            if (loginError) {
+                if (authError.message.includes('Invalid login')) {
+                    loginError.textContent = '❌ Email ou senha inválidos!';
+                } else if (authError.message.includes('Email not confirmed')) {
+                    loginError.textContent = '❌ Email ainda não confirmado. Contate o suporte.';
+                } else {
+                    loginError.textContent = '❌ ' + authError.message;
+                }
+                loginError.style.color = 'var(--neon-red)';
+            }
+            return;
+        }
+
+        if (!authData?.user) {
+            if (loginError) {
+                loginError.textContent = '❌ Falha no login. Tente novamente.';
+                loginError.style.color = 'var(--neon-red)';
+            }
+            return;
+        }
+
+        console.log('✅ Autenticado:', authData.user.email);
+
+        // 2.2. Buscar perfil completo em public.users
+        const { data: userData, error: userError } = await supabaseClient
+            .from('users')
+            .select('*')
+            .eq('id', authData.user.id)
+            .maybeSingle();
+
+        if (userError) {
+            console.warn('⚠️ Erro ao buscar perfil:', userError.message);
+        }
+
+        // 2.3. Buscar saldos em public.balances
+        const { data: balances, error: balError } = await supabaseClient
+            .from('balances')
+            .select('currency, amount')
+            .eq('user_id', authData.user.id);
+
+        if (balError) {
+            console.warn('⚠️ Erro ao buscar saldos:', balError.message);
+        }
+
+        // 2.4. Montar currentUser
+        currentUser = {
+            id: authData.user.id,
+            email: authData.user.email,
+            name: userData?.full_name || authData.user.email.split('@')[0],
+            accountNumber: userData?.account_number || 'ZNTX-XXXX-XXXX-XXXX',
+            username: userData?.username || authData.user.email.split('@')[0],
+            kyc: userData?.kyc_status || 'Pending',
+            balances: balances || []
+        };
+
+        isLoggedIn = true;
+        closeLoginModal();
+        showDashboard();
+        updateUserUI();
+        showToast(`✅ Bem-vindo(a), ${currentUser.name}!`);
+
+        // Salvar sessão
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+        // Carregar dados
+        updateBalancesUI(balances || []);
+        try { loadAllAssets(); } catch(e) {}
+        try { updateHistoryUI(); } catch(e) {}
+        try { initStakingChart(); } catch(e) {}
+
+    } catch (error) {
+        console.error('❌ Erro no login:', error);
+        if (loginError) {
+            loginError.textContent = '❌ Erro: ' + error.message;
+            loginError.style.color = 'var(--neon-red)';
+        }
     }
 }
 
