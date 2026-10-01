@@ -1337,7 +1337,7 @@
                 <option value="USDT">₮ Tether</option>
                 <option value="BNB">BNB Binance</option>
                 <option value="LTC">Ł Litecoin</option>
-                <option value="BRC">🪙 BradiCoin</option>
+                <option value="BRD">🪙 BradiCoin</option>
                 <option value="MATIC">◇ Polygon</option>
             </select>
             <input type="number" id="swapAmountInput" placeholder="Amount to swap" step="0.000001">
@@ -1349,7 +1349,7 @@
                 <option value="USDT">₮ Tether</option>
                 <option value="BNB">BNB Binance</option>
                 <option value="LTC">Ł Litecoin</option>
-                <option value="BRC">🪙 BradiCoin</option>
+                <option value="BRD">🪙 BradiCoin</option>
                 <option value="MATIC">◇ Polygon</option>
                 <option value="USD">💵 USD</option>
                 <option value="EUR">💶 EUR</option>
@@ -1712,7 +1712,7 @@
                                         <option value="MATIC">MATIC</option>
                                         <option value="USDT">USDT</option>
                                         <option value="LTC">LTC</option>
-                                        <option value="BRC">BRC</option>
+                                        <option value="BRD">BRD</option>
                                     </select>
                                 </div>
                                 <div class="filter-group">
@@ -2445,6 +2445,7 @@ async function handleLogin() {
         closeLoginModal();
         showDashboard();
         updateUserUI();
+        stopBalancesRealtime();
         showToast('✅ Bem-vindo, Admin!');
         return;
     }
@@ -2539,10 +2540,12 @@ async function handleLogin() {
         // Salvar sessão
         sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
 
-        // Carregar dados
+               // Carregar dados
+        startBalancesRealtime(currentUser.id);
+        startTransactionsRealtime(currentUser.id);
         updateBalancesUI(balances || []);
         try { loadAllAssets(); } catch(e) {}
-        try { updateHistoryUI(); } catch(e) {}
+        try { await loadUserTransactions(); updateHistoryUI(); } catch(e) { try { updateHistoryUI(); } catch(e2) {} }
         try { initStakingChart(); } catch(e) {}
 
     } catch (error) {
@@ -2555,6 +2558,194 @@ async function handleLogin() {
 }
 
 // ============================================
+//  BLOCO S3 — SALDOS EM TEMPO REAL
+// ============================================
+let balancesChannel = null;
+let balancesPollingInterval = null;
+
+function startBalancesRealtime(userId) {
+    if (!supabaseClient || !userId) return;
+    stopBalancesRealtime();
+    console.log('🛰️ Iniciando Realtime de balances para:', userId);
+    try {
+        balancesChannel = supabaseClient
+            .channel('balances-user-' + userId)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'balances', filter: `user_id=eq.${userId}` },
+                (payload) => {
+                    console.log('🔔 Realtime balances:', payload);
+                    refreshBalancesFromDB();
+                })
+            .subscribe((status) => {
+                console.log('📡 Canal balances status:', status);
+            });
+    } catch (e) {
+        console.warn('⚠️ Erro ao criar canal realtime:', e);
+    }
+    balancesPollingInterval = setInterval(() => {
+        if (isLoggedIn && currentUser?.id) refreshBalancesFromDB();
+    }, 15000);
+}
+
+function stopBalancesRealtime() {
+    if (balancesChannel && supabaseClient) {
+        try { supabaseClient.removeChannel(balancesChannel); } catch(e) {}
+        balancesChannel = null;
+    }
+    if (balancesPollingInterval) {
+        clearInterval(balancesPollingInterval);
+        balancesPollingInterval = null;
+    }
+}
+
+async function refreshBalancesFromDB() {
+    if (!supabaseClient || !currentUser?.id) return;
+    if (currentUser.id === 'admin-local') return;
+    try {
+        const { data: balances, error } = await supabaseClient
+            .from('balances')
+            .select('currency, amount')
+            .eq('user_id', currentUser.id);
+        if (error) { console.warn('⚠️ Erro balances:', error.message); return; }
+        if (balances) {
+            currentUser.balances = balances;
+            updateBalancesUI(balances);
+            console.log('✅ Saldos atualizados via realtime');
+        }
+    } catch (e) {
+        console.warn('⚠️ Falha refreshBalancesFromDB:', e);
+    }
+}
+
+// ============================================
+//  BLOCO S4 — HISTÓRICO REAL DE TRANSACTIONS
+// ============================================
+let transactionsChannel = null;
+
+// Cache local do que veio do Supabase
+let supabaseTransactionsCache = [];
+
+// Carrega todas as transações do usuário logado
+async function loadUserTransactions() {
+    if (!supabaseClient || !currentUser?.id) return [];
+    if (currentUser.id === 'admin-local') return [];
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('transactions')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .order('created_at', { ascending: false })
+            .limit(500);
+
+        if (error) {
+            console.warn('⚠️ Erro ao carregar transactions:', error.message);
+            return [];
+        }
+
+        // Normaliza para o formato que updateHistoryUI espera
+        const normalized = (data || []).map(tx => ({
+            type: tx.type || 'UNKNOWN',
+            currency: tx.currency || 'USD',
+            amount: Number(tx.amount) || 0,
+            detail: tx.detail || '',
+            txId: tx.tx_id || tx.id || 'N/A',
+            date: tx.created_at || new Date().toISOString()
+        }));
+
+        supabaseTransactionsCache = normalized;
+        console.log('✅ Transações carregadas:', normalized.length);
+        return normalized;
+    } catch (e) {
+        console.warn('⚠️ Falha loadUserTransactions:', e);
+        return [];
+    }
+}
+
+// Ativa Realtime na tabela transactions para este usuário
+function startTransactionsRealtime(userId) {
+    if (!supabaseClient || !userId) return;
+    stopTransactionsRealtime();
+
+    try {
+        transactionsChannel = supabaseClient
+            .channel('transactions-user-' + userId)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'transactions', filter: `user_id=eq.${userId}` },
+                (payload) => {
+                    console.log('🔔 Realtime transactions:', payload.eventType);
+                    refreshTransactionsFromDB();
+                })
+            .subscribe((status) => {
+                console.log('📡 Canal transactions status:', status);
+            });
+    } catch (e) {
+        console.warn('⚠️ Erro canal transactions:', e);
+    }
+}
+
+function stopTransactionsRealtime() {
+    if (transactionsChannel && supabaseClient) {
+        try { supabaseClient.removeChannel(transactionsChannel); } catch(e) {}
+        transactionsChannel = null;
+    }
+}
+
+async function refreshTransactionsFromDB() {
+    await loadUserTransactions();
+    updateHistoryUI();
+}
+
+window.loadUserTransactions = loadUserTransactions;
+window.startTransactionsRealtime = startTransactionsRealtime;
+window.stopTransactionsRealtime = stopTransactionsRealtime;
+window.refreshTransactionsFromDB = refreshTransactionsFromDB;
+
+// ============================================
+//  CARREGAR PERFIL DO USUÁRIO (S3 + S4)
+// ============================================
+async function loadUserProfile(authUser) {
+    if (!supabaseClient || !authUser) return;
+
+    // Ativar Realtime (S3 + S4)
+    startBalancesRealtime(authUser.id);
+    startTransactionsRealtime(authUser.id);
+
+    // Buscar perfil em users
+    const { data: userData, error: userError } = await supabaseClient
+        .from('users').select('*').eq('id', authUser.id).maybeSingle();
+    if (userError) console.warn('⚠️ Erro users:', userError.message);
+
+    // Buscar saldos
+    const { data: balances, error: balError } = await supabaseClient
+        .from('balances').select('currency, amount').eq('user_id', authUser.id);
+    if (balError) console.warn('⚠️ Erro balances:', balError.message);
+
+    currentUser = {
+        id: authUser.id,
+        email: authUser.email,
+        name: userData?.full_name || authUser.email.split('@')[0],
+        accountNumber: userData?.account_number || 'ZNTX-XXXX-XXXX-XXXX',
+        username: userData?.username || authUser.email.split('@')[0],
+        kyc: userData?.kyc_status || 'Pending',
+        balances: balances || []
+    };
+    isLoggedIn = true;
+    updateBalancesUI(currentUser.balances);
+
+    // Carregar transações (S4)
+    await loadUserTransactions();
+    updateHistoryUI();
+
+    console.log('✅ Perfil carregado:', currentUser.name);
+}
+
+window.startBalancesRealtime = startBalancesRealtime;
+window.stopBalancesRealtime = stopBalancesRealtime;
+window.refreshBalancesFromDB = refreshBalancesFromDB;
+window.loadUserProfile = loadUserProfile;
+
+// ============================================
 //  FUNÇÃO PARA MOSTRAR O DASHBOARD
 // ============================================
 function showDashboard() {
@@ -2563,7 +2754,7 @@ function showDashboard() {
     const dashboard = document.getElementById('dashboardContainer');
     const loginBtn = document.getElementById('openLoginBtn');
     const logoutBtn = document.getElementById('logoutMainBtn');
-    
+
     if (institutional) institutional.style.display = 'none';
     if (dashboard) dashboard.style.display = 'block';
     if (loginBtn) loginBtn.style.display = 'none';
@@ -2579,8 +2770,12 @@ function logout() {
 
 function confirmLogout() {
     document.getElementById('confirmLogoutModal').classList.remove('active');
+
+    stopBalancesRealtime();
+    stopTransactionsRealtime();
+    supabaseTransactionsCache = [];
+
     isLoggedIn = false;
-    currentUser = null;
     
     try {
         sessionStorage.removeItem('clienteLogado');
@@ -2639,7 +2834,7 @@ function loadAllAssets() {
         { name: 'Bitcoin', symbol: 'BTC', price: 67200, change: '+2.4%', chain: 'BTC', icon: '₿' },
         { name: 'Ethereum', symbol: 'ETH', price: 3443, change: '-1.2%', chain: 'ETH', icon: 'Ξ' },
         { name: 'Binance Coin', symbol: 'BNB', price: 312.50, change: '+0.8%', chain: 'BNB', icon: 'BNB' },
-        { name: 'BradiCoin', symbol: 'BRC', price: 9.87, change: '+5.6%', chain: 'BRC', icon: '🪙' },
+        { name: 'BradiCoin', symbol: 'BRD', price: 9.87, change: '+5.6%', chain: 'BRD', icon: '🪙' },
         { name: 'Solana', symbol: 'SOL', price: 98.07, change: '+3.1%', chain: 'SOL', icon: '◎' },
         { name: 'Polygon', symbol: 'MATIC', price: 0.52, change: '-0.5%', chain: 'MATIC', icon: '◇' },
         { name: 'Tether', symbol: 'USDT', price: 1.00, change: '+0.0%', chain: 'USDT', icon: '₮' },
@@ -2669,6 +2864,7 @@ function loadAllAssets() {
                 <div class="asset-price">$${a.price.toLocaleString()}</div>
                 <div class="button-group">
                     <button class="deposit-btn" onclick="handleDeposit('${a.symbol}')">📥 DEPOSIT</button>
+                    <button class="sell-btn" onclick="handleWithdraw('${a.symbol}')">💸 WITHDRAW</button>
                     <button class="receive-btn" onclick="handleReceive('${a.symbol}')">📤 RECEIVE</button>
                     <button class="swap-btn" onclick="openSwap('${a.symbol}')">🔄 SWAP</button>
                     <button class="staking-btn" onclick="handleStaking('${a.symbol}')">⛓️ STAKE</button>
@@ -2732,7 +2928,7 @@ function loadLocalBalances() {
             { currency: 'MATIC',amount: Number(currentUser.saldoMATIC) || 0 },
             { currency: 'USDT', amount: Number(currentUser.saldoUSDT) || 0 },
             { currency: 'LTC',  amount: Number(currentUser.saldoLTC) || 0 },
-            { currency: 'BRC',  amount: Number(currentUser.saldoBRC) || 0 }
+            { currency: 'BRD',  amount: Number(currentUser.saldoBRD) || 0 }
         ];
     }
     // 3. Admin (tudo zerado, honesto)
@@ -2749,7 +2945,7 @@ function loadLocalBalances() {
             { currency: 'MATIC', amount: 0 },
             { currency: 'USDT', amount: 0 },
             { currency: 'LTC', amount: 0 },
-            { currency: 'BRC', amount: 0 }
+            { currency: 'BRD', amount: 0 }
         ];
     }
     // 4. Ninguém logado — não mostra nada
@@ -2761,45 +2957,130 @@ function loadLocalBalances() {
 }
 
 // ============================================
-//  CRYPTO ACTIONS
+//  BLOCO S5 — DEPÓSITO/SAQUE/STAKE VIA RPC
 // ============================================
-function handleDeposit(currency) {
+
+// ---------- DEPÓSITO (Cripto) ----------
+async function handleDeposit(currency) {
+    if (!isLoggedIn || !currentUser?.id) {
+        showToast('⚠️ Faça login primeiro');
+        return;
+    }
+    if (currentUser.id === 'admin-local') {
+        showToast('⚠️ Admin local não pode depositar');
+        return;
+    }
     const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '0.01');
-    if (amount && parseFloat(amount) > 0) {
-        const valor = parseFloat(amount);
-        registerHistory('DEPOSIT', currency, valor, 'Crypto deposit', 'tx_' + Date.now());
-        showToast(`✅ ${valor} ${currency} deposited successfully!`);
-        updateBalanceLocal(currency, valor);
+    if (!amount || parseFloat(amount) <= 0) return;
+    const valor = parseFloat(amount);
+
+    try {
+        const { data, error } = await supabaseClient.rpc('rpc_deposit', {
+            p_currency: currency,
+            p_amount: valor,
+            p_detail: 'Crypto deposit'
+        });
+        if (error) throw error;
+        console.log('✅ Deposit RPC:', data);
+        showToast(`✅ ${valor} ${currency} deposited!`);
+        await refreshBalancesFromDB();
+        await refreshTransactionsFromDB();
+    } catch (e) {
+        console.error('❌ Deposit error:', e);
+        showToast('❌ ' + (e.message || 'Erro no depósito'));
     }
 }
 
-function handleReceive(currency) {
-    const wallet = generateLocalWallet(currency);
-    const modal = document.getElementById('walletModal');
-    const title = document.getElementById('walletModalTitle');
-    const addressDisplay = document.getElementById('walletAddressDisplay');
-    const privateKeyDisplay = document.getElementById('walletPrivateKeyDisplay');
-    const warning = document.getElementById('walletWarning');
-    title.textContent = '📤 RECEIVE ' + currency;
-    addressDisplay.innerHTML = `
-        <strong>📍 Address:</strong><br><span style="font-size:0.8rem;">${wallet.address}</span><br>
-        <button onclick="copyText('${wallet.address}')" style="margin-top:5px; background:rgba(0,242,255,0.2); border:1px solid var(--neon-blue); border-radius:0.5rem; padding:0.2rem 0.8rem; cursor:pointer; font-size:0.6rem; color:var(--neon-blue);">📋 Copy</button>
-    `;
-    privateKeyDisplay.style.display = 'none';
-    warning.textContent = '⏳ Waiting for network confirmation...';
-    modal.classList.add('active');
-    registerHistory('RECEIVE', currency, 0, 'Address generated', 'receive_' + Date.now());
-    showToast(`📤 ${currency} receiving address generated!`);
+// ---------- DEPÓSITO (Fiat) ----------
+async function handleFiatDeposit(currency) {
+    if (!isLoggedIn || !currentUser?.id) {
+        showToast('⚠️ Faça login primeiro');
+        return;
+    }
+    if (currentUser.id === 'admin-local') {
+        showToast('⚠️ Admin local não pode depositar');
+        return;
+    }
+    const symbol = currency === 'BRL' ? 'R$' : '$';
+    const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '1000');
+    if (!amount || parseFloat(amount) <= 0) return;
+    const valor = parseFloat(amount);
+
+    try {
+        const { data, error } = await supabaseClient.rpc('rpc_deposit', {
+            p_currency: currency,
+            p_amount: valor,
+            p_detail: 'Fiat deposit'
+        });
+        if (error) throw error;
+        console.log('✅ Fiat deposit RPC:', data);
+        showToast(`✅ ${symbol}${valor.toFixed(2)} ${currency} deposited!`);
+        await refreshBalancesFromDB();
+        await refreshTransactionsFromDB();
+    } catch (e) {
+        console.error('❌ Fiat deposit error:', e);
+        showToast('❌ ' + (e.message || 'Erro no depósito'));
+    }
 }
 
-function handleStaking(currency) {
+// ---------- SAQUE (Cripto e Fiat) ----------
+async function handleWithdraw(currency) {
+    if (!isLoggedIn || !currentUser?.id) {
+        showToast('⚠️ Faça login primeiro');
+        return;
+    }
+    if (currentUser.id === 'admin-local') {
+        showToast('⚠️ Admin local não pode sacar');
+        return;
+    }
+    const amount = prompt(`💸 Enter ${currency} amount to withdraw:`, '0.01');
+    if (!amount || parseFloat(amount) <= 0) return;
+    const valor = parseFloat(amount);
+
+    try {
+        const { data, error } = await supabaseClient.rpc('rpc_withdraw', {
+            p_currency: currency,
+            p_amount: valor,
+            p_detail: 'Withdraw'
+        });
+        if (error) throw error;
+        console.log('✅ Withdraw RPC:', data);
+        showToast(`✅ ${valor} ${currency} withdrawn!`);
+        await refreshBalancesFromDB();
+        await refreshTransactionsFromDB();
+    } catch (e) {
+        console.error('❌ Withdraw error:', e);
+        showToast('❌ ' + (e.message || 'Saldo insuficiente'));
+    }
+}
+
+// ---------- STAKING (Cripto) ----------
+async function handleStaking(currency) {
+    if (!isLoggedIn || !currentUser?.id) {
+        showToast('⚠️ Faça login primeiro');
+        return;
+    }
+    if (currentUser.id === 'admin-local') {
+        showToast('⚠️ Admin local não pode fazer staking');
+        return;
+    }
     const amount = prompt(`⛓️ Enter ${currency} amount to stake:`, '1');
-    if (amount && parseFloat(amount) > 0) {
-        const valor = parseFloat(amount);
-        const rates = { 'BTC': 0.5, 'ETH': 3.2, 'SOL': 6.8, 'BNB': 4.5, 'MATIC': 5.1, 'USDT': 8.0, 'LTC': 1.2, 'BRC': 12.5 };
-        const rate = rates[currency] || 5.0;
-        const yieldAmount = (valor * rate) / 100;
-        const modal = document.getElementById('modalOverlay');
+    if (!amount || parseFloat(amount) <= 0) return;
+    const valor = parseFloat(amount);
+
+    const rates = { 'BTC': 0.5, 'ETH': 3.2, 'SOL': 6.8, 'BNB': 4.5, 'MATIC': 5.1, 'USDT': 8.0, 'LTC': 1.2, 'BRD': 12.5 };
+    const rate = rates[currency] || 5.0;
+
+    try {
+        const { data, error } = await supabaseClient.rpc('rpc_stake', {
+            p_currency: currency,
+            p_amount: valor,
+            p_apy: rate,
+            p_detail: 'APY: ' + rate + '%'
+        });
+        if (error) throw error;
+        console.log('✅ Stake RPC:', data);
+
         const content = document.getElementById('modalContent');
         content.innerHTML = `
             <h3 style="color:var(--neon-green);">⛓️ Staking Active</h3>
@@ -2807,28 +3088,55 @@ function handleStaking(currency) {
                 <p><strong>Currency:</strong> ${currency}</p>
                 <p><strong>Amount:</strong> ${valor}</p>
                 <p><strong>APY:</strong> ${rate}%</p>
-                <p><strong>Estimated Yield:</strong> ${yieldAmount.toFixed(4)} ${currency}</p>
                 <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
             </div>
-            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
-        `;
-        modal.classList.add('active');
-        registerHistory('STAKE', currency, valor, 'APY: ' + rate + '%', 'stake_' + Date.now());
-        showToast(`⛓️ Staking ${valor} ${currency} started! APY: ${rate}%`);
+            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>`;
+        document.getElementById('modalOverlay').classList.add('active');
+
+        await refreshBalancesFromDB();
+        await refreshTransactionsFromDB();
+    } catch (e) {
+        console.error('❌ Stake error:', e);
+        showToast('❌ ' + (e.message || 'Erro no staking'));
     }
 }
 
-function handleFiatDeposit(currency) {
+// ---------- STAKING (Fiat) ----------
+async function handleFiatStaking(currency) {
+    if (!isLoggedIn || !currentUser?.id) {
+        showToast('⚠️ Faça login primeiro');
+        return;
+    }
+    if (currentUser.id === 'admin-local') {
+        showToast('⚠️ Admin local não pode fazer staking');
+        return;
+    }
     const symbol = currency === 'BRL' ? 'R$' : '$';
-    const amount = prompt(`💰 Enter ${currency} amount to deposit:`, '1000');
-    if (amount && parseFloat(amount) > 0) {
-        const valor = parseFloat(amount);
-        registerHistory('DEPOSIT', currency, valor, 'Fiat deposit', 'fiat_' + Date.now());
-        showToast(`✅ ${symbol}${valor.toFixed(2)} ${currency} deposited successfully!`);
-        updateBalanceLocal(currency, valor);
+    const amount = prompt(`⛓️ Enter ${currency} amount to stake:`, '1000');
+    if (!amount || parseFloat(amount) <= 0) return;
+    const valor = parseFloat(amount);
+
+    const apy = currency === 'USD' ? 4.2 : (currency === 'EUR' ? 3.8 : (currency === 'GBP' ? 4.5 : 6.0));
+
+    try {
+        const { data, error } = await supabaseClient.rpc('rpc_stake', {
+            p_currency: currency,
+            p_amount: valor,
+            p_apy: apy,
+            p_detail: 'APY: ' + apy + '%'
+        });
+        if (error) throw error;
+        console.log('✅ Fiat stake RPC:', data);
+        showToast(`⛓️ Staking ${symbol}${valor.toFixed(2)} ${currency}! APY: ${apy}%`);
+        await refreshBalancesFromDB();
+        await refreshTransactionsFromDB();
+    } catch (e) {
+        console.error('❌ Fiat stake error:', e);
+        showToast('❌ ' + (e.message || 'Erro no staking'));
     }
 }
 
+// ---------- RECEIVE (não mexe no saldo) ----------
 function handleFiatReceive(currency) {
     const accountNumber = 'ZNTX-' + Math.floor(100000 + Math.random() * 900000);
     const modal = document.getElementById('modalOverlay');
@@ -2840,66 +3148,19 @@ function handleFiatReceive(currency) {
             <p><strong>Account:</strong> ${accountNumber}</p>
             <p><strong>Currency:</strong> ${currency}</p>
             <p><strong>SWIFT:</strong> ZNTXUS33XXX</p>
-            <p><strong>IBAN:</strong> ZNTX${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
         </div>
-        <button onclick="copyText('${accountNumber}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">📋 COPY ACCOUNT</button>
+        <button onclick="copyText('${accountNumber}')" style="background:rgba(188,19,254,0.3); border:1px solid var(--neon-purple); border-radius:0.5rem; padding:0.4rem 1rem; cursor:pointer; color:var(--neon-purple); font-family:'Orbitron',monospace; font-size:0.6rem;">📋 COPY</button>
         <br><br>
-        <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
-    `;
+        <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer;">CLOSE</button>`;
     modal.classList.add('active');
-    registerHistory('RECEIVE', currency, 0, 'Account generated', 'fiat_receive_' + Date.now());
-    showToast(`📤 ${currency} receiving account generated!`);
 }
 
-function handleFiatStaking(currency) {
-    const symbol = currency === 'BRL' ? 'R$' : '$';
-    const amount = prompt(`⛓️ Enter ${currency} amount to stake:`, '1000');
-    if (amount && parseFloat(amount) > 0) {
-        const valor = parseFloat(amount);
-        const apy = currency === 'USD' ? 4.2 : (currency === 'EUR' ? 3.8 : (currency === 'GBP' ? 4.5 : 6.0));
-        const yieldAmount = (valor * apy) / 100;
-        const modal = document.getElementById('modalOverlay');
-        const content = document.getElementById('modalContent');
-        content.innerHTML = `
-            <h3 style="color:var(--neon-green);">⛓️ Staking Active (${currency})</h3>
-            <div style="margin:1rem 0; padding:1rem; background:rgba(0,0,0,0.3); border-radius:1rem;">
-                <p><strong>Currency:</strong> ${currency}</p>
-                <p><strong>Amount:</strong> ${symbol}${valor.toFixed(2)}</p>
-                <p><strong>APY:</strong> ${apy}%</p>
-                <p><strong>Estimated Yield:</strong> ${symbol}${yieldAmount.toFixed(2)} ${currency}</p>
-                <p style="color:var(--neon-yellow); font-size:0.7rem;">⏳ Minimum period: 30 days</p>
-            </div>
-            <button onclick="closeModalOverlay()" style="background:rgba(255,68,102,0.2); border:1px solid var(--neon-red); border-radius:2rem; padding:0.5rem 1.5rem; color:var(--neon-red); cursor:pointer; font-family:'Orbitron',monospace;">CLOSE</button>
-        `;
-        modal.classList.add('active');
-        registerHistory('STAKE', currency, valor, 'APY: ' + apy + '%', 'stake_' + Date.now());
-        showToast(`⛓️ Staking ${symbol}${valor.toFixed(2)} ${currency} started! APY: ${apy}%`);
-    }
-}
-
-function updateBalanceLocal(currency, amount) {
-    // Atualizar saldo do usuário logado
-    if (currentUser && currentUser.email !== 'admin@zentronix.com') {
-        if (currency === 'USD') currentUser.saldoUSD = (currentUser.saldoUSD || 0) + amount;
-        else if (currency === 'EUR') currentUser.saldoEUR = (currentUser.saldoEUR || 0) + amount;
-        else if (currency === 'BRL') currentUser.saldoBRL = (currentUser.saldoBRL || 0) + amount;
-        else if (currency === 'GBP') currentUser.saldoGBP = (currentUser.saldoGBP || 0) + amount;
-        
-        // Atualizar no localStorage
-        const clientes = JSON.parse(localStorage.getItem('zentronix_bank_clients') || '[]');
-        const index = clientes.findIndex(c => c.email === currentUser.email);
-        if (index !== -1) {
-            clientes[index].saldoUSD = currentUser.saldoUSD;
-            clientes[index].saldoEUR = currentUser.saldoEUR;
-            clientes[index].saldoBRL = currentUser.saldoBRL;
-            clientes[index].saldoGBP = currentUser.saldoGBP;
-            localStorage.setItem('zentronix_bank_clients', JSON.stringify(clientes));
-        }
-    }
-    
-    // Atualizar UI
-    loadLocalBalances();
-}
+window.handleDeposit = handleDeposit;
+window.handleWithdraw = handleWithdraw;
+window.handleStaking = handleStaking;
+window.handleFiatDeposit = handleFiatDeposit;
+window.handleFiatStaking = handleFiatStaking;
+window.handleFiatReceive = handleFiatReceive;
 
 // ============================================
 //  WALLET
@@ -2913,7 +3174,7 @@ function generateLocalWallet(chain) {
         'MATIC': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
         'USDT': { address: '0x' + Math.random().toString(36).substring(2, 25), privateKey: '0x' + Math.random().toString(36).substring(2, 25) },
         'LTC': { address: 'ltc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'L' + Math.random().toString(36).substring(2, 20) },
-        'BRC': { address: 'brc1q' + Math.random().toString(36).substring(2, 15), privateKey: 'B' + Math.random().toString(36).substring(2, 20) }
+        'BRD': { address: 'brd1q' + Math.random().toString(36).substring(2, 15), privateKey: 'B' + Math.random().toString(36).substring(2, 20) }
     };
     return wallets[chain] || { address: 'Gen' + Math.random().toString(36).substring(2, 20), privateKey: 'Priv' + Math.random().toString(36).substring(2, 20) };
 }
@@ -2974,14 +3235,14 @@ function updateSwapRate() {
     const rates = {
         'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
         'USD_USDT': 1.00, 'USD_BNB': 0.0032, 'USD_LTC': 0.0121,
-        'USD_BRC': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
+        'USD_BRD': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
         'USD_GBP': 0.79, 'USD_BRL': 5.45,
         'BTC_USD': 67200, 'BTC_ETH': 19.5, 'BTC_SOL': 685,
         'ETH_USD': 3443, 'ETH_BTC': 0.0513, 'ETH_SOL': 35.1,
         'SOL_USD': 98.07, 'SOL_BTC': 0.00146, 'SOL_ETH': 0.0285,
         'BNB_USD': 312.50, 'BNB_BTC': 0.00465, 'BNB_ETH': 0.0907,
         'LTC_USD': 82.50, 'LTC_BTC': 0.00123, 'LTC_ETH': 0.0240,
-        'BRC_USD': 9.87, 'BRC_BTC': 0.000147, 'BRC_ETH': 0.00287,
+        'BRD_USD': 9.87, 'BRD_BTC': 0.000147, 'BRD_ETH': 0.00287,
         'MATIC_USD': 0.52, 'MATIC_BTC': 0.00000774, 'MATIC_ETH': 0.000151,
         'EUR_USD': 1.08, 'GBP_USD': 1.26, 'BRL_USD': 0.18
     };
@@ -2999,14 +3260,14 @@ async function executeSwap() {
     const rates = {
         'USD_BTC': 0.0000149, 'USD_ETH': 0.000291, 'USD_SOL': 0.0102,
         'USD_USDT': 1.00, 'USD_BNB': 0.0032, 'USD_LTC': 0.0121,
-        'USD_BRC': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
+        'USD_BRD': 0.1013, 'USD_MATIC': 1.92, 'USD_EUR': 0.92,
         'USD_GBP': 0.79, 'USD_BRL': 5.45,
         'BTC_USD': 67200, 'BTC_ETH': 19.5, 'BTC_SOL': 685,
         'ETH_USD': 3443, 'ETH_BTC': 0.0513, 'ETH_SOL': 35.1,
         'SOL_USD': 98.07, 'SOL_BTC': 0.00146, 'SOL_ETH': 0.0285,
         'BNB_USD': 312.50, 'BNB_BTC': 0.00465, 'BNB_ETH': 0.0907,
         'LTC_USD': 82.50, 'LTC_BTC': 0.00123, 'LTC_ETH': 0.0240,
-        'BRC_USD': 9.87, 'BRC_BTC': 0.000147, 'BRC_ETH': 0.00287,
+        'BRD_USD': 9.87, 'BRD_BTC': 0.000147, 'BRD_ETH': 0.00287,
         'MATIC_USD': 0.52, 'MATIC_BTC': 0.00000774, 'MATIC_ETH': 0.000151,
         'EUR_USD': 1.08, 'GBP_USD': 1.26, 'BRL_USD': 0.18
     };
@@ -3054,6 +3315,11 @@ let statementPage = 1;
 const statementPerPage = 10;
 
 function getStatementData() {
+    // Se temos dados do Supabase, usa eles
+    if (supabaseTransactionsCache.length > 0) {
+        return supabaseTransactionsCache;
+    }
+    // Fallback: localStorage (para admin local ou se Supabase falhar)
     const history = JSON.parse(localStorage.getItem('zentronix_history') || '[]');
     return history;
 }
@@ -3446,7 +3712,7 @@ function openPersonalLoan() {
                 <option value="EUR">💶 Euro (EUR)</option>
                 <option value="GBP">💷 British Pound (GBP)</option>
                 <option value="BRL">R$ Brazilian Real (BRL)</option>
-                <option value="BRC">🪙 BradiCoin (BRC)</option>
+                <option value="BRD">🪙 BradiCoin (BRD)</option>
             </select>
             <label style="font-size:0.7rem; color:var(--neon-purple);">📝 Loan Purpose</label>
             <select id="loanReason" style="width:100%; padding:0.7rem; margin-bottom:1rem; background:rgba(26,27,58,0.9); border:1px solid var(--border-glow); border-radius:0.8rem; color:var(--text-primary);">
@@ -3579,6 +3845,46 @@ window.registerCardTransaction = registerCardTransaction;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🟣 Zentronix Bank - Inicializando...');
     console.log('🔑 Supabase:', supabaseClient ? '✅ OK' : '❌ FAIL');
+
+    // ============================================
+    //  RESTAURA SESSÃO + MONITORA AUTH
+    // ============================================
+    if (supabaseClient) {
+        // 1. Tenta restaurar sessão existente (F5)
+        supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
+            if (session?.user) {
+                console.log('🔄 Sessão restaurada:', session.user.email);
+                await loadUserProfile(session.user);
+                showDashboard();
+                updateUserUI();
+                loadAllAssets();
+                try { updateHistoryUI(); } catch(e) {}
+                try { initStakingChart(); } catch(e) {}
+            } else {
+                console.log('ℹ️ Sem sessão ativa');
+            }
+        }).catch(e => console.warn('⚠️ getSession:', e));
+
+        // 2. Escuta mudanças (logout em outra aba, expiração, etc)
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            console.log('🔔 Auth event:', event);
+            if (event === 'SIGNED_OUT' && isLoggedIn && currentUser?.id !== 'admin-local') {
+                stopBalancesRealtime();
+                stopTransactionsRealtime();
+                supabaseTransactionsCache = [];
+                isLoggedIn = false;
+                currentUser = null;
+                const dash = document.getElementById('dashboardContainer');
+                const inst = document.getElementById('institutionalContent');
+                const loginBtn = document.getElementById('openLoginBtn');
+                const logoutBtn = document.getElementById('logoutMainBtn');
+                if (dash) dash.style.display = 'none';
+                if (inst) inst.style.display = 'block';
+                if (loginBtn) loginBtn.style.display = 'flex';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+            }
+        });
+    }
     
     // ============================================
     //  IDIOMA
