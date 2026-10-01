@@ -1277,7 +1277,264 @@
                 letter-spacing: 1px;
             }
         }
-        
+
+    /* ============================================ */
+/* S8 — MENSAGENS DO ADMIN                      */
+/* ============================================ */
+
+/* Badge do sino */
+.notification-badge {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+    border: 1px solid var(--neon-blue);
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-family: 'Orbitron', monospace;
+    font-weight: bold;
+    color: #0a0b1e;
+    z-index: 1000;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+}
+.notification-badge.visible { display: flex; }
+.notification-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.7);
+}
+
+/* Seção Inbox */
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.message-card {
+    background: rgba(26, 27, 58, 0.7);
+    border: 1px solid var(--border-glow);
+    border-left: 4px solid var(--neon-blue);
+    border-radius: 1rem;
+    padding: 1rem;
+    transition: all 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.message-card:hover {
+    border-color: var(--neon-blue);
+    transform: translateX(4px);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+}
+
+.message-card.unread {
+    background: rgba(188, 19, 254, 0.1);
+    border-left-color: var(--neon-purple);
+}
+
+.message-card.unread::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 10px;
+    height: 10px;
+    background: var(--neon-purple);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-purple);
+    animation: pulse 2s infinite;
+}
+
+/* Tipos de mensagem */
+.message-card.type-info     { border-left-color: var(--neon-blue); }
+.message-card.type-alert    { border-left-color: var(--neon-red); }
+.message-card.type-promo    { border-left-color: var(--neon-yellow); }
+.message-card.type-success  { border-left-color: var(--neon-green); }
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+}
+
+.message-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.message-card.unread .message-title {
+    color: var(--neon-blue);
+}
+
+.message-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+}
+
+.message-type-badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.4rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.55rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+.message-type-badge.info    { background: rgba(0, 242, 255, 0.15); color: var(--neon-blue); }
+.message-type-badge.alert   { background: rgba(255, 68, 102, 0.15); color: var(--neon-red); }
+.message-type-badge.promo   { background: rgba(255, 215, 0, 0.15); color: var(--neon-yellow); }
+.message-type-badge.success { background: rgba(0, 255, 136, 0.15); color: var(--neon-green); }
+
+.message-body {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    opacity: 0.9;
+    margin-top: 0.4rem;
+    white-space: pre-wrap;
+}
+
+.message-actions {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.message-btn {
+    padding: 0.35rem 0.7rem;
+    border-radius: 0.5rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.message-btn.read {
+    background: rgba(0, 242, 255, 0.1);
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+}
+.message-btn.read:hover { background: rgba(0, 242, 255, 0.25); }
+
+.message-btn.delete {
+    background: rgba(255, 68, 102, 0.1);
+    border-color: var(--neon-red);
+    color: var(--neon-red);
+}
+.message-btn.delete:hover { background: rgba(255, 68, 102, 0.25); }
+
+.messages-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+.messages-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    color: var(--neon-purple);
+    opacity: 0.4;
+}
+
+.messages-toolbar {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    border: 1px solid var(--border-glow);
+    align-items: center;
+}
+
+.messages-toolbar-info {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-right: auto;
+}
+.messages-toolbar-info strong {
+    color: var(--neon-blue);
+    font-family: 'Space Mono', monospace;
+}
+
+/* Mini-painel admin (só aparece se role=admin) */
+.admin-message-panel {
+    display: none;
+    background: rgba(188, 19, 254, 0.08);
+    border: 1px solid var(--neon-purple);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.admin-message-panel.visible { display: block; }
+
+.admin-message-panel h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    color: var(--neon-purple);
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.admin-message-panel input,
+.admin-message-panel textarea,
+.admin-message-panel select {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.6rem;
+    background: rgba(26, 27, 58, 0.9);
+    border: 1px solid var(--border-glow);
+    border-radius: 0.6rem;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+}
+
+.admin-message-panel textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.admin-message-panel button {
+    background: linear-gradient(95deg, var(--neon-purple), var(--neon-blue));
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.6rem;
+    color: #0a0b1e;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.admin-message-panel button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+}
+
     </style>
 </head>
 <body>
@@ -1534,7 +1791,10 @@
     </div>
 </div>
 
-<div class="notification-badge" id="notificationBell"><i class="fas fa-bell"></i> <span id="notificationCount">0</span></div>
+<div class="notification-badge" id="notificationBell" onclick="openInboxSection()">
+    <i class="fas fa-bell"></i>
+    <span id="notificationCount">0</span>
+</div>
 
 <div class="main-container">
     <div class="top-logo-area">
@@ -1651,6 +1911,7 @@
                 <div class="menu-category"><h4 id="menuAnalyticsTitle">📊 ANALYTICS</h4><div class="menu-item" data-section="analytics"><i class="fas fa-chart-pie"></i> <span id="menuAnalytics">Analytics</span></div><div class="menu-item" data-section="reports"><i class="fas fa-file-alt"></i> <span id="menuReports">Reports</span></div></div>
                 <div class="menu-category"><h4 id="menuSecurityKYCTitle">🔒 SECURITY & KYC</h4><div class="menu-item" data-section="security"><i class="fas fa-shield-alt"></i> <span id="menuSecuritySettings">Security Settings</span></div><div class="menu-item" data-section="sessions"><i class="fas fa-desktop"></i> <span id="menuSessions">Active Sessions</span></div><div class="menu-item" data-section="compliance"><i class="fas fa-gavel"></i> <span id="menuCompliance">KYC & Compliance</span></div><div class="menu-item" data-section="antihack"><i class="fas fa-shield-virus"></i> <span id="menuAntiHack">Anti-Hack</span></div></div>
                 <div class="menu-category"><h4 id="menuSystemTitle">⚙️ SYSTEM CONTROLS</h4><div class="menu-item" id="ghostModeBtn"><i class="fas fa-user-secret"></i> <span id="menuGhostMode">Ghost Mode</span></div><div class="menu-item" id="simulatorBtn"><i class="fas fa-chart-simple"></i> <span id="menuSimulator">Scenario Simulator</span></div><div class="menu-item" id="themesBtn"><i class="fas fa-palette"></i> <span id="menuThemes">Theme Weaver</span></div><div class="menu-item" id="auditBtn"><i class="fas fa-history"></i> <span id="menuAudit">Audit Logs</span></div></div>
+                <div class="menu-category"><h4 id="menuMessagesTitle">📬 MESSAGES</h4><div class="menu-item" data-section="inbox"><i class="fas fa-inbox"></i><span id="menuInbox">Inbox</span><span id="inboxBadge" style="margin-left:auto; background:var(--neon-purple); color:#fff; font-size:0.55rem; padding:0.1rem 0.4rem; border-radius:0.6rem; font-weight:bold; display:none;">0</span></div></div>
                 <div class="menu-category"><h4 id="menuServicesTitle">✨ BANKING SERVICES</h4><div class="menu-item" data-section="services"><i class="fas fa-star"></i> <span id="menuCompleteServices">Complete Services</span></div><div class="menu-item" data-section="digitalPayment"><i class="fas fa-mobile-alt"></i> <span id="menuDigitalPayment">Payment Digital</span></div></div>
             </div>
 
@@ -1876,6 +2137,56 @@
                         </div>
                     </div>
                 </div>
+                <div id="inboxSec" class="investment-section">
+    <div class="chart-card">
+        <div class="chart-header">
+            <h4 id="inboxTitle">📬 Inbox</h4>
+            <button class="close-section-btn" onclick="closeCurrentSection()">✕</button>
+        </div>
+
+        <div class="messages-toolbar">
+            <div class="messages-toolbar-info">
+                <i class="fas fa-envelope"></i>
+                <span id="messagesCountText">0 mensagens</span>
+                <span style="margin-left: 1rem;">
+                    Não lidas: <strong id="messagesUnreadCount">0</strong>
+                </span>
+            </div>
+            <button class="create-card-btn" onclick="markAllMessagesAsRead()">
+                <i class="fas fa-check-double"></i> Marcar todas como lidas
+            </button>
+        </div>
+
+        <!-- Painel admin (só aparece se role=admin) -->
+        <div class="admin-message-panel" id="adminMessagePanel">
+            <h4><i class="fas fa-paper-plane"></i> ENVIAR MENSAGEM (ADMIN)</h4>
+            <select id="adminMsgRecipient">
+                <option value="broadcast">📢 Todos (broadcast)</option>
+                <option value="specific">👤 Usuário específico (por user_id)</option>
+            </select>
+            <input type="text" id="adminMsgUserId" placeholder="Cole o user_id (UUID) do destinatário" style="display:none;">
+            <input type="text" id="adminMsgTitle" placeholder="Título da mensagem" maxlength="80">
+            <textarea id="adminMsgBody" placeholder="Corpo da mensagem..." maxlength="1000"></textarea>
+            <select id="adminMsgType">
+                <option value="info">ℹ️ Info</option>
+                <option value="alert">⚠️ Alerta</option>
+                <option value="promo">🎁 Promoção</option>
+                <option value="success">✅ Sucesso</option>
+            </select>
+            <button onclick="adminSendMessage()">
+                <i class="fas fa-paper-plane"></i> ENVIAR
+            </button>
+        </div>
+
+        <div id="messagesList" class="messages-list"></div>
+
+        <div id="messagesEmpty" class="messages-empty">
+            <i class="fas fa-inbox"></i>
+            <p style="font-family:'Orbitron',monospace;">Nenhuma mensagem ainda</p>
+            <p style="font-size:0.8rem;">Quando o admin enviar algo, aparece aqui</p>
+        </div>
+    </div>
+</div>
                 <div id="paymentsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="paymentsTitle">Payments</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><button class="buy-btn" id="makePaymentBtn">Make Payment</button></div></div>
                 <div id="swapSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="swapCenterTitle">Swap Center</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><div id="swapCenterContent"></div></div></div>
                 <div id="analyticsSec" class="investment-section"><div class="chart-card"><div class="chart-header"><h4 id="analyticsTitle">Analytics</h4><button class="close-section-btn" onclick="closeCurrentSection()">✕</button></div><canvas id="analyticsChart" height="150"></canvas></div></div>
@@ -2446,6 +2757,8 @@ async function handleLogin() {
         showDashboard();
         updateUserUI();
         stopBalancesRealtime();
+        supabaseMessagesCache = [];
+        try { renderMessages(); updateMessagesBadge(); } catch(e) {}
         showToast('✅ Bem-vindo, Admin!');
         return;
     }
@@ -2543,9 +2856,13 @@ async function handleLogin() {
                // Carregar dados
         startBalancesRealtime(currentUser.id);
         startTransactionsRealtime(currentUser.id);
+        startCardsRealtime(currentUser.id);
+        startMessagesRealtime(currentUser.id);
         updateBalancesUI(balances || []);
         try { loadAllAssets(); } catch(e) {}
         try { await loadUserTransactions(); updateHistoryUI(); } catch(e) { try { updateHistoryUI(); } catch(e2) {} }
+        try { await loadUserCards(); renderCards(); } catch(e) {}
+        try { await loadUserMessages(); renderMessages(); updateMessagesBadge(); checkAdminPanel(); } catch(e) {}
         try { initStakingChart(); } catch(e) {}
 
     } catch (error) {
@@ -2710,7 +3027,9 @@ async function loadUserProfile(authUser) {
     // Ativar Realtime (S3 + S4)
     startBalancesRealtime(authUser.id);
     startTransactionsRealtime(authUser.id);
-
+    startCardsRealtime(authUser.id);
+    startMessagesRealtime(authUser.id);
+    
     // Buscar perfil em users
     const { data: userData, error: userError } = await supabaseClient
         .from('users').select('*').eq('id', authUser.id).maybeSingle();
@@ -2736,7 +3055,13 @@ async function loadUserProfile(authUser) {
     // Carregar transações (S4)
     await loadUserTransactions();
     updateHistoryUI();
-
+    await loadUserCards();
+    renderCards();
+    await loadUserMessages();
+    renderMessages();
+    updateMessagesBadge();
+    checkAdminPanel();
+    
     console.log('✅ Perfil carregado:', currentUser.name);
 }
 
@@ -2773,8 +3098,12 @@ function confirmLogout() {
 
     stopBalancesRealtime();
     stopTransactionsRealtime();
+    stopCardsRealtime();
+    stopMessagesRealtime();
     supabaseTransactionsCache = [];
-
+    supabaseCardsCache = [];
+    supabaseMessagesCache = [];
+    
     isLoggedIn = false;
     
     try {
@@ -3871,7 +4200,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event === 'SIGNED_OUT' && isLoggedIn && currentUser?.id !== 'admin-local') {
                 stopBalancesRealtime();
                 stopTransactionsRealtime();
+                stopCardsRealtime();
                 supabaseTransactionsCache = [];
+                supabaseCardsCache = [];
                 isLoggedIn = false;
                 currentUser = null;
                 const dash = document.getElementById('dashboardContainer');
@@ -4127,7 +4458,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
             if (section === 'services') setTimeout(loadCompleteServices, 100);
             if (section === 'history') setTimeout(() => { updateHistoryUI(); bindStatementEvents(); }, 100);
-            if (section === 'cards') setTimeout(() => { renderCards(); bindCardsEvents(); }, 100);
+            if (section === 'inbox') setTimeout(() => { refreshMessagesFromDB(); checkAdminPanel(); }, 100);
         });
     });
     
@@ -4309,95 +4640,236 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
+   // ============================================
+//  BLOCO S7 — CARTÕES NA TABELA "cards"
 // ============================================
-// CARTÕES VIRTUAIS
-// ============================================
-function getCardsStorageKey() {
-    const userKey = currentUser?.email || 'anon';
-    return 'zentronix_cards_' + userKey;
-}
+let cardsChannel = null;
+let supabaseCardsCache = [];
 
-function getCards() {
+// ---------- Carrega cartões do Supabase ----------
+async function loadUserCards() {
+    if (!supabaseClient || !currentUser?.id) return [];
+    if (currentUser.id === 'admin-local') return [];
+
     try {
-        return JSON.parse(localStorage.getItem(getCardsStorageKey()) || '[]');
-    } catch(e) {
+        const { data, error } = await supabaseClient
+            .from('cards')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.warn('⚠️ Erro ao carregar cards:', error.message);
+            return [];
+        }
+
+        // Normaliza para o formato que renderCards espera
+        supabaseCardsCache = (data || []).map(c => ({
+            id: c.id,
+            name: c.name || 'Cartão Virtual',
+            number: c.number || c.card_number || '',
+            cvv: c.cvv || '',
+            expiryMonth: c.expiry_month || c.expiryMonth || '12',
+            expiryYear: c.expiry_year || c.expiryYear || '29',
+            holder: c.holder || '',
+            type: c.type || 'virtual',
+            theme: c.theme || 'theme-neon-blue',
+            limit: Number(c.limit_amount || c.card_limit || c.limit) || 0,
+            spent: Number(c.spent) || 0,
+            blocked: !!c.blocked,
+            createdAt: c.created_at
+        }));
+
+        console.log('✅ Cartões carregados:', supabaseCardsCache.length);
+        return supabaseCardsCache;
+    } catch (e) {
+        console.warn('⚠️ Falha loadUserCards:', e);
         return [];
     }
 }
 
-function saveCards(cards) {
-    localStorage.setItem(getCardsStorageKey(), JSON.stringify(cards));
+// ---------- Realtime na tabela cards ----------
+function startCardsRealtime(userId) {
+    if (!supabaseClient || !userId) return;
+    stopCardsRealtime();
+
+    try {
+        cardsChannel = supabaseClient
+            .channel('cards-user-' + userId)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'cards', filter: `user_id=eq.${userId}` },
+                (payload) => {
+                    console.log('🔔 Realtime cards:', payload.eventType);
+                    refreshCardsFromDB();
+                })
+            .subscribe((status) => {
+                console.log('📡 Canal cards status:', status);
+            });
+    } catch (e) {
+        console.warn('⚠️ Erro canal cards:', e);
+    }
 }
 
+function stopCardsRealtime() {
+    if (cardsChannel && supabaseClient) {
+        try { supabaseClient.removeChannel(cardsChannel); } catch(e) {}
+        cardsChannel = null;
+    }
+}
+
+async function refreshCardsFromDB() {
+    if (!currentUser?.id) return;
+    await loadUserCards();
+    renderCards();
+}
+
+// ---------- Gera número de cartão ----------
 function generateCardNumber() {
     let num = '4000';
-    for (let i = 0; i < 3; i++) {
-        num += String(Math.floor(1000 + Math.random() * 9000));
-    }
+    for (let i = 0; i < 3; i++) num += String(Math.floor(1000 + Math.random() * 9000));
     return num;
 }
-
 function generateCVV() {
     return String(Math.floor(100 + Math.random() * 900));
 }
 
-function generateCardId() {
-    return 'card_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+// ---------- Cria cartão no Supabase ----------
+async function createCard(name, limit, type, theme) {
+    if (!isLoggedIn || !currentUser?.id) {
+        showToast('⚠️ Faça login primeiro');
+        return null;
+    }
+    if (currentUser.id === 'admin-local') {
+        showToast('⚠️ Admin local não pode criar cartões');
+        return null;
+    }
+
+    const cardNumber = generateCardNumber();
+    const cvv = generateCVV();
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('cards')
+            .insert({
+                user_id: currentUser.id,
+                name: name || 'Cartão Virtual',
+                number: cardNumber,
+                cvv: cvv,
+                expiry_month: '12',
+                expiry_year: '29',
+                holder: (currentUser.name || 'ZENTRONIX USER').toUpperCase(),
+                type: type || 'virtual',
+                theme: theme || 'theme-neon-blue',
+                limit_amount: parseFloat(limit) || 0,
+                spent: 0,
+                blocked: false
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        console.log('✅ Card criado:', data);
+        await refreshCardsFromDB();
+        return data;
+
+    } catch (e) {
+        console.error('❌ Erro ao criar card:', e);
+        showToast('❌ ' + (e.message || 'Erro ao criar cartão'));
+        return null;
+    }
 }
 
-function createCard(name, limit, type, theme) {
-    const cards = getCards();
-    const card = {
-        id: generateCardId(),
-        name: name || 'Cartão Virtual',
-        number: generateCardNumber(),
-        cvv: generateCVV(),
-        expiryMonth: '12',
-        expiryYear: '29',
-        holder: (currentUser?.name || 'ZENTRONIX USER').toUpperCase(),
-        type: type || 'virtual',
-        theme: theme || 'theme-neon-blue',
-        limit: parseFloat(limit) || 0,
-        spent: 0,
-        blocked: false,
-        createdAt: new Date().toISOString(),
-        transactions: []
-    };
-    cards.push(card);
-    saveCards(cards);
-    return card;
+// ---------- Bloqueia/desbloqueia ----------
+async function blockCard(cardId) {
+    if (!supabaseClient) return false;
+
+    try {
+        const current = supabaseCardsCache.find(c => c.id === cardId);
+        if (!current) return false;
+
+        const { error } = await supabaseClient
+            .from('cards')
+            .update({ blocked: !current.blocked })
+            .eq('id', cardId);
+
+        if (error) throw error;
+
+        await refreshCardsFromDB();
+        return !current.blocked;
+    } catch (e) {
+        console.error('❌ Erro ao bloquear card:', e);
+        return false;
+    }
 }
 
-function blockCard(cardId) {
-    const cards = getCards();
-    const idx = cards.findIndex(c => c.id === cardId);
-    if (idx === -1) return false;
-    cards[idx].blocked = !cards[idx].blocked;
-    saveCards(cards);
-    return cards[idx].blocked;
+// ---------- Deleta cartão ----------
+async function deleteCard(cardId) {
+    if (!supabaseClient) return false;
+
+    try {
+        const { error } = await supabaseClient
+            .from('cards')
+            .delete()
+            .eq('id', cardId);
+
+        if (error) throw error;
+
+        await refreshCardsFromDB();
+        return true;
+    } catch (e) {
+        console.error('❌ Erro ao deletar card:', e);
+        showToast('❌ ' + (e.message || 'Erro ao deletar'));
+        return false;
+    }
 }
 
-function deleteCard(cardId) {
-    const cards = getCards();
-    const filtered = cards.filter(c => c.id !== cardId);
-    saveCards(filtered);
+// ---------- Atualiza limite ----------
+async function updateCardLimit(cardId, newLimit) {
+    if (!supabaseClient) return false;
+
+    try {
+        const { error } = await supabaseClient
+            .from('cards')
+            .update({ limit_amount: parseFloat(newLimit) || 0 })
+            .eq('id', cardId);
+
+        if (error) throw error;
+
+        await refreshCardsFromDB();
+        return true;
+    } catch (e) {
+        console.error('❌ Erro ao atualizar limite:', e);
+        return false;
+    }
 }
 
-function updateCardLimit(cardId, newLimit) {
-    const cards = getCards();
-    const idx = cards.findIndex(c => c.id === cardId);
-    if (idx === -1) return false;
-    cards[idx].limit = parseFloat(newLimit) || 0;
-    saveCards(cards);
-    return true;
+// ---------- Renomeia cartão ----------
+async function renameCard(cardId, newName) {
+    if (!supabaseClient) return false;
+
+    try {
+        const { error } = await supabaseClient
+            .from('cards')
+            .update({ name: newName })
+            .eq('id', cardId);
+
+        if (error) throw error;
+
+        await refreshCardsFromDB();
+        return true;
+    } catch (e) {
+        console.error('❌ Erro ao renomear:', e);
+        return false;
+    }
 }
 
-function registerCardTransaction(cardId, amount, description) {
-    const cards = getCards();
-    const idx = cards.findIndex(c => c.id === cardId);
-    if (idx === -1) return { ok: false, msg: 'Cartão não encontrado' };
+// ---------- Registra compra no cartão (soma em spent) ----------
+async function registerCardTransaction(cardId, amount, description) {
+    if (!supabaseClient) return { ok: false, msg: 'Sem Supabase' };
 
-    const card = cards[idx];
+    const card = supabaseCardsCache.find(c => c.id === cardId);
+    if (!card) return { ok: false, msg: 'Cartão não encontrado' };
     if (card.blocked) return { ok: false, msg: 'Cartão bloqueado' };
 
     const valor = parseFloat(amount) || 0;
@@ -4408,34 +4880,53 @@ function registerCardTransaction(cardId, amount, description) {
         return { ok: false, msg: `Limite insuficiente. Disponível: $${available.toFixed(2)}` };
     }
 
-    card.spent += valor;
-    card.transactions.unshift({
-        date: new Date().toISOString(),
-        amount: valor,
-        description: description || 'Compra'
-    });
-    if (card.transactions.length > 50) card.transactions.pop();
-    saveCards(cards);
-    return { ok: true, card };
+    try {
+        // Atualiza spent
+        const { error: updErr } = await supabaseClient
+            .from('cards')
+            .update({ spent: card.spent + valor })
+            .eq('id', cardId);
+
+        if (updErr) throw updErr;
+
+        // Grava em transactions também
+        try {
+            await supabaseClient.rpc('rpc_deposit', {
+                p_currency: 'USD',
+                p_amount: -valor,
+                p_detail: 'Card: ' + (description || 'Compra')
+            });
+        } catch (e) {
+            // Se rpc_deposit não aceitar negativo, ignora
+            console.warn('Card transaction não gravada em transactions:', e.message);
+        }
+
+        await refreshCardsFromDB();
+        return { ok: true, card };
+
+    } catch (e) {
+        console.error('❌ Erro na compra:', e);
+        return { ok: false, msg: e.message || 'Erro' };
+    }
 }
 
+// ---------- Helpers de render ----------
 function maskCardNumber(number) {
+    if (!number) return '**** **** **** ****';
     return number.slice(0, 4) + ' **** **** ' + number.slice(-4);
 }
 
 function formatCardNumber(number) {
+    if (!number) return '';
     return number.replace(/(\d{4})(?=\d)/g, '$1 ');
 }
 
 function getCardTypeLabel(type) {
-    const map = {
-        'virtual': 'Virtual',
-        'single-use': 'Uso Único',
-        'subscription': 'Assinaturas'
-    };
+    const map = { 'virtual': 'Virtual', 'single-use': 'Uso Único', 'subscription': 'Assinaturas' };
     return map[type] || type;
 }
 
+// ---------- Render cards ----------
 function renderCards() {
     const list = document.getElementById('cardsList');
     const empty = document.getElementById('cardsEmpty');
@@ -4444,7 +4935,7 @@ function renderCards() {
     const totalSpentEl = document.getElementById('cardsTotalSpent');
     if (!list) return;
 
-    const cards = getCards();
+    const cards = supabaseCardsCache;
 
     if (countEl) {
         countEl.textContent = cards.length === 1 ? '1 cartão ativo' : cards.length + ' cartões ativos';
@@ -4491,7 +4982,7 @@ function renderCards() {
                 <div class="vcard-details">
                     <div class="vcard-detail">
                         <div class="label">Titular</div>
-                        <div class="value">${card.holder.substring(0, 20)}</div>
+                        <div class="value">${(card.holder || '').substring(0, 20)}</div>
                     </div>
                     <div class="vcard-detail">
                         <div class="label">Validade</div>
@@ -4514,13 +5005,13 @@ function renderCards() {
                         <i class="fas fa-sliders-h"></i> Limite
                     </button>
                     <button class="vcard-action-btn" data-action="buy" data-card-id="${card.id}">
-                        <i class="fas fa-shopping-cart"></i> Simular Compra
+                        <i class="fas fa-shopping-cart"></i> Compra
                     </button>
                     <button class="vcard-action-btn success" data-action="toggle" data-card-id="${card.id}">
-                        <i class="fas fa-${card.blocked ? 'unlock' : 'lock'}"></i> ${card.blocked ? 'Desbloquear' : 'Bloquear'}
+                        <i class="fas fa-${card.blocked ? 'unlock' : 'lock'}"></i> ${card.blocked ? 'Desbloq.' : 'Bloquear'}
                     </button>
                     <button class="vcard-action-btn danger" data-action="delete" data-card-id="${card.id}">
-                        <i class="fas fa-trash-alt"></i> Excluir
+                        <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
 
@@ -4534,7 +5025,7 @@ function renderCards() {
                         <div class="value">$${card.spent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                     </div>
                     <div class="vcard-info-item available">
-                        <div class="label">Disponível</div>
+                        <div class="label">Disp.</div>
                         <div class="value">$${available.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                     </div>
                 </div>
@@ -4546,7 +5037,7 @@ function renderCards() {
         `;
     }).join('');
 
-    // Bind dos eventos dos cartões
+    // Bind ações
     list.querySelectorAll('.vcard-action-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -4554,99 +5045,74 @@ function renderCards() {
         });
     });
 
-    // Bind do toggle de visibilidade
+    // Bind toggle visibilidade
     list.querySelectorAll('.toggle-visibility').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
-            const cardEl = this.closest('.vcard-number');
-            const span = cardEl.querySelector('.masked');
-            const real = span.dataset.real;
-            const masked = span.dataset.masked;
+            const num = this.closest('.vcard-number');
+            const span = num.querySelector('.masked');
             const icon = this.querySelector('i');
-
-            if (span.textContent.trim() === masked) {
-                span.textContent = real;
+            if (span.textContent.trim() === span.dataset.masked) {
+                span.textContent = span.dataset.real;
                 icon.className = 'fas fa-eye-slash';
             } else {
-                span.textContent = masked;
+                span.textContent = span.dataset.masked;
                 icon.className = 'fas fa-eye';
             }
         });
     });
 }
 
-function handleCardAction(action, cardId) {
+// ---------- Ações do card ----------
+async function handleCardAction(action, cardId) {
     if (!cardId) return;
+    const card = supabaseCardsCache.find(c => c.id === cardId);
+    if (!card) return;
 
     if (action === 'rename') {
-        const cards = getCards();
-        const card = cards.find(c => c.id === cardId);
-        if (!card) return;
-        const newName = prompt('Novo nome para o cartão:', card.name);
-        if (newName && newName.trim()) {
-            card.name = newName.trim().substring(0, 30);
-            saveCards(cards);
-            renderCards();
+        const n = prompt('Novo nome:', card.name);
+        if (n && n.trim()) {
+            await renameCard(cardId, n.trim().substring(0, 30));
             showToast('✅ Nome atualizado!');
         }
     }
     else if (action === 'limit') {
-        const cards = getCards();
-        const card = cards.find(c => c.id === cardId);
-        if (!card) return;
-        const newLimit = prompt('Novo limite mensal (USD):', card.limit);
-        if (newLimit !== null && !isNaN(parseFloat(newLimit)) && parseFloat(newLimit) >= 0) {
-            updateCardLimit(cardId, parseFloat(newLimit));
-            renderCards();
+        const n = prompt('Novo limite (USD):', card.limit);
+        if (n !== null && !isNaN(parseFloat(n)) && parseFloat(n) >= 0) {
+            await updateCardLimit(cardId, parseFloat(n));
             showToast('✅ Limite atualizado!');
         }
     }
     else if (action === 'buy') {
-        const amount = prompt('💰 Valor da compra simulada (USD):', '50');
-        if (!amount || parseFloat(amount) <= 0) return;
-        const desc = prompt('📝 Descrição da compra:', 'Compra online');
-        if (!desc) return;
-        const result = registerCardTransaction(cardId, parseFloat(amount), desc);
-        if (result.ok) {
-            registerHistory('PAYMENT', 'USD', parseFloat(amount), 'Cartão: ' + desc, 'card_' + Date.now());
-            showToast('✅ Compra aprovada!');
-            renderCards();
-        } else {
-            showToast('❌ ' + result.msg);
-        }
+        const a = prompt('💰 Valor (USD):', '50');
+        if (!a || parseFloat(a) <= 0) return;
+        const d = prompt('📝 Descrição:', 'Compra online');
+        if (!d) return;
+        const r = await registerCardTransaction(cardId, parseFloat(a), d);
+        if (r.ok) showToast('✅ Compra aprovada!');
+        else showToast('❌ ' + r.msg);
     }
     else if (action === 'toggle') {
-        const blocked = blockCard(cardId);
-        renderCards();
-        showToast(blocked ? '🔒 Cartão bloqueado' : '🔓 Cartão desbloqueado');
+        const b = await blockCard(cardId);
+        showToast(b ? '🔒 Bloqueado' : '🔓 Desbloqueado');
     }
     else if (action === 'delete') {
-        if (confirm('⚠️ Excluir este cartão? Essa ação não pode ser desfeita.')) {
-            deleteCard(cardId);
-            renderCards();
-            showToast('🗑️ Cartão excluído');
+        if (confirm('⚠️ Excluir este cartão?')) {
+            await deleteCard(cardId);
+            showToast('🗑️ Excluído');
         }
     }
 }
 
+// ---------- Modal de criação ----------
 function openCreateCardModal() {
     const modal = document.getElementById('createCardModal');
     if (!modal) return;
-
-    const nameInput = document.getElementById('cardNameInput');
-    const limitInput = document.getElementById('cardLimitInput');
-    const typeSelect = document.getElementById('cardTypeSelect');
-    const themeInput = document.getElementById('cardThemeInput');
-
-    if (nameInput) nameInput.value = '';
-    if (limitInput) limitInput.value = '5000';
-    if (typeSelect) typeSelect.value = 'virtual';
-    if (themeInput) themeInput.value = 'theme-neon-blue';
-
-    document.querySelectorAll('.theme-option').forEach(el => {
-        el.classList.toggle('selected', el.dataset.theme === 'theme-neon-blue');
-    });
-
+    document.getElementById('cardNameInput').value = '';
+    document.getElementById('cardLimitInput').value = '5000';
+    document.getElementById('cardTypeSelect').value = 'virtual';
+    document.getElementById('cardThemeInput').value = 'theme-neon-blue';
+    document.querySelectorAll('.theme-option').forEach(el => el.classList.toggle('selected', el.dataset.theme === 'theme-neon-blue'));
     modal.classList.add('active');
 }
 
@@ -4657,53 +5123,398 @@ function closeCreateCardModal() {
 
 function bindCardsEvents() {
     const createBtn = document.getElementById('createCardBtn');
-    if (createBtn) {
-        createBtn.addEventListener('click', openCreateCardModal);
-    }
+    if (createBtn) createBtn.addEventListener('click', openCreateCardModal);
 
     const confirmBtn = document.getElementById('confirmCreateCardBtn');
     if (confirmBtn) {
-        confirmBtn.addEventListener('click', function() {
+        confirmBtn.addEventListener('click', async function() {
             const name = document.getElementById('cardNameInput')?.value.trim() || 'Cartão Virtual';
             const limit = parseFloat(document.getElementById('cardLimitInput')?.value || 0);
             const type = document.getElementById('cardTypeSelect')?.value || 'virtual';
             const theme = document.getElementById('cardThemeInput')?.value || 'theme-neon-blue';
-
-            if (limit <= 0) {
-                showToast('⚠️ Informe um limite maior que zero');
-                return;
+            if (limit <= 0) { showToast('⚠️ Limite > 0'); return; }
+            const card = await createCard(name, limit, type, theme);
+            if (card) {
+                closeCreateCardModal();
+                showToast('💳 Cartão virtual criado!');
             }
-
-            const card = createCard(name, limit, type, theme);
-            closeCreateCardModal();
-            renderCards();
-            registerHistory('CARD_CREATED', 'USD', limit, 'Cartão: ' + name, 'card_create_' + Date.now());
-            showToast('💳 Cartão virtual criado!');
         });
     }
 
     const cancelBtn = document.getElementById('cancelCreateCardBtn');
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeCreateCardModal);
-    }
+    if (cancelBtn) cancelBtn.addEventListener('click', closeCreateCardModal);
 
     const modal = document.getElementById('createCardModal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeCreateCardModal();
-        });
-    }
+    if (modal) modal.addEventListener('click', function(e) { if (e.target === this) closeCreateCardModal(); });
 
     document.querySelectorAll('.theme-option').forEach(el => {
         el.addEventListener('click', function() {
             document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('selected'));
             this.classList.add('selected');
-            const themeInput = document.getElementById('cardThemeInput');
-            if (themeInput) themeInput.value = this.dataset.theme;
+            document.getElementById('cardThemeInput').value = this.dataset.theme;
         });
     });
 }
-    
+
+// Expõe globais
+window.loadUserCards = loadUserCards;
+window.startCardsRealtime = startCardsRealtime;
+window.stopCardsRealtime = stopCardsRealtime;
+window.refreshCardsFromDB = refreshCardsFromDB;
+window.createCard = createCard;
+window.deleteCard = deleteCard;
+window.blockCard = blockCard;
+window.updateCardLimit = updateCardLimit;
+window.registerCardTransaction = registerCardTransaction;
+window.renderCards = renderCards;
+
+    // ============================================
+//  BLOCO S8 — MENSAGENS DO ADMIN
+// ============================================
+let messagesChannel = null;
+let supabaseMessagesCache = [];
+
+// ---------- Carrega mensagens do Supabase ----------
+async function loadUserMessages() {
+    if (!supabaseClient || !currentUser?.id) return [];
+    if (currentUser.id === 'admin-local') return [];
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('messages')
+            .select('*')
+            .or(`user_id.eq.${currentUser.id},is_broadcast.eq.true`)
+            .order('created_at', { ascending: false })
+            .limit(200);
+
+        if (error) {
+            console.warn('⚠️ Erro ao carregar messages:', error.message);
+            return [];
+        }
+
+        supabaseMessagesCache = (data || []).map(m => ({
+            id: m.id,
+            userId: m.user_id,
+            senderId: m.sender_id,
+            title: m.title || 'Sem título',
+            body: m.body || '',
+            type: m.type || 'info',
+            read: !!m.read,
+            isBroadcast: !!m.is_broadcast,
+            createdAt: m.created_at
+        }));
+
+        console.log('✅ Mensagens carregadas:', supabaseMessagesCache.length);
+        return supabaseMessagesCache;
+    } catch (e) {
+        console.warn('⚠️ Falha loadUserMessages:', e);
+        return [];
+    }
+}
+
+// ---------- Realtime ----------
+function startMessagesRealtime(userId) {
+    if (!supabaseClient || !userId) return;
+    stopMessagesRealtime();
+
+    try {
+        messagesChannel = supabaseClient
+            .channel('messages-user-' + userId)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'messages', filter: `user_id=eq.${userId}` },
+                (payload) => {
+                    console.log('🔔 Realtime messages (own):', payload.eventType);
+                    refreshMessagesFromDB();
+                })
+            .on('postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'messages' },
+                (payload) => {
+                    if (payload.new && payload.new.is_broadcast) {
+                        console.log('🔔 Broadcast recebido');
+                        refreshMessagesFromDB();
+                    }
+                })
+            .subscribe((status) => {
+                console.log('📡 Canal messages status:', status);
+            });
+    } catch (e) {
+        console.warn('⚠️ Erro canal messages:', e);
+    }
+}
+
+function stopMessagesRealtime() {
+    if (messagesChannel && supabaseClient) {
+        try { supabaseClient.removeChannel(messagesChannel); } catch(e) {}
+        messagesChannel = null;
+    }
+}
+
+async function refreshMessagesFromDB() {
+    if (!currentUser?.id) return;
+    await loadUserMessages();
+    renderMessages();
+    updateMessagesBadge();
+}
+
+// ---------- Helpers ----------
+function getMessageTypeLabel(type) {
+    const map = { info: 'INFO', alert: 'ALERTA', promo: 'PROMO', success: 'OK' };
+    return map[type] || type.toUpperCase();
+}
+
+function formatMessageDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diff = (now - d) / 1000;
+    if (diff < 60) return 'agora';
+    if (diff < 3600) return Math.floor(diff / 60) + ' min';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+    if (diff < 604800) return Math.floor(diff / 86400) + 'd';
+    return d.toLocaleDateString('pt-BR');
+}
+
+function escapeHtml(s) {
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// ---------- Render ----------
+function renderMessages() {
+    const list = document.getElementById('messagesList');
+    const empty = document.getElementById('messagesEmpty');
+    const countEl = document.getElementById('messagesCountText');
+    const unreadEl = document.getElementById('messagesUnreadCount');
+    if (!list) return;
+
+    const msgs = supabaseMessagesCache;
+    const unread = msgs.filter(m => !m.read).length;
+
+    if (countEl) countEl.textContent = msgs.length === 1 ? '1 mensagem' : msgs.length + ' mensagens';
+    if (unreadEl) unreadEl.textContent = unread;
+
+    if (msgs.length === 0) {
+        list.innerHTML = '';
+        if (empty) empty.style.display = 'block';
+        return;
+    }
+
+    if (empty) empty.style.display = 'none';
+
+    list.innerHTML = msgs.map(m => {
+        const unreadClass = m.read ? '' : 'unread';
+        const broadcastTag = m.isBroadcast ? ' <span style="font-size:0.55rem;opacity:0.6;">📢 broadcast</span>' : '';
+
+        return `
+            <div class="message-card type-${m.type} ${unreadClass}" data-message-id="${m.id}">
+                <div class="message-header">
+                    <div class="message-title">${escapeHtml(m.title)}${broadcastTag}</div>
+                    <div class="message-meta">
+                        <span class="message-type-badge ${m.type}">${getMessageTypeLabel(m.type)}</span>
+                        <span>${formatMessageDate(m.createdAt)}</span>
+                    </div>
+                </div>
+                <div class="message-body">${escapeHtml(m.body)}</div>
+                <div class="message-actions">
+                    ${!m.read ? `<button class="message-btn read" data-action="read" data-id="${m.id}"><i class="fas fa-check"></i> Marcar como lida</button>` : ''}
+                    <button class="message-btn delete" data-action="delete" data-id="${m.id}"><i class="fas fa-trash"></i> Excluir</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Bind ações
+    list.querySelectorAll('.message-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            handleMessageAction(this.dataset.action, this.dataset.id);
+        });
+    });
+
+    // Bind: clicar no card marca como lida
+    list.querySelectorAll('.message-card.unread').forEach(card => {
+        card.addEventListener('click', function() {
+            handleMessageAction('read', this.dataset.messageId);
+        });
+    });
+}
+
+// ---------- Badge (sino + menu) ----------
+function updateMessagesBadge() {
+    const unread = supabaseMessagesCache.filter(m => !m.read).length;
+
+    const bell = document.getElementById('notificationBell');
+    const countEl = document.getElementById('notificationCount');
+    const menuBadge = document.getElementById('inboxBadge');
+
+    if (bell) {
+        if (unread > 0) {
+            bell.classList.add('visible');
+            if (countEl) countEl.textContent = unread;
+        } else {
+            bell.classList.remove('visible');
+        }
+    }
+
+    if (menuBadge) {
+        if (unread > 0) {
+            menuBadge.style.display = 'inline-block';
+            menuBadge.textContent = unread;
+        } else {
+            menuBadge.style.display = 'none';
+        }
+    }
+}
+
+// ---------- Ações ----------
+async function handleMessageAction(action, messageId) {
+    if (!messageId || !supabaseClient) return;
+    const msg = supabaseMessagesCache.find(m => m.id === messageId);
+    if (!msg) return;
+
+    if (action === 'read') {
+        if (msg.read) return;
+        try {
+            const { error } = await supabaseClient
+                .from('messages')
+                .update({ read: true })
+                .eq('id', messageId);
+            if (error) throw error;
+            msg.read = true;
+            renderMessages();
+            updateMessagesBadge();
+        } catch (e) {
+            console.warn('⚠️ Erro ao marcar como lida:', e.message);
+        }
+    }
+    else if (action === 'delete') {
+        if (!confirm('Excluir esta mensagem?')) return;
+        try {
+            const { error } = await supabaseClient
+                .from('messages')
+                .delete()
+                .eq('id', messageId);
+            if (error) throw error;
+            supabaseMessagesCache = supabaseMessagesCache.filter(m => m.id !== messageId);
+            renderMessages();
+            updateMessagesBadge();
+            showToast('🗑️ Mensagem excluída');
+        } catch (e) {
+            console.warn('⚠️ Erro ao excluir:', e.message);
+            showToast('❌ ' + (e.message || 'Erro'));
+        }
+    }
+}
+
+async function markAllMessagesAsRead() {
+    if (!supabaseClient || !currentUser?.id) return;
+    const unread = supabaseMessagesCache.filter(m => !m.read && m.userId === currentUser.id);
+    if (unread.length === 0) { showToast('✅ Nada para marcar'); return; }
+
+    try {
+        const ids = unread.map(m => m.id);
+        const { error } = await supabaseClient
+            .from('messages')
+            .update({ read: true })
+            .in('id', ids);
+        if (error) throw error;
+        unread.forEach(m => m.read = true);
+        renderMessages();
+        updateMessagesBadge();
+        showToast('✅ Todas marcadas como lidas');
+    } catch (e) {
+        console.warn('⚠️ Erro:', e.message);
+        showToast('❌ ' + (e.message || 'Erro'));
+    }
+}
+
+// ---------- Admin: enviar ----------
+async function adminSendMessage() {
+    if (!supabaseClient || !currentUser?.id) return;
+
+    const recipient = document.getElementById('adminMsgRecipient')?.value;
+    const userId = document.getElementById('adminMsgUserId')?.value.trim();
+    const title = document.getElementById('adminMsgTitle')?.value.trim();
+    const body = document.getElementById('adminMsgBody')?.value.trim();
+    const type = document.getElementById('adminMsgType')?.value || 'info';
+
+    if (!title || !body) { showToast('⚠️ Preencha título e corpo'); return; }
+
+    const isBroadcast = recipient === 'broadcast';
+    if (!isBroadcast && !userId) { showToast('⚠️ Informe o user_id'); return; }
+
+    try {
+        const payload = {
+            sender_id: currentUser.id,
+            title: title,
+            body: body,
+            type: type,
+            read: false,
+            is_broadcast: isBroadcast,
+            user_id: isBroadcast ? null : userId
+        };
+
+        const { error } = await supabaseClient.from('messages').insert(payload);
+        if (error) throw error;
+
+        showToast('✅ Mensagem enviada!');
+        document.getElementById('adminMsgTitle').value = '';
+        document.getElementById('adminMsgBody').value = '';
+        document.getElementById('adminMsgUserId').value = '';
+        refreshMessagesFromDB();
+    } catch (e) {
+        console.error('❌ Erro ao enviar:', e);
+        showToast('❌ ' + (e.message || 'Erro'));
+    }
+}
+
+// ---------- Abrir Inbox pelo sino ----------
+function openInboxSection() {
+    document.querySelectorAll('.investment-section').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('inboxSec');
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+    const inboxItem = document.querySelector('.menu-item[data-section="inbox"]');
+    if (inboxItem) inboxItem.classList.add('active');
+    refreshMessagesFromDB();
+}
+
+// ---------- Mostrar painel admin se role=admin ----------
+function checkAdminPanel() {
+    const panel = document.getElementById('adminMessagePanel');
+    if (!panel) return;
+    if (currentUser?.role === 'admin') {
+        panel.classList.add('visible');
+    } else {
+        panel.classList.remove('visible');
+    }
+
+    const sel = document.getElementById('adminMsgRecipient');
+    const input = document.getElementById('adminMsgUserId');
+    if (sel && input && !sel.dataset.bound) {
+        sel.dataset.bound = '1';
+        sel.addEventListener('change', function() {
+            input.style.display = this.value === 'specific' ? 'block' : 'none';
+        });
+    }
+}
+
+// ---------- Expõe globais ----------
+window.loadUserMessages = loadUserMessages;
+window.startMessagesRealtime = startMessagesRealtime;
+window.stopMessagesRealtime = stopMessagesRealtime;
+window.refreshMessagesFromDB = refreshMessagesFromDB;
+window.renderMessages = renderMessages;
+window.updateMessagesBadge = updateMessagesBadge;
+window.markAllMessagesAsRead = markAllMessagesAsRead;
+window.adminSendMessage = adminSendMessage;
+window.openInboxSection = openInboxSection;
+window.checkAdminPanel = checkAdminPanel;
+
     // ============================================
     //  PAYMENTS
     // ============================================
@@ -4885,6 +5696,7 @@ function bindCardsEvents() {
             bindStatementEvents();
             renderCards();
             bindCardsEvents();
+            try { refreshMessagesFromDB(); checkAdminPanel(); } catch(e) {}
             initStakingChart();
             loadProfileData();
             
